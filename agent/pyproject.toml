@@ -8,3 +8,4 @@ dependencies = ["openai", "mcp"]
 
 [project.scripts]
 human_interaction = "cli:human_interaction"
+user_simulation = "cli:user_simulation"

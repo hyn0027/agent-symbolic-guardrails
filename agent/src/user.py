@@ -8,7 +8,7 @@ from config.logger import LOGGER
 user_config = CONFIG.USER
 
 
-class UserAgent:
+class UserSimulator:
     def __init__(self, instructions: str):
         self.model = user_config.MODEL
         self.temperature = user_config.TEMPERATURE
