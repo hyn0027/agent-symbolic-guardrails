@@ -14,16 +14,16 @@ class ReActAgent:
     def __init__(self):
         self.model = agent_config.MODEL
         self.temperature = agent_config.TEMPERATURE
-        self.initialize()
+        self._initialize()
 
-    def initialize(self):
+    def _initialize(self):
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
         LOGGER.info("Initializing MCP Client")
         self.mcp_client = MCPClient(agent_config.MCP_SERVER_COMMAND)
         self.loop.run_until_complete(self.mcp_client.initialize())
-        # asyncio.run(self.mcp_client.initialize())
+
         LOGGER.debug("MCP TOOL")
         LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
@@ -95,3 +95,17 @@ class ReActAgent:
             tools=tools,
         )
         return response.choices[0].message
+
+    def shutdown(self):
+        LOGGER.info("Shutting down ReActAgent and closing event loop.")
+        try:
+            pending = asyncio.all_tasks(loop=self.loop)
+            for task in pending:
+                task.cancel()
+            self.loop.run_until_complete(
+                asyncio.gather(*pending, return_exceptions=True)
+            )
+            self.loop.run_until_complete(self.loop.shutdown_asyncgens())
+        finally:
+            self.loop.close()
+        LOGGER.info("ReActAgent shutdown complete.")

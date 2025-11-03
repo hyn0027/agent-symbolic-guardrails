@@ -2,7 +2,7 @@ import json
 from typing import List, Dict, Any, Union
 
 from fastmcp import Client
-from mcp.types import Tool, ContentBlock
+from mcp.types import Tool
 
 
 class MCPClient:
@@ -43,7 +43,9 @@ class MCPClient:
             openai_tools.append(openai_tool)
         return openai_tools
 
-    async def call_tool(self, name: str, arguments: Union[str, Dict[str, Any]]) -> Any:
+    async def call_tool(
+        self, name: str, arguments: Union[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
         """Call a tool by its name with the provided input data."""
         if not self.initialized:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
@@ -59,22 +61,17 @@ class MCPClient:
         try:
             async with self.client:
                 result = await self.client.call_tool(name=name, arguments=arguments)
-            res = self.tool_call_res_to_json(result)
+            res = self._tool_call_res_to_json(result)
             if res["is_error"]:
                 return {"error": res["data"]}
             return res
         except Exception as e:
             return {"error": str(e)}
 
-    def tool_call_res_to_json(self, tool_call_response: Any) -> Dict[str, Any]:
-        """Convert tool call response to a JSON-serializable dictionary."""
-        is_error = tool_call_response.is_error
-        data = tool_call_response.data
-        structured_content = tool_call_response.structured_content
-        content: list[ContentBlock] = tool_call_response.content
+    def _tool_call_res_to_json(self, tool_call_response: Any) -> Dict[str, Any]:
         return {
-            "is_error": is_error,
-            "data": data,
-            "structured_content": structured_content,
-            "content": [block for block in content],
+            "is_error": tool_call_response.is_error,
+            "data": tool_call_response.data,
+            "structured_content": tool_call_response.structured_content,
+            "content": [block for block in tool_call_response.content],
         }
