@@ -1,7 +1,12 @@
 AGENT:
+  MODEL: "gpt-4o"
+  TEMPERATURE: 0
+
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/domains/airline/policy.md"
+  INITIAL_CONVERSTION: "Hi! How can I help you today?"
+
+  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/policy.md"
 
   SYSTEM_PROMPT_TEMPLATE: |
     {agent_instruction}
@@ -20,4 +25,4 @@ AGENT:
     Try to be helpful and always follow the policy. Always make sure you generate valid JSON only.
 
 SETTINGS:
-  LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
+  LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/agent/"

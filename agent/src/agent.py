@@ -4,20 +4,23 @@ from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from typing import Dict, List
 import asyncio
 from mcp_client import MCPClient
-from config import LOGGER, CONFIG
+from config.loader import CONFIG
+from config.logger import LOGGER
 
-config = CONFIG.AGENT
+agent_config = CONFIG.AGENT
 
 
 class ReActAgent:
-    def __init__(self, model: str = "gpt-4o", temperature: float = 0.0):
-        self.model = model
-        self.temperature = temperature
-        self.mcp_client = MCPClient(config.MCP_SERVER_COMMAND)
+    def __init__(self):
+        self.model = agent_config.MODEL
+        self.temperature = agent_config.TEMPERATURE
+        self.mcp_client = MCPClient(agent_config.MCP_SERVER_COMMAND)
         self.initialize()
 
     def initialize(self):
         asyncio.run(self.mcp_client.initialize())
+        LOGGER.debug("MCP TOOL")
+        LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
         self.history = [
             {"role": "system", "content": self.system_prompt},
@@ -28,16 +31,22 @@ class ReActAgent:
 
     @property
     def domain_policy(self) -> str:
-        with open(config.DOMAIN_POLICY_FILE, "r") as f:
+        with open(agent_config.DOMAIN_POLICY_FILE, "r") as f:
             domain_policy = f.read().strip()
         return domain_policy
 
     @property
     def system_prompt(self) -> str:
-        return config.SYSTEM_PROMPT_TEMPLATE.format(
-            agent_instruction=config.AGENT_INSTRUCTION,
+        return agent_config.SYSTEM_PROMPT_TEMPLATE.format(
+            agent_instruction=agent_config.AGENT_INSTRUCTION,
             domain_policy=self.domain_policy,
         )
+
+    def initiate_conversation(self) -> str:
+        self.history.append(
+            {"role": "assistant", "content": agent_config.INITIAL_CONVERSTION}
+        )
+        return agent_config.INITIAL_CONVERSTION
 
     def ReAct_loop(self, user_input: str) -> Dict:
         self.history.append({"role": "user", "content": user_input})

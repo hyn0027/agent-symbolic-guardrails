@@ -35,26 +35,7 @@ class MCPClient:
                 "function": {
                     "name": tool.name,
                     "description": tool.description,
-                    "parameters": {
-                        "type": "object",
-                        "properties": {
-                            param: {
-                                "type": (
-                                    tool.inputSchema["properties"][param]["type"]
-                                    if "type" in tool.inputSchema["properties"][param]
-                                    else "string"
-                                ),
-                                "description": (
-                                    tool.inputSchema["properties"][param]["description"]
-                                    if "description"
-                                    in tool.inputSchema["properties"][param]
-                                    else ""
-                                ),
-                            }
-                            for param in tool.inputSchema["properties"]
-                        },
-                        "required": [param for param in tool.inputSchema["required"]],
-                    },
+                    "parameters": tool.inputSchema,
                 },
             }
             openai_tools.append(openai_tool)
