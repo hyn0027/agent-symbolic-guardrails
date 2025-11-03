@@ -26,7 +26,6 @@ def human_interaction():
 
 
 def _simulation_once(user_task: str):
-    LOGGER.debug(f"Configuration Loaded: {CONFIG}")
     agent = ReActAgent()
     user = UserSimulator(user_task)
     agent_message = agent.initiate_conversation()
@@ -35,7 +34,11 @@ def _simulation_once(user_task: str):
         while True:
             user_input = user.respond_to_customer_support(agent_message)
             LOGGER.info(f"User: {user_input}")
-            if "###STOP###" in user_input or "###TRANSFER###" in user_input or "###OUT-OF-SCOPE###" in user_input:
+            if (
+                "###STOP###" in user_input
+                or "###TRANSFER###" in user_input
+                or "###OUT-OF-SCOPE###" in user_input
+            ):
                 LOGGER.info(f"Simulation ended due to token in user response.")
                 break
             agent_message = agent.ReAct_loop(user_input)
@@ -47,9 +50,12 @@ def _simulation_once(user_task: str):
 
 
 def user_simulation():
+    LOGGER.debug(f"Configuration Loaded: {CONFIG}")
+
     import random
-    
+
     tasks = load_tasks_from_json_file(CONFIG.SIMULATION.TASK_FILE)
     random_task = random.choice(tasks)
     LOGGER.info(f"Selected Task:\n{random_task}")
+    LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
     _simulation_once(random_task.user_scenario)
