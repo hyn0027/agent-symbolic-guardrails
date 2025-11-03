@@ -3,7 +3,7 @@ from config.loader import CONFIG
 from config.logger import LOGGER
 
 
-def main():
+def human_interaction():
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
     agent = ReActAgent()
     initial_message = agent.initiate_conversation()
@@ -16,7 +16,3 @@ def main():
             break
         response = agent.ReAct_loop(user_input)
         LOGGER.info(f"Agent: {response}")
-
-
-if __name__ == "__main__":
-    main()

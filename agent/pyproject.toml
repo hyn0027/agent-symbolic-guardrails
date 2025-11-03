@@ -7,4 +7,4 @@ dependencies = ["openai", "mcp"]
 
 
 [project.scripts]
-start-agent = "cli:main"
+human_interaction = "cli:human_interaction"
