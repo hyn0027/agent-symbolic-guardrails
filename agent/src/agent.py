@@ -4,19 +4,16 @@ from openai.types.chat.chat_completion_message import ChatCompletionMessage
 from typing import Dict, List
 import asyncio
 from mcp_client import MCPClient
-from utils import load_config, Config, get_logger
+from config import LOGGER, CONFIG
 
-config = load_config("config.yml")
-
-logger = get_logger("ReActAgent", config.log_dir)
+config = CONFIG.AGENT
 
 
 class ReActAgent:
-    def __init__(self, config: Config, model: str = "gpt-4o", temperature: float = 0.0):
+    def __init__(self, model: str = "gpt-4o", temperature: float = 0.0):
         self.model = model
         self.temperature = temperature
-        self.mcp_client = MCPClient()
-        self.config = config
+        self.mcp_client = MCPClient(config.MCP_SERVER_COMMAND)
         self.initialize()
 
     def initialize(self):
@@ -25,20 +22,20 @@ class ReActAgent:
         self.history = [
             {"role": "system", "content": self.system_prompt},
         ]
-        logger.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
-        logger.info("Available tools have been successfully enumerated.")
-        logger.debug(json.dumps(self.tools, indent=2))
+        LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
+        LOGGER.info("Available tools have been successfully enumerated.")
+        LOGGER.debug(json.dumps(self.tools, indent=2))
 
     @property
     def domain_policy(self) -> str:
-        with open(self.config.domain_policy_file, "r") as f:
+        with open(config.DOMAIN_POLICY_FILE, "r") as f:
             domain_policy = f.read().strip()
         return domain_policy
 
     @property
     def system_prompt(self) -> str:
-        return self.config.system_prompt_template.format(
-            agent_instruction=self.config.agent_instruction,
+        return config.SYSTEM_PROMPT_TEMPLATE.format(
+            agent_instruction=config.AGENT_INSTRUCTION,
             domain_policy=self.domain_policy,
         )
 
@@ -57,10 +54,10 @@ class ReActAgent:
                     tool_response = asyncio.run(
                         self.mcp_client.call_tool(tool_name, tool_args)
                     )
-                    logger.info(
+                    LOGGER.info(
                         f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
                     )
-                    logger.debug(f"Tool Response: {tool_response}")
+                    LOGGER.debug(f"Tool Response: {tool_response}")
                     self.history.append(
                         {
                             "role": "tool",
@@ -84,20 +81,3 @@ class ReActAgent:
             tools=tools,
         )
         return response.choices[0].message
-
-
-def main():
-    logger.debug(config)
-    agent = ReActAgent(config=config)
-    while True:
-        user_input = input("User: ")
-        logger.debug(f"User Input: {user_input}")
-        if user_input.lower() in ["exit", "quit"]:
-            logger.info("Exiting the agent.")
-            break
-        response = agent.ReAct_loop(user_input)
-        logger.info(f"Agent Response: {response}")
-
-
-if __name__ == "__main__":
-    main()

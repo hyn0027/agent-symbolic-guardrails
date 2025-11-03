@@ -1,0 +1,10 @@
+[project]
+name = "local-agent"
+version = "0.1.0"
+description = "Local ReAct agent"
+requires-python = ">=3.10"
+dependencies = ["openai", "mcp"]
+
+
+[project.scripts]
+start-agent = "cli:main"

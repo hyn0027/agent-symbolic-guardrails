@@ -1,20 +1,20 @@
-import yaml
 import os
 from datetime import datetime
 import logging
+from .loader import CONFIG
 
 
-def get_logger(name: str, log_dir: str) -> logging.Logger:
+def setup_logger(name: str, log_path: str) -> logging.Logger:
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
 
     console_handler = logging.StreamHandler()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-    if not os.path.exists(log_dir):
-        os.makedirs(log_dir)
+    if not os.path.exists(log_path):
+        os.makedirs(log_path)
 
-    log_filename = os.path.join(log_dir, f"{timestamp}.log")
+    log_filename = os.path.join(log_path, f"{timestamp}.log")
     file_handler = logging.FileHandler(log_filename, mode="a", encoding="utf-8")
 
     formatter = logging.Formatter(
@@ -34,17 +34,4 @@ def get_logger(name: str, log_dir: str) -> logging.Logger:
     return logger
 
 
-class Config(dict):
-    """A simple configuration class that extends dict."""
-
-    def __getattr__(self, item):
-        try:
-            return self[item]
-        except KeyError:
-            raise AttributeError(f"'Config' object has no attribute '{item}'")
-
-
-def load_config(config_file: str) -> dict:
-    with open(config_file, "r") as f:
-        config = yaml.safe_load(f)
-    return Config(config)
+LOGGER = setup_logger("ReActAgent", CONFIG.SETTINGS.LOG_PATH)

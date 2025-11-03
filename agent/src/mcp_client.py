@@ -5,19 +5,18 @@ from mcp.client.session import ClientSession
 from mcp.client.stdio import StdioServerParameters, stdio_client
 from mcp.types import Tool
 
-server_params = StdioServerParameters(
-    command="start-mcp-server",
-)
-
 
 class MCPClient:
-    def __init__(self):
+    def __init__(self, server_params: str):
         self.tools: List[Tool] = []
         self.initialized = False
+        self.server_params = StdioServerParameters(
+            command=server_params,
+        )
 
     async def initialize(self):
         """Initialize the MCP client by connecting to the server and fetching tools."""
-        async with stdio_client(server_params) as (read, write):
+        async with stdio_client(self.server_params) as (read, write):
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 tools_response = await session.list_tools()
@@ -75,7 +74,7 @@ class MCPClient:
                 "error": "Arguments must be a dictionary or a JSON string representing a dictionary."
             }
         try:
-            async with stdio_client(server_params) as (read, write):
+            async with stdio_client(self.server_params) as (read, write):
                 async with ClientSession(read, write) as session:
                     await session.initialize()
                     response = await session.call_tool(name, arguments=arguments)
