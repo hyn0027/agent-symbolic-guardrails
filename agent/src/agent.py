@@ -14,11 +14,16 @@ class ReActAgent:
     def __init__(self):
         self.model = agent_config.MODEL
         self.temperature = agent_config.TEMPERATURE
-        self.mcp_client = MCPClient(agent_config.MCP_SERVER_COMMAND)
         self.initialize()
 
     def initialize(self):
-        asyncio.run(self.mcp_client.initialize())
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
+
+        LOGGER.info("Initializing MCP Client")
+        self.mcp_client = MCPClient(agent_config.MCP_SERVER_COMMAND)
+        self.loop.run_until_complete(self.mcp_client.initialize())
+        # asyncio.run(self.mcp_client.initialize())
         LOGGER.debug("MCP TOOL")
         LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
@@ -60,7 +65,7 @@ class ReActAgent:
                     tool_name = tool_call.function.name
                     tool_args = tool_call.function.arguments
 
-                    tool_response = asyncio.run(
+                    tool_response = self.loop.run_until_complete(
                         self.mcp_client.call_tool(tool_name, tool_args)
                     )
                     LOGGER.info(
@@ -71,7 +76,7 @@ class ReActAgent:
                         {
                             "role": "tool",
                             "content": (
-                                tool_response.text
+                                tool_response["content"][0].text
                                 if "error" not in tool_response
                                 else json.dumps(tool_response)
                             ),

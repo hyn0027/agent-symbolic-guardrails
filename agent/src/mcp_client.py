@@ -1,28 +1,30 @@
 import json
 from typing import List, Dict, Any, Union
 
-from mcp.client.session import ClientSession
-from mcp.client.stdio import StdioServerParameters, stdio_client
-from mcp.types import Tool
+from fastmcp import Client
+from mcp.types import Tool, ContentBlock
 
 
 class MCPClient:
     def __init__(self, server_params: str):
         self.tools: List[Tool] = []
         self.initialized = False
-        self.server_params = StdioServerParameters(
-            command=server_params,
+        self.client = Client(
+            {
+                "mcpServers": {
+                    "local_server": {
+                        "transport": "stdio",
+                        "command": server_params,
+                    }
+                }
+            }
         )
 
     async def initialize(self):
         """Initialize the MCP client by connecting to the server and fetching tools."""
-        async with stdio_client(self.server_params) as (read, write):
-            async with ClientSession(read, write) as session:
-                await session.initialize()
-                tools_response = await session.list_tools()
-                for tool in tools_response.tools:
-                    self.tools.append(tool)
-                self.initialized = True
+        async with self.client:
+            self.tools = await self.client.list_tools()
+            self.initialized = True
 
     def list_OPENAI_tools(self) -> List[Dict[str, Any]]:
         """List tools in a format compatible with OpenAI's tool calling."""
@@ -55,10 +57,24 @@ class MCPClient:
                 "error": "Arguments must be a dictionary or a JSON string representing a dictionary."
             }
         try:
-            async with stdio_client(self.server_params) as (read, write):
-                async with ClientSession(read, write) as session:
-                    await session.initialize()
-                    response = await session.call_tool(name, arguments=arguments)
-                    return response.content[0]
+            async with self.client:
+                result = await self.client.call_tool(name=name, arguments=arguments)
+            res = self.tool_call_res_to_json(result)
+            if res["is_error"]:
+                return {"error": res["data"]}
+            return res
         except Exception as e:
             return {"error": str(e)}
+
+    def tool_call_res_to_json(self, tool_call_response: Any) -> Dict[str, Any]:
+        """Convert tool call response to a JSON-serializable dictionary."""
+        is_error = tool_call_response.is_error
+        data = tool_call_response.data
+        structured_content = tool_call_response.structured_content
+        content: list[ContentBlock] = tool_call_response.content
+        return {
+            "is_error": is_error,
+            "data": data,
+            "structured_content": structured_content,
+            "content": [block for block in content],
+        }
