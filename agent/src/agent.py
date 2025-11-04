@@ -76,7 +76,7 @@ class ReActAgent:
                         {
                             "role": "tool",
                             "content": (
-                                tool_response["content"][0].text
+                                json.dumps(tool_response["structured_content"])
                                 if "error" not in tool_response
                                 else json.dumps(tool_response)
                             ),
