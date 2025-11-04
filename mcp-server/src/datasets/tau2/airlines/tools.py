@@ -182,7 +182,7 @@ def _payment_for_update(
     return payment
 
 
-@mcp.tool()
+@mcp.tool(meta={"require_confirmation": True})
 def book_reservation(
     user_id: Annotated[
         str, "The ID of the user to book the reservation such as 'sara_doe_496'`."
@@ -344,7 +344,7 @@ def calculate(
     return str(round(float(eval(expression, {"__builtins__": None}, {})), 2))
 
 
-@mcp.tool()
+@mcp.tool(meta={"require_confirmation": True})
 def cancel_reservation(
     reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
 ) -> Reservation:
@@ -482,7 +482,6 @@ def search_onestop_flight(
             if "+1" in result1.scheduled_arrival_time_est
             else date
         )
-        # TODO: flight1.scheduled_arrival_time_est could have a +1?
         for result2 in _search_direct_flight(
             date=date2,
             origin=result1.destination,
@@ -554,7 +553,7 @@ def transfer_to_human_agents(
     return "Transfer successful"
 
 
-@mcp.tool()
+@mcp.tool(meta={"require_confirmation": True})
 def update_reservation_baggages(
     reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
     total_baggages: Annotated[
@@ -599,7 +598,7 @@ def update_reservation_baggages(
     return reservation
 
 
-@mcp.tool()
+@mcp.tool(meta={"require_confirmation": True})
 def update_reservation_flights(
     reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
     cabin: Annotated[CabinClass, "The cabin class of the reservation"],
@@ -693,11 +692,10 @@ def update_reservation_flights(
     reservation.flights = reservation_flights
     reservation.cabin = cabin  # This was missing from original TauBench
 
-    # Do not make flight database update here, assume it takes time to be updated # TODO: So this means that we don't update the seats here. What about in cancel_reservation?
     return reservation
 
 
-@mcp.tool()
+@mcp.tool(meta={"require_confirmation": True})
 def update_reservation_passengers(
     reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
     passengers: Annotated[

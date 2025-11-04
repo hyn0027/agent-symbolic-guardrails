@@ -92,7 +92,7 @@ def run_random_task():
 def run_dataset():
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
 
-    tasks = load_tasks()[:3]
+    tasks = load_tasks()
     eval_res_list = []
     for idx, task in enumerate(tasks):
         LOGGER.info(f"{'=' * 10} Starting Running Task {idx + 1} {'=' * 10}")

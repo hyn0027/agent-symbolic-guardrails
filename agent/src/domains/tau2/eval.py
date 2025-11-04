@@ -168,7 +168,7 @@ class CommunicateEvaluator:
                     continue
                 if info_str.lower() in message["content"].lower().replace(
                     ",", ""
-                ):  # TODO: This could be improved!
+                ):
                     found = True
                     LOGGER.debug(
                         f"Communicate info '{info_str}' found in message: {message['content']}"

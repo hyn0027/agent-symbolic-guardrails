@@ -1,13 +1,14 @@
 from openai import OpenAI
 import json
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
-from typing import Dict, List
+from typing import Dict, List, Optional
 import asyncio
 from mcp_client import MCPClient
 from config.loader import CONFIG
 from config.logger import LOGGER
 
 agent_config = CONFIG.AGENT
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class ReActAgent:
@@ -35,6 +36,8 @@ class ReActAgent:
         LOGGER.info("Available tools have been successfully enumerated.")
         # LOGGER.debug(json.dumps(self.tools, indent=2))
 
+        self.remaining_tool_calls = []
+
     def initiate_conversation(self) -> str:
         self.history.append(
             {"role": "assistant", "content": agent_config.INITIAL_CONVERSTION}
@@ -44,7 +47,82 @@ class ReActAgent:
     def append_user_message(self, message: str):
         self.history.append({"role": "user", "content": message})
 
+    def _process_tool_call(self, tool_call, user_confirmed: bool) -> Optional[str]:
+        tool_name = tool_call.function.name
+        tool_args = tool_call.function.arguments
+
+        if safeguard_config.USER_CONFIRMATION and not user_confirmed:
+            tool_meta = self.mcp_client.get_tool_metadata(tool_name)
+            if tool_meta.get("require_confirmation", False):
+                LOGGER.info(
+                    f"Tool '{tool_name}' requires user confirmation before invocation."
+                )
+                confirmation_message = (
+                    safeguard_config.USER_CONFIRMATION_TEMPLATE.format(
+                        tool_name=tool_name,
+                        tool_args=(
+                            json.dumps(tool_args)
+                            if isinstance(tool_args, dict)
+                            else str(tool_args)
+                        ),
+                    )
+                )
+                return confirmation_message
+
+        tool_response = self.loop.run_until_complete(
+            self.mcp_client.call_tool(tool_name, tool_args)
+        )
+        LOGGER.info(
+            f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
+        )
+        LOGGER.debug(f"Tool Response: {tool_response}")
+        self.history.append(
+            {
+                "role": "tool",
+                "content": (
+                    json.dumps(tool_response["structured_content"])
+                    if "error" not in tool_response
+                    else json.dumps(tool_response)
+                ),
+                "tool_call_id": tool_call.id,
+            }
+        )
+
     def ReAct_loop(self, user_input: str) -> Dict:
+        if self.remaining_tool_calls:
+            if (
+                user_input.split()[0].strip().upper().replace(".", "").replace(",", "")
+                == "CONFIRM"
+            ):
+                LOGGER.info("User confirmed the tool invocation.")
+                self._process_tool_call(
+                    self.remaining_tool_calls[0], user_confirmed=True
+                )
+                self.remaining_tool_calls = self.remaining_tool_calls[1:]
+            elif (
+                user_input.split()[0].strip().upper().replace(".", "").replace(",", "")
+                == "CANCEL"
+            ):
+                LOGGER.info("User canceled the tool invocation.")
+                self.history.append(
+                    {
+                        "role": "tool",
+                        "content": "Tool invocation canceled by user.",
+                        "tool_call_id": self.remaining_tool_calls[0].id,
+                    }
+                )
+                self.remaining_tool_calls = self.remaining_tool_calls[1:]
+            else:
+                msg = 'Please respond with "CONFIRM" to proceed with the tool invocation or "CANCEL" to abort.'
+                return msg
+
+        for index, tool_call in enumerate(self.remaining_tool_calls):
+            res = self._process_tool_call(tool_call, user_confirmed=False)
+            if res is not None:
+                self.remaining_tool_calls = self.remaining_tool_calls[index:]
+                return res
+        self.remaining_tool_calls = []
+
         self.append_user_message(user_input)
 
         while True:
@@ -52,28 +130,11 @@ class ReActAgent:
             self.history.append(response.to_dict())
 
             if response.tool_calls:
-                for tool_call in response.tool_calls:
-                    tool_name = tool_call.function.name
-                    tool_args = tool_call.function.arguments
-
-                    tool_response = self.loop.run_until_complete(
-                        self.mcp_client.call_tool(tool_name, tool_args)
-                    )
-                    LOGGER.info(
-                        f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
-                    )
-                    LOGGER.debug(f"Tool Response: {tool_response}")
-                    self.history.append(
-                        {
-                            "role": "tool",
-                            "content": (
-                                json.dumps(tool_response["structured_content"])
-                                if "error" not in tool_response
-                                else json.dumps(tool_response)
-                            ),
-                            "tool_call_id": tool_call.id,
-                        }
-                    )
+                for index, tool_call in enumerate(response.tool_calls):
+                    res = self._process_tool_call(tool_call, user_confirmed=False)
+                    if res is not None:
+                        self.remaining_tool_calls = response.tool_calls[index:]
+                        return res
             else:
                 return response.content
 

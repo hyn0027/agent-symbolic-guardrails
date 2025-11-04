@@ -26,6 +26,15 @@ class MCPClient:
             self.tools = await self.client.list_tools()
             self.initialized = True
 
+    def get_tool_metadata(self, name: str) -> Dict[str, Any]:
+        """Get metadata of a tool by its name."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        for tool in self.tools:
+            if tool.name == name:
+                return tool.meta if tool.meta else {}
+        raise ValueError(f"Tool with name '{name}' not found.")
+
     def list_OPENAI_tools(self) -> List[Dict[str, Any]]:
         """List tools in a format compatible with OpenAI's tool calling."""
         if not self.initialized:

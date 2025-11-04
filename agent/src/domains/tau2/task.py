@@ -242,7 +242,7 @@ class EvaluationCriteria(BaseModel):
         ),
     ]
 
-    communicate_info: Annotated[  # TODO: Deprecate this
+    communicate_info: Annotated[
         Optional[list[str]],
         Field(
             description="List of information that the agent should communicate to the user.",
