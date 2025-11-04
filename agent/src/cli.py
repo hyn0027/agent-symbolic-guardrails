@@ -78,3 +78,23 @@ def user_simulation():
     LOGGER.info(f"Selected Task:\n{random_task}")
     LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
     _simulation_once(random_task)
+
+
+def eval_full_dataset():
+    LOGGER.debug(f"Configuration Loaded: {CONFIG}")
+
+    tasks = load_tasks_from_json_file(CONFIG.SIMULATION.TASK_FILE)
+    total_reward = 0.0
+    total_reward_without_nl = 0.0
+    for idx, task in enumerate(tasks):
+        LOGGER.info(f"{'=' * 10} Starting Simulation for Task {idx + 1} {'=' * 10}")
+        eval_res = _simulation_once(task)
+        if eval_res:
+            total_reward += eval_res.reward
+            total_reward_without_nl += eval_res.info["reward_without_nl"]
+    avg_reward = total_reward / len(tasks) if tasks else 0.0
+    avg_reward_without_nl = total_reward_without_nl / len(tasks) if tasks else 0.0
+    LOGGER.info(f"Average Reward over {len(tasks)} tasks: {avg_reward}")
+    LOGGER.info(
+        f"Average Reward without NL component over {len(tasks)} tasks: {avg_reward_without_nl}"
+    )

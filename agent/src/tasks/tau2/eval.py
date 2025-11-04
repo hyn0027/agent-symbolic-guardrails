@@ -348,6 +348,8 @@ def evaluate_simulation(
         reward_breakdown.update(communicate_reward_info.reward_breakdown)
     reward *= communicate_reward_info.reward
 
+    reward_without_nl = reward  # Store reward before NL assertions
+
     if nl_assertions_reward_info.reward_breakdown is not None:
         reward_breakdown.update(nl_assertions_reward_info.reward_breakdown)
     reward *= nl_assertions_reward_info.reward
@@ -359,5 +361,6 @@ def evaluate_simulation(
             "action_evaluation": action_reward_info.info,
             "communicate_evaluation": communicate_reward_info.info,
             "nl_assertions_evaluation": nl_assertions_reward_info.info,
+            "reward_without_nl": reward_without_nl,
         },
     )
