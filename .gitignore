@@ -211,3 +211,6 @@ __marimo__/
 *.pem
 
 .python-version
+
+!logs_to_save/
+!logs_to_save/**/*.log
