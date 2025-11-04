@@ -11,9 +11,10 @@ agent_config = CONFIG.AGENT
 
 
 class ReActAgent:
-    def __init__(self):
+    def __init__(self, system_prompt: str):
         self.model = agent_config.MODEL
         self.temperature = agent_config.TEMPERATURE
+        self.system_prompt = system_prompt
         self._initialize()
 
     def _initialize(self):
@@ -32,20 +33,7 @@ class ReActAgent:
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
         LOGGER.info("Available tools have been successfully enumerated.")
-        LOGGER.debug(json.dumps(self.tools, indent=2))
-
-    @property
-    def domain_policy(self) -> str:
-        with open(agent_config.DOMAIN_POLICY_FILE, "r") as f:
-            domain_policy = f.read().strip()
-        return domain_policy
-
-    @property
-    def system_prompt(self) -> str:
-        return agent_config.SYSTEM_PROMPT_TEMPLATE.format(
-            agent_instruction=agent_config.AGENT_INSTRUCTION,
-            domain_policy=self.domain_policy,
-        )
+        # LOGGER.debug(json.dumps(self.tools, indent=2))
 
     def initiate_conversation(self) -> str:
         self.history.append(
@@ -53,8 +41,11 @@ class ReActAgent:
         )
         return agent_config.INITIAL_CONVERSTION
 
+    def append_user_message(self, message: str):
+        self.history.append({"role": "user", "content": message})
+
     def ReAct_loop(self, user_input: str) -> Dict:
-        self.history.append({"role": "user", "content": user_input})
+        self.append_user_message(user_input)
 
         while True:
             response = self._call_LLM(self.history, self.tools)

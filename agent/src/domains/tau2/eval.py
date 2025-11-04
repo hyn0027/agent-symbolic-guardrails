@@ -1,22 +1,17 @@
 # modified from tau bench code
 
-from enum import Enum
 from openai import OpenAI
 from typing import Annotated, Optional, Dict, List
 from pydantic import BaseModel, Field
 from agent import ReActAgent
 from user import UserSimulator
 from .task import Task, RewardType, Action, ToolCall
+from eval import TerminateReason
 from config.logger import LOGGER
 from config.loader import CONFIG
 import json
 
 eval_config = CONFIG.EVAL
-
-
-class TerminateReason(Enum):
-    USER_STOP = "USER_STOP"
-    MAX_STEPS = "MAX_STEPS"
 
 
 class RewardInfo(BaseModel):
@@ -321,7 +316,7 @@ class NLAssertionsEvaluator:
         return response.choices[0].message.content
 
 
-def evaluate_simulation(
+def evaluate_single(
     terminate_reason: TerminateReason,
     agent: ReActAgent,
     user: UserSimulator,
@@ -361,7 +356,7 @@ def evaluate_simulation(
         reward_breakdown.update(nl_assertions_reward_info.reward_breakdown)
     reward *= nl_assertions_reward_info.reward
 
-    return RewardInfo(
+    eval_res = RewardInfo(
         reward=reward,
         reward_breakdown=reward_breakdown,
         info={
@@ -370,4 +365,34 @@ def evaluate_simulation(
             "nl_assertions_evaluation": nl_assertions_reward_info.info,
             "reward_without_nl": reward_without_nl,
         },
+    )
+
+    LOGGER.info(f"Reward: {eval_res.reward}")
+    LOGGER.info(f"Reward Breakdown: {json.dumps(eval_res.reward_breakdown, indent=2)}")
+    return eval_res
+
+
+def aggregate_evals(res_list: List[RewardInfo]) -> RewardInfo:
+    total_reward = 0.0
+    total_reward_breakdown: Dict[RewardType, float] = {}
+    for res in res_list:
+        if res is None:
+            LOGGER.warning("Skipping None evaluation result during aggregation.")
+            continue
+        total_reward += res.reward
+        if res.reward_breakdown:
+            for k, v in res.reward_breakdown.items():
+                total_reward_breakdown[k] = total_reward_breakdown.get(k, 0.0) + v
+
+    avg_reward = total_reward / len(res_list) if res_list else 0.0
+    avg_reward_breakdown = {
+        k: v / len(res_list) for k, v in total_reward_breakdown.items()
+    }
+
+    LOGGER.info(f"Aggregated Average Reward: {avg_reward}")
+    LOGGER.info(f"Aggregated Average Reward Breakdown: {json.dumps(avg_reward_breakdown, indent=2)}")
+
+    return RewardInfo(
+        reward=avg_reward,
+        reward_breakdown=avg_reward_breakdown,
     )

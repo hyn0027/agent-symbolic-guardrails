@@ -9,27 +9,18 @@ user_config = CONFIG.USER
 
 
 class UserSimulator:
-    def __init__(self, instructions: str):
+    def __init__(self, system_prompt: str):
         self.model = user_config.MODEL
         self.temperature = user_config.TEMPERATURE
-        self.instructions = instructions
+        self.system_prompt = system_prompt
         self.client = OpenAI()
         self.initialize()
-
-    def get_system_prompt(self) -> str:
-        with open(user_config.SIMULATION_GUIDELINE_PATH, "r") as file:
-            guidelines = file.read()
-
-        system_prompt = user_config.SYSTEM_PROMPT_TEMPLATE.format(
-            global_user_sim_guidelines=guidelines, instructions=self.instructions
-        )
-        return system_prompt
 
     def initialize(self):
         self.history = [
             {
                 "role": "system",
-                "content": self.get_system_prompt(),
+                "content": self.system_prompt,
             }
         ]
         LOGGER.info("UserAgent initialization complete.")
@@ -50,6 +41,6 @@ class UserSimulator:
             tools=tools,
         )
         return response.choices[0].message
-    
+
     def fetch_tool_call_history(self) -> List[Dict]:
         return []

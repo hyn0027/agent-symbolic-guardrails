@@ -1,8 +1,14 @@
+DATASET:
+  NAME: "tau2"
+  DOMAIN: "airline"
+
 AGENT:
   MODEL: "gpt-4o"
   TEMPERATURE: 0.0
 
   MCP_SERVER_COMMAND: "start-mcp-server"
+
+  AGENT_INITIAL_MESSAGE: true
 
   INITIAL_CONVERSTION: "Hi! How can I help you today?"
 

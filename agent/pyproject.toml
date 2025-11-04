@@ -8,5 +8,5 @@ dependencies = ["openai", "mcp"]
 
 [project.scripts]
 human_interaction = "cli:human_interaction"
-user_simulation = "cli:user_simulation"
-eval_tasks = "cli:eval_full_dataset"
+run_random_task = "cli:run_random_task"
+run_dataset = "cli:run_dataset"

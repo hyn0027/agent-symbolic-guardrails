@@ -8,6 +8,8 @@ from typing import Optional, Literal, List
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
+from config.loader import CONFIG
+
 
 class Description(BaseModel):
     """
@@ -367,7 +369,7 @@ class Task(BaseModel):
         return "\n".join(lines)
 
 
-def load_tasks_from_json_file(file_path: str) -> List[Task]:
+def _load_tasks_from_json_file(file_path: str) -> List[Task]:
     """
     Load tasks from a JSON file.
     """
@@ -375,3 +377,11 @@ def load_tasks_from_json_file(file_path: str) -> List[Task]:
         tasks_json = json.load(f)
     tasks = [Task.model_validate(task_json, strict=True) for task_json in tasks_json]
     return tasks
+
+
+def load_tasks() -> List[Task]:
+    """
+    Load tasks based on the configuration.
+    """
+    task_file = CONFIG.SIMULATION.TASK_FILE
+    return _load_tasks_from_json_file(task_file)
