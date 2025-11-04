@@ -96,6 +96,13 @@ class ReActAgent:
         )
         return response.choices[0].message
 
+    def fetch_tool_call_history(self) -> List[Dict]:
+        tool_calls = []
+        for message in self.history:
+            if message.get("role") == "assistant" and "tool_calls" in message:
+                tool_calls.extend(message["tool_calls"])
+        return tool_calls
+
     def shutdown(self):
         LOGGER.info("Shutting down ReActAgent and closing event loop.")
         try:

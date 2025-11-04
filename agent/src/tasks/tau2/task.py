@@ -210,8 +210,12 @@ class Action(BaseModel):
             compare_args = self.compare_args
         if len(compare_args) == 0:
             return True
-        tool_args = {k: v for k, v in tool_call.arguments.items() if k in compare_args}
-        action_args = {k: v for k, v in self.arguments.items() if k in compare_args}
+        tool_args = {
+            k: str(v) for k, v in tool_call.arguments.items() if k in compare_args
+        }
+        action_args = {
+            k: str(v) for k, v in self.arguments.items() if k in compare_args
+        }
         return tool_args == action_args
 
 

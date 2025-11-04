@@ -525,20 +525,17 @@ def send_certificate(
     raise ValueError("Too many certificates")
 
 
-# @is_tool(ToolType.THINK)
-# def think(thought: str) -> str:
-#     """
-#     Use the tool to think about something.
-#     It will not obtain new information or change the database, but just append the thought to the log.
-#     Use it when complex reasoning or some cache memory is needed.
+@mcp.tool()
+def think(thought: Annotated[str, "A thought to think about."]) -> str:
+    """
+    Use the tool to think about something.
+    It will not obtain new information or change the database, but just append the thought to the log.
+    Use it when complex reasoning or some cache memory is needed.
 
-#     Args:
-#         thought: A thought to think about.
-
-#     Returns:
-#         Empty string
-#     """
-#     return ""
+    Returns:
+        Empty string
+    """
+    return ""
 
 
 @mcp.tool()

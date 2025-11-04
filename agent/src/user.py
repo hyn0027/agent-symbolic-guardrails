@@ -1,6 +1,6 @@
 from openai import OpenAI
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
-from typing import List
+from typing import List, Dict
 
 from config.loader import CONFIG
 from config.logger import LOGGER
@@ -50,3 +50,6 @@ class UserSimulator:
             tools=tools,
         )
         return response.choices[0].message
+    
+    def fetch_tool_call_history(self) -> List[Dict]:
+        return []
