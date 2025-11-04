@@ -2,7 +2,7 @@
 
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field
-from tau2.db import DB
+from datasets.tau2.db import DB
 from .data_path import AIRLINE_DB_PATH
 
 FlightType = Literal["round_trip", "one_way"]

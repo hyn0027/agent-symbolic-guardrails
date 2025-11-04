@@ -1,5 +1,9 @@
 from mcp_server import mcp
-from tau2.airlines.tools import *
+from config_loader import CONFIG
+
+if CONFIG.DATASET.NAME == "tau2":
+    if CONFIG.DATASET.DOMAIN == "airline":
+        from datasets.tau2.airlines.tools import *
 
 
 def main():
