@@ -8,7 +8,10 @@ from agent import ReActAgent
 from user import UserSimulator
 from .task import Task, RewardType, Action, ToolCall
 from config.logger import LOGGER
+from config.loader import CONFIG
 import json
+
+eval_config = CONFIG.EVAL
 
 
 class TerminateReason(Enum):
@@ -272,7 +275,11 @@ class NLAssertionsEvaluator:
         MAX_RETRIES = 5
         for attempt in range(MAX_RETRIES):
             try:
-                assistant_message = cls._call_LLM(messages)
+                assistant_message = cls._call_LLM(
+                    messages,
+                    model=eval_config.MODEL,
+                    temperature=eval_config.TEMPERATURE,
+                )
                 if assistant_message.find("```json") != -1:
                     assistant_message = (
                         assistant_message.split("```json")[1].split("```")[0].strip()
