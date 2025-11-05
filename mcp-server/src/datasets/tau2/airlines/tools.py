@@ -2,6 +2,7 @@
 
 """Toolkit for the airline reservation system."""
 
+from datetime import datetime
 from copy import deepcopy
 from typing import List, Optional, Annotated
 
@@ -23,10 +24,14 @@ from .data_model import (
     Reservation,
     ReservationFlight,
     User,
+    MembershipLevel,
     db,
 )
 
 from mcp_server import mcp
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 def _get_user(user_id: str) -> User:
@@ -182,7 +187,148 @@ def _payment_for_update(
     return payment
 
 
-@mcp.tool(meta={"require_confirmation": True})
+def _get_free_baggage_allowance(membership: MembershipLevel, cabin: CabinClass) -> int:
+    """Get the free baggage allowance based on membership level and cabin class."""
+    additional = 0
+    if membership == "gold":
+        additional = 2
+    elif membership == "silver":
+        additional = 1
+    if cabin == "basic_economy":
+        return 0 + additional
+    elif cabin == "economy":
+        return 3 + additional
+    elif cabin == "business":
+        return 4 + additional
+
+
+def fetch_current_time() -> str:
+    """
+    Fetch the current system time.
+
+    Returns:
+        The current system time in ISO 8601 format.
+    """
+    return _get_datetime()
+
+
+def compute_time_difference(
+    time1: Annotated[
+        str,
+        "The first time in ISO 8601 format, such as '2024-05-01T10:00:00'.",
+    ],
+    time2: Annotated[
+        str,
+        "The second time in ISO 8601 format, such as '2024-05-01T15:30:00'.",
+    ],
+) -> dict[str, int]:
+    """
+    Compute the difference between two times. If time2 is later than time1, the result is positive; otherwise, it is negative.
+
+    Returns:
+        The difference of the 2 times, in days, hours, and minutes.
+    """
+    fmt = "%Y-%m-%dT%H:%M:%S"
+    dt1 = datetime.strptime(time1, fmt)
+    dt2 = datetime.strptime(time2, fmt)
+    delta = dt2 - dt1
+    days = delta.days
+    seconds = delta.seconds
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    sign = "" if delta.total_seconds() >= 0 else "-"
+    return {
+        "days": int(f"{sign}{abs(days)}"),
+        "hours": int(f"{sign}{abs(hours)}"),
+        "minutes": int(f"{sign}{abs(minutes)}"),
+    }
+
+
+def compute_reservation_price(
+    user_id: Annotated[
+        str, "The ID of the user to book the reservation such as 'sara_doe_496'`."
+    ],
+    cabin: Annotated[
+        CabinClass,
+        "The cabin class such as 'basic_economy', 'economy', or 'business'.",
+    ],
+    flights: Annotated[
+        List[FlightInfo | dict],
+        "An array of objects containing details about each piece of flight.",
+    ],
+    passengers: Annotated[
+        List[Passenger | dict],
+        "An array of objects containing details about each passenger.",
+    ],
+    total_baggages: Annotated[
+        int, "The total number of baggage items to book the reservation."
+    ],
+    nonfree_baggages: Annotated[
+        int, "The number of non-free baggage items to book the reservation."
+    ],
+    insurance: Annotated[Insurance, "Whether the reservation has insurance."],
+) -> int:
+    """
+    Compute the total price of a reservation without booking it.
+
+    Returns:
+        The total price of the reservation.
+    """
+    if all(isinstance(flight, dict) for flight in flights):
+        flights = [FlightInfo(**flight) for flight in flights]
+    if all(isinstance(passenger, dict) for passenger in passengers):
+        passengers = [Passenger(**passenger) for passenger in passengers]
+
+    if safeguard_config.API_CHECK and len(passengers) > 5:
+        raise ValueError("Cannot book reservation for more than 5 passengers")
+
+    user = _get_user(user_id)
+
+    if safeguard_config.API_CHECK:
+        user_membership = user.membership
+        free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
+        if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
+            raise ValueError(
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+            )
+        if (
+            total_baggages > free_baggage_allowance
+            and total_baggages != free_baggage_allowance + nonfree_baggages
+        ):
+            raise ValueError(
+                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+            )
+
+    # Update flights and calculate price
+    total_price = 0
+
+    for flight_info in flights:
+        flight_number = flight_info.flight_number
+        flight_date_data = _get_flight_instance(
+            flight_number=flight_number, date=flight_info.date
+        )
+        # Checking flight availability
+        if not isinstance(flight_date_data, FlightDateStatusAvailable):
+            raise ValueError(
+                f"Flight {flight_number} not available on date {flight_info.date}"
+            )
+        # Checking seat availability
+        if flight_date_data.available_seats[cabin] < len(passengers):
+            raise ValueError(f"Not enough seats on flight {flight_number}")
+        # Calculate price
+        price = flight_date_data.prices[cabin]
+        total_price += price * len(passengers)
+
+    # Add insurance fee
+    if insurance == "yes":
+        total_price += 30 * len(passengers)
+
+    # Add baggage fee
+    total_price += 50 * nonfree_baggages
+
+    return total_price
+
+
 def book_reservation(
     user_id: Annotated[
         str, "The ID of the user to book the reservation such as 'sara_doe_496'`."
@@ -229,8 +375,27 @@ def book_reservation(
         payment_methods = [
             Payment(**payment_method) for payment_method in payment_methods
         ]
+
+    if safeguard_config.API_CHECK and len(passengers) > 5:
+        raise ValueError("Cannot book reservation for more than 5 passengers")
+
     user = _get_user(user_id)
     reservation_id = _get_new_reservation_id()
+
+    if safeguard_config.API_CHECK:
+        user_membership = user.membership
+        free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
+        if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
+            raise ValueError(
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+            )
+        if (
+            total_baggages > free_baggage_allowance
+            and total_baggages != free_baggage_allowance + nonfree_baggages
+        ):
+            raise ValueError(
+                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+            )
 
     reservation = Reservation(
         reservation_id=reservation_id,
@@ -252,6 +417,7 @@ def book_reservation(
     total_price = 0
     all_flights_date_data: list[FlightDateStatusAvailable] = []
 
+    ori_dst_list = []
     for flight_info in flights:
         flight_number = flight_info.flight_number
         flight = _get_flight(flight_number)
@@ -288,6 +454,12 @@ def book_reservation(
     # Add baggage fee
     total_price += 50 * nonfree_baggages
 
+    count_payment_type = {
+        "credit_card": 0,
+        "gift_card": 0,
+        "certificate": 0,
+    }
+
     for payment_method in payment_methods:
         payment_id = payment_method.payment_id
         amount = payment_method.amount
@@ -295,9 +467,46 @@ def book_reservation(
             raise ValueError(f"Payment method {payment_id} not found")
 
         user_payment_method = user.payment_methods[payment_id]
+        count_payment_type[user_payment_method.source] += 1
         if user_payment_method.source in {"gift_card", "certificate"}:
             if user_payment_method.amount < amount:
                 raise ValueError(f"Not enough balance in payment method {payment_id}")
+
+    if safeguard_config.API_CHECK:
+        if (
+            count_payment_type["certificate"] > 1
+            or count_payment_type["credit_card"] > 1
+            or count_payment_type["gift_card"] > 3
+        ):
+            raise ValueError(
+                "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards."
+            )
+        if origin != reservation.flights[0].origin:
+            raise ValueError("Origin does not match the first flight's origin")
+        if (
+            flight_type == "one_way"
+            and destination != reservation.flights[-1].destination
+        ):
+            raise ValueError("Destination does not match the last flight's destination")
+        if (
+            flight_type == "round_trip"
+            and origin != reservation.flights[-1].destination
+        ):
+            raise ValueError(
+                "The last flight's destination does not match the origin for a round trip"
+            )
+        if flight_type == "round_trip":
+            has_flight_end_at_destination = False
+            has_flight_start_at_destination = False
+            for res_flight in reservation.flights:
+                if res_flight.destination == destination:
+                    has_flight_end_at_destination = True
+                if res_flight.origin == destination:
+                    has_flight_start_at_destination = True
+            if not (has_flight_end_at_destination and has_flight_start_at_destination):
+                raise ValueError(
+                    "Round trip reservation must have flights that go to and return from the destination"
+                )
 
     total_payment = sum(payment.amount for payment in payment_methods)
     if total_payment != total_price:
@@ -323,7 +532,6 @@ def book_reservation(
     return reservation
 
 
-@mcp.tool()
 def calculate(
     expression: Annotated[
         str,
@@ -344,55 +552,116 @@ def calculate(
     return str(round(float(eval(expression, {"__builtins__": None}, {})), 2))
 
 
-@mcp.tool(meta={"require_confirmation": True})
-def cancel_reservation(
-    reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
-) -> Reservation:
-    """
-    Cancel the whole reservation.
+if safeguard_config.API_REDESIGN:
 
-    Returns:
-        The updated reservation.
+    def cancel_reservation(
+        user_id: Annotated[str, "The ID of the user cancelling the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+    ) -> Reservation:
+        """
+        Cancel the whole reservation.
 
-    Raises:
-        ValueError: If the reservation is not found.
-    """
-    reservation = _get_reservation(reservation_id)
-    # LOGGER.debug(reservation.model_dump_json(indent=4))
-    # reverse the payment
-    refunds = []
-    for payment in reservation.payment_history:
-        refunds.append(
-            Payment(
-                payment_id=payment.payment_id,
-                amount=-payment.amount,
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the reservation is not found.
+        """
+        user = _get_user(user_id)
+        reservation = _get_reservation(reservation_id)
+
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+
+        # LOGGER.debug(reservation.model_dump_json(indent=4))
+        # reverse the payment
+        refunds = []
+        for payment in reservation.payment_history:
+            refunds.append(
+                Payment(
+                    payment_id=payment.payment_id,
+                    amount=-payment.amount,
+                )
             )
-        )
-    reservation.payment_history.extend(refunds)
-    reservation.status = "cancelled"
-    # LOGGER.debug(_get_reservation(reservation_id).model_dump_json(indent=4))
-    # Release seats
-    # LOGGER.warning("Seats release not implemented for cancellation!!!")
-    return reservation
+        reservation.payment_history.extend(refunds)
+        reservation.status = "cancelled"
+        # LOGGER.debug(_get_reservation(reservation_id).model_dump_json(indent=4))
+        # Release seats
+        # LOGGER.warning("Seats release not implemented for cancellation!!!")
+        return reservation
+
+else:
+
+    def cancel_reservation(
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+    ) -> Reservation:
+        """
+        Cancel the whole reservation.
+
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the reservation is not found.
+        """
+        reservation = _get_reservation(reservation_id)
+        # LOGGER.debug(reservation.model_dump_json(indent=4))
+        # reverse the payment
+        refunds = []
+        for payment in reservation.payment_history:
+            refunds.append(
+                Payment(
+                    payment_id=payment.payment_id,
+                    amount=-payment.amount,
+                )
+            )
+        reservation.payment_history.extend(refunds)
+        reservation.status = "cancelled"
+        # LOGGER.debug(_get_reservation(reservation_id).model_dump_json(indent=4))
+        # Release seats
+        # LOGGER.warning("Seats release not implemented for cancellation!!!")
+        return reservation
 
 
-@mcp.tool()
-def get_reservation_details(
-    reservation_id: Annotated[str, "The reservation ID, such as '8JX2WO'."],
-) -> Reservation:
-    """
-    Get the details of a reservation.
+if safeguard_config.API_REDESIGN:
 
-    Returns:
-        The reservation details.
+    def get_reservation_details(
+        user_id: Annotated[str, "The ID of the user retrieving the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as '8JX2WO'."],
+    ) -> Reservation:
+        """
+        Get the details of a reservation.
 
-    Raises:
-        ValueError: If the reservation is not found.
-    """
-    return _get_reservation(reservation_id)
+        Returns:
+            The reservation details.
+
+        Raises:
+            ValueError: If the reservation is not found.
+            ValueError: If the user does not own the reservation.
+        """
+        user = _get_user(user_id)
+        reservation = _get_reservation(reservation_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+        return reservation
+
+else:
+
+    def get_reservation_details(
+        reservation_id: Annotated[str, "The reservation ID, such as '8JX2WO'."],
+    ) -> Reservation:
+        """
+        Get the details of a reservation.
+
+        Returns:
+            The reservation details.
+
+        Raises:
+            ValueError: If the reservation is not found.
+        """
+        return _get_reservation(reservation_id)
 
 
-@mcp.tool()
 def get_user_details(
     user_id: Annotated[str, "The user ID, such as 'sara_doe_496'."],
 ) -> User:
@@ -408,7 +677,6 @@ def get_user_details(
     return _get_user(user_id)
 
 
-@mcp.tool()
 def list_all_airports() -> AirportInfo:
     """Returns a list of all available airports.
 
@@ -439,7 +707,6 @@ def list_all_airports() -> AirportInfo:
     ]
 
 
-@mcp.tool()
 def search_direct_flight(
     origin: Annotated[str, "The origin city airport in three letters, such as 'JFK'."],
     destination: Annotated[
@@ -458,7 +725,6 @@ def search_direct_flight(
     return _search_direct_flight(date=date, origin=origin, destination=destination)
 
 
-@mcp.tool()
 def search_onestop_flight(
     origin: Annotated[str, "The origin city airport in three letters, such as 'JFK'."],
     destination: Annotated[
@@ -493,7 +759,6 @@ def search_onestop_flight(
     return results
 
 
-@mcp.tool()
 def send_certificate(
     user_id: Annotated[
         str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
@@ -524,7 +789,6 @@ def send_certificate(
     raise ValueError("Too many certificates")
 
 
-@mcp.tool()
 def think(thought: Annotated[str, "A thought to think about."]) -> str:
     """
     Use the tool to think about something.
@@ -537,7 +801,6 @@ def think(thought: Annotated[str, "A thought to think about."]) -> str:
     return ""
 
 
-@mcp.tool()
 def transfer_to_human_agents(
     summary: Annotated[str, "A summary of the user's issue."],
 ) -> str:
@@ -553,178 +816,656 @@ def transfer_to_human_agents(
     return "Transfer successful"
 
 
-@mcp.tool(meta={"require_confirmation": True})
-def update_reservation_baggages(
-    reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
-    total_baggages: Annotated[
-        int, "The updated total number of baggage items included in the reservation."
-    ],
-    nonfree_baggages: Annotated[
-        int, "The updated number of non-free baggage items included in the reservation."
-    ],
-    payment_id: Annotated[
-        str,
-        "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
-    ],
-) -> Reservation:
-    """
-    Update the baggage information of a reservation.
+if safeguard_config.API_REDESIGN:
 
-    Returns:
-        The updated reservation.
+    def update_reservation_baggages(
+        user_id: Annotated[str, "The ID of the user updating the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        total_baggages: Annotated[
+            int,
+            "The updated total number of baggage items included in the reservation.",
+        ],
+        nonfree_baggages: Annotated[
+            int,
+            "The updated number of non-free baggage items included in the reservation.",
+        ],
+        payment_id: Annotated[
+            str,
+            "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+        ],
+    ) -> Reservation:
+        """
+        Update the baggage information of a reservation.
 
-    Raises:
-        ValueError: If the reservation is not found.
-        ValueError: If the user is not found.
-        ValueError: If the payment method is not found.
-        ValueError: If the certificate cannot be used to update reservation.
-        ValueError: If the gift card balance is not enough.
-    """
-    reservation = _get_reservation(reservation_id)
-    user = _get_user(reservation.user_id)
+        Returns:
+            The updated reservation.
 
-    # Calculate price
-    total_price = 50 * max(0, nonfree_baggages - reservation.nonfree_baggages)
+        Raises:
+            ValueError: If the user does not own the reservation.
+            ValueError: If the reservation is not found.
+            ValueError: If the user is not found.
+            ValueError: If the payment method is not found.
+            ValueError: If the certificate cannot be used to update reservation.
+            ValueError: If the gift card balance is not enough.
+        """
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(user_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
 
-    # Create payment
-    payment = _payment_for_update(user, payment_id, total_price)
-    if payment is not None:
-        reservation.payment_history.append(payment)
-
-    # Update reservation
-    reservation.total_baggages = total_baggages
-    reservation.nonfree_baggages = nonfree_baggages
-
-    return reservation
-
-
-@mcp.tool(meta={"require_confirmation": True})
-def update_reservation_flights(
-    reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
-    cabin: Annotated[CabinClass, "The cabin class of the reservation"],
-    flights: Annotated[
-        List[FlightInfo | dict],
-        "An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
-    ],
-    payment_id: Annotated[
-        str,
-        "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
-    ],
-) -> Reservation:
-    """
-    Update the flight information of a reservation.
-
-    Returns:
-        The updated reservation.
-
-    Raises:
-        ValueError: If the reservation is not found.
-        ValueError: If the user is not found.
-        ValueError: If the payment method is not found.
-        ValueError: If the certificate cannot be used to update reservation.
-        ValueError: If the gift card balance is not enough.
-    """
-    if all(isinstance(flight, dict) for flight in flights):
-        flights = [FlightInfo(**flight) for flight in flights]
-    reservation = _get_reservation(reservation_id)
-    user = _get_user(reservation.user_id)
-
-    # update flights and calculate price
-    total_price = 0
-    reservation_flights = []
-    for flight_info in flights:
-        # if existing flight, keep it
-        matching_reservation_flight = next(
-            (
-                reservation_flight
-                for reservation_flight in reservation.flights
-                if reservation_flight.flight_number == flight_info.flight_number
-                and reservation_flight.date == flight_info.date
-                and cabin == reservation.cabin
-            ),
-            None,
-        )
-        if matching_reservation_flight:
-            total_price += matching_reservation_flight.price * len(
-                reservation.passengers
+        if safeguard_config.API_CHECK:
+            free_baggage_allowance = _get_free_baggage_allowance(
+                user.membership, reservation.cabin
             )
-            reservation_flights.append(matching_reservation_flight)
-            continue
+            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
+                raise ValueError(
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                )
+            if (
+                total_baggages > free_baggage_allowance
+                and total_baggages != free_baggage_allowance + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                )
 
-        # If new flight:
-        flight = _get_flight(flight_info.flight_number)
-        # Check flight availability
-        flight_date_data = _get_flight_instance(
-            flight_number=flight_info.flight_number,
-            date=flight_info.date,
-        )
-        if not isinstance(flight_date_data, FlightDateStatusAvailable):
-            raise ValueError(
-                f"Flight {flight_info.flight_number} not available on date {flight_info.date}"
+        # Calculate price
+        total_price = 50 * max(0, nonfree_baggages - reservation.nonfree_baggages)
+
+        # Create payment
+        payment = _payment_for_update(user, payment_id, total_price)
+        if payment is not None:
+            reservation.payment_history.append(payment)
+
+        # Update reservation
+        reservation.total_baggages = total_baggages
+        reservation.nonfree_baggages = nonfree_baggages
+
+        return reservation
+
+else:
+
+    def update_reservation_baggages(
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        total_baggages: Annotated[
+            int,
+            "The updated total number of baggage items included in the reservation.",
+        ],
+        nonfree_baggages: Annotated[
+            int,
+            "The updated number of non-free baggage items included in the reservation.",
+        ],
+        payment_id: Annotated[
+            str,
+            "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+        ],
+    ) -> Reservation:
+        """
+        Update the baggage information of a reservation.
+
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the reservation is not found.
+            ValueError: If the user is not found.
+            ValueError: If the payment method is not found.
+            ValueError: If the certificate cannot be used to update reservation.
+            ValueError: If the gift card balance is not enough.
+        """
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(reservation.user_id)
+
+        if safeguard_config.API_CHECK:
+            free_baggage_allowance = _get_free_baggage_allowance(
+                user.membership, reservation.cabin
+            )
+            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
+                raise ValueError(
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                )
+            if (
+                total_baggages > free_baggage_allowance
+                and total_baggages != free_baggage_allowance + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                )
+
+        # Calculate price
+        total_price = 50 * max(0, nonfree_baggages - reservation.nonfree_baggages)
+
+        # Create payment
+        payment = _payment_for_update(user, payment_id, total_price)
+        if payment is not None:
+            reservation.payment_history.append(payment)
+
+        # Update reservation
+        reservation.total_baggages = total_baggages
+        reservation.nonfree_baggages = nonfree_baggages
+
+        return reservation
+
+
+if safeguard_config.API_REDESIGN:
+
+    def update_reservation_flights(
+        user_id: Annotated[str, "The ID of the user updating the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        cabin: Annotated[CabinClass, "The cabin class of the reservation"],
+        flights: Annotated[
+            List[FlightInfo | dict],
+            "An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
+        ],
+        payment_id: Annotated[
+            str,
+            "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+        ],
+    ) -> Reservation:
+        """
+        Update the flight information of a reservation.
+
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the user does not own the reservation.
+            ValueError: If the reservation is not found.
+            ValueError: If the user is not found.
+            ValueError: If the payment method is not found.
+            ValueError: If the certificate cannot be used to update reservation.
+            ValueError: If the gift card balance is not enough.
+        """
+        if all(isinstance(flight, dict) for flight in flights):
+            flights = [FlightInfo(**flight) for flight in flights]
+
+        if safeguard_config.API_CHECK and len(flights) == 0:
+            raise ValueError("Flights list cannot be empty")
+
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(user_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+
+        # update flights and calculate price
+        total_price = 0
+        reservation_flights = []
+        change_flights = False
+        for flight_info in flights:
+            # if existing flight, keep it
+            matching_reservation_flight = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                    and cabin == reservation.cabin
+                ),
+                None,
+            )
+            if matching_reservation_flight:
+                total_price += matching_reservation_flight.price * len(
+                    reservation.passengers
+                )
+                reservation_flights.append(matching_reservation_flight)
+                continue
+
+            matching_reservation_except_cabin = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                ),
+                None,
             )
 
-        # Check seat availability
-        if flight_date_data.available_seats[cabin] < len(reservation.passengers):
-            raise ValueError(f"Not enough seats on flight {flight_info.flight_number}")
+            if not matching_reservation_except_cabin:
+                change_flights = True
+            # If new flight:
+            flight = _get_flight(flight_info.flight_number)
+            # Check flight availability
+            flight_date_data = _get_flight_instance(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+            )
+            if not isinstance(flight_date_data, FlightDateStatusAvailable):
+                raise ValueError(
+                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}"
+                )
 
-        # Calculate price and add to reservation
-        reservation_flight = ReservationFlight(
-            flight_number=flight_info.flight_number,
-            date=flight_info.date,
-            price=flight_date_data.prices[cabin],
-            origin=flight.origin,
-            destination=flight.destination,
+            # Check seat availability
+            if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+                raise ValueError(
+                    f"Not enough seats on flight {flight_info.flight_number}"
+                )
+
+            # Calculate price and add to reservation
+            reservation_flight = ReservationFlight(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+                price=flight_date_data.prices[cabin],
+                origin=flight.origin,
+                destination=flight.destination,
+            )
+            total_price += reservation_flight.price * len(reservation.passengers)
+            reservation_flights.append(reservation_flight)
+
+        if safeguard_config.API_CHECK:
+            if reservation.origin != reservation_flights[0].origin:
+                raise ValueError("Origin does not match the first flight's origin")
+            if (
+                reservation.flight_type == "one_way"
+                and reservation.destination != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "Destination does not match the last flight's destination"
+                )
+            if (
+                reservation.flight_type == "round_trip"
+                and reservation.origin != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "The last flight's destination does not match the origin for a round trip"
+                )
+            if reservation.flight_type == "round_trip":
+                has_flight_end_at_destination = False
+                has_flight_start_at_destination = False
+                for res_flight in reservation_flights:
+                    if res_flight.destination == reservation.destination:
+                        has_flight_end_at_destination = True
+                    if res_flight.origin == reservation.destination:
+                        has_flight_start_at_destination = True
+                if not (
+                    has_flight_end_at_destination and has_flight_start_at_destination
+                ):
+                    raise ValueError(
+                        "Round trip reservation must have flights that go to and return from the destination"
+                    )
+
+        if (
+            safeguard_config.API_CHECK
+            and change_flights
+            and reservation.cabin == "basic_economy"
+        ):
+            raise ValueError("Cannot change flights when cabin class is basic_economy")
+
+        # Deduct amount already paid for reservation
+        total_price -= sum(flight.price for flight in reservation.flights) * len(
+            reservation.passengers
         )
-        total_price += reservation_flight.price * len(reservation.passengers)
-        reservation_flights.append(reservation_flight)
 
-    # Deduct amount already paid for reservation
-    total_price -= sum(flight.price for flight in reservation.flights) * len(
-        reservation.passengers
-    )
+        # Create payment
+        payment = _payment_for_update(user, payment_id, total_price)
+        if payment is not None:
+            reservation.payment_history.append(payment)
 
-    # Create payment
-    payment = _payment_for_update(user, payment_id, total_price)
-    if payment is not None:
-        reservation.payment_history.append(payment)
+        # Update reservation
+        reservation.flights = reservation_flights
+        reservation.cabin = cabin  # This was missing from original TauBench
 
-    # Update reservation
-    reservation.flights = reservation_flights
-    reservation.cabin = cabin  # This was missing from original TauBench
+        return reservation
 
-    return reservation
+    def compute_update_reservation_flights_price(
+        user_id: Annotated[str, "The ID of the user updating the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        cabin: Annotated[CabinClass, "The cabin class of the reservation"],
+        flights: Annotated[
+            List[FlightInfo | dict],
+            "An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
+        ],
+    ) -> int:
+        """
+        Compute the price difference if updating the flight information of a reservation. This does not update the reservation. A positive value indicates an additional cost, while a negative value indicates a refund.
+
+        Returns:
+            The price difference.
+
+        Raises:
+            ValueError: If the user does not own the reservation.
+            ValueError: If the reservation is not found.
+            ValueError: If the user is not found.
+        """
+        if all(isinstance(flight, dict) for flight in flights):
+            flights = [FlightInfo(**flight) for flight in flights]
+
+        if safeguard_config.API_CHECK and len(flights) == 0:
+            raise ValueError("Flights list cannot be empty")
+
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(user_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+
+        # update flights and calculate price
+        total_price = 0
+        reservation_flights = []
+        change_flights = False
+        for flight_info in flights:
+            # if existing flight, keep it
+            matching_reservation_flight = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                    and cabin == reservation.cabin
+                ),
+                None,
+            )
+            if matching_reservation_flight:
+                total_price += matching_reservation_flight.price * len(
+                    reservation.passengers
+                )
+                reservation_flights.append(matching_reservation_flight)
+                continue
+
+            matching_reservation_except_cabin = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                ),
+                None,
+            )
+
+            if not matching_reservation_except_cabin:
+                change_flights = True
+            # If new flight:
+            flight = _get_flight(flight_info.flight_number)
+            # Check flight availability
+            flight_date_data = _get_flight_instance(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+            )
+            if not isinstance(flight_date_data, FlightDateStatusAvailable):
+                raise ValueError(
+                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}"
+                )
+
+            # Check seat availability
+            if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+                raise ValueError(
+                    f"Not enough seats on flight {flight_info.flight_number}"
+                )
+
+            # Calculate price and add to reservation
+            reservation_flight = ReservationFlight(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+                price=flight_date_data.prices[cabin],
+                origin=flight.origin,
+                destination=flight.destination,
+            )
+            total_price += reservation_flight.price * len(reservation.passengers)
+            reservation_flights.append(reservation_flight)
+
+        if safeguard_config.API_CHECK:
+            if reservation.origin != reservation_flights[0].origin:
+                raise ValueError("Origin does not match the first flight's origin")
+            if (
+                reservation.flight_type == "one_way"
+                and reservation.destination != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "Destination does not match the last flight's destination"
+                )
+            if (
+                reservation.flight_type == "round_trip"
+                and reservation.origin != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "The last flight's destination does not match the origin for a round trip"
+                )
+            if reservation.flight_type == "round_trip":
+                has_flight_end_at_destination = False
+                has_flight_start_at_destination = False
+                for res_flight in reservation_flights:
+                    if res_flight.destination == reservation.destination:
+                        has_flight_end_at_destination = True
+                    if res_flight.origin == reservation.destination:
+                        has_flight_start_at_destination = True
+                if not (
+                    has_flight_end_at_destination and has_flight_start_at_destination
+                ):
+                    raise ValueError(
+                        "Round trip reservation must have flights that go to and return from the destination"
+                    )
+
+        if (
+            safeguard_config.API_CHECK
+            and change_flights
+            and reservation.cabin == "basic_economy"
+        ):
+            raise ValueError("Cannot change flights when cabin class is basic_economy")
+
+        # Deduct amount already paid for reservation
+        total_price -= sum(flight.price for flight in reservation.flights) * len(
+            reservation.passengers
+        )
+        return total_price
+
+else:
+
+    def update_reservation_flights(
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        cabin: Annotated[CabinClass, "The cabin class of the reservation"],
+        flights: Annotated[
+            List[FlightInfo | dict],
+            "An array of objects containing details about each piece of flight in the ENTIRE new reservation. Even if the a flight segment is not changed, it should still be included in the array.",
+        ],
+        payment_id: Annotated[
+            str,
+            "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
+        ],
+    ) -> Reservation:
+        """
+        Update the flight information of a reservation.
+
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the reservation is not found.
+            ValueError: If the user is not found.
+            ValueError: If the payment method is not found.
+            ValueError: If the certificate cannot be used to update reservation.
+            ValueError: If the gift card balance is not enough.
+        """
+        if all(isinstance(flight, dict) for flight in flights):
+            flights = [FlightInfo(**flight) for flight in flights]
+
+        if safeguard_config.API_CHECK and len(flights) == 0:
+            raise ValueError("Flights list cannot be empty")
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(reservation.user_id)
+
+        # update flights and calculate price
+        total_price = 0
+        reservation_flights = []
+        change_flights = False
+        for flight_info in flights:
+            # if existing flight, keep it
+            matching_reservation_flight = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                    and cabin == reservation.cabin
+                ),
+                None,
+            )
+            if matching_reservation_flight:
+                total_price += matching_reservation_flight.price * len(
+                    reservation.passengers
+                )
+                reservation_flights.append(matching_reservation_flight)
+                continue
+
+            matching_reservation_except_cabin = next(
+                (
+                    reservation_flight
+                    for reservation_flight in reservation.flights
+                    if reservation_flight.flight_number == flight_info.flight_number
+                    and reservation_flight.date == flight_info.date
+                ),
+                None,
+            )
+
+            if not matching_reservation_except_cabin:
+                change_flights = True
+
+            # If new flight:
+            flight = _get_flight(flight_info.flight_number)
+            # Check flight availability
+            flight_date_data = _get_flight_instance(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+            )
+            if not isinstance(flight_date_data, FlightDateStatusAvailable):
+                raise ValueError(
+                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}"
+                )
+
+            # Check seat availability
+            if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+                raise ValueError(
+                    f"Not enough seats on flight {flight_info.flight_number}"
+                )
+
+            # Calculate price and add to reservation
+            reservation_flight = ReservationFlight(
+                flight_number=flight_info.flight_number,
+                date=flight_info.date,
+                price=flight_date_data.prices[cabin],
+                origin=flight.origin,
+                destination=flight.destination,
+            )
+            total_price += reservation_flight.price * len(reservation.passengers)
+            reservation_flights.append(reservation_flight)
+
+        if safeguard_config.API_CHECK:
+            if reservation.origin != reservation_flights[0].origin:
+                raise ValueError("Origin does not match the first flight's origin")
+            if (
+                reservation.flight_type == "one_way"
+                and reservation.destination != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "Destination does not match the last flight's destination"
+                )
+            if (
+                reservation.flight_type == "round_trip"
+                and reservation.origin != reservation_flights[-1].destination
+            ):
+                raise ValueError(
+                    "The last flight's destination does not match the origin for a round trip"
+                )
+            if reservation.flight_type == "round_trip":
+                has_flight_end_at_destination = False
+                has_flight_start_at_destination = False
+                for res_flight in reservation_flights:
+                    if res_flight.destination == reservation.destination:
+                        has_flight_end_at_destination = True
+                    if res_flight.origin == reservation.destination:
+                        has_flight_start_at_destination = True
+                if not (
+                    has_flight_end_at_destination and has_flight_start_at_destination
+                ):
+                    raise ValueError(
+                        "Round trip reservation must have flights that go to and return from the destination"
+                    )
+
+        if (
+            safeguard_config.API_CHECK
+            and change_flights
+            and reservation.cabin == "basic_economy"
+        ):
+            raise ValueError("Cannot change flights when cabin class is basic_economy")
+
+        # Deduct amount already paid for reservation
+        total_price -= sum(flight.price for flight in reservation.flights) * len(
+            reservation.passengers
+        )
+
+        # Create payment
+        payment = _payment_for_update(user, payment_id, total_price)
+        if payment is not None:
+            reservation.payment_history.append(payment)
+
+        # Update reservation
+        reservation.flights = reservation_flights
+        reservation.cabin = cabin  # This was missing from original TauBench
+
+        return reservation
 
 
-@mcp.tool(meta={"require_confirmation": True})
-def update_reservation_passengers(
-    reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
-    passengers: Annotated[
-        List[Passenger | dict],
-        "An array of objects containing details about each passenger.",
-    ],
-) -> Reservation:
-    """
-    Update the passenger information of a reservation.
+if safeguard_config.API_REDESIGN:
 
-    Returns:
-        The updated reservation.
+    def update_reservation_passengers(
+        user_id: Annotated[str, "The ID of the user updating the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        passengers: Annotated[
+            List[Passenger | dict],
+            "An array of objects containing details about each passenger.",
+        ],
+    ) -> Reservation:
+        """
+        Update the passenger information of a reservation.
 
-    Raises:
-        ValueError: If the reservation is not found.
-        ValueError: If the number of passengers does not match.
-    """
-    if all(isinstance(passenger, dict) for passenger in passengers):
-        passengers = [Passenger(**passenger) for passenger in passengers]
-    reservation = _get_reservation(reservation_id)
-    # LOGGER.info(len(passengers))
-    # LOGGER.info(len(reservation.passengers))
-    if len(passengers) != len(reservation.passengers):
-        raise ValueError("Number of passengers does not match")
-    reservation.passengers = deepcopy(passengers)
-    return reservation
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the user does not own the reservation.
+            ValueError: If the reservation is not found.
+            ValueError: If the number of passengers does not match.
+        """
+        if all(isinstance(passenger, dict) for passenger in passengers):
+            passengers = [Passenger(**passenger) for passenger in passengers]
+        user = _get_user(user_id)
+        reservation = _get_reservation(reservation_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+        # LOGGER.info(len(passengers))
+        # LOGGER.info(len(reservation.passengers))
+        if len(passengers) != len(reservation.passengers):
+            raise ValueError("Number of passengers does not match")
+        reservation.passengers = deepcopy(passengers)
+        return reservation
+
+else:
+
+    def update_reservation_passengers(
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        passengers: Annotated[
+            List[Passenger | dict],
+            "An array of objects containing details about each passenger.",
+        ],
+    ) -> Reservation:
+        """
+        Update the passenger information of a reservation.
+
+        Returns:
+            The updated reservation.
+
+        Raises:
+            ValueError: If the reservation is not found.
+            ValueError: If the number of passengers does not match.
+        """
+        if all(isinstance(passenger, dict) for passenger in passengers):
+            passengers = [Passenger(**passenger) for passenger in passengers]
+        reservation = _get_reservation(reservation_id)
+        # LOGGER.info(len(passengers))
+        # LOGGER.info(len(reservation.passengers))
+        if len(passengers) != len(reservation.passengers):
+            raise ValueError("Number of passengers does not match")
+        reservation.passengers = deepcopy(passengers)
+        return reservation
 
 
-@mcp.tool()
 def get_flight_status(
     flight_number: Annotated[str, "The flight number."],
     date: Annotated[str, "The date of the flight."],
@@ -739,3 +1480,53 @@ def get_flight_status(
         ValueError: If the flight is not found.
     """
     return _get_flight_instance(flight_number, date).status
+
+
+if safeguard_config.API_REDESIGN:
+    mcp.tool(fetch_current_time)
+    mcp.tool(compute_time_difference)
+    mcp.tool(compute_reservation_price)
+    mcp.tool(book_reservation, meta={"require_confirmation": True})
+    mcp.tool(calculate)
+    mcp.tool(cancel_reservation, meta={"require_confirmation": True})
+    mcp.tool(get_reservation_details)
+    mcp.tool(get_user_details)
+    mcp.tool(list_all_airports)
+    mcp.tool(search_direct_flight)
+    mcp.tool(search_onestop_flight)
+    mcp.tool(send_certificate)
+    mcp.tool(think)
+    mcp.tool(
+        transfer_to_human_agents,
+        meta={
+            "end_conversation": True,
+            "response_template": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
+        },
+    )
+    mcp.tool(update_reservation_baggages, meta={"require_confirmation": True})
+    mcp.tool(update_reservation_flights, meta={"require_confirmation": True})
+    mcp.tool(compute_update_reservation_flights_price)
+    mcp.tool(update_reservation_passengers, meta={"require_confirmation": True})
+    mcp.tool(get_flight_status)
+else:
+    mcp.tool(book_reservation, meta={"require_confirmation": True})
+    mcp.tool(calculate)
+    mcp.tool(cancel_reservation, meta={"require_confirmation": True})
+    mcp.tool(get_reservation_details)
+    mcp.tool(get_user_details)
+    mcp.tool(list_all_airports)
+    mcp.tool(search_direct_flight)
+    mcp.tool(search_onestop_flight)
+    mcp.tool(send_certificate)
+    mcp.tool(think)
+    mcp.tool(
+        transfer_to_human_agents,
+        meta={
+            "end_conversation": True,
+            "response_template": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
+        },
+    )
+    mcp.tool(update_reservation_baggages, meta={"require_confirmation": True})
+    mcp.tool(update_reservation_flights, meta={"require_confirmation": True})
+    mcp.tool(update_reservation_passengers, meta={"require_confirmation": True})
+    mcp.tool(get_flight_status)

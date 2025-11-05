@@ -29,7 +29,7 @@ def human_interaction():
                 break
             response = agent.ReAct_loop(user_input)
             LOGGER.info(f"Agent: {response}")
-            if assess_end_conversation(agent_message):
+            if assess_end_conversation(agent_message) or agent.end_conversation:
                 LOGGER.info(f"Conversation ended by agent response.")
                 break
     except KeyboardInterrupt:
@@ -65,7 +65,7 @@ def _run_once(user_task: Any):
                 break
             agent_message = agent.ReAct_loop(user_input)
             LOGGER.info(f"Agent: {agent_message}")
-            if assess_end_conversation(agent_message):
+            if assess_end_conversation(agent_message) or agent.end_conversation:
                 LOGGER.info(f"Simulation ended due to agent response.")
                 terminate_reason = TerminateReason.AGENT_STOP
                 break
@@ -83,7 +83,7 @@ def run_random_task():
     import random
 
     tasks = load_tasks()
-    random_task = random.choice(tasks)
+    random_task = tasks[7]
     LOGGER.info(f"Selected Task:\n{random_task}")
     LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
     _run_once(random_task)

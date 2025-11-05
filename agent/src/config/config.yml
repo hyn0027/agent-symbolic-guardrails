@@ -62,3 +62,7 @@ SAFEGUARD:
     Arguments: {tool_args}
 
     Please review the action above and confirm if you would like me to proceed. Respond with "CONFIRM" to proceed or "CANCEL" to abort.
+
+  TOOL_RESPONSE_TEMPLATE: true
+
+  TOOL_END_CONVERSATION_FLAG: true

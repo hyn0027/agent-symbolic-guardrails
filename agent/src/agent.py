@@ -38,6 +38,8 @@ class ReActAgent:
 
         self.remaining_tool_calls = []
         self.tmp_user_response = ""
+        self.override_assistant_msg = None
+        self.end_conversation = False
 
     def initiate_conversation(self) -> str:
         self.history.append(
@@ -53,9 +55,9 @@ class ReActAgent:
     ) -> Optional[str]:
         tool_name = tool_call.function.name
         tool_args = tool_call.function.arguments
+        tool_meta = self.mcp_client.get_tool_metadata(tool_name)
 
         if safeguard_config.USER_CONFIRMATION and not user_confirmed:
-            tool_meta = self.mcp_client.get_tool_metadata(tool_name)
             if tool_meta.get("require_confirmation", False):
                 LOGGER.info(
                     f"Tool '{tool_name}' requires user confirmation before invocation."
@@ -79,11 +81,29 @@ class ReActAgent:
             f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
         )
         LOGGER.debug(f"Tool Response: {tool_response}")
+        success = "error" not in tool_response
         tool_call_content = (
             json.dumps(tool_response["structured_content"])
-            if "error" not in tool_response
+            if success
             else json.dumps(tool_response)
         )
+
+        if (
+            safeguard_config.TOOL_END_CONVERSATION_FLAG
+            and success
+            and tool_meta.get("end_conversation", False)
+        ):
+            self.end_conversation = True
+            LOGGER.info("Tool call indicates the conversation should end.")
+
+        if (
+            safeguard_config.TOOL_RESPONSE_TEMPLATE
+            and success
+            and tool_meta.get("response_template", None)
+        ):
+            if self.override_assistant_msg is None:
+                self.override_assistant_msg = tool_meta["response_template"]
+
         if confirmation_msg:
             tool_call_content = (
                 f"Tool call confirmed by user: {confirmation_msg}\n\n"
@@ -97,7 +117,7 @@ class ReActAgent:
             }
         )
 
-    def ReAct_loop(self, user_input: str) -> Dict:
+    def ReAct_loop(self, user_input: str) -> str:
         if self.remaining_tool_calls:
             self.tmp_user_response = self.tmp_user_response + "\n" + user_input
             if user_input.strip().upper().find("CONFIRM") == 0:
@@ -132,6 +152,16 @@ class ReActAgent:
             self.append_user_message(user_input)
 
         while True:
+            if self.override_assistant_msg is not None:
+                self.history.append(
+                    {
+                        "role": "assistant",
+                        "content": self.override_assistant_msg,
+                    }
+                )
+                self.override_assistant_msg = None
+                return self.history[-1]["content"]
+
             response = self._call_LLM(self.history, self.tools)
             self.history.append(response.to_dict())
 
