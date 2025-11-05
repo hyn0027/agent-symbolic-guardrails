@@ -37,6 +37,7 @@ class ReActAgent:
         # LOGGER.debug(json.dumps(self.tools, indent=2))
 
         self.remaining_tool_calls = []
+        self.tmp_user_response = ""
 
     def initiate_conversation(self) -> str:
         self.history.append(
@@ -47,7 +48,9 @@ class ReActAgent:
     def append_user_message(self, message: str):
         self.history.append({"role": "user", "content": message})
 
-    def _process_tool_call(self, tool_call, user_confirmed: bool) -> Optional[str]:
+    def _process_tool_call(
+        self, tool_call, user_confirmed: bool, confirmation_msg: Optional[str] = None
+    ) -> Optional[str]:
         tool_name = tool_call.function.name
         tool_args = tool_call.function.arguments
 
@@ -76,54 +79,57 @@ class ReActAgent:
             f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
         )
         LOGGER.debug(f"Tool Response: {tool_response}")
+        tool_call_content = (
+            json.dumps(tool_response["structured_content"])
+            if "error" not in tool_response
+            else json.dumps(tool_response)
+        )
+        if confirmation_msg:
+            tool_call_content = (
+                f"Tool call confirmed by user: {confirmation_msg}\n\n"
+                f"Tool Response: {tool_call_content}"
+            )
         self.history.append(
             {
                 "role": "tool",
-                "content": (
-                    json.dumps(tool_response["structured_content"])
-                    if "error" not in tool_response
-                    else json.dumps(tool_response)
-                ),
+                "content": tool_call_content,
                 "tool_call_id": tool_call.id,
             }
         )
 
     def ReAct_loop(self, user_input: str) -> Dict:
         if self.remaining_tool_calls:
-            if (
-                user_input.split()[0].strip().upper().replace(".", "").replace(",", "")
-                == "CONFIRM"
-            ):
+            self.tmp_user_response = self.tmp_user_response + "\n" + user_input
+            if user_input.strip().upper().find("CONFIRM") == 0:
                 LOGGER.info("User confirmed the tool invocation.")
                 self._process_tool_call(
-                    self.remaining_tool_calls[0], user_confirmed=True
+                    self.remaining_tool_calls[0],
+                    user_confirmed=True,
+                    confirmation_msg=self.tmp_user_response,
                 )
                 self.remaining_tool_calls = self.remaining_tool_calls[1:]
-            elif (
-                user_input.split()[0].strip().upper().replace(".", "").replace(",", "")
-                == "CANCEL"
-            ):
+            elif user_input.strip().upper().find("CANCEL") == 0:
                 LOGGER.info("User canceled the tool invocation.")
                 self.history.append(
                     {
                         "role": "tool",
-                        "content": "Tool invocation canceled by user.",
+                        "content": f"Tool invocation canceled by user response: {self.tmp_user_response}",
                         "tool_call_id": self.remaining_tool_calls[0].id,
                     }
                 )
                 self.remaining_tool_calls = self.remaining_tool_calls[1:]
             else:
-                msg = 'Please respond with "CONFIRM" to proceed with the tool invocation or "CANCEL" to abort.'
+                msg = 'Please respond with "CONFIRM" to proceed or "CANCEL" to abort.'
                 return msg
-
-        for index, tool_call in enumerate(self.remaining_tool_calls):
-            res = self._process_tool_call(tool_call, user_confirmed=False)
-            if res is not None:
-                self.remaining_tool_calls = self.remaining_tool_calls[index:]
-                return res
-        self.remaining_tool_calls = []
-
-        self.append_user_message(user_input)
+            self.tmp_user_response = ""
+            for index, tool_call in enumerate(self.remaining_tool_calls):
+                res = self._process_tool_call(tool_call, user_confirmed=False)
+                if res is not None:
+                    self.remaining_tool_calls = self.remaining_tool_calls[index:]
+                    return res
+            self.remaining_tool_calls = []
+        else:
+            self.append_user_message(user_input)
 
         while True:
             response = self._call_LLM(self.history, self.tools)

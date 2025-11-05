@@ -61,4 +61,4 @@ SAFEGUARD:
     Tool: {tool_name}
     Arguments: {tool_args}
 
-    Do you confirm? Please answer with "CONFIRM" to proceed or "CANCEL" to abort.
+    Please review the action above and confirm if you would like me to proceed. Respond with "CONFIRM" to proceed or "CANCEL" to abort.
