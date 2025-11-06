@@ -166,9 +166,7 @@ class CommunicateEvaluator:
                     continue
                 if "content" not in message or message["content"] is None:
                     continue
-                if info_str.lower() in message["content"].lower().replace(
-                    ",", ""
-                ):
+                if info_str.lower() in message["content"].lower().replace(",", ""):
                     found = True
                     LOGGER.debug(
                         f"Communicate info '{info_str}' found in message: {message['content']}"
@@ -374,12 +372,14 @@ def evaluate_single(
 
 def aggregate_evals(res_list: List[RewardInfo]) -> RewardInfo:
     total_reward = 0.0
+    total_reward_without_nl = 0.0
     total_reward_breakdown: Dict[RewardType, float] = {}
     for res in res_list:
         if res is None:
             LOGGER.warning("Skipping None evaluation result during aggregation.")
             continue
         total_reward += res.reward
+        total_reward_without_nl += res.info.get("reward_without_nl", 0.0)
         if res.reward_breakdown:
             for k, v in res.reward_breakdown.items():
                 total_reward_breakdown[k] = total_reward_breakdown.get(k, 0.0) + v
@@ -388,9 +388,15 @@ def aggregate_evals(res_list: List[RewardInfo]) -> RewardInfo:
     avg_reward_breakdown = {
         k: v / len(res_list) for k, v in total_reward_breakdown.items()
     }
+    avg_reward_without_nl = total_reward_without_nl / len(res_list) if res_list else 0.0
 
     LOGGER.info(f"Aggregated Average Reward: {avg_reward}")
-    LOGGER.info(f"Aggregated Average Reward Breakdown: {json.dumps(avg_reward_breakdown, indent=2)}")
+    LOGGER.info(
+        f"Aggregated Average Reward Breakdown: {json.dumps(avg_reward_breakdown, indent=2)}"
+    )
+    LOGGER.info(
+        f"Aggregated Average Reward without NL Assertions: {avg_reward_without_nl}"
+    )
 
     return RewardInfo(
         reward=avg_reward,

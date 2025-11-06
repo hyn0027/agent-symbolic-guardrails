@@ -29,6 +29,7 @@ class ReActAgent:
         LOGGER.debug("MCP TOOL")
         LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
+        LOGGER.debug(json.dumps(self.tools, indent=2))
         self.history = [
             {"role": "system", "content": self.system_prompt},
         ]
@@ -40,6 +41,7 @@ class ReActAgent:
         self.tmp_user_response = ""
         self.override_assistant_msg = None
         self.end_conversation = False
+        self.count_tool_call_fails = 0
 
     def initiate_conversation(self) -> str:
         self.history.append(
@@ -88,6 +90,8 @@ class ReActAgent:
             else json.dumps(tool_response)
         )
 
+        if not success:
+            self.count_tool_call_fails += 1
         if (
             safeguard_config.TOOL_END_CONVERSATION_FLAG
             and success
@@ -150,8 +154,9 @@ class ReActAgent:
             self.remaining_tool_calls = []
         else:
             self.append_user_message(user_input)
+            self.count_tool_call_fails = 0
 
-        while True:
+        while True and self.count_tool_call_fails < agent_config.MAX_TOOL_CALL_FAILS:
             if self.override_assistant_msg is not None:
                 self.history.append(
                     {
@@ -173,6 +178,9 @@ class ReActAgent:
                         return res
             else:
                 return response.content
+        response = self._call_LLM(self.history, [])
+        self.history.append(response.to_dict())
+        return response.content
 
     def _call_LLM(self, messages: list, tools: List) -> ChatCompletionMessage:
         client = OpenAI()

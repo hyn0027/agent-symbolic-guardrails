@@ -230,21 +230,18 @@ def compute_time_difference(
     Compute the difference between two times. If time2 is later than time1, the result is positive; otherwise, it is negative.
 
     Returns:
-        The difference of the 2 times, in days, hours, and minutes.
+        The difference of the 2 times, in hours and minutes.
     """
     fmt = "%Y-%m-%dT%H:%M:%S"
     dt1 = datetime.strptime(time1, fmt)
     dt2 = datetime.strptime(time2, fmt)
     delta = dt2 - dt1
-    days = delta.days
-    seconds = delta.seconds
-    hours = seconds // 3600
-    minutes = (seconds % 3600) // 60
-    sign = "" if delta.total_seconds() >= 0 else "-"
+    total_minutes = int(delta.total_seconds() // 60)
+    hours = total_minutes // 60
+    minutes = total_minutes % 60
     return {
-        "days": int(f"{sign}{abs(days)}"),
-        "hours": int(f"{sign}{abs(hours)}"),
-        "minutes": int(f"{sign}{abs(minutes)}"),
+        "hours": hours,
+        "minutes": minutes,
     }
 
 
@@ -822,6 +819,53 @@ def transfer_to_human_agents(
 
 if safeguard_config.API_REDESIGN:
 
+    def compute_update_reservation_baggages_price(
+        user_id: Annotated[str, "The ID of the user updating the reservation."],
+        reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        total_baggages: Annotated[
+            int,
+            "The updated total number of baggage items included in the reservation.",
+        ],
+        nonfree_baggages: Annotated[
+            int,
+            "The updated number of non-free baggage items included in the reservation.",
+        ],
+    ) -> int:
+        """
+        Compute the price for updating the baggage information of a reservation. This does not actually update the reservation.
+
+        Returns:
+            The price for updating the baggage information.
+        """
+        reservation = _get_reservation(reservation_id)
+        user = _get_user(user_id)
+        if reservation.user_id != user_id:
+            raise ValueError("User does not own the reservation")
+
+        if safeguard_config.API_CHECK:
+            if nonfree_baggages <= reservation.nonfree_baggages:
+                raise ValueError(
+                    "Can only add, not reduce, the number of non-free baggages"
+                )
+            free_baggage_allowance = _get_free_baggage_allowance(
+                user.membership, reservation.cabin
+            )
+            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
+                raise ValueError(
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                )
+            if (
+                total_baggages > free_baggage_allowance
+                and total_baggages != free_baggage_allowance + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                )
+
+        # Calculate price
+        total_price = 50 * max(0, nonfree_baggages - reservation.nonfree_baggages)
+        return total_price
+
     def update_reservation_baggages(
         user_id: Annotated[str, "The ID of the user updating the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
@@ -858,6 +902,10 @@ if safeguard_config.API_REDESIGN:
             raise ValueError("User does not own the reservation")
 
         if safeguard_config.API_CHECK:
+            if nonfree_baggages <= reservation.nonfree_baggages:
+                raise ValueError(
+                    "Can only add, not reduce, the number of non-free baggages"
+                )
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
@@ -921,6 +969,10 @@ else:
         user = _get_user(reservation.user_id)
 
         if safeguard_config.API_CHECK:
+            if nonfree_baggages <= reservation.nonfree_baggages:
+                raise ValueError(
+                    "Can only add, not reduce, the number of non-free baggages"
+                )
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
@@ -1536,6 +1588,7 @@ if safeguard_config.API_REDESIGN:
         },
     )
     mcp.tool(update_reservation_baggages, meta={"require_confirmation": True})
+    mcp.tool(compute_update_reservation_baggages_price)
     mcp.tool(update_reservation_flights, meta={"require_confirmation": True})
     mcp.tool(compute_update_reservation_flights_price)
     mcp.tool(update_reservation_passengers, meta={"require_confirmation": True})

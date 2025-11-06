@@ -8,6 +8,8 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
+  MAX_TOOL_CALL_FAILS: 10
+
   AGENT_INITIAL_MESSAGE: true
 
   INITIAL_CONVERSTION: "Hi! How can I help you today?"

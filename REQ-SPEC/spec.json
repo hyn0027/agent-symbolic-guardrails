@@ -746,7 +746,9 @@
                 "content": "API update reservation baggages should be blocked with parameters constraint: check if there's only more baggage"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if less baggage raise error"
     },
     {
         "line_number": 124,
@@ -757,7 +759,7 @@
                 "content": "API simply don't provide an api for this should be redesigned as -"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 126,
@@ -774,7 +776,7 @@
                 "content": "API update passegner should be blocked with parameters constraint: passenger num mismatch"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 128,
@@ -801,7 +803,7 @@
                 "content": "API all update api, the payment only accept one argument should be redesigned as -"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 133,
