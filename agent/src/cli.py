@@ -83,7 +83,7 @@ def run_random_task():
     import random
 
     tasks = load_tasks()
-    random_task = tasks[7]
+    random_task = random.choice(tasks)
     LOGGER.info(f"Selected Task:\n{random_task}")
     LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
     _run_once(random_task)

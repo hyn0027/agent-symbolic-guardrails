@@ -688,7 +688,9 @@
                 "content": "API update reservation flights should be blocked with parameters constraint: block cabin change if the flight status is checked to be taken off already"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if any flight already flown raise error"
     },
     {
         "line_number": 117,
@@ -705,7 +707,7 @@
                 "content": "API change reservation flight should be redesigned as only one field for a single cabin"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 119,
@@ -716,7 +718,7 @@
                 "content": "API update flight reservation should be redesigned as compute the diff in the code"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 120,
@@ -727,7 +729,7 @@
                 "content": "API update flight reservation should be redesigned as compute the diff in the code"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 122,

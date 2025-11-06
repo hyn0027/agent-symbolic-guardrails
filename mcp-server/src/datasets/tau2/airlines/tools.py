@@ -15,6 +15,10 @@ from .data_model import (
     Flight,
     FlightDateStatus,
     FlightDateStatusAvailable,
+    FlightDateStatusLanded,
+    FlightDateStatusCancelled,
+    FlightDateStatusDelayed,
+    FlightDataStatusFlying,
     FlightDB,
     FlightInfo,
     FlightType,
@@ -1137,6 +1141,20 @@ if safeguard_config.API_REDESIGN:
         if reservation.user_id != user_id:
             raise ValueError("User does not own the reservation")
 
+        if safeguard_config.API_CHECK and cabin != reservation.cabin:
+            # check if flight have already been flown
+            for reservation_flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=reservation_flight.flight_number,
+                    date=reservation_flight.date,
+                )
+                if isinstance(flight_date_data, FlightDateStatusLanded) or isinstance(
+                    flight_date_data, FlightDataStatusFlying
+                ):
+                    raise ValueError(
+                        "Cannot change cabin class for already flown flights"
+                    )
+
         # update flights and calculate price
         total_price = 0
         reservation_flights = []
@@ -1280,6 +1298,20 @@ else:
             raise ValueError("Flights list cannot be empty")
         reservation = _get_reservation(reservation_id)
         user = _get_user(reservation.user_id)
+
+        if safeguard_config.API_CHECK and cabin != reservation.cabin:
+            # check if flight have already been flown
+            for reservation_flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=reservation_flight.flight_number,
+                    date=reservation_flight.date,
+                )
+                if isinstance(flight_date_data, FlightDateStatusLanded) or isinstance(
+                    flight_date_data, FlightDataStatusFlying
+                ):
+                    raise ValueError(
+                        "Cannot change cabin class for already flown flights"
+                    )
 
         # update flights and calculate price
         total_price = 0
