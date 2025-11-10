@@ -2,8 +2,8 @@ from agent import ReActAgent
 from user import UserSimulator
 from typing import Any
 from eval import TerminateReason
+import argparse
 
-import json
 from config.loader import CONFIG
 from config.logger import LOGGER
 
@@ -87,6 +87,23 @@ def run_random_task():
     LOGGER.info(f"Selected Task:\n{random_task}")
     LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
     _run_once(random_task)
+
+
+def run_given_task():
+    parser = argparse.ArgumentParser(description="Run a specific task by ID.")
+    parser.add_argument(
+        "-id", "--task_id", type=int, required=True, help="ID of the task to run."
+    )
+    args = parser.parse_args()
+
+    LOGGER.debug(f"Configuration Loaded: {CONFIG}")
+    tasks = load_tasks()
+    task_id = args.task_id
+    LOGGER.info(f"Looking for Task ID: {task_id}")
+    task = tasks[task_id]
+    LOGGER.info(f"Selected Task:\n{task}")
+    LOGGER.info(f"{'*' * 20} Starting Simulation {'*' * 20}")
+    _run_once(task)
 
 
 def run_dataset():

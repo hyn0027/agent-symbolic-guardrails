@@ -9,6 +9,7 @@ FlightType = Literal["round_trip", "one_way"]
 CabinClass = Literal["business", "economy", "basic_economy"]
 Insurance = Literal["yes", "no"]
 
+CancellationReason = Literal["change_of_plan", "airline_cancelled_flight", "other"]
 
 MembershipLevel = Annotated[
     Literal["gold", "silver", "regular"], Field(description="Membership level")

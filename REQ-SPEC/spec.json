@@ -832,8 +832,15 @@
     {
         "line_number": 139,
         "content": "The agent must also obtain the reason for cancellation (change of plan, airline cancelled flight, or other reasons)",
-        "spec": [],
-        "tag": "not_enforcable"
+        "spec": [
+            {
+                "template_type": "API_redesign",
+                "content": "API cancel flight should be blocked with parameters constraint: reason for cancellation is provided"
+            }
+        ],
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if no reason raise error"
     },
     {
         "line_number": 141,
@@ -844,7 +851,9 @@
                 "content": "API cancel flight should be blocked with parameters constraint: any portion is already flown"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if any portion flown raise error"
     },
     {
         "line_number": 143,
@@ -861,7 +870,9 @@
                 "content": "API cancel flight should be blocked with parameters constraint: check if the booking is within 24h"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
     {
         "line_number": 145,
@@ -872,7 +883,9 @@
                 "content": "API cancel flight should be blocked with parameters constraint: check the flight status by airline"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
     {
         "line_number": 146,
@@ -883,13 +896,16 @@
                 "content": "API cancel flight should be blocked with parameters constraint: just cancel it when it's a business cabin"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
     {
         "line_number": 147,
         "content": "- The user has travel insurance and the reason for cancellation is covered by insurance.",
         "spec": [],
-        "tag": "not_enforcable"
+        "tag": "not_enforcable",
+        "note": "partially fixed, checked if the user has travel insurance, but not the reason for cancellation"
     },
     {
         "line_number": 149,
@@ -912,7 +928,7 @@
                 "content": "API cancel fligt should be redesigned as in the api if cancel is succeeful, show this message to the user by code"
             }
         ],
-        "tag": "enforcable"
+        "tag": "implemented"
     },
     {
         "line_number": 154,

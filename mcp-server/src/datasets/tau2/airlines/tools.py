@@ -29,6 +29,7 @@ from .data_model import (
     ReservationFlight,
     User,
     MembershipLevel,
+    CancellationReason,
     db,
 )
 
@@ -206,6 +207,28 @@ def _get_free_baggage_allowance(membership: MembershipLevel, cabin: CabinClass) 
         return 2 + additional
 
 
+def _is_eligible_for_cancellation(
+    reservation: Reservation, meet_insurance_policy: bool
+) -> bool:
+    """Check if the reservation is eligible for cancellation."""
+    booking_time = datetime.strptime(reservation.created_at, "%Y-%m-%dT%H:%M:%S")
+    current_time = datetime.strptime(_get_datetime(), "%Y-%m-%dT%H:%M:%S")
+    delta = current_time - booking_time
+    if delta.total_seconds() < 24 * 3600:
+        return True
+    if reservation.cabin == "business":
+        return True
+    for flight in reservation.flights:
+        flight_date_data = _get_flight_instance(
+            flight_number=flight.flight_number, date=flight.date
+        )
+        if isinstance(flight_date_data, FlightDateStatusCancelled):
+            return True
+    if meet_insurance_policy and reservation.insurance == "yes":
+        return True
+    return False
+
+
 def fetch_current_time() -> str:
     """
     Fetch the current system time.
@@ -290,7 +313,7 @@ def compute_reservation_price(
         free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
         if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
             raise ValueError(
-                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
             )
         if (
             total_baggages > free_baggage_allowance
@@ -388,7 +411,7 @@ def book_reservation(
         free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
         if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
             raise ValueError(
-                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
             )
         if (
             total_baggages > free_baggage_allowance
@@ -474,13 +497,17 @@ def book_reservation(
                 raise ValueError(f"Not enough balance in payment method {payment_id}")
 
     if safeguard_config.API_CHECK:
-        if (
-            count_payment_type["certificate"] > 1
-            or count_payment_type["credit_card"] > 1
-            or count_payment_type["gift_card"] > 3
-        ):
+        if count_payment_type["certificate"] > 1:
             raise ValueError(
-                "Each reservation can use at most one travel certificate, at most one credit card, and at most three gift cards."
+                f"Each reservation can use at most one travel certificate. You have used {count_payment_type['certificate']} certificates."
+            )
+        if count_payment_type["credit_card"] > 1:
+            raise ValueError(
+                f"Each reservation can use at most one credit card. You have used {count_payment_type['credit_card']} credit cards."
+            )
+        if count_payment_type["gift_card"] > 3:
+            raise ValueError(
+                f"Each reservation can use at most three gift cards. You have used {count_payment_type['gift_card']} gift cards."
             )
         if origin != reservation.flights[0].origin:
             raise ValueError("Origin does not match the first flight's origin")
@@ -488,25 +515,32 @@ def book_reservation(
             flight_type == "one_way"
             and destination != reservation.flights[-1].destination
         ):
-            raise ValueError("Destination does not match the last flight's destination")
+            raise ValueError(
+                "As a one-way flight, destination must match the last flight's destination. The last flight's destination is "
+                f"{reservation.flights[-1].destination}, but the destination provided is {destination}."
+            )
         if (
             flight_type == "round_trip"
             and origin != reservation.flights[-1].destination
         ):
             raise ValueError(
-                "The last flight's destination does not match the origin for a round trip"
+                "As a round-trip flight, origin must match the last flight's destination. The last flight's destination is "
+                f"{reservation.flights[-1].destination}, but the origin provided is {origin}."
             )
         if flight_type == "round_trip":
             has_flight_end_at_destination = False
             has_flight_start_at_destination = False
+            ori_dst_list = []
             for res_flight in reservation.flights:
                 if res_flight.destination == destination:
                     has_flight_end_at_destination = True
                 if res_flight.origin == destination:
                     has_flight_start_at_destination = True
+                ori_dst_list.append((res_flight.origin, res_flight.destination))
             if not (has_flight_end_at_destination and has_flight_start_at_destination):
                 raise ValueError(
-                    "Round trip reservation must have flights that go to and return from the destination"
+                    "Round trip reservation must have flights that go to and return from the destination. "
+                    f"The current origin-destination pairs are: {ori_dst_list}."
                 )
 
     total_payment = sum(payment.amount for payment in payment_methods)
@@ -558,6 +592,11 @@ if safeguard_config.API_REDESIGN:
     def cancel_reservation(
         user_id: Annotated[str, "The ID of the user cancelling the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
+        reason: Annotated[CancellationReason, "The reason for cancellation."],
+        meet_cancellation_insurance_policy: Annotated[
+            bool,
+            "Whether the cancellation reason is covered by the insurance policy (health or weather issue). If so, set to true; otherwise, set to false.",
+        ],
     ) -> Reservation:
         """
         Cancel the whole reservation.
@@ -573,6 +612,31 @@ if safeguard_config.API_REDESIGN:
 
         if reservation.user_id != user_id:
             raise ValueError("User does not own the reservation")
+
+        if safeguard_config.API_CHECK:
+            if reason not in {"change_of_plan", "airline_cancelled_flight", "other"}:
+                raise ValueError(
+                    "Invalid reason for cancellation. Must be one of 'change_of_plan', 'airline_cancelled_flight', or 'other'."
+                )
+            for res_flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=res_flight.flight_number, date=res_flight.date
+                )
+                if isinstance(flight_date_data, FlightDateStatusLanded) or isinstance(
+                    flight_date_data, FlightDataStatusFlying
+                ):
+                    raise ValueError(
+                        f"Cannot cancel reservation with flight {res_flight.flight_number} already departed or landed. Must transfer to human agent for further assistance."
+                    )
+            if not _is_eligible_for_cancellation(
+                reservation, meet_cancellation_insurance_policy
+            ):
+                raise ValueError(
+                    "Reservation is not eligible for cancellation based on the airline's cancellation policy. "
+                    "The policy states that cancellations are only allowed if made within 24 hours of booking, "
+                    "if the flight is cancelled by the airline, if the booking is in business class, "
+                    "or if the cancellation reason is covered by the insurance policy and the reservation has insurance."
+                )
 
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
@@ -606,6 +670,26 @@ else:
             ValueError: If the reservation is not found.
         """
         reservation = _get_reservation(reservation_id)
+
+        if safeguard_config.API_CHECK:
+            for res_flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=res_flight.flight_number, date=res_flight.date
+                )
+                if isinstance(flight_date_data, FlightDateStatusLanded) or isinstance(
+                    flight_date_data, FlightDataStatusFlying
+                ):
+                    raise ValueError(
+                        f"Cannot cancel reservation with flight {res_flight.flight_number} already departed or landed. Must transfer to human agent for further assistance."
+                    )
+            if not _is_eligible_for_cancellation(reservation, True):
+                raise ValueError(
+                    "Reservation is not eligible for cancellation based on the airline's cancellation policy. "
+                    "The policy states that cancellations are only allowed if made within 24 hours of booking, "
+                    "if the flight is cancelled by the airline, if the booking is in business class, "
+                    "or if the cancellation reason is covered by the insurance policy and the reservation has insurance."
+                )
+
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
         refunds = []
@@ -843,16 +927,18 @@ if safeguard_config.API_REDESIGN:
             raise ValueError("User does not own the reservation")
 
         if safeguard_config.API_CHECK:
-            if nonfree_baggages <= reservation.nonfree_baggages:
+            if nonfree_baggages < reservation.nonfree_baggages:
                 raise ValueError(
-                    "Can only add, not reduce, the number of non-free baggages"
+                    "Can only add or keep, not reduce, the number of non-free baggages. The total baggages may be added as free-baggages. "
+                    f"Current non-free baggages: {reservation.nonfree_baggages}, requested non-free baggages: {nonfree_baggages}. "
+                    f"Current total baggages: {reservation.total_baggages}, requested total baggages: {total_baggages}."
                 )
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
             if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
                 raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
                 )
             if (
                 total_baggages > free_baggage_allowance
@@ -902,16 +988,18 @@ if safeguard_config.API_REDESIGN:
             raise ValueError("User does not own the reservation")
 
         if safeguard_config.API_CHECK:
-            if nonfree_baggages <= reservation.nonfree_baggages:
+            if nonfree_baggages < reservation.nonfree_baggages:
                 raise ValueError(
-                    "Can only add, not reduce, the number of non-free baggages"
+                    "Can only add or keep, not reduce, the number of non-free baggages. The total baggages may be added as free-baggages. "
+                    f"Current non-free baggages: {reservation.nonfree_baggages}, requested non-free baggages: {nonfree_baggages}. "
+                    f"Current total baggages: {reservation.total_baggages}, requested total baggages: {total_baggages}."
                 )
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
             if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
                 raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
                 )
             if (
                 total_baggages > free_baggage_allowance
@@ -969,16 +1057,18 @@ else:
         user = _get_user(reservation.user_id)
 
         if safeguard_config.API_CHECK:
-            if nonfree_baggages <= reservation.nonfree_baggages:
+            if nonfree_baggages < reservation.nonfree_baggages:
                 raise ValueError(
-                    "Can only add, not reduce, the number of non-free baggages"
+                    "Can only add or keep, not reduce, the number of non-free baggages. The total baggages may be added as free-baggages. "
+                    f"Current non-free baggages: {reservation.nonfree_baggages}, requested non-free baggages: {nonfree_baggages}. "
+                    f"Current total baggages: {reservation.total_baggages}, requested total baggages: {total_baggages}."
                 )
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
             if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
                 raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
                 )
             if (
                 total_baggages > free_baggage_allowance
@@ -1109,34 +1199,41 @@ if safeguard_config.API_REDESIGN:
 
         if safeguard_config.API_CHECK:
             if reservation.origin != reservation_flights[0].origin:
-                raise ValueError("Origin does not match the first flight's origin")
+                raise ValueError(
+                    f"The reservation origin {reservation.origin} does not match the first flight's origin {reservation_flights[0].origin}"
+                )
             if (
                 reservation.flight_type == "one_way"
                 and reservation.destination != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "Destination does not match the last flight's destination"
+                    "As a one-way flight, destination must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation destination is {reservation.destination}."
                 )
             if (
                 reservation.flight_type == "round_trip"
                 and reservation.origin != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "The last flight's destination does not match the origin for a round trip"
+                    "As a round-trip flight, origin must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation origin is {reservation.origin}."
                 )
             if reservation.flight_type == "round_trip":
                 has_flight_end_at_destination = False
                 has_flight_start_at_destination = False
+                ori_dst_list = []
                 for res_flight in reservation_flights:
                     if res_flight.destination == reservation.destination:
                         has_flight_end_at_destination = True
                     if res_flight.origin == reservation.destination:
                         has_flight_start_at_destination = True
+                    ori_dst_list.append((res_flight.origin, res_flight.destination))
                 if not (
                     has_flight_end_at_destination and has_flight_start_at_destination
                 ):
                     raise ValueError(
-                        "Round trip reservation must have flights that go to and return from the destination"
+                        "Round trip reservation must have flights that go to and return from the destination. "
+                        f" The reservation destination is {reservation.destination}. The current origin-destination pairs are: {ori_dst_list}."
                     )
 
         if (
@@ -1204,7 +1301,8 @@ if safeguard_config.API_REDESIGN:
                     flight_date_data, FlightDataStatusFlying
                 ):
                     raise ValueError(
-                        "Cannot change cabin class for already flown flights"
+                        "Cannot change cabin class for already flown flights. "
+                        f"Flight {reservation_flight.flight_number} on date {reservation_flight.date} has already been flown."
                     )
 
         # update flights and calculate price
@@ -1273,34 +1371,41 @@ if safeguard_config.API_REDESIGN:
 
         if safeguard_config.API_CHECK:
             if reservation.origin != reservation_flights[0].origin:
-                raise ValueError("Origin does not match the first flight's origin")
+                raise ValueError(
+                    f"The reservation origin {reservation.origin} does not match the first flight's origin {reservation_flights[0].origin}"
+                )
             if (
                 reservation.flight_type == "one_way"
                 and reservation.destination != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "Destination does not match the last flight's destination"
+                    "As a one-way flight, destination must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation destination is {reservation.destination}."
                 )
             if (
                 reservation.flight_type == "round_trip"
                 and reservation.origin != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "The last flight's destination does not match the origin for a round trip"
+                    "As a round-trip flight, origin must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation origin is {reservation.origin}."
                 )
             if reservation.flight_type == "round_trip":
                 has_flight_end_at_destination = False
                 has_flight_start_at_destination = False
+                ori_dst_list = []
                 for res_flight in reservation_flights:
                     if res_flight.destination == reservation.destination:
                         has_flight_end_at_destination = True
                     if res_flight.origin == reservation.destination:
                         has_flight_start_at_destination = True
+                    ori_dst_list.append((res_flight.origin, res_flight.destination))
                 if not (
                     has_flight_end_at_destination and has_flight_start_at_destination
                 ):
                     raise ValueError(
-                        "Round trip reservation must have flights that go to and return from the destination"
+                        "Round trip reservation must have flights that go to and return from the destination. "
+                        f" The reservation destination is {reservation.destination}. The current origin-destination pairs are: {ori_dst_list}."
                     )
 
         if (
@@ -1362,7 +1467,8 @@ else:
                     flight_date_data, FlightDataStatusFlying
                 ):
                     raise ValueError(
-                        "Cannot change cabin class for already flown flights"
+                        "Cannot change cabin class for already flown flights. "
+                        f"Flight {reservation_flight.flight_number} on date {reservation_flight.date} has already been flown."
                     )
 
         # update flights and calculate price
@@ -1432,34 +1538,41 @@ else:
 
         if safeguard_config.API_CHECK:
             if reservation.origin != reservation_flights[0].origin:
-                raise ValueError("Origin does not match the first flight's origin")
+                raise ValueError(
+                    f"The reservation origin {reservation.origin} does not match the first flight's origin {reservation_flights[0].origin}"
+                )
             if (
                 reservation.flight_type == "one_way"
                 and reservation.destination != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "Destination does not match the last flight's destination"
+                    "As a one-way flight, destination must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation destination is {reservation.destination}."
                 )
             if (
                 reservation.flight_type == "round_trip"
                 and reservation.origin != reservation_flights[-1].destination
             ):
                 raise ValueError(
-                    "The last flight's destination does not match the origin for a round trip"
+                    "As a round-trip flight, origin must match the last flight's destination. "
+                    f"The last flight's destination is {reservation_flights[-1].destination}, but the reservation origin is {reservation.origin}."
                 )
             if reservation.flight_type == "round_trip":
                 has_flight_end_at_destination = False
                 has_flight_start_at_destination = False
+                ori_dst_list = []
                 for res_flight in reservation_flights:
                     if res_flight.destination == reservation.destination:
                         has_flight_end_at_destination = True
                     if res_flight.origin == reservation.destination:
                         has_flight_start_at_destination = True
+                    ori_dst_list.append((res_flight.origin, res_flight.destination))
                 if not (
                     has_flight_end_at_destination and has_flight_start_at_destination
                 ):
                     raise ValueError(
-                        "Round trip reservation must have flights that go to and return from the destination"
+                        "Round trip reservation must have flights that go to and return from the destination. "
+                        f" The reservation destination is {reservation.destination}. The current origin-destination pairs are: {ori_dst_list}."
                     )
 
         if (
@@ -1516,7 +1629,9 @@ if safeguard_config.API_REDESIGN:
         # LOGGER.info(len(passengers))
         # LOGGER.info(len(reservation.passengers))
         if len(passengers) != len(reservation.passengers):
-            raise ValueError("Number of passengers does not match")
+            raise ValueError(
+                f"Number of passengers does not match. The current number of passengers is {len(reservation.passengers)}, while the new number of passengers is {len(passengers)}."
+            )
         reservation.passengers = deepcopy(passengers)
         return reservation
 
@@ -1545,7 +1660,9 @@ else:
         # LOGGER.info(len(passengers))
         # LOGGER.info(len(reservation.passengers))
         if len(passengers) != len(reservation.passengers):
-            raise ValueError("Number of passengers does not match")
+            raise ValueError(
+                f"Number of passengers does not match. The current number of passengers is {len(reservation.passengers)}, while the new number of passengers is {len(passengers)}."
+            )
         reservation.passengers = deepcopy(passengers)
         return reservation
 
