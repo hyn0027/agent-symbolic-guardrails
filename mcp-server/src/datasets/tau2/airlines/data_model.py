@@ -8,6 +8,7 @@ from .data_path import AIRLINE_DB_PATH
 FlightType = Literal["round_trip", "one_way"]
 CabinClass = Literal["business", "economy", "basic_economy"]
 Insurance = Literal["yes", "no"]
+CompensatonReason = Literal["cancellation", "delay"]
 
 CancellationReason = Literal["change_of_plan", "airline_cancelled_flight", "other"]
 
@@ -244,6 +245,12 @@ class Reservation(BaseModel):
     insurance: Insurance = Field(description="Whether travel insurance was purchased")
     status: Optional[Literal["cancelled"]] = Field(
         description="Status of the reservation", default=None
+    )
+    compensated: bool = Field(
+        description="Whether compensation has been provided", default=False
+    )
+    has_delay_history: Optional[bool] = Field(
+        description="Whether the reservation has a history of delays", default=None
     )
 
 

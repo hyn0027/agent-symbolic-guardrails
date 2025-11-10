@@ -30,6 +30,7 @@ from .data_model import (
     User,
     MembershipLevel,
     CancellationReason,
+    CompensatonReason,
     db,
 )
 
@@ -641,6 +642,13 @@ if safeguard_config.API_REDESIGN:  # line: 139
                     "or if the cancellation reason is covered by the insurance policy and the reservation has insurance."
                 )
 
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number, date=flight.date
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
+
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
         refunds = []
@@ -693,6 +701,13 @@ else:
                     "if the flight is cancelled by the airline, if the booking is in business class, "
                     "or if the cancellation reason is covered by the insurance policy and the reservation has insurance."
                 )
+
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number, date=flight.date
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
 
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
@@ -846,36 +861,6 @@ def search_onestop_flight(
             result2.date = date2
             results.append([result1, result2])
     return results
-
-
-def send_certificate(
-    user_id: Annotated[
-        str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
-    ],
-    amount: Annotated[int, "The amount of the certificate to send."],
-) -> str:
-    """
-    Send a certificate to a user. Be careful!
-
-    Returns:
-        A message indicating the certificate was sent.
-
-    Raises:
-        ValueError: If the user is not found.
-    """
-    user = _get_user(user_id)
-
-    # add a certificate, assume at most 3 cases per task
-    for payment_id in [f"certificate_{id}" for id in _get_new_payment_id()]:
-        if payment_id not in user.payment_methods:
-            new_payment = Certificate(
-                id=payment_id,
-                amount=amount,
-                source="certificate",
-            )
-            user.payment_methods[payment_id] = new_payment
-            return f"Certificate {payment_id} added to user {user_id} with amount {amount}."
-    raise ValueError("Too many certificates")
 
 
 def think(thought: Annotated[str, "A thought to think about."]) -> str:
@@ -1264,6 +1249,13 @@ if safeguard_config.API_REDESIGN:  # line: 106
         ):  # line: 110
             raise ValueError("Cannot change flights when cabin class is basic_economy")
 
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number, date=flight.date
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
+
         # Deduct amount already paid for reservation
         total_price -= sum(flight.price for flight in reservation.flights) * len(
             reservation.passengers
@@ -1603,6 +1595,13 @@ else:
         ):  # line: 110
             raise ValueError("Cannot change flights when cabin class is basic_economy")
 
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number, date=flight.date
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
+
         # Deduct amount already paid for reservation
         total_price -= sum(flight.price for flight in reservation.flights) * len(
             reservation.passengers
@@ -1704,6 +1703,136 @@ def get_flight_status(
     return _get_flight_instance(flight_number, date).status
 
 
+if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
+
+    def send_certificate(
+        user_id: Annotated[
+            str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
+        ],
+        reservation_id: Annotated[
+            str,
+            "The reservation ID to associate the certificate with, such as 'ZFA04Y'.",
+        ],
+        compensation_reason: Annotated[
+            CompensatonReason, "The reason for compensation."
+        ],
+        amount: Annotated[int, "The amount of the certificate to send."],
+    ) -> str:
+        """
+        Send a certificate to a user. Be careful!
+
+        Returns:
+            A message indicating the certificate was sent.
+
+        Raises:
+            ValueError: If the user is not found.
+        """
+        user = _get_user(user_id)
+        reservation = _get_reservation(reservation_id)
+        if safeguard_config.API_CHECK:  # line: 106
+            if reservation.user_id != user_id:
+                raise ValueError("User does not own the reservation")
+        if compensation_reason != "cancellation" and compensation_reason != "delay":
+            raise ValueError(
+                f"Invalid compensation reason. Valid reasons are 'cancellation' and 'delay', but got '{compensation_reason}'."
+            )
+        if safeguard_config.API_CHECK:  # line: 157, 161
+            if (
+                user.membership == "regular"
+                and reservation.insurance == "no"
+                and reservation.cabin != "business"
+            ):
+                raise ValueError(
+                    "Only users with silver or gold membership, or with insurance, or in business class can receive compensation certificates."
+                )
+
+        if (
+            safeguard_config.API_CHECK and reservation.compensated == True
+        ):  # line: unspecified (commonsense)
+            raise ValueError(
+                "Compensation certificate has already been issued for this reservation."
+            )
+
+        if (
+            safeguard_config.API_CHECK and compensation_reason == "cancellation"
+        ):  # line: 163
+            found_cancelled_flight = False
+            for flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=flight.flight_number,
+                    date=flight.date,
+                )
+                if isinstance(flight_date_data, FlightDateStatusCancelled):
+                    found_cancelled_flight = True
+                    break
+            if not found_cancelled_flight:
+                raise ValueError(
+                    "Cannot issue cancellation certificate for reservation without any cancelled flights."
+                )
+            verified_amount = 100 * len(reservation.passengers)
+            if verified_amount != amount:
+                raise ValueError(
+                    f"Invalid certificate amount for cancellation compensation. The amount should be {verified_amount} = 100 * {len(reservation.passengers)}, but got {amount}."
+                )
+        if safeguard_config.API_CHECK and compensation_reason == "delay":  # line: 165
+            if reservation.has_delay_history == False:
+                raise ValueError(
+                    "Cannot issue delay certificate for reservation without any delayed flights."
+                )
+            if reservation.has_delay_history == None:
+                raise ValueError(
+                    "The reservation has to be changed or cancelled before delay compensation can be issued."
+                )
+            verified_amount = 50 * len(reservation.passengers)
+            if verified_amount != amount:
+                raise ValueError(
+                    f"Invalid certificate amount for delay compensation. The amount should be {verified_amount} = 50 * {len(reservation.passengers)}, but got {amount}."
+                )
+        reservation.compensated = True
+        # add a certificate, assume at most 3 cases per task
+        for payment_id in [f"certificate_{id}" for id in _get_new_payment_id()]:
+            if payment_id not in user.payment_methods:
+                new_payment = Certificate(
+                    id=payment_id,
+                    amount=amount,
+                    source="certificate",
+                )
+                user.payment_methods[payment_id] = new_payment
+                return f"Certificate {payment_id} added to user {user_id} with amount {amount}."
+        raise ValueError("Too many certificates")
+
+else:
+
+    def send_certificate(
+        user_id: Annotated[
+            str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
+        ],
+        amount: Annotated[int, "The amount of the certificate to send."],
+    ) -> str:
+        """
+        Send a certificate to a user. Be careful!
+
+        Returns:
+            A message indicating the certificate was sent.
+
+        Raises:
+            ValueError: If the user is not found.
+        """
+        user = _get_user(user_id)
+
+        # add a certificate, assume at most 3 cases per task
+        for payment_id in [f"certificate_{id}" for id in _get_new_payment_id()]:
+            if payment_id not in user.payment_methods:
+                new_payment = Certificate(
+                    id=payment_id,
+                    amount=amount,
+                    source="certificate",
+                )
+                user.payment_methods[payment_id] = new_payment
+                return f"Certificate {payment_id} added to user {user_id} with amount {amount}."
+        raise ValueError("Too many certificates")
+
+
 mcp.tool(fetch_current_time)
 mcp.tool(
     book_reservation,
@@ -1749,8 +1878,8 @@ mcp.tool(
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
 mcp.tool(get_flight_status)
-if safeguard_config.API_REDESIGN:
-    mcp.tool(compute_time_difference)  # line: unspecified (new)
-    mcp.tool(compute_reservation_price)  # line: unspecified (new)
-    mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
-    mcp.tool(compute_update_reservation_flights_price)  # line: unspecified
+# if safeguard_config.API_REDESIGN:
+#     mcp.tool(compute_time_difference)  # line: unspecified (new)
+    # mcp.tool(compute_reservation_price)  # line: unspecified (new)
+    # mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
+    # mcp.tool(compute_update_reservation_flights_price)  # line: unspecified

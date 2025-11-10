@@ -982,19 +982,34 @@
                 "content": "API add explicit api about refund with the 2 types; verify the user and reservation details before preocedd should be redesigned as -"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "commented": true,
+        "note": "implemented in the API code; check user membership, insurance and cabin class before proceeding"
     },
     {
         "line_number": 159,
         "content": "Always confirms the facts before offering compensation.",
         "spec": [],
-        "tag": "not_enforcable"
+        "tag": "not_applicable"
     },
     {
         "line_number": 161,
         "content": "Only compensate if the user is a silver/gold member or has travel insurance or flies business.",
-        "spec": [],
-        "tag": "not_applicable"
+        "spec": [
+            {
+                "template_type": "API_redesign",
+                "content": "API add explicit api about verify the user membership level, insurance and cabin class before offering compensation should be redesigned as -"
+            },
+            {
+                "template_type": "API_check",
+                "content": "API add explicit api about verify the user membership level, insurance and cabin class before offering compensation should add a check or action: verify the user membership level, insurance and cabin class before offering compensation"
+            }
+        ],
+        "tag": "enforcable",
+        "fixed": true,
+        "commented": true,
+        "note": "implemented in the API code; check user membership, insurance and cabin class before proceeding"
     },
     {
         "line_number": 163,
@@ -1005,7 +1020,10 @@
                 "content": "API design an explicit api about refune because of canceling should be redesigned as -"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "commented": true,
+        "note": "implemented in the API code; check flight is cancelled and compute the amount and check if it matches"
     },
     {
         "line_number": 165,
@@ -1016,17 +1034,15 @@
                 "content": "API explicitly design an api to offer compensation because of delays; also ceify that they have change/cancel the reservation should be redesigned as -"
             }
         ],
-        "tag": "enforcable"
+        "tag": "enforcable",
+        "fixed": true,
+        "commented": true,
+        "note": "implemented in the API code; check flight is delayed and compute the amount and check if it matches"   
     },
     {
         "line_number": 167,
         "content": "Do not offer compensation for any other reason than the ones listed above.",
-        "spec": [
-            {
-                "template_type": "API_redesign",
-                "content": "API don't design other compensation api should be redesigned as -"
-            }
-        ],
-        "tag": "enforcable"
+        "spec": [],
+        "tag": "not_applicable"
     }
 ]
