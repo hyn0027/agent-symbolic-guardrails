@@ -201,9 +201,9 @@ def _get_free_baggage_allowance(membership: MembershipLevel, cabin: CabinClass) 
     if cabin == "basic_economy":
         return 0 + additional
     elif cabin == "economy":
-        return 3 + additional
+        return 1 + additional
     elif cabin == "business":
-        return 4 + additional
+        return 2 + additional
 
 
 def fetch_current_time() -> str:
