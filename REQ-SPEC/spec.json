@@ -22,12 +22,13 @@
         "content": "Before taking any actions that update the booking database (booking, modifying flights, editing baggage, changing cabin class, or updating passenger information), you must list the action details and obtain explicit user confirmation (yes) to proceed.",
         "spec": [
             {
-                "template_type": "API_check",
+                "template_type": "user_confirmation",
                 "content": "API all api updating database should add a check: code for an explict user consent"
             }
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "forced user confirmation in the agent implementation"
     },
     {
@@ -46,6 +47,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": false,
         "fixed": true,
         "note": "implementation"
     },
@@ -66,6 +68,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "API metadata + agent loop code"
     },
     {
@@ -335,6 +338,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if more than 5 raise error"
     },
@@ -377,6 +381,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if more than allowed raise error"
     },
     {
@@ -423,6 +428,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -436,6 +442,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -449,6 +456,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -468,6 +476,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -481,6 +490,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -494,6 +504,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -513,6 +524,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
@@ -527,6 +539,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
     {
@@ -540,6 +553,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if baggage not match raise error"
     },
     {
@@ -584,9 +598,7 @@
                 "content": "there should be an api that can calculate price given an attempt to book reservation"
             }
         ],
-        "tag": "enforcable",
-        "fixed": true,
-        "note": "implemented in the API code; price is computed correctly"
+        "tag": "implemented"
     },
     {
         "line_number": 103,
@@ -607,10 +619,15 @@
             {
                 "template_type": "API_redesign",
                 "content": "API general api should be redesigned as design so that no api can be used to look up for a user"
+            },
+            {
+                "template_type": "API_check",
+                "content": "API all api should be blocked when user_id does not match"
             }
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "all APIs have been redesigned to require user_id"
     },
     {
@@ -641,6 +658,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if basic econ raise error"
     },
     {
@@ -653,6 +671,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if not match raise error"
     },
@@ -690,6 +709,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if any flight already flown raise error"
     },
     {
@@ -748,6 +768,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if less baggage raise error"
     },
     {
@@ -836,10 +857,15 @@
             {
                 "template_type": "API_redesign",
                 "content": "API cancel flight should be blocked with parameters constraint: reason for cancellation is provided"
+            },
+            {
+                "template_type": "API_check",
+                "content": "API cancel flight should be blocked with parameters constraint: reason for cancellation is provided"
             }
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if no reason raise error"
     },
     {
@@ -853,6 +879,7 @@
         ],
         "tag": "enforcable",
         "fixed": true,
+        "commented": true,
         "note": "implemented in the API code; if any portion flown raise error"
     },
     {
@@ -871,6 +898,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
@@ -884,6 +912,7 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
@@ -897,11 +926,13 @@
             }
         ],
         "tag": "enforcable",
+        "commented": true,
         "fixed": true,
         "note": "implemented in the API code; if not meet any of the criteria raise error"
     },
     {
         "line_number": 147,
+        "commented": true,
         "content": "- The user has travel insurance and the reason for cancellation is covered by insurance.",
         "spec": [],
         "tag": "not_enforcable",
