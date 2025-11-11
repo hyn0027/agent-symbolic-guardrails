@@ -36,7 +36,7 @@ Also changed a bit wording in the task description (if it results in less charge
 
 Created a new user (mohamed_silva_9266) with a new reservation (K1NW8M) to avoid conflict with other tasks.
 
-In the DB changed the original payment to 1800.
+In the DB changed the original payment to 1800, so that the 1786 payment now should apply.
 
 ## Policy change
 
