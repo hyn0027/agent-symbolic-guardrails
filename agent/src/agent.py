@@ -194,6 +194,9 @@ class ReActAgent:
     def fetch_successful_tool_call_history(self) -> List[Dict]:
         return self.mcp_client.successful_tool_calls
 
+    def get_user_and_assistant_history(self) -> List[Dict[str, str]]:
+        return [msg for msg in self.history if msg["role"] in ["user", "assistant"]]
+
     def shutdown(self):
         LOGGER.info("Shutting down ReActAgent and closing event loop.")
         try:

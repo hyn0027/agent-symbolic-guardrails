@@ -312,16 +312,22 @@ def compute_reservation_price(
     if safeguard_config.API_CHECK:  # line: 82-94
         user_membership = user.membership
         free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
-        if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
-            raise ValueError(
-                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
-            )
+        passenger_num = len(passengers)
         if (
-            total_baggages > free_baggage_allowance
-            and total_baggages != free_baggage_allowance + nonfree_baggages
+            total_baggages <= free_baggage_allowance * passenger_num
+            and nonfree_baggages > 0
         ):
             raise ValueError(
-                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance * passenger_num} = {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count), but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
+            )
+        if (
+            total_baggages > free_baggage_allowance * passenger_num
+            and total_baggages
+            != free_baggage_allowance * passenger_num + nonfree_baggages
+        ):
+            raise ValueError(
+                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance * passenger_num} (computed by {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count)) "
+                f"+ non-free baggages {nonfree_baggages}"
             )
 
     # Update flights and calculate price
@@ -410,16 +416,23 @@ def book_reservation(
     if safeguard_config.API_CHECK:  # line: 82-94
         user_membership = user.membership
         free_baggage_allowance = _get_free_baggage_allowance(user_membership, cabin)
-        if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
-            raise ValueError(
-                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
-            )
+        passenger_num = len(passengers)
         if (
-            total_baggages > free_baggage_allowance
-            and total_baggages != free_baggage_allowance + nonfree_baggages
+            total_baggages <= free_baggage_allowance * passenger_num
+            and nonfree_baggages > 0
         ):
             raise ValueError(
-                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                f"Total baggages {total_baggages} within free allowance {free_baggage_allowance * passenger_num} = {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count), "
+                f"but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0."
+            )
+        if (
+            total_baggages > free_baggage_allowance * passenger_num
+            and total_baggages
+            != free_baggage_allowance * passenger_num + nonfree_baggages
+        ):
+            raise ValueError(
+                f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance * passenger_num} (computed by {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count)) "
+                f"+ non-free baggages {nonfree_baggages}"
             )
 
     reservation = Reservation(
@@ -928,16 +941,23 @@ if safeguard_config.API_REDESIGN:  # line: 106
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
-            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
-                raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
-                )
+            passenger_num = len(reservation.passengers)
             if (
-                total_baggages > free_baggage_allowance
-                and total_baggages != free_baggage_allowance + nonfree_baggages
+                total_baggages <= free_baggage_allowance * passenger_num
+                and nonfree_baggages > 0
             ):
                 raise ValueError(
-                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance * passenger_num} = {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count), "
+                    f"but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
+                )
+            if (
+                total_baggages > free_baggage_allowance * passenger_num
+                and total_baggages
+                != free_baggage_allowance * passenger_num + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance * passenger_num} (computed by {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count)) "
+                    f"+ non-free baggages {nonfree_baggages}"
                 )
 
         # Calculate price
@@ -990,16 +1010,23 @@ if safeguard_config.API_REDESIGN:  # line: 106
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
-            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
-                raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
-                )
+            passenger_num = len(reservation.passengers)
             if (
-                total_baggages > free_baggage_allowance
-                and total_baggages != free_baggage_allowance + nonfree_baggages
+                total_baggages <= free_baggage_allowance * passenger_num
+                and nonfree_baggages > 0
             ):
                 raise ValueError(
-                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance * passenger_num} = {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count), "
+                    f"but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
+                )
+            if (
+                total_baggages > free_baggage_allowance * passenger_num
+                and total_baggages
+                != free_baggage_allowance * passenger_num + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance * passenger_num} (computed by {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count)) "
+                    f"+ non-free baggages {nonfree_baggages}"
                 )
 
         # Calculate price
@@ -1060,16 +1087,23 @@ else:
             free_baggage_allowance = _get_free_baggage_allowance(
                 user.membership, reservation.cabin
             )
-            if total_baggages <= free_baggage_allowance and nonfree_baggages > 0:
-                raise ValueError(
-                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance}, but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
-                )
+            passenger_num = len(reservation.passengers)
             if (
-                total_baggages > free_baggage_allowance
-                and total_baggages != free_baggage_allowance + nonfree_baggages
+                total_baggages <= free_baggage_allowance * passenger_num
+                and nonfree_baggages > 0
             ):
                 raise ValueError(
-                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance} + non-free baggages {nonfree_baggages}"
+                    f"Total baggages {total_baggages} within free allowance {free_baggage_allowance * passenger_num} = {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count), "
+                    f"but non-free baggages is {nonfree_baggages}. The non-free baggages should be 0. The additional bag should be added as free-baggages."
+                )
+            if (
+                total_baggages > free_baggage_allowance * passenger_num
+                and total_baggages
+                != free_baggage_allowance * passenger_num + nonfree_baggages
+            ):
+                raise ValueError(
+                    f"Total baggages {total_baggages} does not equal to free allowance {free_baggage_allowance * passenger_num} (computed by {free_baggage_allowance} (baggage num per person) * {passenger_num} (passenger count)) "
+                    f"+ non-free baggages {nonfree_baggages}"
                 )
 
         # Calculate price

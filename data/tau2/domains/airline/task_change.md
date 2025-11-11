@@ -28,6 +28,16 @@ removed the 2 action check to search for direct flight. Upgrading cabin has noth
 
 there's no point that the summary field in the transfer to agent must strictly match... removed that
 
+### ID: 14
+
+The task said the master card would be charged 44 but the action checker is actually 1786... It totally does not match. To total price of the new flight is not 871.
+
+Also changed a bit wording in the task description (if it results in less charges to your master card than what had been charged for the original flight -> if it results in less charges to your master card than the total charge of the original flight)
+
+Created a new user (mohamed_silva_9266) with a new reservation (K1NW8M) to avoid conflict with other tasks.
+
+In the DB changed the original payment to 1800.
+
 ## Policy change
 
 add a description in the policy and data model that reservations also include past ones.

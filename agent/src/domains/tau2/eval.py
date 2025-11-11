@@ -333,9 +333,11 @@ def evaluate_single(
         task,
         agent.fetch_successful_tool_call_history() + user.fetch_tool_call_history(),
     )
-    communicate_reward_info = CommunicateEvaluator.calculate_reward(task, agent.history)
+    communicate_reward_info = CommunicateEvaluator.calculate_reward(
+        task, agent.get_user_and_assistant_history()
+    )
     nl_assertions_reward_info = NLAssertionsEvaluator.calculate_reward(
-        task, agent.history
+        task, agent.get_user_and_assistant_history()
     )
 
     reward = 1.0
