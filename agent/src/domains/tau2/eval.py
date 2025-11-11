@@ -71,9 +71,9 @@ class ActionEvaluator:
     @classmethod
     def dict2Toolcall(cls, tc_dict: Dict) -> ToolCall:
         return ToolCall(
-            id=tc_dict["id"],
-            name=tc_dict["function"]["name"],
-            arguments=json.loads(tc_dict["function"]["arguments"]),
+            id="id",
+            name=tc_dict["name"],
+            arguments=tc_dict["arguments"],
         )
 
     @classmethod
@@ -88,7 +88,7 @@ class ActionEvaluator:
         action_match_list = []
         predicted_tool_calls: list[ToolCall] = []
         for tc in tool_call_history:
-            predicted_tool_calls.extend(cls.dict2Toolcall(tc) for tc in [tc])
+            predicted_tool_calls.append(cls.dict2Toolcall(tc))
 
         # Check if all the gold actions are in the predicted actions
         for gold_action in golden_actions:
@@ -330,7 +330,8 @@ def evaluate_single(
         )
 
     action_reward_info = ActionEvaluator.calculate_reward(
-        task, agent.fetch_tool_call_history() + user.fetch_tool_call_history()
+        task,
+        agent.fetch_successful_tool_call_history() + user.fetch_tool_call_history(),
     )
     communicate_reward_info = CommunicateEvaluator.calculate_reward(task, agent.history)
     nl_assertions_reward_info = NLAssertionsEvaluator.calculate_reward(

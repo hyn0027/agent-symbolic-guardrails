@@ -22,6 +22,8 @@ class MCPClient:
 
     async def initialize(self):
         """Initialize the MCP client by connecting to the server and fetching tools."""
+        self.attempted_tool_calls = []
+        self.successful_tool_calls = []
         async with self.client:
             self.tools = await self.client.list_tools()
             self.initialized = True
@@ -67,12 +69,17 @@ class MCPClient:
             return {
                 "error": "Arguments must be a dictionary or a JSON string representing a dictionary."
             }
+
+        self.attempted_tool_calls.append({"name": name, "arguments": arguments})
         try:
             async with self.client:
                 result = await self.client.call_tool(name=name, arguments=arguments)
             res = self._tool_call_res_to_json(result)
             if res["is_error"]:
                 return {"error": res["data"]}
+            self.successful_tool_calls.append(
+                {"name": name, "arguments": arguments, "response": res}
+            )
             return res
         except Exception as e:
             return {"error": str(e)}

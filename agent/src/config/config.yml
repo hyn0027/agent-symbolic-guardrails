@@ -14,7 +14,7 @@ AGENT:
 
   INITIAL_CONVERSTION: "Hi! How can I help you today?"
 
-  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/policy.md"
+  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/new_policy.md"
 
   SYSTEM_PROMPT_TEMPLATE: |
     {agent_instruction}
@@ -50,7 +50,7 @@ EVAL:
   TEMPERATURE: 0.0
 
 SIMULATION:
-  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tasks.json"
+  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/new_tasks.json"
   MAX_STEPS: 100
 
 SETTINGS:
@@ -63,7 +63,8 @@ SAFEGUARD:
     Tool: {tool_name}
     Arguments: {tool_args}
 
-    Please review the action above and confirm if you would like me to proceed. Respond with "CONFIRM" to proceed or "CANCEL" to abort.
+    Please review the action above and confirm if you would like me to proceed.
+    Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
 
   TOOL_RESPONSE_TEMPLATE: true
 

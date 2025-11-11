@@ -242,6 +242,14 @@ class EvaluationCriteria(BaseModel):
         ),
     ]
 
+    destructive_actions: Annotated[
+        Optional[list[Action]],
+        Field(
+            description="All the destructive actions that the agent is expected to take during the task.",
+            default=None,
+        ),
+    ]
+
     communicate_info: Annotated[
         Optional[list[str]],
         Field(

@@ -29,7 +29,6 @@ class ReActAgent:
         LOGGER.debug("MCP TOOL")
         LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
-        LOGGER.debug(json.dumps(self.tools, indent=2))
         self.history = [
             {"role": "system", "content": self.system_prompt},
         ]
@@ -143,7 +142,7 @@ class ReActAgent:
                 )
                 self.remaining_tool_calls = self.remaining_tool_calls[1:]
             else:
-                msg = 'Please respond with "CONFIRM" to proceed or "CANCEL" to abort.'
+                msg = 'Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.'
                 return msg
             self.tmp_user_response = ""
             for index, tool_call in enumerate(self.remaining_tool_calls):
@@ -192,12 +191,8 @@ class ReActAgent:
         )
         return response.choices[0].message
 
-    def fetch_tool_call_history(self) -> List[Dict]:
-        tool_calls = []
-        for message in self.history:
-            if message.get("role") == "assistant" and "tool_calls" in message:
-                tool_calls.extend(message["tool_calls"])
-        return tool_calls
+    def fetch_successful_tool_call_history(self) -> List[Dict]:
+        return self.mcp_client.successful_tool_calls
 
     def shutdown(self):
         LOGGER.info("Shutting down ReActAgent and closing event loop.")

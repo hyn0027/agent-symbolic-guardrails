@@ -217,7 +217,9 @@ class User(BaseModel):
         description="User's saved passenger information"
     )
     membership: MembershipLevel = Field(description="User's membership level")
-    reservations: List[str] = Field(description="List of user's reservation IDs")
+    reservations: List[str] = Field(
+        description="List of user's reservation IDs, include both past and upcoming ones, and is not ordered"
+    )
 
 
 # Reservation Models
@@ -250,7 +252,8 @@ class Reservation(BaseModel):
         description="Whether compensation has been provided", default=False
     )
     has_delay_history: Optional[bool] = Field(
-        description="Whether the reservation has a history of delays", default=None
+        description="Whether the reservation has a history of delays. If set to None, the delay history is unknown.",
+        default=None,
     )
 
 

@@ -648,6 +648,7 @@ if safeguard_config.API_REDESIGN:  # line: 139
             )
             if isinstance(flight_date_data, FlightDateStatusDelayed):
                 reservation.has_delay_history = True
+                break
 
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
@@ -708,6 +709,7 @@ else:
             )
             if isinstance(flight_date_data, FlightDateStatusDelayed):
                 reservation.has_delay_history = True
+                break
 
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
@@ -1255,6 +1257,7 @@ if safeguard_config.API_REDESIGN:  # line: 106
             )
             if isinstance(flight_date_data, FlightDateStatusDelayed):
                 reservation.has_delay_history = True
+                break
 
         # Deduct amount already paid for reservation
         total_price -= sum(flight.price for flight in reservation.flights) * len(
@@ -1601,6 +1604,7 @@ else:
             )
             if isinstance(flight_date_data, FlightDateStatusDelayed):
                 reservation.has_delay_history = True
+                break
 
         # Deduct amount already paid for reservation
         total_price -= sum(flight.price for flight in reservation.flights) * len(
@@ -1705,6 +1709,85 @@ def get_flight_status(
 
 if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
 
+    def compute_compensation_amount(
+        user_id: Annotated[
+            str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
+        ],
+        reservation_id: Annotated[
+            str,
+            "The reservation ID to associate the certificate with, such as 'ZFA04Y'.",
+        ],
+        compensation_reason: Annotated[
+            CompensatonReason, "The reason for compensation."
+        ],
+    ) -> int:
+        """
+        Compute the compensation amount for a reservation.
+
+        Returns:
+            The compensation amount.
+        """
+
+        user = _get_user(user_id)
+        reservation = _get_reservation(reservation_id)
+        if safeguard_config.API_CHECK:  # line: 106
+            if reservation.user_id != user_id:
+                raise ValueError("User does not own the reservation")
+        if compensation_reason != "cancellation" and compensation_reason != "delay":
+            raise ValueError(
+                f"Invalid compensation reason. Valid reasons are 'cancellation' and 'delay', but got '{compensation_reason}'."
+            )
+        if safeguard_config.API_CHECK:  # line: 157, 161
+            if (
+                user.membership == "regular"
+                and reservation.insurance == "no"
+                and reservation.cabin != "business"
+            ):
+                raise ValueError(
+                    "Only users with silver or gold membership, or with insurance, or in business class can receive compensation certificates. "
+                    f"User membership: {user.membership}, reservation insurance: {reservation.insurance}, reservation cabin: {reservation.cabin}."
+                )
+
+        if (
+            safeguard_config.API_CHECK and reservation.compensated == True
+        ):  # line: unspecified (commonsense)
+            raise ValueError(
+                "Compensation certificate has already been issued for this reservation."
+            )
+
+        if (
+            safeguard_config.API_CHECK and compensation_reason == "cancellation"
+        ):  # line: 163
+            found_cancelled_flight = False
+            for flight in reservation.flights:
+                flight_date_data = _get_flight_instance(
+                    flight_number=flight.flight_number,
+                    date=flight.date,
+                )
+                if isinstance(flight_date_data, FlightDateStatusCancelled):
+                    found_cancelled_flight = True
+                    break
+            if not found_cancelled_flight:
+                raise ValueError(
+                    "Cannot issue cancellation certificate for reservation without any cancelled flights."
+                )
+            verified_amount = 100 * len(reservation.passengers)
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number,
+                date=flight.date,
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
+                break
+        if safeguard_config.API_CHECK and compensation_reason == "delay":  # line: 165
+            if not reservation.has_delay_history:
+                raise ValueError(
+                    "Cannot issue delay certificate for reservation without any delayed flights."
+                )
+            verified_amount = 50 * len(reservation.passengers)
+        return verified_amount
+
     def send_certificate(
         user_id: Annotated[
             str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
@@ -1743,7 +1826,8 @@ if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
                 and reservation.cabin != "business"
             ):
                 raise ValueError(
-                    "Only users with silver or gold membership, or with insurance, or in business class can receive compensation certificates."
+                    "Only users with silver or gold membership, or with insurance, or in business class can receive compensation certificates. "
+                    f"User membership: {user.membership}, reservation insurance: {reservation.insurance}, reservation cabin: {reservation.cabin}."
                 )
 
         if (
@@ -1774,14 +1858,18 @@ if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
                 raise ValueError(
                     f"Invalid certificate amount for cancellation compensation. The amount should be {verified_amount} = 100 * {len(reservation.passengers)}, but got {amount}."
                 )
+        for flight in reservation.flights:
+            flight_date_data = _get_flight_instance(
+                flight_number=flight.flight_number,
+                date=flight.date,
+            )
+            if isinstance(flight_date_data, FlightDateStatusDelayed):
+                reservation.has_delay_history = True
+                break
         if safeguard_config.API_CHECK and compensation_reason == "delay":  # line: 165
-            if reservation.has_delay_history == False:
+            if reservation.has_delay_history != True:
                 raise ValueError(
                     "Cannot issue delay certificate for reservation without any delayed flights."
-                )
-            if reservation.has_delay_history == None:
-                raise ValueError(
-                    "The reservation has to be changed or cancelled before delay compensation can be issued."
                 )
             verified_amount = 50 * len(reservation.passengers)
             if verified_amount != amount:
@@ -1878,8 +1966,10 @@ mcp.tool(
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
 mcp.tool(get_flight_status)
-# if safeguard_config.API_REDESIGN:
-#     mcp.tool(compute_time_difference)  # line: unspecified (new)
-    # mcp.tool(compute_reservation_price)  # line: unspecified (new)
-    # mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
-    # mcp.tool(compute_update_reservation_flights_price)  # line: unspecified
+
+if safeguard_config.NEW_API:
+    mcp.tool(compute_time_difference)  # line: unspecified (new)
+    mcp.tool(compute_reservation_price)  # line: unspecified (new)
+    mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
+    mcp.tool(compute_update_reservation_flights_price)  # line: unspecified
+    mcp.tool(compute_compensation_amount)  # line: unspecified (new)

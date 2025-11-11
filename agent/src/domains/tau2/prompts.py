@@ -28,7 +28,7 @@ def user_prompt(task: Task) -> str:
 def assess_end_conversation(message: str) -> bool:
     end_indicators = [
         "###STOP###",
-        "###TRANSFER###",
+        # "###TRANSFER###",
         "###OUT-OF-SCOPE###"
     ]
     for indicator in end_indicators:
