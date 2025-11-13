@@ -1,6 +1,7 @@
 import yaml
 from pathlib import Path
 from typing import Optional
+import argparse
 
 
 class Config(dict):
@@ -16,7 +17,10 @@ class Config(dict):
 def load_config(config_path: Optional[str] = None) -> Config:
     """Load configuration from a YAML file."""
     if config_path is None:
-        config_path = Path(__file__).parent / "config.yml"
+        argparse_parser = argparse.ArgumentParser()
+        argparse_parser.add_argument("--config", type=str, default="config.yml", help="Path to the config file.")
+        args, _ = argparse_parser.parse_known_args()
+        config_path = Path(__file__).parent / args.config
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
     return Config(config)

@@ -34,6 +34,7 @@ from .data_model import (
     CompensatonReason,
     db,
 )
+from .data_path import TMP_DB_PATH
 
 from mcp_server import mcp
 from config_loader import CONFIG
@@ -2158,29 +2159,31 @@ else:
         process_error("Too many certificates", ["implemented"])
 
 
-mcp.tool(fetch_current_time)
+mcp.tool(fetch_current_time, meta={"skip_golden_eval": True})
 mcp.tool(
     book_reservation,
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
-mcp.tool(calculate)
+mcp.tool(calculate, meta={"skip_golden_eval": True})
 mcp.tool(
     cancel_reservation,
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
 mcp.tool(get_reservation_details)
 mcp.tool(get_user_details)
-mcp.tool(list_all_airports)
-mcp.tool(search_direct_flight)
-mcp.tool(search_onestop_flight)
+mcp.tool(list_all_airports, meta={"skip_golden_eval": True})
+mcp.tool(search_direct_flight, meta={"skip_golden_eval": True})
+mcp.tool(search_onestop_flight, meta={"skip_golden_eval": True})
 mcp.tool(send_certificate)
-mcp.tool(think)
+if safeguard_config.ENABLE_THINKING_STEP:
+    mcp.tool(think, meta={"skip_golden_eval": True})
 if safeguard_config.TOOL_RESPONSE_TEMPLATE:  # line: 15
     mcp.tool(
         transfer_to_human_agents,
         meta={
             "end_conversation": safeguard_config.TOOL_END_CONVERSATION,  # line: 15
             "response_template": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
+            "skip_golden_eval": True,
         },
     )
 else:
@@ -2188,6 +2191,7 @@ else:
         transfer_to_human_agents,
         meta={
             "end_conversation": safeguard_config.TOOL_END_CONVERSATION,  # line: 15
+            "skip_golden_eval": True,
         },
     )
 mcp.tool(
@@ -2202,7 +2206,7 @@ mcp.tool(
     update_reservation_passengers,
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
-mcp.tool(get_flight_status)
+mcp.tool(get_flight_status, meta={"skip_golden_eval": True})
 
 if safeguard_config.NEW_API:
     mcp.tool(compute_time_difference)  # line: unspecified (new)
@@ -2210,3 +2214,19 @@ if safeguard_config.NEW_API:
     mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
     mcp.tool(compute_update_reservation_flights_price)  # line: unspecified
     mcp.tool(compute_compensation_amount)  # line: unspecified (new)
+
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def save_state() -> str:
+    """
+    Save the current state of the system.
+
+    Returns:
+        A message indicating the state was saved.
+    """
+    db.dump(TMP_DB_PATH)
+    return "State saved successfully."

@@ -8,6 +8,12 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config test_config.yml"
+
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config golden_config.yml"
+
+  TEST_WITH_GOLDEN: true
+
   MAX_TOOL_CALL_FAILS: 10
 
   AGENT_INITIAL_MESSAGE: true
@@ -35,7 +41,7 @@ AGENT:
 
 USER:
   MODEL: "gpt-4o"
-  TEMPERATURE: 1.0
+  TEMPERATURE: 0.0
 
   SYSTEM_PROMPT_TEMPLATE: |
     {global_user_sim_guidelines}

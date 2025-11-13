@@ -1,0 +1,22 @@
+DATASET:
+  NAME: "tau2"
+  DOMAIN: "airline"
+  DOMAIN_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/"
+  USER_SIMULATION_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/user_simulator/"
+  AIRLINE_DB_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/new_db.json"
+  TMP_DB_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tmp_db.json"
+
+SETTINGS:
+  LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/mcp-server/"
+
+SAFEGUARD:
+  API_CHECK: true
+  API_REDESIGN: false
+  USER_CONFIRMATION: false
+  TOOL_END_CONVERSATION: true
+  TOOL_RESPONSE_TEMPLATE: false
+  NEW_API: false
+  ENABLE_THINKING_STEP: true
+
+ERROR_HANDLING:
+  SILENT_CHECK: true

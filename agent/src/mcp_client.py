@@ -6,7 +6,7 @@ from mcp.types import Tool
 
 
 class MCPClient:
-    def __init__(self, server_params: str):
+    def __init__(self, server_params: str, server_args: str = ""):
         self.tools: List[Tool] = []
         self.initialized = False
         self.client = Client(
@@ -15,6 +15,7 @@ class MCPClient:
                     "local_server": {
                         "transport": "stdio",
                         "command": server_params,
+                        "args": server_args.split(),
                     }
                 }
             }
@@ -40,18 +41,38 @@ class MCPClient:
                 return tool.meta if tool.meta else {}
         raise ValueError(f"Tool with name '{name}' not found.")
 
+    def _traverse_and_set_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
+        """Recursively traverse and set the schema additional properties to False."""
+        if "type" in schema and schema["type"] == "object":
+            schema["additionalProperties"] = False
+            if "properties" in schema:
+                for prop in schema["properties"].values():
+                    self._traverse_and_set_schema(prop)
+            if "$defs" in schema:
+                for defn in schema["$defs"].values():
+                    self._traverse_and_set_schema(defn)
+        elif "type" in schema and schema["type"] == "array":
+            if "items" in schema:
+                self._traverse_and_set_schema(schema["items"])
+        elif "anyOf" in schema:
+            for subschema in schema["anyOf"]:
+                self._traverse_and_set_schema(subschema)
+        return schema
+
     def list_OPENAI_tools(self) -> List[Dict[str, Any]]:
         """List tools in a format compatible with OpenAI's tool calling."""
         if not self.initialized:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
         openai_tools = []
         for tool in self.tools:
+            tool.inputSchema = self._traverse_and_set_schema(tool.inputSchema)
             openai_tool = {
                 "type": "function",
                 "function": {
                     "name": tool.name,
                     "description": tool.description,
                     "parameters": tool.inputSchema,
+                    "strict": True,
                 },
             }
             openai_tools.append(openai_tool)
@@ -102,6 +123,20 @@ class MCPClient:
             return res["structured_content"]
         except Exception as e:
             return {"error": str(e)}
+
+    async def save_state(self) -> bool:
+        """Call the save_state tool to persist the current state."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        try:
+            async with self.client:
+                result = await self.client.call_tool(name="save_state", arguments={})
+            res = self._tool_call_res_to_json(result)
+            if res["is_error"]:
+                return False
+            return True
+        except Exception as e:
+            return False
 
     def _tool_call_res_to_json(self, tool_call_response: Any) -> Dict[str, Any]:
         return {

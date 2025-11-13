@@ -365,15 +365,27 @@ def evaluate_single(
             "communicate_evaluation": communicate_reward_info.info,
             "nl_assertions_evaluation": nl_assertions_reward_info.info,
             "reward_without_nl": reward_without_nl,
+            "golden_eval_history": agent.golden_eval_hist,
         },
     )
 
     LOGGER.info(f"Reward: {eval_res.reward}")
     LOGGER.info(f"Reward Breakdown: {json.dumps(eval_res.reward_breakdown, indent=2)}")
+    golden_count = {}
+    for eval_entry in eval_res.info.get("golden_eval_history", []):
+        eval_res_entry = eval_entry.get("eval_result", None)
+        flag = eval_res_entry.get("flag", "unknown") if eval_res_entry else "unknown"
+        if flag not in golden_count:
+            golden_count[flag] = 0
+        golden_count[flag] += 1
+    LOGGER.info(f"Golden Evaluation Flag Counts: {json.dumps(golden_count, indent=2)}")
+
+    LOGGER.debug(f"Full Golden Evaluation History: ")
+    LOGGER.debug(json.dumps(agent.golden_eval_hist, indent=2))
     return eval_res
 
 
-def aggregate_evals(res_list: List[RewardInfo]) -> RewardInfo:
+def aggregate_evals(res_list: List[RewardInfo]) -> None:
     total_reward = 0.0
     total_reward_without_nl = 0.0
     total_reward_breakdown: Dict[RewardType, float] = {}
@@ -401,7 +413,26 @@ def aggregate_evals(res_list: List[RewardInfo]) -> RewardInfo:
         f"Aggregated Average Reward without NL Assertions: {avg_reward_without_nl}"
     )
 
-    return RewardInfo(
-        reward=avg_reward,
-        reward_breakdown=avg_reward_breakdown,
+    golden_flag_count = {}
+    golden_flag_all_pass_list = []
+    for res in res_list:
+        if res is None:
+            continue
+        golden_eval_list = res.info.get("golden_eval_history", [])
+        golden_flag_all_pass = True
+        for eval_entry in golden_eval_list:
+            eval_res = eval_entry.get("eval_result", None)
+            flag = eval_res.get("flag", "unknown") if eval_res else "unknown"
+            if flag not in golden_flag_count:
+                golden_flag_count[flag] = 0
+            golden_flag_count[flag] += 1
+            if flag != "pass":
+                golden_flag_all_pass = False
+        golden_flag_all_pass_list.append(golden_flag_all_pass)
+    LOGGER.info(
+        f"Golden Evaluation Flag Counts: {json.dumps(golden_flag_count, indent=2)}"
+    )
+    all_pass_count = sum(golden_flag_all_pass_list)
+    LOGGER.info(
+        f"Number of simulations with all golden evals passing: {all_pass_count} out of {len(res_list)}"
     )
