@@ -26,6 +26,9 @@ class MCPClient:
         self.successful_tool_calls = []
         async with self.client:
             self.tools = await self.client.list_tools()
+            self.tools = [
+                tool for tool in self.tools if tool.meta.get("disclose_to_model", True)
+            ]
             self.initialized = True
 
     def get_tool_metadata(self, name: str) -> Dict[str, Any]:
@@ -81,6 +84,22 @@ class MCPClient:
                 {"name": name, "arguments": arguments, "response": res}
             )
             return res
+        except Exception as e:
+            return {"error": str(e)}
+
+    async def report_error_statistics(self) -> Dict:
+        """Call the report_error_statistics tool to get error statistics."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        try:
+            async with self.client:
+                result = await self.client.call_tool(
+                    name="report_error_statistics", arguments={}
+                )
+            res = self._tool_call_res_to_json(result)
+            if res["is_error"]:
+                return {"error": res["data"]}
+            return res["structured_content"]
         except Exception as e:
             return {"error": str(e)}
 

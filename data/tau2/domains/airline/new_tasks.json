@@ -1085,6 +1085,28 @@
                     "info": null
                 }
             ],
+            "destructive_actions": [
+                {
+                    "action_id": "15_0",
+                    "name": "update_reservation_flights",
+                    "arguments": {
+                        "reservation_id": "M05KNL",
+                        "cabin": "economy",
+                        "flights": [
+                            {
+                                "flight_number": "HAT110",
+                                "date": "2024-05-24"
+                            },
+                            {
+                                "flight_number": "HAT172",
+                                "date": "2024-05-24"
+                            }
+                        ],
+                        "payment_id": "gift_card_8887175"
+                    },
+                    "info": null
+                }
+            ],
             "communicate_info": [],
             "nl_assertions": [
                 "Agent updates reservation M05KNL to economy with flights HAT110 and HAT172 on 2024-05-24.",
@@ -1113,6 +1135,28 @@
         "initial_state": null,
         "evaluation_criteria": {
             "actions": [
+                {
+                    "action_id": "16_0",
+                    "name": "update_reservation_flights",
+                    "arguments": {
+                        "reservation_id": "M05KNL",
+                        "cabin": "economy",
+                        "flights": [
+                            {
+                                "flight_number": "HAT110",
+                                "date": "2024-05-24"
+                            },
+                            {
+                                "flight_number": "HAT172",
+                                "date": "2024-05-24"
+                            }
+                        ],
+                        "payment_id": "gift_card_8887175"
+                    },
+                    "info": null
+                }
+            ],
+            "destructive_actions": [
                 {
                     "action_id": "16_0",
                     "name": "update_reservation_flights",

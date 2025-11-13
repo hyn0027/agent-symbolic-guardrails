@@ -1,5 +1,6 @@
 from mcp_server import mcp
 from config_loader import CONFIG
+from safety_check import *
 
 if CONFIG.DATASET.NAME == "tau2":
     if CONFIG.DATASET.DOMAIN == "airline":

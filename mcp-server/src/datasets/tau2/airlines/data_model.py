@@ -3,7 +3,10 @@
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field
 from datasets.tau2.db import DB
+from config_loader import CONFIG
 from .data_path import AIRLINE_DB_PATH
+
+safeguard_config = CONFIG.SAFEGUARD
 
 FlightType = Literal["round_trip", "one_way"]
 CabinClass = Literal["business", "economy", "basic_economy"]
@@ -248,13 +251,14 @@ class Reservation(BaseModel):
     status: Optional[Literal["cancelled"]] = Field(
         description="Status of the reservation", default=None
     )
-    compensated: bool = Field(
-        description="Whether compensation has been provided", default=False
-    )
-    has_delay_history: Optional[bool] = Field(
-        description="Whether the reservation has a history of delays. If set to None, the delay history is unknown.",
-        default=None,
-    )
+    if safeguard_config.API_REDESIGN:  # line: unspecified
+        compensated: bool = Field(
+            description="Whether compensation has been provided", default=False
+        )
+        has_delay_history: Optional[bool] = Field(
+            description="Whether the reservation has a history of delays. If set to None, the delay history is unknown.",
+            default=None,
+        )
 
 
 class FlightDB(DB):
