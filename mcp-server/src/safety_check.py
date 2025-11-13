@@ -24,7 +24,7 @@ def process_error(message, err_type: List[str]) -> None:
             "caller_line_no": caller_frame.lineno,
         }
     )
-    if error_handling_config.CONTINUE_ON_ERROR:
+    if error_handling_config.SILENT_CHECK:
         if "implemented" in err_type:
             raise ValueError(message)
         else:
