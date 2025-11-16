@@ -761,7 +761,7 @@ else:
                     )
         if safeguard_config.API_CHECK:  # line: 144-147
             assertion, result_msg = _is_eligible_for_cancellation(
-                reservation, meet_insurance_policy=False
+                reservation, meet_insurance_policy=True
             )
             if not assertion:
                 process_error(
@@ -2159,7 +2159,7 @@ else:
         process_error("Too many certificates", ["implemented"])
 
 
-mcp.tool(fetch_current_time, meta={"skip_golden_eval": True})
+mcp.tool(fetch_current_time)
 mcp.tool(
     book_reservation,
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
@@ -2171,9 +2171,9 @@ mcp.tool(
 )  # line: 7
 mcp.tool(get_reservation_details)
 mcp.tool(get_user_details)
-mcp.tool(list_all_airports, meta={"skip_golden_eval": True})
-mcp.tool(search_direct_flight, meta={"skip_golden_eval": True})
-mcp.tool(search_onestop_flight, meta={"skip_golden_eval": True})
+mcp.tool(list_all_airports,)
+mcp.tool(search_direct_flight, )
+mcp.tool(search_onestop_flight)
 mcp.tool(send_certificate)
 if safeguard_config.ENABLE_THINKING_STEP:
     mcp.tool(think, meta={"skip_golden_eval": True})
@@ -2206,7 +2206,7 @@ mcp.tool(
     update_reservation_passengers,
     meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
 )  # line: 7
-mcp.tool(get_flight_status, meta={"skip_golden_eval": True})
+mcp.tool(get_flight_status)
 
 if safeguard_config.NEW_API:
     mcp.tool(compute_time_difference)  # line: unspecified (new)

@@ -78,6 +78,10 @@ class ReActAgent:
                     )
                 )
                 return confirmation_message
+        if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
+            "skip_golden_eval", False
+        ):
+            self.loop.run_until_complete(self.mcp_client.save_state())
 
         tool_response = self.loop.run_until_complete(
             self.mcp_client.call_tool(tool_name, tool_args)
@@ -99,21 +103,33 @@ class ReActAgent:
             and success
             and not tool_meta.get("skip_golden_eval", False)
         ):
-            self.loop.run_until_complete(self.mcp_client.save_state())
-            golden_evaluation = self.evaluate_with_golden_config(
-                tool_name, json.loads(tool_args)
+            LOGGER.info(
+                f"Performing golden evaluation for tool call '{tool_name}' with arguments: {tool_args}"
             )
-            if not golden_evaluation["safe"]:
-                LOGGER.warning(
-                    f"GOLDEN_EVAL: Discrepancy detected in tool call evaluation with golden config: {golden_evaluation['reason']}"
+            for _ in range(agent_config.MAX_GOLDEN_RETRIES):
+                golden_evaluation = self.evaluate_with_golden_config(
+                    tool_name, json.loads(tool_args)
                 )
-                LOGGER.debug(
-                    f"Golden Evaluation Details: {json.dumps(golden_evaluation, indent=2)}"
-                )
-            else:
-                LOGGER.info(
-                    f"GOLDEN_EVAL: Tool call '{tool_name}' passed golden evaluation."
-                )
+                if not golden_evaluation["safe"]:
+                    LOGGER.warning(
+                        f"GOLDEN_EVAL: Discrepancy detected in tool call evaluation with golden config: {golden_evaluation['reason']}"
+                    )
+                    LOGGER.debug(
+                        f"Golden Evaluation Details: {json.dumps(golden_evaluation, indent=2)}"
+                    )
+                else:
+                    LOGGER.info(
+                        f"GOLDEN_EVAL: Tool call '{tool_name}' passed golden evaluation."
+                    )
+                if (
+                    golden_evaluation["flag"] == "no_tool_call"
+                    or golden_evaluation["flag"] == "different_tool_called"
+                ):
+                    LOGGER.info(
+                        "Retrying golden evaluation due to no tool call or different tool called."
+                    )
+                else:
+                    break
             self.golden_eval_hist.append(
                 {
                     "tool_name": tool_name,
@@ -217,10 +233,15 @@ class ReActAgent:
         asyncio.set_event_loop(golden_loop)
         golden_loop.run_until_complete(golden_mcp_client.initialize())
         all_tools = golden_mcp_client.list_OPENAI_tools()
-        response = self._call_LLM(self.history[:-1], all_tools)
+        temp_hist = self.history[:-1] + [
+            {
+                "role": "assistant",
+                "content": f"I plan to call the tool {tool_name} with arguments {json.dumps(tool_args)}, and if there are additional parameters needed, I will include them as well, or ask the user if I don't have enough information.",
+            }
+        ]
+        response = self._call_LLM(temp_hist, all_tools, temperature=0.6)
 
         def _shutdown_golden_loop():
-            LOGGER.info("Shutting down golden MCP client event loop.")
             try:
                 pending = asyncio.all_tasks(loop=golden_loop)
                 for task in pending:
@@ -231,7 +252,6 @@ class ReActAgent:
                 golden_loop.run_until_complete(golden_loop.shutdown_asyncgens())
             finally:
                 golden_loop.close()
-            LOGGER.info("Golden MCP client event loop shutdown complete.")
 
         if not response.tool_calls:
             _shutdown_golden_loop()
@@ -267,6 +287,13 @@ class ReActAgent:
         tool_response = golden_loop.run_until_complete(
             golden_mcp_client.call_tool(tool_name, tool_call.function.arguments)
         )
+        golden_error_statistic = golden_loop.run_until_complete(
+            golden_mcp_client.report_error_statistics()
+        )
+        LOGGER.debug(f"GOLDEN_EVAL: Tool Response under golden config: {tool_response}")
+        LOGGER.debug(
+            f"GOLDEN_EVAL: Error statistics under golden config: {golden_error_statistic}"
+        )
         _shutdown_golden_loop()
         if "error" in tool_response:
             return {
@@ -274,6 +301,15 @@ class ReActAgent:
                 "flag": "tool_call_raised_error",
                 "reason": "Tool call resulted in error under golden config.",
                 "tool_response": tool_response,
+                "error_statistics": golden_error_statistic,
+            }
+        if golden_error_statistic["raise_count_with_type"] != {}:
+            return {
+                "safe": False,
+                "flag": "tool_call_raised_error",
+                "reason": "Tool call resulted in error under golden config.",
+                "tool_response": tool_response["structured_content"],
+                "error_statistics": golden_error_statistic,
             }
 
         return {
@@ -282,14 +318,16 @@ class ReActAgent:
             "tool_response": tool_response["structured_content"],
         }
 
-    def _call_LLM(self, messages: list, tools: List) -> ChatCompletionMessage:
+    def _call_LLM(self, messages: list, tools: List, **kwargs) -> ChatCompletionMessage:
         client = OpenAI()
+        if "temperature" not in kwargs:
+            kwargs["temperature"] = self.temperature
         response = client.chat.completions.create(
             model=self.model,
             messages=messages,
-            temperature=self.temperature,
             tools=tools,
             parallel_tool_calls=False,
+            **kwargs,
         )
         return response.choices[0].message
 

@@ -415,6 +415,8 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
 
     golden_flag_count = {}
     golden_flag_all_pass_list = []
+    golden_error_statistics = {}
+    golden_error_logs = []
     for res in res_list:
         if res is None:
             continue
@@ -428,11 +430,26 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
             golden_flag_count[flag] += 1
             if flag != "pass":
                 golden_flag_all_pass = False
+            if flag == "tool_call_raised_error":
+                error_statistics = eval_res.get("error_statistics", {})
+                for err_type, count in error_statistics.get(
+                    "raise_count_with_type", {}
+                ).items():
+                    if err_type not in golden_error_statistics:
+                        golden_error_statistics[err_type] = 0
+                    golden_error_statistics[err_type] += count
+                golden_error_logs.extend(error_statistics.get("error_calling_log", []))
         golden_flag_all_pass_list.append(golden_flag_all_pass)
     LOGGER.info(
         f"Golden Evaluation Flag Counts: {json.dumps(golden_flag_count, indent=2)}"
     )
+    LOGGER.info(
+        f"Golden Evaluation Error Statistics: {json.dumps(golden_error_statistics, indent=2)}"
+    )
     all_pass_count = sum(golden_flag_all_pass_list)
     LOGGER.info(
         f"Number of simulations with all golden evals passing: {all_pass_count} out of {len(res_list)}"
+    )
+    LOGGER.debug(
+        f"Golden Evaluation Error Logs: {json.dumps(golden_error_logs, indent=2)}"
     )

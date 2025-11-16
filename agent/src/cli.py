@@ -147,7 +147,7 @@ def run_given_task():
 def run_dataset():
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
 
-    tasks = load_tasks()[:5]
+    tasks = load_tasks()
     eval_res_list = []
     for idx, task in enumerate(tasks):
         LOGGER.info(f"{'=' * 10} Starting Running Task {idx + 1} {'=' * 10}")
