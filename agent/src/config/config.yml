@@ -12,7 +12,7 @@ AGENT:
 
   MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config golden_config.yml"
 
-  TEST_WITH_GOLDEN: true
+  TEST_WITH_GOLDEN: false
 
   MAX_GOLDEN_RETRIES: 5
 

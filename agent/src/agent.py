@@ -100,7 +100,6 @@ class ReActAgent:
 
         if (
             agent_config.TEST_WITH_GOLDEN
-            and success
             and not tool_meta.get("skip_golden_eval", False)
         ):
             LOGGER.info(
@@ -124,6 +123,7 @@ class ReActAgent:
                 if (
                     golden_evaluation["flag"] == "no_tool_call"
                     or golden_evaluation["flag"] == "different_tool_called"
+                    or golden_evaluation["flag"] == "wrong_tool_arguments"
                 ):
                     LOGGER.info(
                         "Retrying golden evaluation due to no tool call or different tool called."
@@ -236,7 +236,7 @@ class ReActAgent:
         temp_hist = self.history[:-1] + [
             {
                 "role": "assistant",
-                "content": f"I plan to call the tool {tool_name} with arguments {json.dumps(tool_args)}, and if there are additional parameters needed, I will include them as well, or ask the user if I don't have enough information.",
+                "content": f"I plan to call the tool {tool_name} with arguments {json.dumps(tool_args)}. For all the additional parameters needed not included here, I will include them as well, or ask the user if I'm not sure.",
             }
         ]
         response = self._call_LLM(temp_hist, all_tools, temperature=0.6)

@@ -380,8 +380,25 @@ def evaluate_single(
         golden_count[flag] += 1
     LOGGER.info(f"Golden Evaluation Flag Counts: {json.dumps(golden_count, indent=2)}")
 
-    LOGGER.debug(f"Full Golden Evaluation History: ")
-    LOGGER.debug(json.dumps(agent.golden_eval_hist, indent=2))
+    golden_error_statistics = {}
+    for eval_entry in eval_res.info.get("golden_eval_history", []):
+        eval_res_entry = eval_entry.get("eval_result", None)
+        if eval_res_entry is None:
+            continue
+        if eval_res_entry.get("flag", "") == "tool_call_raised_error":
+            error_statistics = eval_res_entry.get("error_statistics", {})
+            for err_type, count in error_statistics.get(
+                "raise_count_with_type", {}
+            ).items():
+                if err_type not in golden_error_statistics:
+                    golden_error_statistics[err_type] = 0
+                golden_error_statistics[err_type] += count
+    LOGGER.info(
+        f"Golden Evaluation Error Statistics: {json.dumps(golden_error_statistics, indent=2)}"
+    )
+
+    # LOGGER.debug(f"Full Golden Evaluation History: ")
+    # LOGGER.debug(json.dumps(agent.golden_eval_hist, indent=2))
     return eval_res
 
 
