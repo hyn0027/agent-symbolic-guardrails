@@ -1,0 +1,2 @@
+- When retrieving user data, a user ID as verification must be provided; block request if the retrived user data does not match the user ID
+- When identifying order by OwnerId, a user ID must be provided and matched
