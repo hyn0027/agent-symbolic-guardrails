@@ -520,6 +520,7 @@ def book_reservation(
         "gift_card": 0,
         "certificate": 0,
     }
+    payment_method_set = set()
 
     for payment_method in payment_methods:
         payment_id = payment_method.payment_id
@@ -535,6 +536,12 @@ def book_reservation(
                     f"Not enough balance in payment method {payment_id}",
                     ["implemented"],
                 )
+        if safeguard_config.API_CHECK and payment_id in payment_method_set:
+            process_error(
+                f"Duplicate payment method {payment_id} in payment methods",
+                ["api_check"],
+            )
+        payment_method_set.add(payment_id)
 
     if safeguard_config.API_CHECK:  # line: 78
         if count_payment_type["certificate"] > 1:
@@ -706,6 +713,7 @@ if safeguard_config.API_REDESIGN:  # line: 139
                 )
 
         if safeguard_config.API_REDESIGN:  # line: 165
+            reservation.has_delay_history = False
             for flight in reservation.flights:
                 flight_date_data = _get_flight_instance(
                     flight_number=flight.flight_number, date=flight.date
@@ -774,15 +782,6 @@ else:
                     + (result_msg if result_msg is not None else ""),
                     ["api_check"],
                 )
-
-        if safeguard_config.API_REDESIGN:  # line: 165
-            for flight in reservation.flights:
-                flight_date_data = _get_flight_instance(
-                    flight_number=flight.flight_number, date=flight.date
-                )
-                if isinstance(flight_date_data, FlightDateStatusDelayed):
-                    reservation.has_delay_history = True
-                    break
 
         # LOGGER.debug(reservation.model_dump_json(indent=4))
         # reverse the payment
@@ -1051,6 +1050,10 @@ if safeguard_config.API_REDESIGN:  # line: 106
             str,
             "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
         ],
+        payment_amount: Annotated[
+            int,
+            "The payment amount to be paid for the baggage update.",
+        ],
     ) -> Reservation:
         """
         Update the baggage information of a reservation.
@@ -1114,6 +1117,12 @@ if safeguard_config.API_REDESIGN:  # line: 106
 
         # Calculate price
         total_price = 50 * max(0, nonfree_baggages - reservation.nonfree_baggages)
+
+        if safeguard_config.API_CHECK and total_price != payment_amount:  # line: 166
+            process_error(
+                f"Payment amount {payment_amount} does not match the calculated price {total_price} for the baggage update.",
+                ["api_check", "api_redesign"],
+            )
 
         # Create payment
         payment = _payment_for_update(user, payment_id, total_price)
@@ -1406,6 +1415,10 @@ if safeguard_config.API_REDESIGN:  # line: 106
             str,
             "The payment id stored in user profile, such as 'credit_card_7815826', 'gift_card_7815826', 'certificate_7815826'.",
         ],
+        payment_amount: Annotated[
+            int,
+            "The amount to be paid for the update. If negative, it indicates a refund amount.",
+        ],
     ) -> Reservation:
         """
         Update the flight information of a reservation.
@@ -1577,6 +1590,7 @@ if safeguard_config.API_REDESIGN:  # line: 106
             )
 
         if safeguard_config.API_REDESIGN:  # line: 165
+            reservation.has_delay_history = False
             for flight in reservation.flights:
                 flight_date_data = _get_flight_instance(
                     flight_number=flight.flight_number, date=flight.date
@@ -1589,6 +1603,15 @@ if safeguard_config.API_REDESIGN:  # line: 106
         total_price -= sum(flight.price for flight in reservation.flights) * len(
             reservation.passengers
         )
+
+        if safeguard_config.API_CHECK:  # line: 106
+            if total_price != payment_amount:
+                process_error(
+                    (
+                        f"The provided payment amount {payment_amount} does not match the computed total price {total_price} for the update."
+                    ),
+                    ["api_check", "api_redesign"],
+                )
 
         # Create payment
         payment = _payment_for_update(user, payment_id, total_price)
@@ -1779,15 +1802,6 @@ else:
                 "Cannot change flights when cabin class is basic_economy", ["api_check"]
             )
 
-        if safeguard_config.API_REDESIGN:  # line: 165
-            for flight in reservation.flights:
-                flight_date_data = _get_flight_instance(
-                    flight_number=flight.flight_number, date=flight.date
-                )
-                if isinstance(flight_date_data, FlightDateStatusDelayed):
-                    reservation.has_delay_history = True
-                    break
-
         # Deduct amount already paid for reservation
         total_price -= sum(flight.price for flight in reservation.flights) * len(
             reservation.passengers
@@ -1965,21 +1979,26 @@ def compute_compensation_amount(
                 "Cannot issue cancellation certificate for reservation without any cancelled flights.",
                 ["api_check", "new_api"],
             )
-    if safeguard_config.API_REDESIGN:  # line: 165
-        for flight in reservation.flights:
-            flight_date_data = _get_flight_instance(
-                flight_number=flight.flight_number,
-                date=flight.date,
-            )
-            if isinstance(flight_date_data, FlightDateStatusDelayed):
-                reservation.has_delay_history = True
-                break
+    # if safeguard_config.API_REDESIGN:  # line: 165
+    #     for flight in reservation.flights:
+    #         flight_date_data = _get_flight_instance(
+    #             flight_number=flight.flight_number,
+    #             date=flight.date,
+    #         )
+    #         if isinstance(flight_date_data, FlightDateStatusDelayed):
+    #             reservation.has_delay_history = True
+    #             break
     if (
         safeguard_config.API_REDESIGN
         and safeguard_config.API_CHECK
         and compensation_reason == "delay"
     ):  # line: 165
-        if not reservation.has_delay_history:
+        if reservation.has_delay_history == None:
+            process_error(
+                "The flight has not been cancelled or changed. To offer a compensation, the flight has to be either cancelled or changed because of the delay.",
+                ["api_redesign", "api_check", "new_api"],
+            )
+        if reservation.has_delay_history == False:
             process_error(
                 "Cannot issue delay certificate for reservation without any delayed flights.",
                 ["api_redesign", "api_check", "new_api"],
@@ -2071,19 +2090,24 @@ if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
                     "Cannot issue cancellation certificate for reservation without any cancelled flights.",
                     ["api_check", "api_redesign"],
                 )
-        if safeguard_config.API_REDESIGN:  # line: 165
-            for flight in reservation.flights:
-                flight_date_data = _get_flight_instance(
-                    flight_number=flight.flight_number,
-                    date=flight.date,
-                )
-                if isinstance(flight_date_data, FlightDateStatusDelayed):
-                    reservation.has_delay_history = True
-                    break
+        # if safeguard_config.API_REDESIGN:  # line: 165
+        #     for flight in reservation.flights:
+        #         flight_date_data = _get_flight_instance(
+        #             flight_number=flight.flight_number,
+        #             date=flight.date,
+        #         )
+        #         if isinstance(flight_date_data, FlightDateStatusDelayed):
+        #             reservation.has_delay_history = True
+        #             break
         if (
             safeguard_config.API_REDESIGN and compensation_reason == "delay"
         ):  # line: 165
-            if reservation.has_delay_history != True:
+            if reservation.has_delay_history == None:
+                process_error(
+                    "The flight has not been cancelled or changed. To offer a compensation, the flight has to be either cancelled or changed because of the delay.",
+                    ["api_redesign", "api_check"],
+                )
+            if reservation.has_delay_history == False:
                 process_error(
                     "Cannot issue delay certificate for reservation without any delayed flights.",
                     ["api_redesign", "api_check"],
@@ -2171,8 +2195,12 @@ mcp.tool(
 )  # line: 7
 mcp.tool(get_reservation_details)
 mcp.tool(get_user_details)
-mcp.tool(list_all_airports,)
-mcp.tool(search_direct_flight, )
+mcp.tool(
+    list_all_airports,
+)
+mcp.tool(
+    search_direct_flight,
+)
 mcp.tool(search_onestop_flight)
 mcp.tool(send_certificate)
 if safeguard_config.ENABLE_THINKING_STEP:

@@ -212,13 +212,23 @@ class Action(BaseModel):
             compare_args = self.compare_args
         if len(compare_args) == 0:
             return True
-        tool_args = {
-            k: str(v) for k, v in tool_call.arguments.items() if k in compare_args
-        }
-        action_args = {
-            k: str(v) for k, v in self.arguments.items() if k in compare_args
-        }
-        return tool_args == action_args
+        tool_args = {k: v for k, v in tool_call.arguments.items() if k in compare_args}
+        action_args = {k: v for k, v in self.arguments.items() if k in compare_args}
+        for k in compare_args:
+            if k not in tool_args or k not in action_args:
+                return False
+            if isinstance(action_args[k], float) and isinstance(tool_args[k], float):
+                if abs(action_args[k] - tool_args[k]) > 1e-6:
+                    return False
+            elif isinstance(action_args[k], list) and isinstance(tool_args[k], list):
+                action_args[k] = [str(item) for item in action_args[k]]
+                tool_args[k] = [str(item) for item in tool_args[k]]
+                if sorted(action_args[k]) != sorted(tool_args[k]):
+                    return False
+            else:
+                if tool_args[k] != action_args[k]:
+                    return False
+        return True
 
 
 class RewardType(str, Enum):
