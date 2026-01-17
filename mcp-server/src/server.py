@@ -4,7 +4,7 @@ from safety_check import *
 
 if CONFIG.DATASET.NAME == "tau2":
     if CONFIG.DATASET.DOMAIN == "airline":
-        from domains.tau2.airlines.tools import *
+        from dataset_domains.tau2.airlines.tools import *
 
 
 def main():

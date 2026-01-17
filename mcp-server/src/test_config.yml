@@ -3,7 +3,7 @@ DATASET:
   DOMAIN: "airline"
   DOMAIN_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/"
   USER_SIMULATION_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/user_simulator/"
-  AIRLINE_DB_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/new_db.json"
+  AIRLINE_DB_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/db.json"
   TMP_DB_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tmp_db.json"
 
 SETTINGS:

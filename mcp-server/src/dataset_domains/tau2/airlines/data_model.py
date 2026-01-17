@@ -2,7 +2,7 @@
 
 from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field
-from domains.tau2.db import DB
+from dataset_domains.tau2.db import DB
 from config_loader import CONFIG
 from .data_path import AIRLINE_DB_PATH
 
