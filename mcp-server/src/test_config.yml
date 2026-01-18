@@ -10,13 +10,13 @@ SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/mcp-server/"
 
 SAFEGUARD:
-  API_CHECK: true
-  API_REDESIGN: true
-  USER_CONFIRMATION: true
+  API_CHECK: false
+  API_REDESIGN: false
+  USER_CONFIRMATION: false
   TOOL_END_CONVERSATION: true
-  TOOL_RESPONSE_TEMPLATE: true
+  TOOL_RESPONSE_TEMPLATE: false
   NEW_API: false
   ENABLE_THINKING_STEP: true
 
 ERROR_HANDLING:
-  SILENT_CHECK: false
+  SILENT_CHECK: true
