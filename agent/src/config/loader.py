@@ -1,4 +1,5 @@
 import yaml
+import argparse
 from pathlib import Path
 from typing import Optional
 
@@ -22,4 +23,12 @@ def load_config(config_path: Optional[str] = None) -> Config:
     return Config(config)
 
 
-CONFIG = load_config()
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--config",
+    type=str,
+    default=None,
+    help="Path to config file (YAML)",
+)
+args = parser.parse_args()
+CONFIG = load_config(args.config)

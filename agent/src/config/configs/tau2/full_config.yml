@@ -8,11 +8,11 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config test_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/tau2/full_config.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config golden_config.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/tau2/golden_config.yml"
 
-  TEST_WITH_GOLDEN: true
+  TEST_WITH_GOLDEN: false
 
   MAX_GOLDEN_RETRIES: 5
 

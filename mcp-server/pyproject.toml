@@ -3,7 +3,12 @@ name = "local-mcp-server"
 version = "0.1.0"
 description = "Local MCP server with custom tools"
 requires-python = ">=3.10"
-dependencies = ["fastmcp"]
+dependencies = [
+    "fastmcp>=2.0.0",
+    "pydantic>=2.0.0",
+    "docker>=7.0.0",
+    "pyyaml>=6.0.0",
+]
 
 [project.scripts]
 start-mcp-server = "server:main"
