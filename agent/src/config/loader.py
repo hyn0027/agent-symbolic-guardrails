@@ -30,5 +30,9 @@ parser.add_argument(
     default=None,
     help="Path to config file (YAML)",
 )
+parser.add_argument(
+    "-id", "--task_id", type=int, required=False, help="ID of the task to run."
+)
 args = parser.parse_args()
 CONFIG = load_config(args.config)
+

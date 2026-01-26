@@ -1,6 +1,6 @@
 from openai import OpenAI
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
-from typing import List, Dict
+from typing import List, Dict, Any
 
 from config.loader import CONFIG
 from config.logger import LOGGER
@@ -18,8 +18,8 @@ class UserSimulator:
         self.temperature = user_config.TEMPERATURE
         self.system_prompt = system_prompt
         self.client = OpenAI()
+        self.history: List[Dict[str, Any]] = []
         self.initialize()
-        self.history: List[Dict] = []
 
     def initialize(self) -> None:
         self.history = [

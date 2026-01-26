@@ -5,7 +5,7 @@ from eval import TerminateReason
 import argparse
 import json
 
-from config.loader import CONFIG
+from config.loader import CONFIG, args
 from config.logger import LOGGER
 
 if CONFIG.DATASET.NAME == "tau2":
@@ -141,11 +141,8 @@ def run_random_task() -> None:
 
 
 def run_given_task() -> None:
-    parser = argparse.ArgumentParser(description="Run a specific task by ID.")
-    parser.add_argument(
-        "-id", "--task_id", type=int, required=True, help="ID of the task to run."
-    )
-    args = parser.parse_args()
+    if args.task_id is None:
+        raise ValueError("Please provide a task ID using --task_id argument.")
 
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
     tasks = load_tasks()
