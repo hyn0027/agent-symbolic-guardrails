@@ -39,7 +39,7 @@ AGENT:
     - Make a tool call.
     You cannot do both at the same time.
 
-    Try to be helpful and always follow the policy. Always make sure you generate valid JSON only.
+    Try to be helpful and always follow the policy.
 
 USER:
   MODEL: "gpt-4o"

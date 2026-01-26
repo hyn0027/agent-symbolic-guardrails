@@ -3,7 +3,7 @@
 import json
 import textwrap
 from enum import Enum
-from typing import Optional, Literal, List
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
@@ -112,9 +112,6 @@ class UserScenario(BaseModel):
         return "\n".join(lines)
 
 
-ToolRequestor = Literal["user", "assistant"]
-
-
 class ToolCall(BaseModel):
     """
     A tool call.
@@ -123,13 +120,9 @@ class ToolCall(BaseModel):
     id: str = Field(default="", description="The unique identifier for the tool call.")
     name: str = Field(description="The name of the tool.")
     arguments: dict = Field(description="The arguments of the tool.")
-    requestor: ToolRequestor = Field(
-        "assistant",
-        description="The requestor of the tool call.",
-    )
 
     def __str__(self) -> str:
-        lines = [f"ToolCall (from {self.requestor})"]
+        lines = [f"ToolCall"]
         if self.id:
             lines.append(f"id: {self.id}")
         lines.append(f"name: {self.name}")
@@ -143,7 +136,6 @@ class ToolCall(BaseModel):
             self.id == other.id
             and self.name == other.name
             and self.arguments == other.arguments
-            and self.requestor == other.requestor
         )
 
 
@@ -153,7 +145,6 @@ class Action(BaseModel):
     Example:
       {
       "action_id": "get_user_details_1",
-      "requestor": "assistant",
       "name": "get_user_details",
       "arguments": { "user_id": "sophia_silva_7557", "note": "I need to get the user details for user_id: sophia_silva_7557" },
       "compare_args": ["user_id"]
@@ -164,10 +155,6 @@ class Action(BaseModel):
 
     action_id: str = Field(
         description="The unique identifier for the action within a scenario."
-    )
-    requestor: ToolRequestor = Field(
-        description="The requestor of the action.",
-        default="assistant",
     )
     name: str = Field(description="The name of the action.")
     arguments: dict = Field(description="The arguments for the action.")
@@ -182,20 +169,11 @@ class Action(BaseModel):
     def __str__(self) -> str:
         lines = []
         lines.append(f"Action ID: {self.action_id}")
-        lines.append(f"Requestor: {self.requestor}")
         lines.append(f"Name: {self.name}")
         lines.append(f"Arguments:\n{json.dumps(self.arguments, indent=2)}")
         if self.info is not None:
             lines.append(f"Info:\n{textwrap.indent(self.info, '    ')}")
         return "\n".join(lines)
-
-    def get_func_format(self) -> str:
-        """
-        Get the function format of the action.
-        """
-        return (
-            f"{self.name}({', '.join([f'{k}={v}' for k, v in self.arguments.items()])})"
-        )
 
     def compare_with_tool_call(self, tool_call: ToolCall) -> bool:
         """
@@ -291,14 +269,6 @@ class EvaluationCriteria(BaseModel):
             lines.extend(
                 [textwrap.indent(str(action), "\t") for action in self.actions]
             )
-        # if self.env_assertions is not None:
-        #     lines.append("Env Assertions:")
-        #     lines.extend(
-        #         [
-        #             textwrap.indent(str(assertion), "\t")
-        #             for assertion in self.env_assertions
-        #         ]
-        #     )
         if self.communicate_info is not None:
             lines.append("Communicate Info:")
             lines.extend(
@@ -310,30 +280,6 @@ class EvaluationCriteria(BaseModel):
                 [textwrap.indent(assertion, "\t") for assertion in self.nl_assertions]
             )
         return "\n".join(lines)
-
-    def info(self) -> dict:
-        num_agent_actions = (
-            len([action for action in self.actions if action.requestor == "assistant"])
-            if self.actions is not None
-            else 0
-        )
-        num_user_actions = (
-            len([action for action in self.actions if action.requestor == "user"])
-            if self.actions is not None
-            else 0
-        )
-        num_env_assertions = (
-            len(self.env_assertions) if self.env_assertions is not None else 0
-        )
-        num_nl_assertions = (
-            len(self.nl_assertions) if self.nl_assertions is not None else 0
-        )
-        return {
-            "num_agent_actions": num_agent_actions,
-            "num_user_actions": num_user_actions,
-            "num_env_assertions": num_env_assertions,
-            "num_nl_assertions": num_nl_assertions,
-        }
 
 
 class Task(BaseModel):
@@ -378,9 +324,6 @@ class Task(BaseModel):
             lines.append(textwrap.indent(str(self.description), "\t"))
         lines.append("User Scenario:")
         lines.append(textwrap.indent(str(self.user_scenario), "\t"))
-        # if self.initial_state is not None:
-        #     lines.append("Initial State:")
-        #     lines.append(textwrap.indent(str(self.initial_state), "\t"))
         if self.evaluation_criteria is not None:
             lines.append("Evaluation Criteria:")
             lines.append(textwrap.indent(str(self.evaluation_criteria), "\t"))
@@ -401,5 +344,7 @@ def load_tasks() -> List[Task]:
     """
     Load tasks based on the configuration.
     """
+    assert isinstance(CONFIG.SIMULATION.TASK_FILE, str), "TASK_FILE should be a string."
+
     task_file = CONFIG.SIMULATION.TASK_FILE
     return _load_tasks_from_json_file(task_file)

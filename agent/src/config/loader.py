@@ -1,13 +1,13 @@
 import yaml
 import argparse
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, Any
 
 
 class Config(dict):
     """A simple configuration class that extends dict."""
 
-    def __getattr__(self, item):
+    def __getattr__(self, item) -> Union["Config", Any]:
         try:
             return Config(self[item]) if isinstance(self[item], dict) else self[item]
         except KeyError:

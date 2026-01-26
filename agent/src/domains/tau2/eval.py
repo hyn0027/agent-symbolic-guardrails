@@ -267,6 +267,12 @@ class NLAssertionsEvaluator:
 
         MAX_RETRIES = 5
         for attempt in range(MAX_RETRIES):
+            assert isinstance(eval_config.MODEL, str), "LLM model must be a string."
+
+            assert isinstance(
+                eval_config.TEMPERATURE, float
+            ), "LLM temperature must be a float."
+
             try:
                 assistant_message = cls._call_LLM(
                     messages,
@@ -289,14 +295,11 @@ class NLAssertionsEvaluator:
                 LOGGER.error(
                     f"Error in NL Assertions evaluation LLM call or parsing response: {e}"
                 )
-                if attempt == MAX_RETRIES - 1:
-                    LOGGER.error(
-                        "Max retries reached. Failing the NL assertions evaluation."
-                    )
-                    return [False] * len(nl_assertions)
                 LOGGER.info(
                     f"Retrying NL assertions evaluation (attempt {attempt + 1})..."
                 )
+        LOGGER.error("Unexpected error in NL assertions evaluation.")
+        return [False] * len(nl_assertions)
 
     @classmethod
     def _call_LLM(
@@ -311,6 +314,15 @@ class NLAssertionsEvaluator:
             messages=messages,
             temperature=temperature,
         )
+        assert (
+            response.choices is not None and len(response.choices) > 0
+        ), "LLM response has no choices."
+        assert (
+            response.choices[0].message is not None
+        ), "LLM response choice has no message."
+        assert isinstance(
+            response.choices[0].message.content, str
+        ), "LLM response message content is not a string."
         return response.choices[0].message.content
 
 
@@ -327,6 +339,7 @@ def evaluate_single(
             info={
                 "note": f"Simulation terminated prematurely. Termination reason: {terminate_reason.value}"
             },
+            reward_breakdown=None,
         )
 
     action_reward_info = ActionEvaluator.calculate_reward(
@@ -372,6 +385,7 @@ def evaluate_single(
     LOGGER.info(f"Reward: {eval_res.reward}")
     LOGGER.info(f"Reward Breakdown: {json.dumps(eval_res.reward_breakdown, indent=2)}")
     golden_count = {}
+    assert eval_res.info is not None, "RewardInfo.info should not be None."
     for eval_entry in eval_res.info.get("golden_eval_history", []):
         eval_res_entry = eval_entry.get("eval_result", None)
         flag = eval_res_entry.get("flag", "unknown") if eval_res_entry else "unknown"
@@ -411,6 +425,7 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
             LOGGER.warning("Skipping None evaluation result during aggregation.")
             continue
         total_reward += res.reward
+        assert res.info is not None, "RewardInfo.info should not be None."
         total_reward_without_nl += res.info.get("reward_without_nl", 0.0)
         if res.reward_breakdown:
             for k, v in res.reward_breakdown.items():
@@ -437,6 +452,7 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
     for res in res_list:
         if res is None:
             continue
+        assert res.info is not None, "RewardInfo.info should not be None."
         golden_eval_list = res.info.get("golden_eval_history", [])
         golden_flag_all_pass = True
         for eval_entry in golden_eval_list:

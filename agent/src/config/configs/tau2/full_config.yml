@@ -3,8 +3,8 @@ DATASET:
   DOMAIN: "airline"
 
 AGENT:
-  MODEL: "gpt-4o"
-  TEMPERATURE: 0.0
+  MODEL: "gpt-5-nano"
+  TEMPERATURE: 1.0
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
@@ -39,11 +39,11 @@ AGENT:
     - Make a tool call.
     You cannot do both at the same time.
 
-    Try to be helpful and always follow the policy. Always make sure you generate valid JSON only.
+    Try to be helpful and always follow the policy.
 
 USER:
-  MODEL: "gpt-4o"
-  TEMPERATURE: 0.0
+  MODEL: "gpt-5-nano"
+  TEMPERATURE: 1.0
 
   SYSTEM_PROMPT_TEMPLATE: |
     {global_user_sim_guidelines}
@@ -55,8 +55,8 @@ USER:
   SIMULATION_GUIDELINE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/user_simulator/simulation_guidelines.md"
 
 EVAL:
-  MODEL: "gpt-4o"
-  TEMPERATURE: 0.0
+  MODEL: "gpt-5-nano"
+  TEMPERATURE: 1.0
 
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tasks.json"

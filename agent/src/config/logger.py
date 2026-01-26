@@ -34,4 +34,6 @@ def setup_logger(name: str, log_path: str) -> logging.Logger:
     return logger
 
 
+assert isinstance(CONFIG.SETTINGS.LOG_PATH, str), "Log path must be a string."
+
 LOGGER = setup_logger("ReActAgent", CONFIG.SETTINGS.LOG_PATH)

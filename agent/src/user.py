@@ -10,13 +10,18 @@ user_config = CONFIG.USER
 
 class UserSimulator:
     def __init__(self, system_prompt: str):
+        assert isinstance(user_config.MODEL, str), "MODEL should be a string."
+        assert isinstance(
+            user_config.TEMPERATURE, float
+        ), "TEMPERATURE should be a float."
         self.model = user_config.MODEL
         self.temperature = user_config.TEMPERATURE
         self.system_prompt = system_prompt
         self.client = OpenAI()
         self.initialize()
+        self.history: List[Dict] = []
 
-    def initialize(self):
+    def initialize(self) -> None:
         self.history = [
             {
                 "role": "system",
@@ -30,6 +35,11 @@ class UserSimulator:
 
         response = self._call_LLM(self.history, tools=[])
         self.history.append(response.to_dict())
+
+        assert isinstance(
+            response.content, str
+        ), "LLM response message content is not a string."
+
         return response.content
 
     def _call_LLM(self, messages: list, tools: List) -> ChatCompletionMessage:

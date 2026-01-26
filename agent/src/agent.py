@@ -1,7 +1,10 @@
 from openai import OpenAI
 import json
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
-from typing import Dict, List, Optional
+from openai.types.chat.chat_completion_message_function_tool_call import (
+    ChatCompletionMessageFunctionToolCall,
+)
+from typing import Dict, List, Optional, Any
 import asyncio
 from mcp_client import MCPClient
 from config.loader import CONFIG
@@ -13,7 +16,11 @@ safeguard_config = CONFIG.SAFEGUARD
 
 class ReActAgent:
     def __init__(self, system_prompt: str):
+        assert isinstance(agent_config.MODEL, str), "MODEL must be a string."
         self.model = agent_config.MODEL
+        assert isinstance(
+            agent_config.TEMPERATURE, float
+        ), "TEMPERATURE must be a float."
         self.temperature = agent_config.TEMPERATURE
         self.system_prompt = system_prompt
         self._initialize()
@@ -23,6 +30,15 @@ class ReActAgent:
         asyncio.set_event_loop(self.loop)
 
         LOGGER.info("Initializing MCP Client")
+
+        assert isinstance(
+            agent_config.MCP_SERVER_COMMAND, str
+        ), "MCP_SERVER_COMMAND must be a string."
+
+        assert isinstance(
+            agent_config.MCP_SERVER_COMMAND_TEST_ARGS, str
+        ), "MCP_SERVER_COMMAND_TEST_ARGS must be a string."
+
         self.mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_TEST_ARGS
         )
@@ -31,14 +47,14 @@ class ReActAgent:
         LOGGER.debug("MCP TOOL")
         LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
-        self.history = [
+        self.history: List[Dict[str, Any]] = [
             {"role": "system", "content": self.system_prompt},
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
         LOGGER.info("Available tools have been successfully enumerated.")
         LOGGER.debug(json.dumps(self.tools, indent=2))
 
-        self.remaining_tool_call = []
+        self.remaining_tool_call = None
         self.tmp_user_response = ""
         self.override_assistant_msg = None
         self.end_conversation = False
@@ -47,6 +63,10 @@ class ReActAgent:
         self.golden_eval_hist = []
 
     def initiate_conversation(self) -> str:
+        assert isinstance(
+            agent_config.INITIAL_CONVERSTION, str
+        ), "INITIAL_CONVERSTION must be a string."
+
         self.history.append(
             {"role": "assistant", "content": agent_config.INITIAL_CONVERSTION}
         )
@@ -67,6 +87,11 @@ class ReActAgent:
                 LOGGER.info(
                     f"Tool '{tool_name}' requires user confirmation before invocation."
                 )
+
+                assert isinstance(
+                    safeguard_config.USER_CONFIRMATION_TEMPLATE, str
+                ), "USER_CONFIRMATION_TEMPLATE must be a string."
+
                 confirmation_message = (
                     safeguard_config.USER_CONFIRMATION_TEMPLATE.format(
                         tool_name=tool_name,
@@ -78,6 +103,7 @@ class ReActAgent:
                     )
                 )
                 return confirmation_message
+
         if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
             "skip_golden_eval", False
         ):
@@ -104,6 +130,11 @@ class ReActAgent:
             LOGGER.info(
                 f"Performing golden evaluation for tool call '{tool_name}' with arguments: {tool_args}"
             )
+
+            assert isinstance(
+                agent_config.MAX_GOLDEN_RETRIES, int
+            ), "MAX_GOLDEN_RETRIES must be an integer."
+
             for _ in range(agent_config.MAX_GOLDEN_RETRIES):
                 golden_evaluation = self.evaluate_with_golden_config(
                     tool_name, json.loads(tool_args)
@@ -178,7 +209,7 @@ class ReActAgent:
                     user_confirmed=True,
                     confirmation_msg=self.tmp_user_response,
                 )
-                self.remaining_tool_call = []
+                self.remaining_tool_call = None
             elif user_input.strip().upper().find("CANCEL") == 0:
                 LOGGER.info("User canceled the tool invocation.")
                 self.history.append(
@@ -188,7 +219,7 @@ class ReActAgent:
                         "tool_call_id": self.remaining_tool_call.id,
                     }
                 )
-                self.remaining_tool_call = []
+                self.remaining_tool_call = None
             else:
                 msg = 'Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.'
                 return msg
@@ -196,6 +227,10 @@ class ReActAgent:
         else:
             self.append_user_message(user_input)
             self.count_tool_call_fails = 0
+
+        assert isinstance(
+            agent_config.MAX_TOOL_CALL_FAILS, int
+        ), "MAX_TOOL_CALL_FAILS must be an integer."
 
         while True and self.count_tool_call_fails < agent_config.MAX_TOOL_CALL_FAILS:
             if self.override_assistant_msg is not None:
@@ -219,12 +254,33 @@ class ReActAgent:
                     self.remaining_tool_call = response.tool_calls[0]
                     return res
             else:
+                assert isinstance(
+                    response.content, str
+                ), "LLM response content is not a string."
                 return response.content
+
+        self.history.append(
+            {
+                "role": "assistant",
+                "content": "Exceeded maximum tool call failures. Ending conversation.",
+            }
+        )
+
         response = self._call_LLM(self.history, [])
         self.history.append(response.to_dict())
+        assert isinstance(
+            response.content, str
+        ), "LLM response content is not a string."
         return response.content
 
     def evaluate_with_golden_config(self, tool_name: str, tool_args: Dict) -> Dict:
+        assert isinstance(
+            agent_config.MCP_SERVER_COMMAND, str
+        ), "MCP_SERVER_COMMAND must be a string."
+        assert isinstance(
+            agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS, str
+        ), "MCP_SERVER_COMMAND_GOLDEN_ARGS must be a string."
+
         golden_mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
         )
@@ -240,7 +296,7 @@ class ReActAgent:
         ]
         response = self._call_LLM(temp_hist, all_tools, temperature=0.6)
 
-        def _shutdown_golden_loop():
+        def _shutdown_golden_loop() -> None:
             try:
                 pending = asyncio.all_tasks(loop=golden_loop)
                 for task in pending:
@@ -262,6 +318,10 @@ class ReActAgent:
             }
 
         tool_call = response.tool_calls[0]
+
+        assert isinstance(
+            tool_call, ChatCompletionMessageFunctionToolCall
+        ), "Tool call is not a function tool call."
 
         # tool call does not match
         if tool_call.function.name != tool_name:
@@ -339,7 +399,7 @@ class ReActAgent:
     def report_tool_error_statistics(self) -> Dict:
         return self.loop.run_until_complete(self.mcp_client.report_error_statistics())
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         LOGGER.info("Shutting down ReActAgent and closing event loop.")
         try:
             pending = asyncio.all_tasks(loop=self.loop)

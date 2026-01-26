@@ -51,7 +51,7 @@ def _add_tool_error_statistics(tool_error_stats: dict):
         total_tool_error_statistics["count_without_error_log"] += 1
 
 
-def human_interaction():
+def human_interaction() -> None:
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
     agent = ReActAgent(system_prompt=system_prompt())
     if CONFIG.AGENT.AGENT_INITIAL_MESSAGE:
@@ -92,6 +92,11 @@ def _run_once(user_task: Any):
     try:
         while True:
             step_cnt += 1
+
+            assert isinstance(
+                CONFIG.SIMULATION.MAX_STEPS, int
+            ), "MAX_STEPS should be an integer."
+
             if step_cnt > CONFIG.SIMULATION.MAX_STEPS:
                 LOGGER.info(
                     f"Simulation ended due to reaching max steps: {CONFIG.SIMULATION.MAX_STEPS}."
@@ -123,7 +128,7 @@ def _run_once(user_task: Any):
     return eval_res
 
 
-def run_random_task():
+def run_random_task() -> None:
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
 
     import random
@@ -135,7 +140,7 @@ def run_random_task():
     _run_once(random_task)
 
 
-def run_given_task():
+def run_given_task() -> None:
     parser = argparse.ArgumentParser(description="Run a specific task by ID.")
     parser.add_argument(
         "-id", "--task_id", type=int, required=True, help="ID of the task to run."
@@ -152,7 +157,7 @@ def run_given_task():
     _run_once(task)
 
 
-def run_dataset():
+def run_dataset() -> None:
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
 
     tasks = load_tasks()

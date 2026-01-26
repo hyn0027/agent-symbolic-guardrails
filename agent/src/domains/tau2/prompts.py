@@ -5,31 +5,53 @@ from config.logger import LOGGER
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
 
+
 def _domain_policy() -> str:
+    assert isinstance(
+        agent_config.DOMAIN_POLICY_FILE, str
+    ), "DOMAIN_POLICY_FILE must be a string."
     with open(agent_config.DOMAIN_POLICY_FILE, "r") as f:
         domain_policy = f.read().strip()
     return domain_policy
 
 
 def system_prompt() -> str:
+    assert isinstance(
+        agent_config.AGENT_INSTRUCTION, str
+    ), "AGENT_INSTRUCTION must be a string."
+
+    assert isinstance(
+        agent_config.SYSTEM_PROMPT_TEMPLATE, str
+    ), "SYSTEM_PROMPT_TEMPLATE must be a string."
+
     return agent_config.SYSTEM_PROMPT_TEMPLATE.format(
         agent_instruction=agent_config.AGENT_INSTRUCTION,
         domain_policy=_domain_policy(),
     )
 
+
 def user_prompt(task: Task) -> str:
+    assert isinstance(
+        user_config.SIMULATION_GUIDELINE_PATH, str
+    ), "SIMULATION_GUIDELINE_PATH must be a string."
+
     with open(user_config.SIMULATION_GUIDELINE_PATH, "r") as file:
-            guidelines = file.read()
+        guidelines = file.read()
+
+    assert isinstance(
+        user_config.SYSTEM_PROMPT_TEMPLATE, str
+    ), "SYSTEM_PROMPT_TEMPLATE must be a string."
 
     return user_config.SYSTEM_PROMPT_TEMPLATE.format(
         global_user_sim_guidelines=guidelines, instructions=task.user_scenario
     )
 
+
 def assess_end_conversation(message: str) -> bool:
     end_indicators = [
         "###STOP###",
         # "###TRANSFER###",
-        "###OUT-OF-SCOPE###"
+        "###OUT-OF-SCOPE###",
     ]
     for indicator in end_indicators:
         if indicator in message:
