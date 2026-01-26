@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import atexit
-import logging
 import signal
-import sys
 import threading
 import time
 from dataclasses import dataclass
@@ -18,24 +16,28 @@ from docker.models.containers import Container
 @dataclass
 class DockerService:
     image: str = "jyxsu6/medagentbench:latest"
-    container_name: str = "medagentbench_mcp_managed"
+    container_name: str = "medagentbench"
     host_port: int = 8080
     container_port: int = 8080
     ready_timeout_s: int = 180
-    pull: bool = True
-    stream_logs: bool = False
 
     _client: Optional[docker.DockerClient] = None
     _container: Optional[Container] = None
     _stop_event: threading.Event = threading.Event()
-    _log_thread: Optional[threading.Thread] = None
 
     def start(self) -> None:
         self._client = self._get_docker_client()
 
-        if self.pull:
-            print(f"Pulling image {self.image} ...")
-            self._client.images.pull(self.image)
+        try:
+            self._client.images.get(self.image)
+            print(f"Image {self.image} found locally.")
+        except NotFound:
+            print(f"Image {self.image} not found locally. Pulling from Docker Hub ...")
+            try:
+                self._client.images.pull(self.image)
+                print(f"Successfully pulled image {self.image}.")
+            except APIError as e:
+                raise RuntimeError(f"Failed to pull image {self.image}: {e}") from e
 
         try:
             old = self._client.containers.get(self.container_name)
@@ -68,9 +70,6 @@ class DockerService:
                 ) from e
             raise
 
-        if self.stream_logs:
-            self._start_log_stream()
-
         self._wait_until_ready()
 
         print(f"Container ready. Base URL: http://127.0.0.1:{self.host_port}")
@@ -78,31 +77,27 @@ class DockerService:
     def stop(self) -> None:
         self._stop_event.set()
 
-        if self._log_thread and self._log_thread.is_alive():
-            print("Stopping log stream ...", flush=True)
-            self._log_thread.join()
-
         if not self._client:
-            print("Docker client not initialized; nothing to stop.", flush=True)
+            print("Docker client not initialized; nothing to stop.")
             return
 
         if not self._container:
             try:
                 self._container = self._client.containers.get(self.container_name)
             except NotFound:
-                print("Container not found; nothing to stop.", flush=True)
+                print("Container not found; nothing to stop.")
                 return
 
         try:
-            print(f"Stopping container {self.container_name} ...", flush=True)
-            self._container.stop(timeout=10)
+            print(f"Stopping container {self.container_name} ...")
+            self._container.stop()
             try:
-                print(f"Removing container {self.container_name} ...", flush=True)
+                print(f"Removing container {self.container_name} ...")
                 self._container.remove(force=True)
             except Exception as e:
-                print(f"Error removing container: {e}", flush=True)
+                print(f"Error removing container: {e}")
         except Exception as e:
-            print(f"Error stopping container: {e}", flush=True)
+            print(f"Error stopping container: {e}")
 
     def _get_docker_client(self) -> docker.DockerClient:
         try:
@@ -111,27 +106,6 @@ class DockerService:
             return client
         except DockerException as e:
             raise RuntimeError("Docker is not running or not accessible.") from e
-
-    def _start_log_stream(self) -> None:
-        if self._container is None:
-            raise RuntimeError("Cannot stream logs: container is not running.")
-        self._stop_event.clear()
-
-        def _stream():
-            try:
-                for line in self._container.logs(stream=True, follow=True):
-                    if self._stop_event.is_set():
-                        break
-                    text = line.decode("utf-8", errors="replace").rstrip()
-                    if text:
-                        print(f"[container] {text}")
-            except Exception as e:
-                print(f"Log stream ended: {e}")
-
-        self._log_thread = threading.Thread(
-            target=_stream, name="container-logs", daemon=True
-        )
-        self._log_thread.start()
 
     def _wait_until_ready(self) -> None:
         deadline = time.time() + self.ready_timeout_s
@@ -144,8 +118,8 @@ class DockerService:
                 if self._stop_event.is_set():
                     raise RuntimeError("Stopped while waiting for container readiness.")
                 try:
-                    r = client.get(url)
-                    print("HTTP ready check: %s -> %s", url, r.status_code)
+                    response = client.get(url)
+                    print(f"HTTP ready check: {url} -> {response.status_code}")
                     return
                 except Exception:
                     time.sleep(2)
@@ -157,20 +131,13 @@ _shutdown_once = threading.Event()
 
 
 def start_service() -> None:
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
-    )
-
     service = DockerService(image="jyxsu6/medagentbench:latest")
 
     def shutdown(reason: str) -> None:
         if _shutdown_once.is_set():
             return
         _shutdown_once.set()
-        if not sys.stdout.closed:
-            print(f"Shutting down ({reason}) ...", flush=True)
-        # with suppress(Exception):
+        print(f"Shutting down ({reason}) ...")
         service.stop()
 
     atexit.register(shutdown, "atexit")

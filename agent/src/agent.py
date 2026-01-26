@@ -18,7 +18,7 @@ class ReActAgent:
         self.system_prompt = system_prompt
         self._initialize()
 
-    def _initialize(self):
+    def _initialize(self) -> None:
         self.loop = asyncio.new_event_loop()
         asyncio.set_event_loop(self.loop)
 
@@ -36,7 +36,7 @@ class ReActAgent:
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
         LOGGER.info("Available tools have been successfully enumerated.")
-        # LOGGER.debug(json.dumps(self.tools, indent=2))
+        LOGGER.debug(json.dumps(self.tools, indent=2))
 
         self.remaining_tool_call = []
         self.tmp_user_response = ""
@@ -98,9 +98,8 @@ class ReActAgent:
             else json.dumps(tool_response)
         )
 
-        if (
-            agent_config.TEST_WITH_GOLDEN
-            and not tool_meta.get("skip_golden_eval", False)
+        if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
+            "skip_golden_eval", False
         ):
             LOGGER.info(
                 f"Performing golden evaluation for tool call '{tool_name}' with arguments: {tool_args}"
@@ -179,7 +178,7 @@ class ReActAgent:
                     user_confirmed=True,
                     confirmation_msg=self.tmp_user_response,
                 )
-                self.remaining_tool_call = None
+                self.remaining_tool_call = []
             elif user_input.strip().upper().find("CANCEL") == 0:
                 LOGGER.info("User canceled the tool invocation.")
                 self.history.append(
@@ -189,7 +188,7 @@ class ReActAgent:
                         "tool_call_id": self.remaining_tool_call.id,
                     }
                 )
-                self.remaining_tool_call = None
+                self.remaining_tool_call = []
             else:
                 msg = 'Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.'
                 return msg

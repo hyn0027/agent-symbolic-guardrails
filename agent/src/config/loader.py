@@ -1,7 +1,7 @@
 import yaml
 import argparse
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 
 class Config(dict):
@@ -14,7 +14,7 @@ class Config(dict):
             raise AttributeError(f"'Config' object has no attribute '{item}'")
 
 
-def load_config(config_path: Optional[str] = None) -> Config:
+def load_config(config_path: Optional[Union[str, Path]] = None) -> Config:
     """Load configuration from a YAML file."""
     if config_path is None:
         config_path = Path(__file__).parent / "config.yml"

@@ -10,7 +10,7 @@ class MCPClient:
         self.tools: List[Tool] = []
         self.initialized = False
         self.client = Client(
-            {
+            transport={
                 "mcpServers": {
                     "local_server": {
                         "transport": "stdio",
@@ -18,17 +18,20 @@ class MCPClient:
                         "args": server_args.split(),
                     }
                 }
-            }
+            },
+            init_timeout=300,
         )
 
-    async def initialize(self):
+    async def initialize(self) -> None:
         """Initialize the MCP client by connecting to the server and fetching tools."""
         self.attempted_tool_calls = []
         self.successful_tool_calls = []
         async with self.client:
             self.tools = await self.client.list_tools()
             self.tools = [
-                tool for tool in self.tools if tool.meta.get("disclose_to_model", True)
+                tool
+                for tool in self.tools
+                if tool.meta is None or tool.meta.get("disclose_to_model", True)
             ]
             self.initialized = True
 

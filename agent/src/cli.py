@@ -12,6 +12,14 @@ if CONFIG.DATASET.NAME == "tau2":
     from domains.tau2.prompts import system_prompt, user_prompt, assess_end_conversation
     from domains.tau2.task import load_tasks
     from domains.tau2.eval import evaluate_single, aggregate_evals
+elif CONFIG.DATASET.NAME == "MedAgentBench":
+    from domains.MedAgentBench.prompts import (
+        system_prompt,
+        user_prompt,
+        assess_end_conversation,
+    )
+    from domains.MedAgentBench.task import load_tasks
+    from domains.MedAgentBench.eval import evaluate_single, aggregate_evals
 
 
 total_tool_error_statistics = {
@@ -53,7 +61,7 @@ def human_interaction():
         while True:
             user_input = input("User: ")
             LOGGER.debug(f"User: {user_input}")
-            if user_input.lower() in ["exit", "quit"]:
+            if assess_end_conversation(user_input):
                 LOGGER.info("Exiting the agent.")
                 agent.append_user_message(user_input)
                 break

@@ -1,0 +1,72 @@
+DATASET:
+  NAME: "MedAgentBench"
+
+AGENT:
+  MODEL: "gpt-4o"
+  TEMPERATURE: 0.0
+
+  MCP_SERVER_COMMAND: "start-mcp-server"
+
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/config.yml"
+
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config tbd"
+
+  TEST_WITH_GOLDEN: false
+
+  MAX_GOLDEN_RETRIES: 5
+
+  MAX_TOOL_CALL_FAILS: 10
+
+  AGENT_INITIAL_MESSAGE: true
+
+  INITIAL_CONVERSTION: "Hi! How can I help you today?"
+
+  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/policy.md"
+
+  SYSTEM_PROMPT_TEMPLATE: |
+    <instructions>
+    {agent_instruction}
+    </instructions>
+    <policy>
+    {domain_policy}
+    </policy>
+
+  AGENT_INSTRUCTION: |
+    You are an agent that assists users in interacting with an electronic medical record (EMR) system.
+    Your users are healthcare providers seeking to retrieve and update patient information.
+    You can interact with a FHIR-based EMR system via a set of tools that allow you to retrieve and update patient data.
+
+    You must strictly follow the <policy> provided below.
+
+    In each turn you can either:
+    - Send a message to the user.
+    - Make a tool call.
+    You cannot do both at the same time.
+
+USER:
+  MODEL: "gpt-4o"
+  TEMPERATURE: 0.0
+
+  SYSTEM_PROMPT_TEMPLATE: |
+    <todo>
+
+  SIMULATION_GUIDELINE_PATH: None
+
+EVAL: None
+
+SETTINGS:
+  LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
+
+SAFEGUARD:
+  USER_CONFIRMATION: true
+  USER_CONFIRMATION_TEMPLATE: |
+    I am about to perform the following action:
+    Tool: {tool_name}
+    Arguments: {tool_args}
+
+    Please review the action above and confirm if you would like me to proceed.
+    Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
+
+  TOOL_RESPONSE_TEMPLATE: true
+
+  TOOL_END_CONVERSATION_FLAG: true
