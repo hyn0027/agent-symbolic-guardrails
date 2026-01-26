@@ -142,7 +142,7 @@ def start_service() -> None:
 
     atexit.register(shutdown, "atexit")
 
-    def _handle_signal(signum, frame):
+    def _handle_signal(signum, frame) -> None:
         shutdown(f"signal {signum}")
         raise SystemExit(0)
 

@@ -4,6 +4,7 @@ from typing import Annotated, Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field
 from dataset_domains.tau2.db import DB
 from config_loader import CONFIG
+from utils import load_json
 from .data_path import AIRLINE_DB_PATH
 
 safeguard_config = CONFIG.SAFEGUARD
@@ -273,6 +274,12 @@ class FlightDB(DB):
     reservations: Dict[str, Reservation] = Field(
         description="Dictionary of all reservations indexed by reservation ID"
     )
+
+    @classmethod
+    def load(cls, path: str) -> "FlightDB":
+        """Load the database from a structured file like JSON, YAML, or TOML."""
+        data = load_json(path)
+        return cls.model_validate(data)
 
     def get_statistics(self) -> dict[str, Any]:
         """Get the statistics of the database."""

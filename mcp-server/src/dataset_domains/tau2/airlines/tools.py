@@ -87,14 +87,15 @@ def _get_new_reservation_id() -> str:
         if reservation_id not in db.reservations:
             return reservation_id
     process_error("Too many reservations", ["implemented"])
+    raise ValueError("Too many reservations")
 
 
-def _get_new_payment_id() -> str:
+def _get_new_payment_id() -> List[int]:
     """Get a new payment id.
     Assume each task makes at most 3 payments
 
     Returns:
-        A new payment id.
+        A list of new payment ids.
     """
     return [3221322, 3221323, 3221324]
 
@@ -138,8 +139,8 @@ def _search_direct_flight(
                 status="available",
                 scheduled_departure_time_est=flight.scheduled_departure_time_est,
                 scheduled_arrival_time_est=flight.scheduled_arrival_time_est,
-                available_seats=flight.dates[date].available_seats,
-                prices=flight.dates[date].prices,
+                available_seats=flight.dates[date].available_seats,  # type: ignore
+                prices=flight.dates[date].prices,  # type: ignore
             )
             results.append(direct_flight)
     return results
@@ -278,11 +279,11 @@ def compute_reservation_price(
         CabinClass,
         "The cabin class such as 'basic_economy', 'economy', or 'business'.",
     ],
-    flights: Annotated[
+    flights: Annotated[  # type: ignore
         List[FlightInfo | dict],
         "An array of objects containing details about each piece of flight.",
     ],
-    passengers: Annotated[
+    passengers: Annotated[  # type: ignore
         List[Passenger | dict],
         "An array of objects containing details about each passenger.",
     ],
@@ -301,9 +302,9 @@ def compute_reservation_price(
         The total price of the reservation.
     """
     if all(isinstance(flight, dict) for flight in flights):
-        flights = [FlightInfo(**flight) for flight in flights]
+        flights: List[FlightInfo] = [FlightInfo(**flight) for flight in flights]  # type: ignore
     if all(isinstance(passenger, dict) for passenger in passengers):
-        passengers = [Passenger(**passenger) for passenger in passengers]
+        passengers: List[Passenger] = [Passenger(**passenger) for passenger in passengers]  # type: ignore
 
     if safeguard_config.API_CHECK and len(passengers) > 5:  # line: 73
         process_error(
@@ -342,24 +343,24 @@ def compute_reservation_price(
     total_price = 0
 
     for flight_info in flights:
-        flight_number = flight_info.flight_number
+        flight_number = flight_info.flight_number  # type: ignore
         flight_date_data = _get_flight_instance(
-            flight_number=flight_number, date=flight_info.date
+            flight_number=flight_number, date=flight_info.date  # type: ignore
         )
         # Checking flight availability
         if not isinstance(flight_date_data, FlightDateStatusAvailable):
             process_error(
-                f"Flight {flight_number} not available on date {flight_info.date}",
+                f"Flight {flight_number} not available on date {flight_info.date}",  # type: ignore
                 ["implemented", "new_api"],
             )
         # Checking seat availability
-        if flight_date_data.available_seats[cabin] < len(passengers):
+        if flight_date_data.available_seats[cabin] < len(passengers):  # type: ignore
             process_error(
                 f"Not enough seats on flight {flight_number}",
                 ["implemented", "new_api"],
             )
         # Calculate price
-        price = flight_date_data.prices[cabin]
+        price = flight_date_data.prices[cabin]  # type: ignore
         total_price += price * len(passengers)
 
     # Add insurance fee
@@ -411,12 +412,12 @@ def book_reservation(
     Book a reservation.
     """
     if all(isinstance(flight, dict) for flight in flights):
-        flights = [FlightInfo(**flight) for flight in flights]
+        flights = [FlightInfo(**flight) for flight in flights]  # type: ignore
     if all(isinstance(passenger, dict) for passenger in passengers):
-        passengers = [Passenger(**passenger) for passenger in passengers]
+        passengers = [Passenger(**passenger) for passenger in passengers]  # type: ignore
     if all(isinstance(payment_method, dict) for payment_method in payment_methods):
         payment_methods = [
-            Payment(**payment_method) for payment_method in payment_methods
+            Payment(**payment_method) for payment_method in payment_methods  # type: ignore
         ]
 
     if safeguard_config.API_CHECK and len(passengers) > 5:  # line: 73
@@ -463,8 +464,8 @@ def book_reservation(
         flight_type=flight_type,
         cabin=cabin,
         flights=[],
-        passengers=deepcopy(passengers),
-        payment_history=deepcopy(payment_methods),
+        passengers=deepcopy(passengers),  # type: ignore
+        payment_history=deepcopy(payment_methods),  # type: ignore
         created_at=_get_datetime(),
         total_baggages=total_baggages,
         nonfree_baggages=nonfree_baggages,
@@ -477,35 +478,35 @@ def book_reservation(
 
     ori_dst_list = []
     for flight_info in flights:
-        flight_number = flight_info.flight_number
+        flight_number = flight_info.flight_number  # type: ignore
         flight = _get_flight(flight_number)
         flight_date_data = _get_flight_instance(
-            flight_number=flight_number, date=flight_info.date
+            flight_number=flight_number, date=flight_info.date  # type: ignore
         )
         # Checking flight availability
         if not isinstance(flight_date_data, FlightDateStatusAvailable):
             process_error(
-                f"Flight {flight_number} not available on date {flight_info.date}",
+                f"Flight {flight_number} not available on date {flight_info.date}",  # type: ignore
                 ["implemented"],
             )
         # Checking seat availability
-        if flight_date_data.available_seats[cabin] < len(passengers):
+        if flight_date_data.available_seats[cabin] < len(passengers):  # type: ignore
             process_error(
                 f"Not enough seats on flight {flight_number}", ["implemented"]
             )
         # Calculate price
-        price = flight_date_data.prices[cabin]
+        price = flight_date_data.prices[cabin]  # type: ignore
         # Update reservation
         reservation.flights.append(
             ReservationFlight(
                 origin=flight.origin,
                 destination=flight.destination,
                 flight_number=flight_number,
-                date=flight_info.date,
+                date=flight_info.date,  # type: ignore
                 price=price,
             )
         )
-        all_flights_date_data.append(flight_date_data)
+        all_flights_date_data.append(flight_date_data)  # type: ignore
         total_price += price * len(passengers)
 
     # Add insurance fee
@@ -523,15 +524,15 @@ def book_reservation(
     payment_method_set = set()
 
     for payment_method in payment_methods:
-        payment_id = payment_method.payment_id
-        amount = payment_method.amount
+        payment_id = payment_method.payment_id  # type: ignore
+        amount = payment_method.amount  # type: ignore
         if payment_id not in user.payment_methods:
             process_error(f"Payment method {payment_id} not found", ["implemented"])
 
         user_payment_method = user.payment_methods[payment_id]
         count_payment_type[user_payment_method.source] += 1
         if user_payment_method.source in {"gift_card", "certificate"}:
-            if user_payment_method.amount < amount:
+            if user_payment_method.amount < amount:  # type: ignore
                 process_error(
                     f"Not enough balance in payment method {payment_id}",
                     ["implemented"],
@@ -605,7 +606,7 @@ def book_reservation(
                     ["api_check"],
                 )
 
-    total_payment = sum(payment.amount for payment in payment_methods)
+    total_payment = sum(payment.amount for payment in payment_methods)  # type: ignore
     if total_payment != total_price:
         process_error(
             f"Payment amount does not add up, total price is {total_price}, but paid {total_payment}",
@@ -614,8 +615,8 @@ def book_reservation(
 
     # if checks pass, deduct payment
     for payment_method in payment_methods:
-        payment_id = payment_method.payment_id
-        amount = payment_method.amount
+        payment_id = payment_method.payment_id  # type: ignore
+        amount = payment_method.amount  # type: ignore
         user_payment_method = user.payment_methods[payment_id]
         if user_payment_method.source == "gift_card":
             user_payment_method.amount -= amount
@@ -652,7 +653,7 @@ def calculate(
 
 if safeguard_config.API_REDESIGN:  # line: 139
 
-    def cancel_reservation(
+    def cancel_reservation(  # type: ignore
         user_id: Annotated[str, "The ID of the user cancelling the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
         reason: Annotated[CancellationReason, "The reason for cancellation."],
@@ -803,7 +804,7 @@ else:
 
 if safeguard_config.API_REDESIGN:  # line: 106
 
-    def get_reservation_details(
+    def get_reservation_details(  # type: ignore
         user_id: Annotated[str, "The ID of the user retrieving the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as '8JX2WO'."],
     ) -> Reservation:
@@ -1035,7 +1036,7 @@ def compute_update_reservation_baggages_price(
 
 if safeguard_config.API_REDESIGN:  # line: 106
 
-    def update_reservation_baggages(
+    def update_reservation_baggages(  # type: ignore
         user_id: Annotated[str, "The ID of the user updating the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
         total_baggages: Annotated[
@@ -1243,7 +1244,7 @@ def compute_update_reservation_flights_price(
         ValueError: If the user is not found.
     """
     if all(isinstance(flight, dict) for flight in flights):
-        flights = [FlightInfo(**flight) for flight in flights]
+        flights = [FlightInfo(**flight) for flight in flights]  # type: ignore
 
     if safeguard_config.API_CHECK and len(flights) == 0:  # line: 111
         process_error("Flights list cannot be empty", ["api_check", "new_api"])
@@ -1281,8 +1282,8 @@ def compute_update_reservation_flights_price(
             (
                 reservation_flight
                 for reservation_flight in reservation.flights
-                if reservation_flight.flight_number == flight_info.flight_number
-                and reservation_flight.date == flight_info.date
+                if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                and reservation_flight.date == flight_info.date  # type: ignore
                 and cabin == reservation.cabin
             ),
             None,
@@ -1298,8 +1299,8 @@ def compute_update_reservation_flights_price(
             (
                 reservation_flight
                 for reservation_flight in reservation.flights
-                if reservation_flight.flight_number == flight_info.flight_number
-                and reservation_flight.date == flight_info.date
+                if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                and reservation_flight.date == flight_info.date  # type: ignore
             ),
             None,
         )
@@ -1307,30 +1308,30 @@ def compute_update_reservation_flights_price(
         if not matching_reservation_except_cabin:
             change_flights = True
         # If new flight:
-        flight = _get_flight(flight_info.flight_number)
+        flight = _get_flight(flight_info.flight_number)  # type: ignore
         # Check flight availability
         flight_date_data = _get_flight_instance(
-            flight_number=flight_info.flight_number,
-            date=flight_info.date,
+            flight_number=flight_info.flight_number,  # type: ignore
+            date=flight_info.date,  # type: ignore
         )
         if not isinstance(flight_date_data, FlightDateStatusAvailable):
             process_error(
-                f"Flight {flight_info.flight_number} not available on date {flight_info.date}",
+                f"Flight {flight_info.flight_number} not available on date {flight_info.date}",  # type: ignore
                 ["implemented", "new_api"],
             )
 
         # Check seat availability
-        if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+        if flight_date_data.available_seats[cabin] < len(reservation.passengers):  # type: ignore
             process_error(
-                f"Not enough seats on flight {flight_info.flight_number}",
+                f"Not enough seats on flight {flight_info.flight_number}",  # type: ignore
                 ["implemented", "new_api"],
             )
 
         # Calculate price and add to reservation
         reservation_flight = ReservationFlight(
-            flight_number=flight_info.flight_number,
-            date=flight_info.date,
-            price=flight_date_data.prices[cabin],
+            flight_number=flight_info.flight_number,  # type: ignore
+            date=flight_info.date,  # type: ignore
+            price=flight_date_data.prices[cabin],  # type: ignore
             origin=flight.origin,
             destination=flight.destination,
         )
@@ -1403,7 +1404,7 @@ def compute_update_reservation_flights_price(
 
 if safeguard_config.API_REDESIGN:  # line: 106
 
-    def update_reservation_flights(
+    def update_reservation_flights(  # type: ignore
         user_id: Annotated[str, "The ID of the user updating the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
         cabin: Annotated[CabinClass, "The cabin class of the reservation"],
@@ -1435,7 +1436,7 @@ if safeguard_config.API_REDESIGN:  # line: 106
             ValueError: If the gift card balance is not enough.
         """
         if all(isinstance(flight, dict) for flight in flights):
-            flights = [FlightInfo(**flight) for flight in flights]
+            flights = [FlightInfo(**flight) for flight in flights]  # type: ignore
 
         if safeguard_config.API_CHECK and len(flights) == 0:  # line: 111
             process_error("Flights list cannot be empty", ["api_check", "api_redesign"])
@@ -1474,8 +1475,8 @@ if safeguard_config.API_REDESIGN:  # line: 106
                 (
                     reservation_flight
                     for reservation_flight in reservation.flights
-                    if reservation_flight.flight_number == flight_info.flight_number
-                    and reservation_flight.date == flight_info.date
+                    if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                    and reservation_flight.date == flight_info.date  # type: ignore
                     and cabin == reservation.cabin
                 ),
                 None,
@@ -1491,8 +1492,8 @@ if safeguard_config.API_REDESIGN:  # line: 106
                 (
                     reservation_flight
                     for reservation_flight in reservation.flights
-                    if reservation_flight.flight_number == flight_info.flight_number
-                    and reservation_flight.date == flight_info.date
+                    if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                    and reservation_flight.date == flight_info.date  # type: ignore
                 ),
                 None,
             )
@@ -1500,30 +1501,30 @@ if safeguard_config.API_REDESIGN:  # line: 106
             if not matching_reservation_except_cabin:
                 change_flights = True
             # If new flight:
-            flight = _get_flight(flight_info.flight_number)
+            flight = _get_flight(flight_info.flight_number)  # type: ignore
             # Check flight availability
             flight_date_data = _get_flight_instance(
-                flight_number=flight_info.flight_number,
-                date=flight_info.date,
+                flight_number=flight_info.flight_number,  # type: ignore
+                date=flight_info.date,  # type: ignore
             )
             if not isinstance(flight_date_data, FlightDateStatusAvailable):
                 process_error(
-                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}",
+                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}",  # type: ignore
                     ["implemented", "api_redesign"],
                 )
 
             # Check seat availability
-            if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+            if flight_date_data.available_seats[cabin] < len(reservation.passengers):  # type: ignore
                 process_error(
-                    f"Not enough seats on flight {flight_info.flight_number}",
+                    f"Not enough seats on flight {flight_info.flight_number}",  # type: ignore
                     ["implemented", "api_redesign"],
                 )
 
             # Calculate price and add to reservation
             reservation_flight = ReservationFlight(
-                flight_number=flight_info.flight_number,
-                date=flight_info.date,
-                price=flight_date_data.prices[cabin],
+                flight_number=flight_info.flight_number,  # type: ignore
+                date=flight_info.date,  # type: ignore
+                price=flight_date_data.prices[cabin],  # type: ignore
                 origin=flight.origin,
                 destination=flight.destination,
             )
@@ -1652,7 +1653,7 @@ else:
             ValueError: If the gift card balance is not enough.
         """
         if all(isinstance(flight, dict) for flight in flights):
-            flights = [FlightInfo(**flight) for flight in flights]
+            flights = [FlightInfo(**flight) for flight in flights]  # type: ignore
 
         if safeguard_config.API_CHECK and len(flights) == 0:  # line: 111
             process_error("Flights list cannot be empty", ["api_check"])
@@ -1687,8 +1688,8 @@ else:
                 (
                     reservation_flight
                     for reservation_flight in reservation.flights
-                    if reservation_flight.flight_number == flight_info.flight_number
-                    and reservation_flight.date == flight_info.date
+                    if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                    and reservation_flight.date == flight_info.date  # type: ignore
                     and cabin == reservation.cabin
                 ),
                 None,
@@ -1704,8 +1705,8 @@ else:
                 (
                     reservation_flight
                     for reservation_flight in reservation.flights
-                    if reservation_flight.flight_number == flight_info.flight_number
-                    and reservation_flight.date == flight_info.date
+                    if reservation_flight.flight_number == flight_info.flight_number  # type: ignore
+                    and reservation_flight.date == flight_info.date  # type: ignore
                 ),
                 None,
             )
@@ -1714,30 +1715,30 @@ else:
                 change_flights = True
 
             # If new flight:
-            flight = _get_flight(flight_info.flight_number)
+            flight = _get_flight(flight_info.flight_number)  # type: ignore
             # Check flight availability
             flight_date_data = _get_flight_instance(
-                flight_number=flight_info.flight_number,
-                date=flight_info.date,
+                flight_number=flight_info.flight_number,  # type: ignore
+                date=flight_info.date,  # type: ignore
             )
             if not isinstance(flight_date_data, FlightDateStatusAvailable):
                 process_error(
-                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}",
+                    f"Flight {flight_info.flight_number} not available on date {flight_info.date}",  # type: ignore
                     ["implemented"],
                 )
 
             # Check seat availability
-            if flight_date_data.available_seats[cabin] < len(reservation.passengers):
+            if flight_date_data.available_seats[cabin] < len(reservation.passengers):  # type: ignore
                 process_error(
-                    f"Not enough seats on flight {flight_info.flight_number}",
+                    f"Not enough seats on flight {flight_info.flight_number}",  # type: ignore
                     ["implemented"],
                 )
 
             # Calculate price and add to reservation
             reservation_flight = ReservationFlight(
-                flight_number=flight_info.flight_number,
-                date=flight_info.date,
-                price=flight_date_data.prices[cabin],
+                flight_number=flight_info.flight_number,  # type: ignore
+                date=flight_info.date,  # type: ignore
+                price=flight_date_data.prices[cabin],  # type: ignore
                 origin=flight.origin,
                 destination=flight.destination,
             )
@@ -1821,7 +1822,7 @@ else:
 
 if safeguard_config.API_REDESIGN:  # line: 106
 
-    def update_reservation_passengers(
+    def update_reservation_passengers(  # type: ignore
         user_id: Annotated[str, "The ID of the user updating the reservation."],
         reservation_id: Annotated[str, "The reservation ID, such as 'ZFA04Y'."],
         passengers: Annotated[
@@ -1841,7 +1842,7 @@ if safeguard_config.API_REDESIGN:  # line: 106
             ValueError: If the number of passengers does not match.
         """
         if all(isinstance(passenger, dict) for passenger in passengers):
-            passengers = [Passenger(**passenger) for passenger in passengers]
+            passengers = [Passenger(**passenger) for passenger in passengers]  # type: ignore
         user = _get_user(user_id)
         reservation = _get_reservation(reservation_id)
         if safeguard_config.API_CHECK and reservation.user_id != user_id:  # line: 106
@@ -1855,7 +1856,7 @@ if safeguard_config.API_REDESIGN:  # line: 106
                 f"Number of passengers does not match. The current number of passengers is {len(reservation.passengers)}, while the new number of passengers is {len(passengers)}.",
                 ["implemented", "api_redesign"],
             )
-        reservation.passengers = deepcopy(passengers)
+        reservation.passengers = deepcopy(passengers)  # type: ignore
         return reservation
 
 else:
@@ -1878,7 +1879,7 @@ else:
             ValueError: If the number of passengers does not match.
         """
         if all(isinstance(passenger, dict) for passenger in passengers):
-            passengers = [Passenger(**passenger) for passenger in passengers]
+            passengers = [Passenger(**passenger) for passenger in passengers]  # type: ignore
         reservation = _get_reservation(reservation_id)
         # LOGGER.info(len(passengers))
         # LOGGER.info(len(reservation.passengers))
@@ -1887,7 +1888,7 @@ else:
                 f"Number of passengers does not match. The current number of passengers is {len(reservation.passengers)}, while the new number of passengers is {len(passengers)}.",
                 ["implemented"],
             )
-        reservation.passengers = deepcopy(passengers)
+        reservation.passengers = deepcopy(passengers)  # type: ignore
         return reservation
 
 
@@ -2013,7 +2014,7 @@ def compute_compensation_amount(
 
 if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
 
-    def send_certificate(
+    def send_certificate(  # type: ignore
         user_id: Annotated[
             str, "The ID of the user to book the reservation, such as 'sara_doe_496'."
         ],
@@ -2150,6 +2151,7 @@ if safeguard_config.API_REDESIGN:  # line: 106, 157, 161
                 user.payment_methods[payment_id] = new_payment
                 return f"Certificate {payment_id} added to user {user_id} with amount {amount}."
         process_error("Too many certificates", ["api_redesign", "implemented"])
+        raise ValueError("Too many certificates")  # just for type checker
 
 else:
 
@@ -2181,6 +2183,7 @@ else:
                 user.payment_methods[payment_id] = new_payment
                 return f"Certificate {payment_id} added to user {user_id} with amount {amount}."
         process_error("Too many certificates", ["implemented"])
+        raise ValueError("Too many certificates")  # just for type checker
 
 
 mcp.tool(fetch_current_time)

@@ -11,7 +11,7 @@ elif CONFIG.DATASET.NAME == "MedAgentBench":
     from dataset_domains.MedAgentBench.tools import *
 
 
-def main():
+def main() -> None:
     print("Starting MCP server...")
     mcp.run(
         show_banner=False,
