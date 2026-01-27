@@ -48,7 +48,12 @@ def process_logic_value(
 
 
 ResourceTypes = Literal[
-    "Patient", "Condition", "MedicationRequest", "Observation", "Procedure"
+    "Patient",
+    "Condition",
+    "MedicationRequest",
+    "Observation",
+    "Procedure",
+    "ServiceRequest",
 ]
 GenderTypes = Literal["male", "female", "other", "unknown"]
 
@@ -190,6 +195,9 @@ class DoseAndRate(BaseModel):
     doseQuantity: Optional[ValueQuantity] = Field(
         None, description="The amount of medication to be administered."
     )
+    rateQuantity: Optional[ValueQuantity] = Field(
+        None, description="The speed at which the medication is to be administered."
+    )
 
 
 class Timing(BaseModel):
@@ -208,6 +216,10 @@ class DosageInstruction(BaseModel):
     doseAndRate: Optional[List[DoseAndRate]] = Field(
         None, description="A list of dose and rate instructions."
     )
+
+
+class Note(BaseModel):
+    text: str = Field(description="The text of the note.")
 
 
 class Patient(Resource):
@@ -328,4 +340,37 @@ class Observation(Resource):
     )
     valueString: Optional[str] = Field(
         None, description="The value of the observation as a string."
+    )
+
+
+class ServiceRequest(Resource):
+    id: Optional[str] = Field(
+        description="The unique identifier for the service request."
+    )
+    meta: Optional[MetaData] = Field(
+        None, description="Metadata about the service request resource."
+    )
+    code: CodeableConcept = Field(
+        description="The specific service that is being requested, which can include LOINC, SNOMED, CPT, CBV, THL, or Kuntalitto codes.",
+    )
+    subject: Subject = Field(
+        description="The patient or group that the service request is associated with.",
+    )
+    authoredOn: datetime = Field(
+        description="The date when the service request was authored."
+    )
+    status: str = Field(
+        description="The status of the service request (e.g., active, completed).",
+    )
+    intent: str = Field(
+        description="The intent of the service request (e.g., order, plan).",
+    )
+    priority: str = Field(
+        description="The priority of the service request (e.g., routine, urgent).",
+    )
+    note: Optional[List[Note]] = Field(
+        None, description="A list of notes associated with the service request."
+    )
+    occurrenceDateTime: Optional[datetime] = Field(
+        None, description="The date and time when the service is to occur."
     )

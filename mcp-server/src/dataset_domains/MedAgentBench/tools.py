@@ -5,6 +5,7 @@ from dataset_domains.MedAgentBench.data_model import (
     Observation,
     MedicationRequest,
     Procedure,
+    ServiceRequest,
     DateTimeRange,
     LogicList,
     ValueRange,
@@ -357,11 +358,91 @@ def post_medication_request(medication_request: MedicationRequest) -> Medication
     return MedicationRequest.model_validate(created_resource, extra="forbid")
 
 
+def get_procedure(
+    procedure_id: Annotated[
+        Optional[str | LogicList[str]], "The unique identifier of the procedure."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    code: Annotated[
+        Optional[str | LogicList[str]],
+        "The code of the procedure, following CPT standards.",
+    ],
+    performed_date_time: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the procedure was performed, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[Procedure]:
+    """
+    Retrieve procedures from the FHIR server.
+
+    Returns:
+        List[Procedure]: A list of Procedure objects.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+    params = []
+    if procedure_id:
+        params.extend(process_logic_value(procedure_id, "_id"))
+    if patient_id:
+        params.extend(process_logic_value(patient_id, "subject"))
+    if code:
+        params.extend(process_logic_value(code, "code"))
+    if performed_date_time:
+        if isinstance(performed_date_time, datetime):
+            params.append(("date", performed_date_time.strftime("%Y-%m-%dT%H:%M:%S%z")))
+        elif isinstance(performed_date_time, DateTimeRange):
+            params.extend(performed_date_time.to_query_params("date"))
+    params.append(("_count", str(_count)))
+    if _offset:
+        params.append(("_offset", str(_offset)))
+    if _sort:
+        params.append(("_sort", _sort))
+    response = requests.get(f"{base_api}Procedure", params=params)
+    response.raise_for_status()
+    bundle = response.json()
+    res = [
+        Procedure.model_validate(entry["resource"], extra="forbid")
+        for entry in bundle.get("entry", [])
+    ]
+    return res
+
+
+def post_service_request(service_request: ServiceRequest) -> ServiceRequest:
+    """
+    Create a new service request in the FHIR server.
+
+    Returns:
+        ServiceRequest: The created ServiceRequest object.
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+    payload = service_request.model_dump_json(exclude_unset=True)
+
+    response = requests.post(
+        f"{base_api}/ServiceRequest",
+        data=payload,
+        headers={"Content-Type": "application/fhir+json"},
+    )
+    response.raise_for_status()
+    created_resource = response.json()
+    return ServiceRequest.model_validate(created_resource, extra="forbid")
+
+
 mcp.tool(get_patient)
 mcp.tool(get_condition)
 mcp.tool(get_observation)
 mcp.tool(post_observation)
 mcp.tool(get_medication_request)
+mcp.tool(post_medication_request)
+mcp.tool(get_procedure)
+mcp.tool(post_service_request)
 
 
 def test() -> None:
@@ -505,7 +586,8 @@ def test() -> None:
                             unit="mg",
                             system="http://unitsofmeasure.org",
                             code="mg",
-                        )
+                        ),
+                        rateQuantity=None,
                     )
                 ],
             )
@@ -516,5 +598,52 @@ def test() -> None:
     created_medication_request = post_medication_request(medication_request)
     print(f"Created new medication request with ID: {created_medication_request.id}")
 
+    procedures = get_procedure(
+        procedure_id=None,
+        patient_id=None,
+        code=None,
+        performed_date_time=None,
+        _count=1000,
+        _offset=None,
+        _sort=None,
+    )
+    print(f"Found {len(procedures)} procedures in total")
 
-test()
+    from dataset_domains.MedAgentBench.data_model import Note
+    from datetime import timedelta
+
+    service_request = ServiceRequest(
+        resourceType="ServiceRequest",
+        id=None,
+        meta=None,
+        code=CodeableConcept(
+            coding=[
+                Coding(
+                    system="http://www.ama-assn.org/go/cpt",
+                    code="99213",
+                    display="Office or other outpatient visit for the evaluation and management of an established patient",
+                )
+            ],
+            text="Office Visit",
+        ),
+        subject=Subject(
+            reference=f"Patient/{patients[0].id}",
+            identifier=patients[0].identifier[0] if patients[0].identifier else None,
+        ),
+        authoredOn=datetime.now(),
+        status="active",
+        intent="order",
+        priority="routine",
+        note=[
+            Note(
+                text="Patient requires a follow-up appointment in two weeks.",
+            )
+        ],
+        occurrenceDateTime=datetime.now() + timedelta(days=1),
+    )
+
+    created_service_request = post_service_request(service_request)
+    print(f"Created new service request with ID: {created_service_request.id}")
+
+
+# test()
