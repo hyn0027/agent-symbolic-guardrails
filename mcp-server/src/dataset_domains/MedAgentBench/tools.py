@@ -1,5 +1,5 @@
 from mcp_server import mcp
-from dataset_domains.MedAgentBench.data_model import Patient
+from dataset_domains.MedAgentBench.data_model import Patient, Condition
 from typing import Annotated, Optional, List
 import requests
 
@@ -7,7 +7,7 @@ base_api = "http://localhost:8080/fhir/"
 
 
 def get_patient(
-    id: Annotated[Optional[str], "The patient's Medical Record Number (MRN)."],
+    patient_id: Annotated[Optional[str], "The patient's Medical Record Number (MRN)."],
     birthdate: Annotated[
         Optional[str], "The patient's birthdate in YYYY-MM-DD format."
     ],
@@ -44,8 +44,8 @@ def get_patient(
     """
 
     params = {}
-    if id:
-        params["identifier"] = id
+    if patient_id:
+        params["identifier"] = patient_id
     if birthdate:
         params["birthdate"] = birthdate
     if family:
@@ -73,6 +73,12 @@ def get_patient(
     return [
         Patient.model_validate(entry["resource"]) for entry in bundle.get("entry", [])
     ]
+
+
+def get_condition(
+    patient_id: Annotated[str, "The patient's unique Medical Record Number (MRN)."],
+) -> List[Condition]:
+    raise NotImplementedError("get_condition is not implemented yet.")
 
 
 mcp.tool(get_patient)
