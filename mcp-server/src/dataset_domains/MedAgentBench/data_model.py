@@ -21,6 +21,23 @@ class LogicList(BaseModel, Generic[T]):
             raise ValueError(f"Unsupported operator: {self.operator}")
 
 
+class ValueRange(BaseModel):
+    low: Optional[float] = Field(
+        None, description="The lower bound of the range. (inclusive)"
+    )
+    high: Optional[float] = Field(
+        None, description="The upper bound of the range. (inclusive)"
+    )
+
+    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
+        params = []
+        if self.low is not None:
+            params.append((field_name, f"ge{self.low}"))
+        if self.high is not None:
+            params.append((field_name, f"le{self.high}"))
+        return params
+
+
 def process_logic_value(
     value: T | LogicList[T], field_name: str
 ) -> List[tuple[str, str]]:
@@ -37,8 +54,22 @@ GenderTypes = Literal["male", "female", "other", "unknown"]
 
 
 class DateTimeRange(BaseModel):
-    start: Optional[datetime] = Field(description="The start of the date-time range.")
-    end: Optional[datetime] = Field(description="The end of the date-time range.")
+    start: Optional[datetime] = Field(
+        description="The start of the date-time range (inclusive). In format YYYY-MM-DDTHH:MM:SS±HH:MM"
+    )
+    end: Optional[datetime] = Field(
+        description="The end of the date-time range (inclusive). In format YYYY-MM-DDTHH:MM:SS±HH:MM"
+    )
+
+    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
+        params = []
+        if self.start:
+            params.append(
+                (field_name, f"ge{self.start.strftime('%Y-%m-%dT%H:%M:%S%z')}")
+            )
+        if self.end:
+            params.append((field_name, f"le{self.end.strftime('%Y-%m-%dT%H:%M:%S%z')}"))
+        return params
 
 
 class Resource(BaseModel):
@@ -283,4 +314,7 @@ class Observation(Resource):
     )
     interpretation: Optional[List[CodeableConcept]] = Field(
         None, description="A list of interpretations of the observation."
+    )
+    valueString: Optional[str] = Field(
+        None, description="The value of the observation as a string."
     )
