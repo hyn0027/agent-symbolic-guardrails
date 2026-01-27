@@ -1,13 +1,44 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List, Literal
+from typing import Optional, List, Literal, TypeVar, Generic
 from datetime import datetime
+
+T = TypeVar("T")
+
+
+class LogicList(BaseModel, Generic[T]):
+    values: List[T] = Field(description="A list of values for logical operations.")
+    operator: Literal["AND", "OR"] = Field(
+        description="Logical operator to apply between the values."
+    )
+
+    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
+        if self.operator == "OR":
+            joined_values = ",".join(str(v) for v in self.values)
+            return [(field_name, joined_values)]
+        elif self.operator == "AND":
+            return [(field_name, str(v)) for v in self.values]
+        else:
+            raise ValueError(f"Unsupported operator: {self.operator}")
+
+
+def process_logic_value(
+    value: T | LogicList[T], field_name: str
+) -> List[tuple[str, str]]:
+    if isinstance(value, LogicList):
+        return value.to_query_params(field_name)
+    else:
+        return [(field_name, str(value))]
+
 
 ResourceTypes = Literal[
     "Patient", "Condition", "MedicationRequest", "Observation", "Procedure"
 ]
 GenderTypes = Literal["male", "female", "other", "unknown"]
 
-# Type DateTime format: YYYY-MM-DDThh:mm:ss.sss+zz:zz
+
+class DateTimeRange(BaseModel):
+    start: Optional[datetime] = Field(description="The start of the date-time range.")
+    end: Optional[datetime] = Field(description="The end of the date-time range.")
 
 
 class Resource(BaseModel):
@@ -158,7 +189,7 @@ class Patient(Resource):
         None,
         description="The patient's legal sex (e.g., male, female, other, unknown).",
     )
-    birthDate: str = Field(description="The patient's birthdate in YYYY-MM-DD format.")
+    birthDate: Optional[datetime] = Field(None, description="The patient's birthdate.")
     address: Optional[List[Address]] = Field(
         None, description="A list of the patient's addresses."
     )
