@@ -252,9 +252,116 @@ def get_observation(
     return res
 
 
+def post_observation(observation: Observation) -> Observation:
+    """
+    Create a new observation in the FHIR server.
+
+    Returns:
+        Observation: The created Observation object.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+    payload = observation.model_dump_json(exclude_unset=True)
+
+    response = requests.post(
+        f"{base_api}/Observation",
+        data=payload,
+        headers={"Content-Type": "application/fhir+json"},
+    )
+    response.raise_for_status()
+    created_resource = response.json()
+    return Observation.model_validate(created_resource, extra="forbid")
+
+
+def get_medication_request(
+    medication_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The unique identifier of the medication request.",
+    ],
+    status: Annotated[
+        Optional[str | LogicList[str]], "The status of the medication request."
+    ],
+    intent: Annotated[
+        Optional[str | LogicList[str]], "The intent of the medication request."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    authored_on: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the medication request was authored, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[MedicationRequest]:
+    """
+    Retrieve medication requests from the FHIR server.
+
+    Returns:
+        List[MedicationRequest]: A list of MedicationRequest objects.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+    params = []
+    if medication_id:
+        params.extend(process_logic_value(medication_id, "_id"))
+    if status:
+        params.extend(process_logic_value(status, "status"))
+    if intent:
+        params.extend(process_logic_value(intent, "intent"))
+    if patient_id:
+        params.extend(process_logic_value(patient_id, "subject"))
+    if authored_on:
+        if isinstance(authored_on, datetime):
+            params.append(("authoredon", authored_on.strftime("%Y-%m-%dT%H:%M:%S%z")))
+        elif isinstance(authored_on, DateTimeRange):
+            params.extend(authored_on.to_query_params("authoredon"))
+    params.append(("_count", str(_count)))
+    if _offset:
+        params.append(("_offset", str(_offset)))
+    if _sort:
+        params.append(("_sort", _sort))
+    response = requests.get(f"{base_api}MedicationRequest", params=params)
+    response.raise_for_status()
+    bundle = response.json()
+    res = [
+        MedicationRequest.model_validate(entry["resource"], extra="forbid")
+        for entry in bundle.get("entry", [])
+    ]
+    return res
+
+
+def post_medication_request(medication_request: MedicationRequest) -> MedicationRequest:
+    """
+    Create a new medication request in the FHIR server.
+
+    Returns:
+        MedicationRequest: The created MedicationRequest object.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+    payload = medication_request.model_dump_json(exclude_unset=True)
+
+    response = requests.post(
+        f"{base_api}/MedicationRequest",
+        data=payload,
+        headers={"Content-Type": "application/fhir+json"},
+    )
+    response.raise_for_status()
+    created_resource = response.json()
+    return MedicationRequest.model_validate(created_resource, extra="forbid")
+
+
 mcp.tool(get_patient)
 mcp.tool(get_condition)
 mcp.tool(get_observation)
+mcp.tool(post_observation)
+mcp.tool(get_medication_request)
 
 
 def test() -> None:
@@ -276,25 +383,17 @@ def test() -> None:
     )
     print(f"Found {len(patients)} patients in total")
 
-    # condition_num = []
-    # for patient in patients:
-    #     conditions = get_condition(
-    #         condition_id=None,
-    #         patient_id=patient.id,
-    #         code=None,
-    #         onset_date=None,
-    #         recorded_date=None,
-    #         _count=10000,
-    #         _offset=None,
-    #         _sort=None,
-    #     )
-    #     condition_num.append(len(conditions))
-
-    # print(
-    #     f"Average number of conditions per patient: {sum(condition_num)/len(condition_num)}"
-    # )
-    # print(f"Max number of conditions for a patient: {max(condition_num)}")
-    # print(f"Min number of conditions for a patient: {min(condition_num)}")
+    conditions = get_condition(
+        condition_id=None,
+        patient_id=None,
+        code=None,
+        onset_date=None,
+        recorded_date=None,
+        _count=1000,
+        _offset=None,
+        _sort=None,
+    )
+    print(f"Found {len(conditions)} conditions in total")
 
     observations = get_observation(
         observation_id=None,
@@ -310,6 +409,112 @@ def test() -> None:
         _sort=None,
     )
     print(f"Found {len(observations)} observations in total")
+
+    from dataset_domains.MedAgentBench.data_model import (
+        Subject,
+        CodeableConcept,
+        Coding,
+        ValueQuantity,
+    )
+
+    new_observation = Observation(
+        resourceType="Observation",
+        subject=Subject(
+            reference=f"Patient/{patients[0].id}",
+            identifier=patients[0].identifier[0] if patients[0].identifier else None,
+        ),
+        code=CodeableConcept(
+            coding=[
+                Coding(
+                    system="http://loinc.org",
+                    code="29463-7",
+                    display="Body Weight",
+                )
+            ],
+            text="Body Weight",
+        ),
+        valueQuantity=ValueQuantity(
+            value=70.0,
+            unit="kg",
+            system="http://unitsofmeasure.org",
+            code="kg",
+        ),
+        status="final",
+        category=[
+            CodeableConcept(
+                coding=[
+                    Coding(
+                        system="http://terminology.hl7.org/CodeSystem/observation-category",
+                        code="vital-signs",
+                        display="Vital Signs",
+                    )
+                ],
+                text="Vital Signs",
+            )
+        ],
+        effectiveDateTime=datetime.now(),
+        id=None,
+        meta=None,
+        issued=None,
+        valueString=None,
+        interpretation=None,
+    )
+    created_observation = post_observation(new_observation)
+    print(f"Created new observation with ID: {created_observation.id}")
+
+    medication_requests = get_medication_request(
+        medication_id=None,
+        status=None,
+        intent=None,
+        patient_id=None,
+        authored_on=None,
+        _count=1000,
+        _offset=None,
+        _sort=None,
+    )
+    print(f"Found {len(medication_requests)} medication requests in total")
+
+    from dataset_domains.MedAgentBench.data_model import (
+        DosageInstruction,
+        Timing,
+        DoseAndRate,
+    )
+
+    medication_request = MedicationRequest(
+        resourceType="MedicationRequest",
+        status="active",
+        intent="order",
+        medicationCodeableConcept=CodeableConcept(
+            coding=None, text="Amoxicillin 500mg Capsule"
+        ),
+        subject=Subject(
+            reference=f"Patient/{patients[0].id}",
+            identifier=patients[0].identifier[0] if patients[0].identifier else None,
+        ),
+        authoredOn=datetime.now(),
+        dosageInstruction=[
+            DosageInstruction(
+                timing=Timing(
+                    code=CodeableConcept(coding=None, text="Three times a day")
+                ),
+                route=CodeableConcept(coding=None, text="Oral"),
+                doseAndRate=[
+                    DoseAndRate(
+                        doseQuantity=ValueQuantity(
+                            value=500,
+                            unit="mg",
+                            system="http://unitsofmeasure.org",
+                            code="mg",
+                        )
+                    )
+                ],
+            )
+        ],
+        id=None,
+        meta=None,
+    )
+    created_medication_request = post_medication_request(medication_request)
+    print(f"Created new medication request with ID: {created_medication_request.id}")
 
 
 test()

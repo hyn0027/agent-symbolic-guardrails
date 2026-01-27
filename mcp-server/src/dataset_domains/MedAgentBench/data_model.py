@@ -74,6 +74,9 @@ class DateTimeRange(BaseModel):
 
 class Resource(BaseModel):
     resourceType: str = Field(description="The type of the FHIR resource.")
+    id: Optional[str] = Field(
+        None, description="The unique identifier of the resource."
+    )
 
 
 class MetaData(BaseModel):
@@ -189,8 +192,14 @@ class DoseAndRate(BaseModel):
     )
 
 
+class Timing(BaseModel):
+    code: Optional[CodeableConcept] = Field(
+        None, description="A code that defines the timing schedule."
+    )
+
+
 class DosageInstruction(BaseModel):
-    timing: Optional[CodeableConcept] = Field(
+    timing: Optional[Timing] = Field(
         None, description="The timing schedule for the medication dosage."
     )
     route: Optional[CodeableConcept] = Field(
@@ -209,8 +218,8 @@ class Patient(Resource):
     extension: Optional[List[Extension]] = Field(
         None, description="A list of extensions for additional information."
     )
-    identifier: Optional[List[Identifier]] = Field(
-        None, description="A list of the patient's identifiers."
+    identifier: List[Identifier] = Field(
+        description="A list of the patient's identifiers."
     )
     name: List[Name] = Field(description="A list of the patient's names.")
     telecom: Optional[List[Telecom]] = Field(
@@ -245,7 +254,9 @@ class Condition(Resource):
 
 
 class MedicationRequest(Resource):
-    id: str = Field(description="The unique identifier for the medication request.")
+    id: Optional[str] = Field(
+        description="The unique identifier for the medication request."
+    )
     meta: Optional[MetaData] = Field(
         None, description="Metadata about the medication request resource."
     )
@@ -288,7 +299,7 @@ class Procedure(Resource):
 
 
 class Observation(Resource):
-    id: str = Field(description="The unique identifier for the observation.")
+    id: Optional[str] = Field(description="The unique identifier for the observation.")
     meta: Optional[MetaData] = Field(
         None, description="Metadata about the observation resource."
     )
