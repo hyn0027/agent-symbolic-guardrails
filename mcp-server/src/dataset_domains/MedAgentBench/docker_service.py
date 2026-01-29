@@ -12,20 +12,28 @@ import httpx
 from docker.errors import APIError, DockerException, NotFound
 from docker.models.containers import Container
 
+from config_loader import CONFIG
+
+DOCKER_CONFIG = CONFIG.DATASET.DOCKER
+
 
 @dataclass
 class DockerService:
-    image: str = "jyxsu6/medagentbench:latest"
-    container_name: str = "medagentbench"
-    host_port: int = 8080
-    container_port: int = 8080
-    ready_timeout_s: int = 180
+    image: str
+    container_name: str
+    host_port: int
+    container_port: int
+    ready_timeout_s: int
+    restart_if_running: bool = False
+    reuse_stopped_container: bool = False
 
     _client: Optional[docker.DockerClient] = None
     _container: Optional[Container] = None
     _stop_event: threading.Event = threading.Event()
 
-    def start(self) -> None:
+    def start(
+        self,
+    ) -> None:
         self._client = self._get_docker_client()
 
         try:
@@ -40,15 +48,42 @@ class DockerService:
                 raise RuntimeError(f"Failed to pull image {self.image}: {e}") from e
 
         try:
-            old = self._client.containers.get(self.container_name)
-            print(f"Removing existing container {self.container_name} ...")
-            try:
-                old.remove(force=True)
-            except Exception as e:
-                print(f"Failed to remove old container: {e}")
+            container = self._client.containers.get(self.container_name)
+            container.reload()
+            status = container.status
+            if status == "running":
+                if self.restart_if_running:
+                    print(
+                        f"Container {self.container_name} is already running. Restarting ..."
+                    )
+                    container.remove(force=True)
+                else:
+                    print(
+                        f"Container {self.container_name} is already running. Reusing ..."
+                    )
+                    self._container = container
+                    self._wait_until_ready()
+                    print(
+                        f"Container ready. Base URL: http://127.0.0.1:{self.host_port}"
+                    )
+                    return
+            elif status == "exited" and self.reuse_stopped_container:
+                print(
+                    f"Container {self.container_name} is stopped. Reusing stopped container ..."
+                )
+                self._container = container
+                self._container.start()
+                print("Waiting for container to be ready ...")
+                self._wait_until_ready()
+                print(f"Container ready. Base URL: http://127.0.0.1:{self.host_port}")
+                return
+            else:
+                print(
+                    f"Container {self.container_name} is in status '{status}'. Removing ..."
+                )
+                container.remove(force=True)
         except NotFound:
             print("No existing container found.")
-            old = None
 
         print(
             f"Starting container {self.image} (port {self.host_port} -> {self.container_port}) ..."
@@ -74,7 +109,7 @@ class DockerService:
 
         print(f"Container ready. Base URL: http://127.0.0.1:{self.host_port}")
 
-    def stop(self) -> None:
+    def stop(self, remove_container=False) -> None:
         self._stop_event.set()
 
         if not self._client:
@@ -91,11 +126,12 @@ class DockerService:
         try:
             print(f"Stopping container {self.container_name} ...")
             self._container.stop()
-            try:
-                print(f"Removing container {self.container_name} ...")
-                self._container.remove(force=True)
-            except Exception as e:
-                print(f"Error removing container: {e}")
+            if remove_container:
+                try:
+                    print(f"Removing container {self.container_name} ...")
+                    self._container.remove(force=True)
+                except Exception as e:
+                    print(f"Error removing container: {e}")
         except Exception as e:
             print(f"Error stopping container: {e}")
 
@@ -131,14 +167,55 @@ _shutdown_once = threading.Event()
 
 
 def start_service() -> None:
-    service = DockerService(image="jyxsu6/medagentbench:latest")
+    assert (
+        DOCKER_CONFIG is not None
+    ), "DOCKER_CONFIG must be defined in the configuration."
+    assert isinstance(DOCKER_CONFIG.IMAGE, str), "DOCKER_CONFIG.IMAGE must be a string."
+    assert isinstance(
+        DOCKER_CONFIG.CONTAINER_NAME, str
+    ), "DOCKER_CONFIG.CONTAINER_NAME must be a string."
+    assert isinstance(
+        DOCKER_CONFIG.HOST_PORT, int
+    ), "DOCKER_CONFIG.HOST_PORT must be an integer."
+    assert isinstance(
+        DOCKER_CONFIG.CONTAINER_PORT, int
+    ), "DOCKER_CONFIG.CONTAINER_PORT must be an integer."
+    assert isinstance(
+        DOCKER_CONFIG.READY_TIMEOUT, int
+    ), "DOCKER_CONFIG.READY_TIMEOUT must be an integer."
+    assert isinstance(
+        DOCKER_CONFIG.RESTART_IF_RUNNING, bool
+    ), "DOCKER_CONFIG.RESTART_IF_RUNNING must be a boolean."
+    assert isinstance(
+        DOCKER_CONFIG.REUSE_STOPPED_CONTAINER, bool
+    ), "DOCKER_CONFIG.REUSE_STOPPED_CONTAINER must be a boolean."
+
+    service = DockerService(
+        image=DOCKER_CONFIG.IMAGE,
+        container_name=DOCKER_CONFIG.CONTAINER_NAME,
+        host_port=DOCKER_CONFIG.HOST_PORT,
+        container_port=DOCKER_CONFIG.CONTAINER_PORT,
+        ready_timeout_s=DOCKER_CONFIG.READY_TIMEOUT,
+        restart_if_running=DOCKER_CONFIG.RESTART_IF_RUNNING,
+        reuse_stopped_container=DOCKER_CONFIG.REUSE_STOPPED_CONTAINER,
+    )
+
+    assert isinstance(
+        DOCKER_CONFIG.REMOVE_WHEN_STOPPED, bool
+    ), "DOCKER_CONFIG.REMOVE_WHEN_STOPPED must be a boolean."
+    assert isinstance(
+        DOCKER_CONFIG.STOP_WHEN_END, bool
+    ), "DOCKER_CONFIG.STOP_WHEN_END must be a boolean."
+    remove_when_stopped = DOCKER_CONFIG.REMOVE_WHEN_STOPPED
+    stop_when_end = DOCKER_CONFIG.STOP_WHEN_END
 
     def shutdown(reason: str) -> None:
         if _shutdown_once.is_set():
             return
         _shutdown_once.set()
         print(f"Shutting down ({reason}) ...")
-        service.stop()
+        if stop_when_end:
+            service.stop(remove_container=remove_when_stopped)
 
     atexit.register(shutdown, "atexit")
 

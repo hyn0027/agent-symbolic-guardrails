@@ -1,5 +1,15 @@
 DATASET:
   NAME: "MedAgentBench"
+  DOCKER:
+    IMAGE: "jyxsu6/medagentbench:latest"
+    CONTAINER_NAME: "medagentbench_container"
+    HOST_PORT: 8080
+    CONTAINER_PORT: 8080
+    READY_TIMEOUT: 180
+    RESTART_IF_RUNNING: false
+    REUSE_STOPPED_CONTAINER: true
+    STOP_WHEN_END: false
+    REMOVE_WHEN_STOPPED: false
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/mcp-server/"
