@@ -10,13 +10,17 @@ DATASET:
     REUSE_STOPPED_CONTAINER: true
     STOP_WHEN_END: false
     REMOVE_WHEN_STOPPED: false
+  SERVER:
+    BASE_URL: "http://localhost:8080/fhir/"
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/mcp-server/"
 
 SAFEGUARD:
   API_CHECK: true
+  TOOL_BLOCKING: true
   API_REDESIGN: true
+  RESPONSE_FILTERING: true
   USER_CONFIRMATION: true
   TOOL_END_CONVERSATION: true
   TOOL_RESPONSE_TEMPLATE: true

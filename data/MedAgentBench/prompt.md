@@ -1,10 +1,245 @@
-from pydantic import BaseModel, Field, model_validator
-from typing import Optional, List, Literal, TypeVar, Generic
-from datetime import datetime
+## Your task
+Generate a comprehensive safety policy governing an LLM-powered agent’s behavior.
 
-T = TypeVar("T")
+## Details about the agent
+- The agent is designed to assist users (healthcare providers) in interacting with a FHIR-compliant Electronic Medical Record (EMR) system
+- The agent interacts with users only via text 
+- The agent is equipped with a defined set of tools, detailed below, which it can invoke as needed
+- The agent has no access to external systems and services beyond the explicitly provided tools
 
+## Policy requirements
+- Write the policy as bullet points organized under sections
+- Each bullet point must state one specific safety requirement
+- The requirements should be concise and should not contain duplicate entries
+- The requirements should be detailed and concrete
+- The requirements should be precise and unambiguous
+- Do not include requirements that are already specified in the tool schema
+- Address the agent as “you” within each requirement
 
+## Available tools
+```
+def get_patient(
+    patient_id: Annotated[
+        Optional[str | LogicList[str]], "The patient's Medical Record Number (MRN)."
+    ],
+    birthdate: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The patient’s birthdate, either as a single date (YYYY-MM-DD) or as a datetime range (YYYY-MM-DDTHH:MM:SS±HH:MM)",
+    ],
+    family: Annotated[Optional[str | LogicList[str]], "The patient's family name."],
+    given: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's given name. May include first and middle names.",
+    ],
+    name: Annotated[
+        Optional[str | LogicList[str]],
+        "Any part of the patient's name. When discrete name parameters are used, such as 'family' or 'given', this parameter is ignored.",
+    ],
+    gender: Annotated[Optional[str | LogicList[str]], "The patient's legal sex."],
+    address: Annotated[
+        Optional[str | LogicList[str]],
+        "Any part of the patient's address, including street, city, state, and postal code.",
+    ],
+    address_city: Annotated[
+        Optional[str | LogicList[str]], "The city of the patient's address."
+    ],
+    address_postalcode: Annotated[
+        Optional[str | LogicList[str]], "The postal code of the patient's address."
+    ],
+    address_state: Annotated[
+        Optional[str | LogicList[str]], "The state of the patient's address."
+    ],
+    telecom: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's phone number (XXX-XXX-XXXX) or email address.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[Patient]:
+    """
+    Search for patients in the FHIR server based on various criteria.
+
+    Returns:
+        A list of Patient objects matching the search criteria.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def get_condition(
+    condition_id: Annotated[
+        Optional[str | LogicList[str]], "The unique identifier of the condition."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    code: Annotated[
+        Optional[str | LogicList[str]], "The icd-10 code of the condition."
+    ],
+    onset_date: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the condition began, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    recorded_date: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the condition was recorded, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[Condition]:
+    """
+    Retrieve conditions associated with a specific patient.
+
+    Returns:
+        List[Condition]: A list of Condition objects associated with the patient.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def get_observation(
+    observation_id: Annotated[
+        Optional[str | LogicList[str]], "The unique identifier of the observation."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    status: Annotated[
+        Optional[str | LogicList[str]],
+        "The status of the observation (e.g., final, amended).",
+    ],
+    category: Annotated[
+        Optional[str | LogicList[str]],
+        "The category of the observation. Can be 'vital-signs', or 'laboratory'.",
+    ],
+    code: Annotated[Optional[str | LogicList[str]], "The code of the observation."],
+    effective_date: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the observation was made, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    value_string: Annotated[
+        Optional[str | LogicList[str]], "The value of the observation as a string."
+    ],
+    value_quantity: Annotated[
+        Optional[float | ValueRange],
+        "The value of the observation as a quantity.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[Observation]:
+    """
+    Retrieve observations from the FHIR server.
+
+    Returns:
+        List[Observation]: A list of Observation objects.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def post_observation(observation: Observation) -> Observation:
+    """
+    Create a new observation in the FHIR server.
+
+    Returns:
+        Observation: The created Observation object.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def get_medication_request(
+    medication_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The unique identifier of the medication request.",
+    ],
+    status: Annotated[
+        Optional[str | LogicList[str]], "The status of the medication request."
+    ],
+    intent: Annotated[
+        Optional[str | LogicList[str]], "The intent of the medication request."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    authored_on: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the medication request was authored, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[MedicationRequest]:
+    """
+    Retrieve medication requests from the FHIR server.
+
+    Returns:
+        List[MedicationRequest]: A list of MedicationRequest objects.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def post_medication_request(medication_request: MedicationRequest) -> MedicationRequest:
+    """
+    Create a new medication request in the FHIR server.
+
+    Returns:
+        MedicationRequest: The created MedicationRequest object.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def get_procedure(
+    procedure_id: Annotated[
+        Optional[str | LogicList[str]], "The unique identifier of the procedure."
+    ],
+    patient_id: Annotated[
+        Optional[str | LogicList[str]],
+        "The patient's unique Medical Record Number (MRN).",
+    ],
+    code: Annotated[
+        Optional[str | LogicList[str]],
+        "The code of the procedure, following CPT standards.",
+    ],
+    performed_date_time: Annotated[
+        Optional[datetime | DateTimeRange],
+        "The date when the procedure was performed, in date time format (YYYY-MM-DDTHH:MM:SS±HH:MM). Can be a specific date or a range.",
+    ],
+    _count: Annotated[int, "Maximum number of results to return."],
+    _offset: Annotated[Optional[int], "Number of results to skip."],
+    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+) -> List[Procedure]:
+    """
+    Retrieve procedures from the FHIR server.
+
+    Returns:
+        List[Procedure]: A list of Procedure objects.
+
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+
+def post_service_request(service_request: ServiceRequest) -> ServiceRequest:
+    """
+    Create a new service request in the FHIR server.
+
+    Returns:
+        ServiceRequest: The created ServiceRequest object.
+    Raises:
+        HTTPError: If the FHIR server returns an error response.
+    """
+```
+
+## Datamodel references
+```
 class LogicList(BaseModel, Generic[T]):
     """A list of values combined with a logical operator (AND/OR)."""
 
@@ -12,16 +247,6 @@ class LogicList(BaseModel, Generic[T]):
     operator: Literal["AND", "OR"] = Field(
         description="Logical operator to apply between the values."
     )
-
-    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
-        if self.operator == "OR":
-            joined_values = ",".join(str(v) for v in self.values)
-            return [(field_name, joined_values)]
-        elif self.operator == "AND":
-            return [(field_name, str(v)) for v in self.values]
-        else:
-            raise ValueError(f"Unsupported operator: {self.operator}")
-
 
 class ValueRange(BaseModel):
     """A range of numeric values with optional lower and upper bounds."""
@@ -33,33 +258,6 @@ class ValueRange(BaseModel):
         description="The upper bound of the range. (inclusive)"
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "low" not in data:
-            data["low"] = None
-        if isinstance(data, dict) and "high" not in data:
-            data["high"] = None
-        return data
-
-    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
-        params = []
-        if self.low is not None:
-            params.append((field_name, f"ge{self.low}"))
-        if self.high is not None:
-            params.append((field_name, f"le{self.high}"))
-        return params
-
-
-def process_logic_value(
-    value: T | LogicList[T], field_name: str
-) -> List[tuple[str, str]]:
-    if isinstance(value, LogicList):
-        return value.to_query_params(field_name)
-    else:
-        return [(field_name, str(value))]
-
-
 ResourceTypes = Literal[
     "Patient",
     "Condition",
@@ -68,8 +266,8 @@ ResourceTypes = Literal[
     "Procedure",
     "ServiceRequest",
 ]
-GenderTypes = Literal["male", "female", "other", "unknown"]
 
+GenderTypes = Literal["male", "female", "other", "unknown"]
 
 class DateTimeRange(BaseModel):
     """A range of date-time values with optional start and end timestamps."""
@@ -81,39 +279,11 @@ class DateTimeRange(BaseModel):
         description="The end of the date-time range (inclusive). In format YYYY-MM-DDTHH:MM:SS±HH:MM"
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "start" not in data:
-            data["start"] = None
-        if isinstance(data, dict) and "end" not in data:
-            data["end"] = None
-        return data
-
-    def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
-        params = []
-        if self.start:
-            params.append(
-                (field_name, f"ge{self.start.strftime('%Y-%m-%dT%H:%M:%S%z')}")
-            )
-        if self.end:
-            params.append((field_name, f"le{self.end.strftime('%Y-%m-%dT%H:%M:%S%z')}"))
-        return params
-
-
 class Resource(BaseModel):
     """A FHIR resource with a type and optional unique identifier."""
 
     resourceType: str = Field(description="The type of the FHIR resource.")
     id: Optional[str] = Field(description="The unique identifier of the resource.")
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "id" not in data:
-            data["id"] = None
-        return data
-
 
 class MetaData(BaseModel):
     """Metadata about a FHIR resource."""
@@ -126,18 +296,6 @@ class MetaData(BaseModel):
     )
     source: Optional[str] = Field(description="The source of the resource.")
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "versionId" not in data:
-            data["versionId"] = None
-        if isinstance(data, dict) and "lastUpdated" not in data:
-            data["lastUpdated"] = None
-        if isinstance(data, dict) and "source" not in data:
-            data["source"] = None
-        return data
-
-
 class Name(BaseModel):
     """A human's name with family, given names, and usage context."""
 
@@ -148,14 +306,6 @@ class Name(BaseModel):
     use: Optional[str] = Field(
         description="The usage context of the name (e.g., official, nickname)."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "use" not in data:
-            data["use"] = None
-        return data
-
 
 class Telecom(BaseModel):
     """A contact detail for a human, such as a phone number or email address."""
@@ -168,14 +318,6 @@ class Telecom(BaseModel):
         description="The usage context of the contact (e.g., home, work)."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "use" not in data:
-            data["use"] = None
-        return data
-
-
 class Address(BaseModel):
     """A physical address with street lines, city, state, and postal code."""
 
@@ -183,20 +325,6 @@ class Address(BaseModel):
     city: Optional[str] = Field(description="City of the address.")
     state: Optional[str] = Field(description="State of the address.")
     postalCode: Optional[str] = Field(description="Postal code of the address.")
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "line" not in data:
-            data["line"] = None
-        if isinstance(data, dict) and "city" not in data:
-            data["city"] = None
-        if isinstance(data, dict) and "state" not in data:
-            data["state"] = None
-        if isinstance(data, dict) and "postalCode" not in data:
-            data["postalCode"] = None
-        return data
-
 
 class Coding(BaseModel):
     """A coding that defines a symbol from a code system."""
@@ -208,21 +336,6 @@ class Coding(BaseModel):
     display: Optional[str] = Field(
         description="A representation of the meaning of the code in the system, following the rules of the system.",
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "system" not in data:
-            data["system"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        if isinstance(data, dict) and "display" not in data:
-            data["display"] = None
-        return data
-
-    def is_empty(self) -> bool:
-        return not (self.system or self.code or self.display)
-
 
 class CodeableConcept(BaseModel):
     """
@@ -236,26 +349,6 @@ class CodeableConcept(BaseModel):
         description="A human language representation of the concept."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "coding" not in data:
-            data["coding"] = None
-        if isinstance(data, dict) and "text" not in data:
-            data["text"] = None
-        return data
-    
-    def is_empty(self) -> bool:
-        coding_empty = True
-        if self.coding:
-            for code in self.coding:
-                if not code.is_empty():
-                    coding_empty = False
-                    break
-        text_empty = not self.text
-        return coding_empty and text_empty
-
-
 class Identifier(BaseModel):
     """An identifier for a resource or subject."""
 
@@ -268,20 +361,6 @@ class Identifier(BaseModel):
         description="A coded type for the identifier."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "system" not in data:
-            data["system"] = None
-        if isinstance(data, dict) and "value" not in data:
-            data["value"] = None
-        if isinstance(data, dict) and "use" not in data:
-            data["use"] = None
-        if isinstance(data, dict) and "type" not in data:
-            data["type"] = None
-        return data
-
-
 class Subject(BaseModel):
     """A reference to another resource."""
 
@@ -289,14 +368,6 @@ class Subject(BaseModel):
     identifier: Optional[Identifier] = Field(
         description="An identifier for the referenced resource."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "identifier" not in data:
-            data["identifier"] = None
-        return data
-
 
 class Extension(BaseModel):
     """An extension for additional information not part of the basic definition."""
@@ -307,14 +378,6 @@ class Extension(BaseModel):
     valueCodeableConcept: Optional[CodeableConcept] = Field(
         description="The value of the extension as a CodeableConcept."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "valueCodeableConcept" not in data:
-            data["valueCodeableConcept"] = None
-        return data
-
 
 class ValueQuantity(BaseModel):
     """A value represented as a quantity with unit and code."""
@@ -332,20 +395,6 @@ class ValueQuantity(BaseModel):
         description="A symbol in syntax defined by the system for the unit."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "value" not in data:
-            data["value"] = None
-        if isinstance(data, dict) and "unit" not in data:
-            data["unit"] = None
-        if isinstance(data, dict) and "system" not in data:
-            data["system"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        return data
-
-
 class DoseAndRate(BaseModel):
     """A dosage instruction with dose quantity and rate quantity."""
 
@@ -356,30 +405,12 @@ class DoseAndRate(BaseModel):
         description="The speed at which the medication is to be administered."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "doseQuantity" not in data:
-            data["doseQuantity"] = None
-        if isinstance(data, dict) and "rateQuantity" not in data:
-            data["rateQuantity"] = None
-        return data
-
-
 class Timing(BaseModel):
     """The timing schedule for medication dosage."""
 
     code: Optional[CodeableConcept] = Field(
         description="A code that defines the timing schedule."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        return data
-
 
 class DosageInstruction(BaseModel):
     """Dosage instructions for medication administration."""
@@ -394,23 +425,10 @@ class DosageInstruction(BaseModel):
         description="A list of dose and rate instructions."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "timing" not in data:
-            data["timing"] = None
-        if isinstance(data, dict) and "route" not in data:
-            data["route"] = None
-        if isinstance(data, dict) and "doseAndRate" not in data:
-            data["doseAndRate"] = None
-        return data
-
-
 class Note(BaseModel):
     """A note associated with a service request."""
 
     text: str = Field(description="The text of the note.")
-
 
 class Patient(Resource):
     """A patient resource representing an individual receiving healthcare."""
@@ -435,30 +453,6 @@ class Patient(Resource):
         description="A list of the patient's addresses."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "extension" not in data:
-            data["extension"] = None
-        if isinstance(data, dict) and "telecom" not in data:
-            data["telecom"] = None
-        if isinstance(data, dict) and "gender" not in data:
-            data["gender"] = None
-        if isinstance(data, dict) and "birthDate" not in data:
-            data["birthDate"] = None
-        if isinstance(data, dict) and "address" not in data:
-            data["address"] = None
-        return data
-
-    def deidentify(self) -> "Patient":
-        """De-identify the patient by removing personal identifiers."""
-        self.address = None
-        self.telecom = None
-        return self
-
-
 class Condition(Resource):
     """A condition resource representing a clinical condition or diagnosis."""
 
@@ -478,22 +472,6 @@ class Condition(Resource):
     recordedDate: Optional[datetime] = Field(
         description="The date when the condition was first recorded."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        if isinstance(data, dict) and "subject" not in data:
-            data["subject"] = None
-        if isinstance(data, dict) and "onsetDateTime" not in data:
-            data["onsetDateTime"] = None
-        if isinstance(data, dict) and "recordedDate" not in data:
-            data["recordedDate"] = None
-        return data
-
 
 class MedicationRequest(Resource):
     """A medication request resource representing a request for medication."""
@@ -523,26 +501,6 @@ class MedicationRequest(Resource):
         description="A list of dosage instructions for the medication."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "status" not in data:
-            data["status"] = None
-        if isinstance(data, dict) and "intent" not in data:
-            data["intent"] = None
-        if isinstance(data, dict) and "medicationCodeableConcept" not in data:
-            data["medicationCodeableConcept"] = None
-        if isinstance(data, dict) and "subject" not in data:
-            data["subject"] = None
-        if isinstance(data, dict) and "authoredOn" not in data:
-            data["authoredOn"] = None
-        if isinstance(data, dict) and "dosageInstruction" not in data:
-            data["dosageInstruction"] = None
-        return data
-
-
 class Procedure(Resource):
     id: str = Field(description="The unique identifier for the procedure.")
     meta: Optional[MetaData] = Field(
@@ -557,20 +515,6 @@ class Procedure(Resource):
     performedDateTime: Optional[datetime] = Field(
         description="The date and time when the procedure was performed."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "performedDateTime" not in data:
-            data["performedDateTime"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        if isinstance(data, dict) and "subject" not in data:
-            data["subject"] = None
-        return data
-
 
 class Observation(Resource):
     """
@@ -609,32 +553,6 @@ class Observation(Resource):
         description="The value of the observation as a string."
     )
 
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "status" not in data:
-            data["status"] = None
-        if isinstance(data, dict) and "category" not in data:
-            data["category"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        if isinstance(data, dict) and "subject" not in data:
-            data["subject"] = None
-        if isinstance(data, dict) and "effectiveDateTime" not in data:
-            data["effectiveDateTime"] = None
-        if isinstance(data, dict) and "issued" not in data:
-            data["issued"] = None
-        if isinstance(data, dict) and "valueQuantity" not in data:
-            data["valueQuantity"] = None
-        if isinstance(data, dict) and "interpretation" not in data:
-            data["interpretation"] = None
-        if isinstance(data, dict) and "valueString" not in data:
-            data["valueString"] = None
-        return data
-
-
 class ServiceRequest(Resource):
     id: Optional[str] = Field(
         description="The unique identifier for the service request."
@@ -666,18 +584,4 @@ class ServiceRequest(Resource):
     occurrenceDateTime: Optional[datetime] = Field(
         description="The date and time when the service is to occur."
     )
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
-        if isinstance(data, dict) and "code" not in data:
-            data["code"] = None
-        if isinstance(data, dict) and "subject" not in data:
-            data["subject"] = None
-        if isinstance(data, dict) and "note" not in data:
-            data["note"] = None
-        if isinstance(data, dict) and "occurrenceDateTime" not in data:
-            data["occurrenceDateTime"] = None
-        return data
+```

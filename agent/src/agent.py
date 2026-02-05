@@ -62,6 +62,8 @@ class ReActAgent:
 
         self.golden_eval_hist = []
 
+        self.blocking_tool_call = None
+
     def initiate_conversation(self) -> str:
         assert isinstance(
             agent_config.INITIAL_CONVERSTION, str
@@ -88,6 +90,21 @@ class ReActAgent:
                     f"Tool '{tool_name}' requires user confirmation before invocation."
                 )
 
+                user_confirmation_details = self.loop.run_until_complete(
+                    self.mcp_client.get_user_confirmation_details(
+                        tool_name, json.loads(tool_args)
+                    )
+                )
+
+                if "user_confirmation_details" in user_confirmation_details:
+                    user_confirmation_details = user_confirmation_details[
+                        "user_confirmation_details"
+                    ]
+                else:
+                    user_confirmation_details = "No additional details available."
+
+                LOGGER.debug(f"User confirmation details: {user_confirmation_details}")
+
                 assert isinstance(
                     safeguard_config.USER_CONFIRMATION_TEMPLATE, str
                 ), "USER_CONFIRMATION_TEMPLATE must be a string."
@@ -100,6 +117,11 @@ class ReActAgent:
                             if isinstance(tool_args, dict)
                             else str(tool_args)
                         ),
+                        user_confirmation_details=(
+                            user_confirmation_details
+                            if isinstance(user_confirmation_details, str)
+                            else str(user_confirmation_details)
+                        ),
                     )
                 )
                 return confirmation_message
@@ -108,6 +130,23 @@ class ReActAgent:
             "skip_golden_eval", False
         ):
             self.loop.run_until_complete(self.mcp_client.save_state())
+
+        if safeguard_config.TOOL_BLOCKING:
+            if (
+                self.blocking_tool_call != None
+                and tool_call.function.name != self.blocking_tool_call.function.name
+            ):
+                LOGGER.warning(
+                    f"Currently blocking tool calls due to previous failure of tool '{self.blocking_tool_call.function.name}'. New tool call to '{tool_call.function.name}' will also be blocked until the issue is resolved."
+                )
+                self.history.append(
+                    {
+                        "role": "tool",
+                        "content": f"Tool call to '{tool_call.function.name}' blocked due to previous failure of tool '{self.blocking_tool_call.function.name}'. The blocking status will be cleared once a successful tool call to '{self.blocking_tool_call.function.name}' is made.",
+                        "tool_call_id": tool_call.id,
+                    }
+                )
+                return None
 
         tool_response = self.loop.run_until_complete(
             self.mcp_client.call_tool(tool_name, tool_args)
@@ -167,6 +206,26 @@ class ReActAgent:
                     "eval_result": golden_evaluation,
                 }
             )
+
+        if (
+            safeguard_config.TOOL_BLOCKING
+            and tool_meta.get("block_when_failed", False)
+            and not success
+        ):
+            self.blocking_tool_call = tool_call
+            LOGGER.warning(
+                f"Tool call to '{tool_name}' failed and is marked as blocking. Blocking further tool calls until this is resolved."
+            )
+
+        if (
+            safeguard_config.TOOL_BLOCKING
+            and self.blocking_tool_call is not None
+            and success
+        ):
+            LOGGER.info(
+                f"Tool call to '{tool_name}' succeeded. Clearing blocking status for tool '{self.blocking_tool_call.function.name}'."
+            )
+            self.blocking_tool_call = None
 
         if not success:
             self.count_tool_call_fails += 1
@@ -281,6 +340,19 @@ class ReActAgent:
             agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS, str
         ), "MCP_SERVER_COMMAND_GOLDEN_ARGS must be a string."
 
+        if safeguard_config.TOOL_BLOCKING:
+            if (
+                self.blocking_tool_call != None
+                and tool_name != self.blocking_tool_call.function.name
+            ):
+                LOGGER.warning(
+                    f"Skipping golden evaluation for tool call to '{tool_name}' due to active blocking of tool '{self.blocking_tool_call.function.name}'."
+                )
+                return {
+                    "safe": False,
+                    "flag": "golden_eval_blocked",
+                    "reason": f"Golden evaluation skipped for tool call to '{tool_name}' due to active blocking of tool '{self.blocking_tool_call.function.name}'.",
+                }
         golden_mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
         )

@@ -63,6 +63,7 @@ SAFEGUARD:
     I am about to perform the following action:
     Tool: {tool_name}
     Arguments: {tool_args}
+    Additional Info: {user_confirmation_details}
 
     Please review the action above and confirm if you would like me to proceed.
     Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
@@ -70,3 +71,5 @@ SAFEGUARD:
   TOOL_RESPONSE_TEMPLATE: true
 
   TOOL_END_CONVERSATION_FLAG: true
+
+  TOOL_BLOCKING: true

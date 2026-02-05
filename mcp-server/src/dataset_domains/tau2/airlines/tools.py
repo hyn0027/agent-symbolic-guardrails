@@ -2261,3 +2261,15 @@ def save_state() -> str:
     """
     db.dump(TMP_DB_PATH)
     return "State saved successfully."
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def get_user_confirmation_details(func_name, func_args) -> str:
+    """
+    Get details for user confirmation. For test only.
+    """
+
+    return ""

@@ -3,6 +3,7 @@ from typing import List, Dict, Any, Union
 
 from fastmcp import Client
 from mcp.types import Tool
+from config.logger import LOGGER
 
 
 class MCPClient:
@@ -140,6 +141,30 @@ class MCPClient:
             return True
         except Exception as e:
             return False
+
+    async def get_user_confirmation_details(
+        self, func_name: str, func_args: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Call the get_user_confirmation_details tool to get details for user confirmation."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        try:
+            arguments = {"func_name": func_name, "func_args": func_args}
+            LOGGER.debug(
+                f"Getting user confirmation details with arguments: {arguments}"
+            )
+            async with self.client:
+                result = await self.client.call_tool(
+                    name="get_user_confirmation_details", arguments=arguments
+                )
+            res = self._tool_call_res_to_json(result)
+            LOGGER.debug(f"User confirmation details response: {res}")
+            if res["is_error"]:
+                return {"error": res["data"]}
+            return {"user_confirmation_details": res["data"]}
+        except Exception as e:
+            LOGGER.error(f"Error getting user confirmation details: {str(e)}")
+            return {"error": str(e)}
 
     def _tool_call_res_to_json(self, tool_call_response: Any) -> Dict[str, Any]:
         return {
