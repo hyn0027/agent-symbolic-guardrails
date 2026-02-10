@@ -87,4 +87,4 @@ SAFEGUARD:
 
   TOOL_BLOCKING: true
 
-  NO_TOOL_CALL_DISCLOSURE_MESSAGE: ""
+  NO_TOOL_CALL_DISCLOSURE_MESSAGE:  "No tool calls to the airline system or external systems have been made since the last message."

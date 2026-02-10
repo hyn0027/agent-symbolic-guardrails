@@ -80,4 +80,4 @@ SAFEGUARD:
     Here is a summary of the tool calls the agent just made:
     {tool_call_disclosure}
 
-  NO_TOOL_CALL_DISCLOSURE_MESSAGE: ""
+  NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to EMR system or external systems have been made since the last message."
