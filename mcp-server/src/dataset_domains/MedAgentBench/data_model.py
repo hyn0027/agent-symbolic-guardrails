@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, model_validator
-from typing import Optional, List, Literal, TypeVar, Generic
+from typing import Optional, List, Literal, TypeVar, Generic, Dict
 from datetime import datetime
 
 T = TypeVar("T")
@@ -35,7 +35,7 @@ class ValueRange(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "low" not in data:
             data["low"] = None
         if isinstance(data, dict) and "high" not in data:
@@ -83,7 +83,7 @@ class DateTimeRange(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "start" not in data:
             data["start"] = None
         if isinstance(data, dict) and "end" not in data:
@@ -101,20 +101,6 @@ class DateTimeRange(BaseModel):
         return params
 
 
-class Resource(BaseModel):
-    """A FHIR resource with a type and optional unique identifier."""
-
-    resourceType: str = Field(description="The type of the FHIR resource.")
-    id: Optional[str] = Field(description="The unique identifier of the resource.")
-
-    @model_validator(mode="before")
-    @classmethod
-    def default_missing_to_none(cls, data):
-        if isinstance(data, dict) and "id" not in data:
-            data["id"] = None
-        return data
-
-
 class MetaData(BaseModel):
     """Metadata about a FHIR resource."""
 
@@ -128,7 +114,7 @@ class MetaData(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "versionId" not in data:
             data["versionId"] = None
         if isinstance(data, dict) and "lastUpdated" not in data:
@@ -151,7 +137,7 @@ class Name(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "use" not in data:
             data["use"] = None
         return data
@@ -170,7 +156,7 @@ class Telecom(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "use" not in data:
             data["use"] = None
         return data
@@ -186,7 +172,7 @@ class Address(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "line" not in data:
             data["line"] = None
         if isinstance(data, dict) and "city" not in data:
@@ -211,7 +197,7 @@ class Coding(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "system" not in data:
             data["system"] = None
         if isinstance(data, dict) and "code" not in data:
@@ -238,13 +224,13 @@ class CodeableConcept(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "coding" not in data:
             data["coding"] = None
         if isinstance(data, dict) and "text" not in data:
             data["text"] = None
         return data
-    
+
     def is_empty(self) -> bool:
         coding_empty = True
         if self.coding:
@@ -254,6 +240,21 @@ class CodeableConcept(BaseModel):
                     break
         text_empty = not self.text
         return coding_empty and text_empty
+
+    @classmethod
+    def similar(cls, cc1: "CodeableConcept", cc2: "CodeableConcept") -> bool:
+        """Determine if two CodeableConcepts are similar based on their coding and text."""
+        # Check if coding lists are similar
+        if cc1.coding and cc2.coding:
+            for code1 in cc1.coding:
+                for code2 in cc2.coding:
+                    if code1.system == code2.system and code1.code == code2.code:
+                        return True
+        # Check if text is similar (case-insensitive)
+        if cc1.text and cc2.text:
+            if cc1.text.strip().lower() == cc2.text.strip().lower():
+                return True
+        return False
 
 
 class Identifier(BaseModel):
@@ -270,7 +271,7 @@ class Identifier(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "system" not in data:
             data["system"] = None
         if isinstance(data, dict) and "value" not in data:
@@ -292,7 +293,7 @@ class Subject(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "identifier" not in data:
             data["identifier"] = None
         return data
@@ -301,7 +302,7 @@ class Subject(BaseModel):
 class Extension(BaseModel):
     """An extension for additional information not part of the basic definition."""
 
-    url: str = Field(
+    url: Optional[str] = Field(
         description="The URL that identifies the meaning of the extension."
     )
     valueCodeableConcept: Optional[CodeableConcept] = Field(
@@ -310,7 +311,9 @@ class Extension(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "url" not in data:
+            data["url"] = None
         if isinstance(data, dict) and "valueCodeableConcept" not in data:
             data["valueCodeableConcept"] = None
         return data
@@ -334,7 +337,7 @@ class ValueQuantity(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "value" not in data:
             data["value"] = None
         if isinstance(data, dict) and "unit" not in data:
@@ -344,6 +347,20 @@ class ValueQuantity(BaseModel):
         if isinstance(data, dict) and "code" not in data:
             data["code"] = None
         return data
+
+    def is_empty(self) -> bool:
+        return not (self.value or self.unit or self.system or self.code)
+
+    @classmethod
+    def similar(cls, vq1: "ValueQuantity", vq2: "ValueQuantity") -> bool:
+        """Determine if two ValueQuantities are similar based on their value and unit."""
+        if vq1.value is not None and vq2.value is not None:
+            if vq1.value != vq2.value:
+                return False
+        if vq1.unit and vq2.unit:
+            if vq1.unit.strip().lower() != vq2.unit.strip().lower():
+                return False
+        return True
 
 
 class DoseAndRate(BaseModel):
@@ -358,12 +375,17 @@ class DoseAndRate(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "doseQuantity" not in data:
             data["doseQuantity"] = None
         if isinstance(data, dict) and "rateQuantity" not in data:
             data["rateQuantity"] = None
         return data
+
+    def is_empty(self) -> bool:
+        dose_quantity_empty = not self.doseQuantity or self.doseQuantity.is_empty()
+        rate_quantity_empty = not self.rateQuantity or self.rateQuantity.is_empty()
+        return dose_quantity_empty and rate_quantity_empty
 
 
 class Timing(BaseModel):
@@ -375,10 +397,13 @@ class Timing(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "code" not in data:
             data["code"] = None
         return data
+
+    def is_empty(self) -> bool:
+        return not (self.code and not self.code.is_empty())
 
 
 class DosageInstruction(BaseModel):
@@ -396,7 +421,7 @@ class DosageInstruction(BaseModel):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "timing" not in data:
             data["timing"] = None
         if isinstance(data, dict) and "route" not in data:
@@ -405,11 +430,34 @@ class DosageInstruction(BaseModel):
             data["doseAndRate"] = None
         return data
 
+    def is_incomplete(self) -> bool:
+        """Check if the dosage instruction is incomplete (i.e., missing all fields)."""
+        timing_empty = not self.timing or self.timing.is_empty()
+        route_empty = not self.route or self.route.is_empty()
+        dose_and_rate_empty = True
+        if self.doseAndRate:
+            for dr in self.doseAndRate:
+                if not dr.is_empty():
+                    dose_and_rate_empty = False
+                    break
+        return timing_empty or route_empty or dose_and_rate_empty
+
 
 class Note(BaseModel):
     """A note associated with a service request."""
 
     text: str = Field(description="The text of the note.")
+
+
+class Resource(BaseModel):
+    """A FHIR resource with a type and optional unique identifier."""
+
+    resourceType: str = Field(description="The type of the FHIR resource.")
+
+    @model_validator(mode="before")
+    @classmethod
+    def default_missing_to_none(cls, data) -> Dict:
+        return data
 
 
 class Patient(Resource):
@@ -434,10 +482,17 @@ class Patient(Resource):
     address: Optional[List[Address]] = Field(
         description="A list of the patient's addresses."
     )
+    note: Optional[List[Note]] = Field(
+        description="A list of notes associated with the patient."
+    )
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
+        if isinstance(data, dict) and "extension" not in data:
+            data["extension"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "extension" not in data:
@@ -450,6 +505,8 @@ class Patient(Resource):
             data["birthDate"] = None
         if isinstance(data, dict) and "address" not in data:
             data["address"] = None
+        if isinstance(data, dict) and "note" not in data:
+            data["note"] = None
         return data
 
     def deidentify(self) -> "Patient":
@@ -478,10 +535,15 @@ class Condition(Resource):
     recordedDate: Optional[datetime] = Field(
         description="The date when the condition was first recorded."
     )
+    note: Optional[List[Note]] = Field(
+        description="A list of notes associated with the condition."
+    )
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "code" not in data:
@@ -492,6 +554,8 @@ class Condition(Resource):
             data["onsetDateTime"] = None
         if isinstance(data, dict) and "recordedDate" not in data:
             data["recordedDate"] = None
+        if isinstance(data, dict) and "note" not in data:
+            data["note"] = None
         return data
 
 
@@ -522,10 +586,15 @@ class MedicationRequest(Resource):
     dosageInstruction: Optional[List[DosageInstruction]] = Field(
         description="A list of dosage instructions for the medication."
     )
+    note: Optional[List[Note]] = Field(
+        description="A list of notes associated with the medication request."
+    )
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "status" not in data:
@@ -540,7 +609,47 @@ class MedicationRequest(Resource):
             data["authoredOn"] = None
         if isinstance(data, dict) and "dosageInstruction" not in data:
             data["dosageInstruction"] = None
+        if isinstance(data, dict) and "note" not in data:
+            data["note"] = None
         return data
+
+    def incomplete_dosage_instructions(self) -> bool:
+        """Check if the medication request has no dosage instructions."""
+        if not self.dosageInstruction:
+            return True
+        for instruction in self.dosageInstruction:
+            if not instruction.is_incomplete():
+                return False
+        return True
+
+    def add_dosage_explanation(self, explanation: str) -> None:
+        """Add an explanation for missing dosage instructions"""
+        if not self.note:
+            self.note = []
+        self.note.append(Note(text=explanation))
+
+    @classmethod
+    def similar(cls, mr1: "MedicationRequest", mr2: "MedicationRequest") -> bool:
+        """Determine if two medication requests are similar based on their medication and subject."""
+        # Check subject
+        if mr1.subject and mr2.subject:
+            if mr1.subject.reference != mr2.subject.reference:
+                return False
+        # check status
+        if mr1.status and mr2.status:
+            if mr1.status.strip().lower() != mr2.status.strip().lower():
+                return False
+        # check intent
+        if mr1.intent and mr2.intent:
+            if mr1.intent.strip().lower() != mr2.intent.strip().lower():
+                return False
+        # Check medication        if mr1.medicationCodeableConcept and mr2.medicationCodeableConcept:
+        if mr1.medicationCodeableConcept and mr2.medicationCodeableConcept:
+            if not CodeableConcept.similar(
+                mr1.medicationCodeableConcept, mr2.medicationCodeableConcept
+            ):
+                return False
+        return True
 
 
 class Procedure(Resource):
@@ -557,10 +666,15 @@ class Procedure(Resource):
     performedDateTime: Optional[datetime] = Field(
         description="The date and time when the procedure was performed."
     )
+    note: Optional[List[Note]] = Field(
+        description="A list of notes associated with the procedure."
+    )
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "performedDateTime" not in data:
@@ -569,6 +683,8 @@ class Procedure(Resource):
             data["code"] = None
         if isinstance(data, dict) and "subject" not in data:
             data["subject"] = None
+        if isinstance(data, dict) and "note" not in data:
+            data["note"] = None
         return data
 
 
@@ -611,7 +727,9 @@ class Observation(Resource):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "status" not in data:
@@ -633,6 +751,39 @@ class Observation(Resource):
         if isinstance(data, dict) and "valueString" not in data:
             data["valueString"] = None
         return data
+
+    @classmethod
+    def similar(cls, obs1: "Observation", obs2: "Observation") -> bool:
+        """Determine if two observations are similar based on their code and category."""
+        # patient
+        if obs1.subject and obs2.subject:
+            if obs1.subject.reference != obs2.subject.reference:
+                return False
+        # code
+        if obs1.code and obs2.code:
+            if not CodeableConcept.similar(obs1.code, obs2.code):
+                return False
+        # category        if obs1.category and obs2.category:
+        if obs1.category and obs2.category:
+            category_similar = False
+            for cat1 in obs1.category:
+                for cat2 in obs2.category:
+                    if CodeableConcept.similar(cat1, cat2):
+                        category_similar = True
+                        break
+                if category_similar:
+                    break
+            if not category_similar:
+                return False
+        # valueQuantity
+        if obs1.valueQuantity and obs2.valueQuantity:
+            if not ValueQuantity.similar(obs1.valueQuantity, obs2.valueQuantity):
+                return False
+        # valueString
+        if obs1.valueString and obs2.valueString:
+            if obs1.valueString.strip().lower() != obs2.valueString.strip().lower():
+                return False
+        return True
 
 
 class ServiceRequest(Resource):
@@ -669,7 +820,9 @@ class ServiceRequest(Resource):
 
     @model_validator(mode="before")
     @classmethod
-    def default_missing_to_none(cls, data):
+    def default_missing_to_none(cls, data) -> Dict:
+        if isinstance(data, dict) and "id" not in data:
+            data["id"] = None
         if isinstance(data, dict) and "meta" not in data:
             data["meta"] = None
         if isinstance(data, dict) and "code" not in data:
@@ -681,3 +834,33 @@ class ServiceRequest(Resource):
         if isinstance(data, dict) and "occurrenceDateTime" not in data:
             data["occurrenceDateTime"] = None
         return data
+
+    @classmethod
+    def similar(cls, sr1: "ServiceRequest", sr2: "ServiceRequest") -> bool:
+        """Determine if two service requests are similar based on their code and subject."""
+        # patient
+        if sr1.subject and sr2.subject:
+            if sr1.subject.reference != sr2.subject.reference:
+                return False
+        # code
+        if sr1.code and sr2.code:
+            if not CodeableConcept.similar(sr1.code, sr2.code):
+                return False
+        # status
+        if sr1.status and sr2.status:
+            if sr1.status.strip().lower() != sr2.status.strip().lower():
+                return False
+        # intent
+        if sr1.intent and sr2.intent:
+            if sr1.intent.strip().lower() != sr2.intent.strip().lower():
+                return False
+        # priority
+        if sr1.priority and sr2.priority:
+            if sr1.priority.strip().lower() != sr2.priority.strip().lower():
+                return False
+        return True
+
+
+posted_observations = []
+posted_medication_requests = []
+posted_service_requests = []

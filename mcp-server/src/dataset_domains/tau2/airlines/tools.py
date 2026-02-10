@@ -2189,23 +2189,43 @@ else:
 mcp.tool(fetch_current_time)
 mcp.tool(
     book_reservation,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
 )  # line: 7
 mcp.tool(calculate, meta={"skip_golden_eval": True})
 mcp.tool(
     cancel_reservation,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
 )  # line: 7
-mcp.tool(get_reservation_details)
-mcp.tool(get_user_details)
+mcp.tool(
+    get_reservation_details,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+)
+mcp.tool(
+    get_user_details,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+)
 mcp.tool(
     list_all_airports,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
 )
 mcp.tool(
     search_direct_flight,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
 )
-mcp.tool(search_onestop_flight)
-mcp.tool(send_certificate)
+mcp.tool(
+    search_onestop_flight,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+)
+mcp.tool(
+    send_certificate,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+)
 if safeguard_config.ENABLE_THINKING_STEP:
     mcp.tool(think, meta={"skip_golden_eval": True})
 if safeguard_config.TOOL_RESPONSE_TEMPLATE:  # line: 15
@@ -2215,6 +2235,7 @@ if safeguard_config.TOOL_RESPONSE_TEMPLATE:  # line: 15
             "end_conversation": safeguard_config.TOOL_END_CONVERSATION,  # line: 15
             "response_template": "YOU ARE BEING TRANSFERRED TO A HUMAN AGENT. PLEASE HOLD ON.",
             "skip_golden_eval": True,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
         },
     )
 else:
@@ -2223,28 +2244,41 @@ else:
         meta={
             "end_conversation": safeguard_config.TOOL_END_CONVERSATION,  # line: 15
             "skip_golden_eval": True,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
         },
     )
 mcp.tool(
     update_reservation_baggages,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
 )  # line: 7
 mcp.tool(
     update_reservation_flights,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
 )  # line: 7
 mcp.tool(
     update_reservation_passengers,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
 )  # line: 7
-mcp.tool(get_flight_status)
+mcp.tool(
+    get_flight_status,
+    meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+)
 
 if safeguard_config.NEW_API:
     mcp.tool(compute_time_difference)  # line: unspecified (new)
-    mcp.tool(compute_reservation_price)  # line: unspecified (new)
-    mcp.tool(compute_update_reservation_baggages_price)  # line: unspecified (new)
-    mcp.tool(compute_update_reservation_flights_price)  # line: unspecified
-    mcp.tool(compute_compensation_amount)  # line: unspecified (new)
+    mcp.tool(compute_reservation_price, meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE})  # line: unspecified (new)
+    mcp.tool(compute_update_reservation_baggages_price, meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE})  # line: unspecified (new)
+    mcp.tool(compute_update_reservation_flights_price, meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE})  # line: unspecified
+    mcp.tool(compute_compensation_amount, meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE})  # line: unspecified (new)
 
 
 @mcp.tool(
@@ -2261,6 +2295,7 @@ def save_state() -> str:
     """
     db.dump(TMP_DB_PATH)
     return "State saved successfully."
+
 
 @mcp.tool(
     meta={

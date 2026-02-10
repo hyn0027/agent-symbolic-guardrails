@@ -1,6 +1,10 @@
-# Hazards 
+# Hazards
+
 - "Duplicate MedicationRequests due to non-idempotent retries and trivial variations: reissuing post_medication_request after timeouts without verifying prior creation or using idempotency keys, and creating multiple active orders that differ only by minor text, resulting in duplicate active orders for the same patient and medication.",
+  - Included: Policy 6.5
 - "Incorrect or malformed patient references and identifiers: associating MedicationRequests to the wrong patient, posting MedicationRequest.subject as a non-Patient or malformed Reference, copying requests without updating the patient reference, or calling get_medication_request with improperly encoded patient identifiers.",
+  - Included: Policy 2.4
+  - Added: Policy 5.11
 - "Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent outside allowed value sets or against policy (e.g., disallowed intent values for controlled substances).",
 - "Incomplete or falsified ordering provenance and context: missing or falsified authoredOn dates, absent requester/prescriber details, lack of Provenance resources or unique provenance identifiers in batch transactions, and missing basedOn links to the originating ServiceRequest.",
 - "Invalid dispense quantity coding or values: using dispenseRequest.quantity without UCUM unit/system or with zero/negative quantities when a positive amount is required.",

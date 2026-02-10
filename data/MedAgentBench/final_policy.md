@@ -47,6 +47,7 @@
   - dosing instructions  
   *or* explicit instruction to create a draft without dosing per workflow.
 - Do not create multiple resources as a batch without first summarizing the planned set and obtaining confirmation.
+- For all resources written to the system, `subject.reference` must be set to Patient/{patient_id}.
 
 ## 6) Tool-use safety, truthfulness, and failure handling
 - Use tools only as needed for the stated task; avoid unrelated exploration.

@@ -73,3 +73,11 @@ SAFEGUARD:
   TOOL_END_CONVERSATION_FLAG: true
 
   TOOL_BLOCKING: true
+
+  TOOL_CALL_DISCLOSURE: true
+
+  TOOL_CALL_DISCLOSURE_TEMPLATE: |
+    Here is a summary of the tool calls the agent just made:
+    {tool_call_disclosure}
+
+  NO_TOOL_CALL_DISCLOSURE_MESSAGE: ""

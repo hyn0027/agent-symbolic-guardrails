@@ -44,15 +44,14 @@ class ReActAgent:
         )
         self.loop.run_until_complete(self.mcp_client.initialize())
 
-        LOGGER.debug("MCP TOOL")
-        LOGGER.debug(self.mcp_client.tools)
+        # LOGGER.debug("MCP TOOL")
+        # LOGGER.debug(self.mcp_client.tools)
         self.tools = self.mcp_client.list_OPENAI_tools()
         self.history: List[Dict[str, Any]] = [
             {"role": "system", "content": self.system_prompt},
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
-        LOGGER.info("Available tools have been successfully enumerated.")
-        LOGGER.debug(json.dumps(self.tools, indent=2))
+        # LOGGER.debug(json.dumps(self.tools, indent=2))
 
         self.remaining_tool_call = None
         self.tmp_user_response = ""
@@ -63,6 +62,7 @@ class ReActAgent:
         self.golden_eval_hist = []
 
         self.blocking_tool_call = None
+        self.tool_call_disclosure = []
 
     def initiate_conversation(self) -> str:
         assert isinstance(
@@ -86,7 +86,7 @@ class ReActAgent:
 
         if safeguard_config.USER_CONFIRMATION and not user_confirmed:
             if tool_meta.get("require_confirmation", False):
-                LOGGER.info(
+                LOGGER.debug(
                     f"Tool '{tool_name}' requires user confirmation before invocation."
                 )
 
@@ -151,7 +151,7 @@ class ReActAgent:
         tool_response = self.loop.run_until_complete(
             self.mcp_client.call_tool(tool_name, tool_args)
         )
-        LOGGER.info(
+        LOGGER.debug(
             f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
         )
         LOGGER.debug(f"Tool Response: {tool_response}")
@@ -166,7 +166,7 @@ class ReActAgent:
         if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
             "skip_golden_eval", False
         ):
-            LOGGER.info(
+            LOGGER.debug(
                 f"Performing golden evaluation for tool call '{tool_name}' with arguments: {tool_args}"
             )
 
@@ -258,6 +258,17 @@ class ReActAgent:
             }
         )
 
+        if tool_meta.get("tool_call_disclosure", False):
+            self.tool_call_disclosure.append(
+                {
+                    "tool_name": tool_name,
+                    "tool_args": tool_args,
+                    "user_confirmed": user_confirmed,
+                    "success": success,
+                    "tool_response": tool_call_content,
+                }
+            )
+
     def ReAct_loop(self, user_input: str) -> str:
         if self.remaining_tool_call:
             self.tmp_user_response = self.tmp_user_response + "\n" + user_input
@@ -311,11 +322,21 @@ class ReActAgent:
                 )
                 if res is not None:
                     self.remaining_tool_call = response.tool_calls[0]
+                    if safeguard_config.TOOL_CALL_DISCLOSURE:
+                        disclosure_message = self.tool_call_disclosure_summary()
+                        self.tool_call_disclosure = []
+                        final_response = f"{res}\n\n{disclosure_message}"
+                        return final_response
                     return res
             else:
                 assert isinstance(
                     response.content, str
                 ), "LLM response content is not a string."
+                if safeguard_config.TOOL_CALL_DISCLOSURE:
+                    disclosure_message = self.tool_call_disclosure_summary()
+                    self.tool_call_disclosure = []
+                    final_response = f"{response.content}\n\n{disclosure_message}"
+                    return final_response
                 return response.content
 
         self.history.append(
@@ -330,7 +351,43 @@ class ReActAgent:
         assert isinstance(
             response.content, str
         ), "LLM response content is not a string."
+        if safeguard_config.TOOL_CALL_DISCLOSURE:
+            disclosure_message = self.tool_call_disclosure_summary()
+            self.tool_call_disclosure = []
+            final_response = f"{response.content}\n\n{disclosure_message}"
+            return final_response
         return response.content
+
+    def tool_call_disclosure_summary(self) -> str:
+        if len(self.tool_call_disclosure) == 0:
+            assert isinstance(
+                safeguard_config.NO_TOOL_CALL_DISCLOSURE_MESSAGE, str
+            ), "NO_TOOL_CALL_DISCLOSURE_MESSAGE must be a string."
+            return safeguard_config.NO_TOOL_CALL_DISCLOSURE_MESSAGE
+
+        assert isinstance(
+            safeguard_config.TOOL_CALL_DISCLOSURE_TEMPLATE, str
+        ), "TOOL_CALL_DISCLOSURE_TEMPLATE must be a string."
+
+        disclosure_entries = []
+        for entry in self.tool_call_disclosure:
+            disclosure_entry = (
+                f"Tool Name: {entry['tool_name']}\n"
+                f"Arguments: {json.dumps(entry['tool_args'])}\n"
+                f"User Confirmed: {entry['user_confirmed']}\n"
+                f"Success: {entry['success']}\n"
+                f"Tool Response: {entry['tool_response']}\n"
+                "-----"
+            )
+            disclosure_entries.append(disclosure_entry)
+
+        full_disclosure = "\n".join(disclosure_entries)
+
+        disclosure_message = safeguard_config.TOOL_CALL_DISCLOSURE_TEMPLATE.format(
+            tool_call_disclosure=full_disclosure
+        )
+
+        return disclosure_message
 
     def evaluate_with_golden_config(self, tool_name: str, tool_args: Dict) -> Dict:
         assert isinstance(

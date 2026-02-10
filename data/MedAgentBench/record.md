@@ -65,3 +65,9 @@ Detailed record about what we did:
         - Do not infer sensitive attributes.
         - Use neutral, non-stigmatizing language.
         - Recommend documenting objective facts.
+8.
+    - Original:
+        - On tool errors: stop, report the failure, and propose safe next steps; do not guess results.
+    - Decomposed:
+        - On tool errors: stop, report the failure, and propose safe next steps.
+        - On tool errors: do not guess results.

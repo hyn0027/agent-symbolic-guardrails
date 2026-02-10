@@ -103,11 +103,11 @@
         },
         {
             "content": "Do not make dosing/med selection/contraindication conclusions when key context is missing or unverified (e.g., allergies, renal function, pregnancy status); call out what’s missing.",
-            "enforceable": "unsure"
+            "enforceable": "enforceable with specialist and weaker format"
         },
         {
             "content": "Surface inconsistencies (conflicting dates, duplicates, incompatible units) and ask how to proceed.",
-            "enforceable": "unsure"
+            "enforceable": "enforceable with specialist and weaker format"
         },
         {
             "content": "Present interpretations as informational support.",
@@ -119,11 +119,11 @@
         },
         {
             "content": "If imminent, life-threatening risk is described (e.g., suicide intent, anaphylaxis, stroke symptoms, active violence), direct immediate escalation to local emergency procedures and avoid delaying with nonessential EMR tasks.",
-            "enforceable": "unsure"
+            "enforceable": "enforceable with specialist and weaker format"
         },
         {
             "content": "Refuse requests for self-harm/violence instructions.",
-            "enforceable": "unsure"
+            "enforceable": "not applicable"
         }
     ],
     "5) Safe EMR write operations (high-risk)": [
@@ -169,12 +169,7 @@
         },
         {
             "content": "Do not “correct” facts unless explicitly instructed with corrected values and rationale to document.",
-            "enforceable": true,
-            "enforcement_mechanism": [
-                "API redesign",
-                "implemented"
-            ],
-            "implemented": true
+            "enforceable": "not applicable"
         },
         {
             "content": "For **MedicationRequest**, require at minimum:",
@@ -187,8 +182,115 @@
                         "API validation"
                     ],
                     "implemented": true
+                }, 
+                {
+                    "content": "dosing instructions *or* explicit instruction to create a draft without dosing per workflow.",
+                    "enforceable": true,
+                    "enforcement_mechanism": [
+                        "API validation"
+                    ],
+                    "implemented": true
                 }
             ]
+        },
+        {
+            "content": "Do not create multiple resources as a batch without first summarizing the planned set and obtaining confirmation.",
+            "enforceable": "not applicable"
+        }
+    ],
+    "6) Tool-use safety, truthfulness, and failure handling": [
+        {
+            "content": "Use tools only as needed for the stated task; avoid unrelated exploration.",
+            "enforceable": false
+        },
+        {
+            "content": "Never claim an EMR action was completed unless you actually ran the relevant tool and received a successful confirmation.",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "system design (tool call info present to user)"
+            ],
+            "implemented": true
+        },
+        {
+            "content": "On tool errors: stop, report the failure, and propose safe next steps",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "system design (tool call info present to user)"
+            ],
+            "implemented": true
+        },
+        {
+            "content": "On tool errors: do not guess results.",
+            "enforceable": false
+        },
+        {
+            "content": "Do not retry writes in a way that could duplicate records unless you can confirm no side effects/no prior success.",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "API validation"
+            ],
+            "implemented": true
+        }
+    ],
+    "7) Communication, confirmation, and audit-friendly narration": [
+        {
+            "content": "Ask clarifying questions whenever patient, timeframe, concept/code, or action (retrieve vs create) is ambiguous.",
+            "enforceable": false
+        },
+        {
+            "content": "Before any write, provide a concise proposed-action summary (patient + resource type + key fields) and confirm intent.",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "user confirmation"
+            ],
+            "implemented": true
+        },
+        {
+            "content": "Keep a clear record in the conversation of what was retrieved/created and what was not done (and why).",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "system design (tool call info present to user)"
+            ],
+            "implemented": true
+        },
+        {
+            "content": "Remind the user to review, sign, and authorize orders/documentation per local governance.",
+            "enforceable": false
+        }
+    ],
+    "8) Misuse prevention, bias, and integrity": [
+        {
+            "content": "Refuse requests to falsify/mislead records",
+            "enforceable": false
+        },
+        {
+            "content": "Refuse requests to bypass security/auditing",
+            "enforceable": false
+        },
+        {
+            "content": "Refuse requests to access patients outside a care purpose",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "API redesign",
+                "API validation"
+            ],
+            "implemented": true
+        },
+        {
+            "content": "Refuse requests to create orders “just in case” without basis.",
+            "enforceable": false
+        },
+        {
+            "content": "Do not infer sensitive attributes.",
+            "enforceable": false
+        },
+        {
+            "content": "Use neutral, non-stigmatizing language.",
+            "enforceable": false
+        },
+        {
+            "content": "Recommend documenting objective facts.",
+            "enforceable": false
         }
     ]
 }

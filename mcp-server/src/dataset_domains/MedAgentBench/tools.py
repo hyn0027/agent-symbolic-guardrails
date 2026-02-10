@@ -10,6 +10,9 @@ from dataset_domains.MedAgentBench.data_model import (
     DateTimeRange,
     LogicList,
     ValueRange,
+    posted_observations,
+    posted_medication_requests,
+    posted_service_requests,
     process_logic_value,
 )
 from typing import Annotated, Optional, List, Dict, Any
@@ -336,6 +339,12 @@ def get_condition(
     response = requests.get(f"{base_api}Condition", params=params)
     response.raise_for_status()
     bundle = response.json()
+    for entry in bundle.get("entry", []):
+        try:
+            Condition.model_validate(entry["resource"], extra="forbid")
+        except Exception as e:
+            print(f"Error validating Condition resource: {e}")
+            print(json.dumps(entry["resource"], indent=2))
     res = [
         Condition.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
@@ -490,7 +499,11 @@ def get_observation(
     return res
 
 
-def post_observation(observation: Observation) -> Observation:
+def post_observation(
+    observation: Annotated[
+        Observation, "The Observation object to be created in the FHIR server."
+    ],
+) -> Observation:
     """
     Create a new observation in the FHIR server.
 
@@ -510,6 +523,11 @@ def post_observation(observation: Observation) -> Observation:
             raise ValueError(
                 "Observation issued date must match the current server time."
             )  # POLICY 5.7
+        for previous_observation in posted_observations:
+            if Observation.similar(observation, previous_observation):
+                raise ValueError(
+                    "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
+                )  # POLICY 6.5
 
     payload = observation.model_dump_json(exclude_unset=True)
 
@@ -518,9 +536,12 @@ def post_observation(observation: Observation) -> Observation:
         data=payload,
         headers={"Content-Type": "application/fhir+json"},
     )
+    print(response.text)
     response.raise_for_status()
     created_resource = response.json()
-    return Observation.model_validate(created_resource, extra="forbid")
+    res = Observation.model_validate(created_resource, extra="forbid")
+    posted_observations.append(res)
+    return res
 
 
 def get_medication_request_extended(
@@ -640,7 +661,40 @@ def get_medication_request(
     return res
 
 
-def post_medication_request(medication_request: MedicationRequest) -> MedicationRequest:
+def post_medication_request_extended(
+    medication_request: Annotated[
+        MedicationRequest,
+        "The MedicationRequest object to be created in the FHIR server.",
+    ],
+    explanation_for_no_dosing_instructions: Annotated[
+        Optional[str],
+        "If the medication request lacks dosing instructions, provide a justification here.",
+    ],
+) -> MedicationRequest:
+    """
+    Create a new medication request in the FHIR server.
+
+    Returns:
+        MedicationRequest: The created MedicationRequest object.
+    """
+    if safeguard_config.API_CHECK:
+        if medication_request.incomplete_dosage_instructions():
+            if not explanation_for_no_dosing_instructions:
+                raise ValueError(
+                    "MedicationRequest lacks dosing instructions. An explanation must be provided."
+                )  # POLICY 5.9.2
+            medication_request.add_dosage_explanation(
+                explanation_for_no_dosing_instructions
+            )  # POLICY 5.9.2
+    return post_medication_request(medication_request)
+
+
+def post_medication_request(
+    medication_request: Annotated[
+        MedicationRequest,
+        "The MedicationRequest object to be created in the FHIR server.",
+    ],
+) -> MedicationRequest:
     """
     Create a new medication request in the FHIR server.
 
@@ -668,6 +722,13 @@ def post_medication_request(medication_request: MedicationRequest) -> Medication
             raise ValueError(
                 "MedicationRequest must have a non-empty medicationCodeableConcept."
             )  # POLICY 5.9.1
+        for previous_medication_request in posted_medication_requests:
+            if MedicationRequest.similar(
+                medication_request, previous_medication_request
+            ):
+                raise ValueError(
+                    "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
+                )  # POLICY 6.5
 
     payload = medication_request.model_dump_json(exclude_unset=True)
 
@@ -678,7 +739,9 @@ def post_medication_request(medication_request: MedicationRequest) -> Medication
     )
     response.raise_for_status()
     created_resource = response.json()
-    return MedicationRequest.model_validate(created_resource, extra="forbid")
+    res = MedicationRequest.model_validate(created_resource, extra="forbid")
+    posted_medication_requests.append(res)
+    return res
 
 
 def get_procedure_extended(
@@ -787,7 +850,12 @@ def get_procedure(
     return res
 
 
-def post_service_request(service_request: ServiceRequest) -> ServiceRequest:
+def post_service_request(
+    service_request: Annotated[
+        ServiceRequest,
+        "The ServiceRequest object to be created in the FHIR server.",
+    ],
+) -> ServiceRequest:
     """
     Create a new service request in the FHIR server.
 
@@ -809,6 +877,11 @@ def post_service_request(service_request: ServiceRequest) -> ServiceRequest:
             raise ValueError(
                 "ServiceRequest authoredOn date must match the current server time."
             )  # POLICY 5.7
+        for previous_service_request in posted_service_requests:
+            if ServiceRequest.similar(service_request, previous_service_request):
+                raise ValueError(
+                    "A similar service request has already been posted. Please check the posted service requests to avoid duplicates."
+                )  # POLICY 6.5
 
     payload = service_request.model_dump_json(exclude_unset=True)
 
@@ -819,7 +892,9 @@ def post_service_request(service_request: ServiceRequest) -> ServiceRequest:
     )
     response.raise_for_status()
     created_resource = response.json()
-    return ServiceRequest.model_validate(created_resource, extra="forbid")
+    res = ServiceRequest.model_validate(created_resource, extra="forbid")
+    posted_service_requests.append(res)
+    return res
 
 
 mcp.tool(fetch_current_time)
@@ -827,45 +902,86 @@ if safeguard_config.API_REDESIGN:
     mcp.tool(
         get_patient_extended,
         name="get_patient",
-        meta={"block_when_failed": safeguard_config.TOOL_BLOCKING},
-    )  # POLICY 2.3, 5.2, 3.1, 3.2
+        meta={
+            "block_when_failed": safeguard_config.TOOL_BLOCKING,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+        },
+    )  # POLICY 2.3, 5.2, 3.1, 3.2, 6.2, 6.3, 7.3
     mcp.tool(
         get_condition_extended,
         name="get_condition",
-    )  # POLICY 3.1, 3.2
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
     mcp.tool(
         get_observation_extended,
         name="get_observation",
-    )  # POLICY 3.1, 3.2
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
     mcp.tool(
         get_medication_request_extended,
         name="get_medication_request",
-    )  # POLICY 3.1, 3.2
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
     mcp.tool(
         get_procedure_extended,
         name="get_procedure",
-    )  # POLICY 3.1, 3.2
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+    mcp.tool(
+        post_medication_request_extended,
+        name="post_medication_request",
+        meta={
+            "require_confirmation": safeguard_config.USER_CONFIRMATION,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+        },
+    )  # POLICY 2.4, 5.1, 5.9.2, 6.2, 6.3, 7.3, 7.2
 else:
     mcp.tool(
-        get_patient, meta={"block_when_failed": safeguard_config.TOOL_BLOCKING}
-    )  # POLICY 2.3, 5.2
-    mcp.tool(get_condition)
-    mcp.tool(get_observation)
-    mcp.tool(get_medication_request)
-    mcp.tool(get_procedure)
+        get_patient,
+        meta={
+            "block_when_failed": safeguard_config.TOOL_BLOCKING,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+        },
+    )  # POLICY 2.3, 5.2, 6.2, 6.3, 7.3
+    mcp.tool(
+        get_condition,
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+    mcp.tool(
+        get_observation,
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+    mcp.tool(
+        get_medication_request,
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+    mcp.tool(
+        get_procedure,
+        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+
+    mcp.tool(
+        post_medication_request,
+        meta={
+            "require_confirmation": safeguard_config.USER_CONFIRMATION,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+        },
+    )  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3
 
 mcp.tool(
     post_observation,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
-)  # POLICY 2.4, 5.1
-mcp.tool(
-    post_medication_request,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
-)  # POLICY 2.4, 5.1
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
+)  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
 mcp.tool(
     post_service_request,
-    meta={"require_confirmation": safeguard_config.USER_CONFIRMATION},
-)  # POLICY 2.4, 5.1
+    meta={
+        "require_confirmation": safeguard_config.USER_CONFIRMATION,
+        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+    },
+)  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
 
 
 @mcp.tool(
@@ -887,7 +1003,7 @@ def save_state() -> str:
     meta={
         "disclose_to_model": False,
     }
-)
+)  # Policy: 2.4, 7.2
 def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
     """
     Get details for user confirmation. For test only.
@@ -945,7 +1061,7 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
 
 
 def test() -> None:
-    patients = get_patient(
+    patients = get_patient_extended(
         patient_id=None,
         birthdate=None,
         family=None,
@@ -960,6 +1076,8 @@ def test() -> None:
         _count=1,
         _offset=None,
         _sort=None,
+        purpose="patient care",
+        require_identifier=False,
     )
     print(f"Found {len(patients)} patients in total")
 
@@ -969,7 +1087,7 @@ def test() -> None:
 
     assert isinstance(patient_id, str), "Patient ID should be a string"
 
-    conditions = get_condition(
+    conditions = get_condition_extended(
         condition_id=None,
         patient_id=patient_id,
         code=None,
@@ -978,10 +1096,11 @@ def test() -> None:
         _count=1000,
         _offset=None,
         _sort=None,
+        purpose="patient care",
     )
     print(f"Found {len(conditions)} conditions in total")
 
-    observations = get_observation(
+    observations = get_observation_extended(
         observation_id=None,
         patient_id=patient_id,
         status=None,
@@ -993,6 +1112,7 @@ def test() -> None:
         _count=1000,
         _offset=None,
         _sort=None,
+        purpose="patient care",
     )
     print(f"Found {len(observations)} observations in total")
 
@@ -1002,6 +1122,9 @@ def test() -> None:
         Coding,
         ValueQuantity,
     )
+
+    current_time = fetch_current_time()
+    current_time_dt = datetime.strptime(current_time, "%Y-%m-%dT%H:%M:%S%z")
 
     new_observation = Observation(
         resourceType="Observation",
@@ -1038,17 +1161,17 @@ def test() -> None:
                 text="Vital Signs",
             )
         ],
-        effectiveDateTime=datetime.now(),
+        effectiveDateTime=current_time_dt,
         id=None,
         meta=None,
-        issued=None,
+        issued=current_time_dt,
         valueString=None,
         interpretation=None,
     )
     created_observation = post_observation(new_observation)
     print(f"Created new observation with ID: {created_observation.id}")
 
-    medication_requests = get_medication_request(
+    medication_requests = get_medication_request_extended(
         medication_id=None,
         status=None,
         intent=None,
@@ -1057,6 +1180,7 @@ def test() -> None:
         _count=1000,
         _offset=None,
         _sort=None,
+        purpose="patient care",
     )
     print(f"Found {len(medication_requests)} medication requests in total")
 
@@ -1064,6 +1188,7 @@ def test() -> None:
         DosageInstruction,
         Timing,
         DoseAndRate,
+        Note,
     )
 
     medication_request = MedicationRequest(
@@ -1077,7 +1202,7 @@ def test() -> None:
             reference=f"Patient/{patients[0].id}",
             identifier=patients[0].identifier[0] if patients[0].identifier else None,
         ),
-        authoredOn=datetime.now(),
+        authoredOn=current_time_dt,
         dosageInstruction=[
             DosageInstruction(
                 timing=Timing(
@@ -1099,11 +1224,14 @@ def test() -> None:
         ],
         id=None,
         meta=None,
+        note=[Note(text="Take with food to avoid stomach upset.")],
     )
-    created_medication_request = post_medication_request(medication_request)
+    created_medication_request = post_medication_request_extended(
+        medication_request, explanation_for_no_dosing_instructions=None
+    )
     print(f"Created new medication request with ID: {created_medication_request.id}")
 
-    procedures = get_procedure(
+    procedures = get_procedure_extended(
         procedure_id=None,
         patient_id=patient_id,
         code=None,
@@ -1111,6 +1239,7 @@ def test() -> None:
         _count=1000,
         _offset=None,
         _sort=None,
+        purpose="patient care",
     )
     print(f"Found {len(procedures)} procedures in total")
 
@@ -1135,7 +1264,7 @@ def test() -> None:
             reference=f"Patient/{patients[0].id}",
             identifier=patients[0].identifier[0] if patients[0].identifier else None,
         ),
-        authoredOn=datetime.now(),
+        authoredOn=current_time_dt,
         status="active",
         intent="order",
         priority="routine",
@@ -1144,7 +1273,7 @@ def test() -> None:
                 text="Patient requires a follow-up appointment in two weeks.",
             )
         ],
-        occurrenceDateTime=datetime.now() + timedelta(days=1),
+        occurrenceDateTime=current_time_dt + timedelta(days=1),
     )
 
     created_service_request = post_service_request(service_request)
