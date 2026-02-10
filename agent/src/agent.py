@@ -51,7 +51,7 @@ class ReActAgent:
             {"role": "system", "content": self.system_prompt},
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
-        # LOGGER.debug(json.dumps(self.tools, indent=2))
+        LOGGER.debug(json.dumps(self.tools, indent=2))
 
         self.remaining_tool_call = None
         self.tmp_user_response = ""

@@ -238,6 +238,15 @@
             "tag": "5.10",
             "content": "Do not create multiple resources as a batch without first summarizing the planned set and obtaining confirmation.",
             "enforceable": "not applicable"
+        },
+        {
+            "tag": "5.11",
+            "content": "For all resources written to the system, `subject.reference` must be set to Patient/{patient_id}.",
+            "enforceable": true,
+            "enforcement_mechanism": [
+                "API validation"
+            ],
+            "implemented": true
         }
     ],
     "6) Tool-use safety, truthfulness, and failure handling": [

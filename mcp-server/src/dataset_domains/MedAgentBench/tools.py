@@ -24,6 +24,27 @@ base_api = CONFIG.DATASET.SERVER.BASE_URL
 safeguard_config = CONFIG.SAFEGUARD
 
 
+def _patient_exist(patient_id: str) -> bool:
+    """
+    Check if a patient with the given patient_id exists in the FHIR server.
+
+    Args:
+        patient_id (str): The Medical Record Number (MRN) of the patient.
+
+    Returns:
+        bool: True if the patient exists, False otherwise.
+    """
+    response = requests.get(f"{base_api}Patient", params={"identifier": patient_id})
+    response.raise_for_status()
+    bundle = response.json()
+    num_entries = len(bundle.get("entry", []))
+    if num_entries > 1:
+        raise ValueError(
+            f"Expected at most one patient for patient id {patient_id}, but got {num_entries}. Please check the FHIR server data integrity."
+        )
+    return num_entries == 1
+
+
 def fetch_current_time() -> str:
     """
     Fetch the current time from the server.
@@ -500,9 +521,7 @@ def get_observation(
 
 
 def post_observation(
-    observation: Annotated[
-        Observation, "The Observation object to be created in the FHIR server."
-    ],
+    observation: Observation,
 ) -> Observation:
     """
     Create a new observation in the FHIR server.
@@ -515,6 +534,16 @@ def post_observation(
             raise ValueError(
                 "Observation must have a subject with a reference to a patient."
             )  # POLICY 2.1
+        if not observation.subject.reference.startswith("Patient/"):
+            raise ValueError(
+                "Observation subject reference must be of the format 'Patient/{patient_id}'."
+            )  # POLICY 5.11
+
+        patient_id = observation.subject.reference.split("/")[1]
+        if not _patient_exist(patient_id):
+            raise ValueError(
+                f"Patient with id {patient_id} does not exist. Please create the patient record before posting the observation."
+            )  # POLICY 5.11
 
         if not observation.issued:
             raise ValueError("Observation must have an issued date.")  # POLICY 5.7
@@ -662,10 +691,7 @@ def get_medication_request(
 
 
 def post_medication_request_extended(
-    medication_request: Annotated[
-        MedicationRequest,
-        "The MedicationRequest object to be created in the FHIR server.",
-    ],
+    medication_request: MedicationRequest,
     explanation_for_no_dosing_instructions: Annotated[
         Optional[str],
         "If the medication request lacks dosing instructions, provide a justification here.",
@@ -690,10 +716,7 @@ def post_medication_request_extended(
 
 
 def post_medication_request(
-    medication_request: Annotated[
-        MedicationRequest,
-        "The MedicationRequest object to be created in the FHIR server.",
-    ],
+    medication_request: MedicationRequest,
 ) -> MedicationRequest:
     """
     Create a new medication request in the FHIR server.
@@ -706,6 +729,16 @@ def post_medication_request(
             raise ValueError(
                 "MedicationRequest must have a subject with a reference to a patient."
             )  # POLICY 2.1
+        if not medication_request.subject.reference.startswith("Patient/"):
+            raise ValueError(
+                "MedicationRequest subject reference must be of the format 'Patient/{patient_id}'."
+            )  # POLICY 5.11
+        patient_id = medication_request.subject.reference.split("/")[1]
+        if not _patient_exist(patient_id):
+            raise ValueError(
+                f"Patient with id {patient_id} does not exist. Please create the patient record before posting the medication request."
+            )  # POLICY 5.11
+
         if not medication_request.authoredOn:
             raise ValueError(
                 "MedicationRequest must have an authoredOn date."
@@ -851,10 +884,7 @@ def get_procedure(
 
 
 def post_service_request(
-    service_request: Annotated[
-        ServiceRequest,
-        "The ServiceRequest object to be created in the FHIR server.",
-    ],
+    service_request: ServiceRequest,
 ) -> ServiceRequest:
     """
     Create a new service request in the FHIR server.
@@ -869,6 +899,15 @@ def post_service_request(
             raise ValueError(
                 "ServiceRequest must have a subject with a reference to a patient."
             )  # POLICY 2.1
+        if not service_request.subject.reference.startswith("Patient/"):
+            raise ValueError(
+                "ServiceRequest subject reference must be of the format 'Patient/{patient_id}'."
+            )  # POLICY 5.11
+        patient_id = service_request.subject.reference.split("/")[1]
+        if not _patient_exist(patient_id):
+            raise ValueError(
+                f"Patient with id {patient_id} does not exist. Please create the patient record before posting the service request."
+            )  # POLICY 5.11
         if not service_request.authoredOn:
             raise ValueError(
                 "ServiceRequest must have an authoredOn date."

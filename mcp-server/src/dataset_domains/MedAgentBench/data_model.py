@@ -559,6 +559,29 @@ class Condition(Resource):
         return data
 
 
+MedicationRequestStatus = Literal[
+    "active",
+    "on-hold",
+    "ended",
+    "stopped",
+    "completed",
+    "cancelled",
+    "entered-in-error",
+    "draft",
+    "unknown",
+]
+MedicationRequestIntent = Literal[
+    "proposal",
+    "plan",
+    "order",
+    "original-order",
+    "reflex-order",
+    "filler-order",
+    "instance-order",
+    "option",
+]
+
+
 class MedicationRequest(Resource):
     """A medication request resource representing a request for medication."""
 
@@ -568,10 +591,10 @@ class MedicationRequest(Resource):
     meta: Optional[MetaData] = Field(
         description="Metadata about the medication request resource."
     )
-    status: Optional[str] = Field(
+    status: Optional[MedicationRequestStatus] = Field(
         description="The status of the medication request (e.g., active, completed).",
     )
-    intent: Optional[str] = Field(
+    intent: Optional[MedicationRequestIntent] = Field(
         description="The intent of the medication request (e.g., order, plan).",
     )
     medicationCodeableConcept: Optional[CodeableConcept] = Field(
@@ -688,6 +711,21 @@ class Procedure(Resource):
         return data
 
 
+ObservationStatus = Literal[
+    "registered",
+    "specimen-in-process",
+    "preliminary",
+    "final",
+    "amended",
+    "corrected",
+    "appended",
+    "cancelled",
+    "entered-in-error",
+    "unknown",
+    "cannot-be-obtained",
+]
+
+
 class Observation(Resource):
     """
     A medical observation made about a patient.
@@ -697,7 +735,7 @@ class Observation(Resource):
     meta: Optional[MetaData] = Field(
         description="Metadata about the observation resource."
     )
-    status: Optional[str] = Field(
+    status: Optional[ObservationStatus] = Field(
         description="The status of the observation (e.g., final, amended).",
     )
     category: Optional[List[CodeableConcept]] = Field(
@@ -786,6 +824,32 @@ class Observation(Resource):
         return True
 
 
+ServiceRequestStatus = Literal[
+    "draft",
+    "active",
+    "on-hold",
+    "entered-in-error",
+    "ended",
+    "completed",
+    "revoked",
+    "unknown",
+]
+
+ServiceRequestIntent = Literal[
+    "proposal",
+    "solicit-offer",
+    "offer-response",
+    "plan",
+    "directive",
+    "order",
+    "original-order",
+    "reflex-order",
+    "filler-order",
+    "instance-order",
+    "option",
+]
+
+
 class ServiceRequest(Resource):
     id: Optional[str] = Field(
         description="The unique identifier for the service request."
@@ -802,10 +866,10 @@ class ServiceRequest(Resource):
     authoredOn: datetime = Field(
         description="The date when the service request was authored."
     )
-    status: str = Field(
+    status: Optional[ServiceRequestStatus] = Field(
         description="The status of the service request (e.g., active, completed).",
     )
-    intent: str = Field(
+    intent: Optional[ServiceRequestIntent] = Field(
         description="The intent of the service request (e.g., order, plan).",
     )
     priority: str = Field(

@@ -6,6 +6,7 @@
   - Included: Policy 2.4
   - Added: Policy 5.11
 - "Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent outside allowed value sets or against policy (e.g., disallowed intent values for controlled substances).",
+  - Added: Tool schema strict enforcement
 - "Incomplete or falsified ordering provenance and context: missing or falsified authoredOn dates, absent requester/prescriber details, lack of Provenance resources or unique provenance identifiers in batch transactions, and missing basedOn links to the originating ServiceRequest.",
 - "Invalid dispense quantity coding or values: using dispenseRequest.quantity without UCUM unit/system or with zero/negative quantities when a positive amount is required.",
 - "Ambiguous, invalid, or contradictory administration instructions: using \u201cas directed\u201d as the sole instruction, omitting necessary start/stop dates or duration, specifying unsupported timing repetition parameters, or including multiple conflicting routes.",
