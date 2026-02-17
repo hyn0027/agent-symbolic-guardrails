@@ -43,7 +43,8 @@
       - Incomplete or falsified ordering provenance and context: lack of Provenance resources or unique provenance identifiers in batch transactions
         - Enforceable: already implemented
       - Incomplete or falsified ordering provenance and context: missing basedOn links to the originating ServiceRequest
-        - Enforceable: already implemented
+        - Enforceable: out of scope
+        - Note: no based on data model
 5.
     - Original: Invalid dispense quantity coding or values: using dispenseRequest.quantity without UCUM unit/system or with zero/negative quantities when a positive amount is required.
     - Decomposed:
@@ -176,8 +177,8 @@
     - Original: Disclosure of specially protected records: Exposing identifiers or URLs that reveal the existence of SUD-tagged or otherwise specially protected records in outputs.
     - Decomposed:
       - Disclosure of specially protected records: Exposing identifiers or URLs that reveal the existence of SUD-tagged or otherwise specially protected records in outputs
-      - Enforceable: enforceable with specialist and weaker format
-      - Note: we need some matching/patterns to see what is SUG-tagged and what other things are protected
+        - Enforceable: enforceable with specialist and weaker format
+        - Note: we need some matching/patterns to see what is SUG-tagged and what other things are protected
 20.
     - Original: Missing required FHIR metadata, such as meta.profile, meta.tag, or meta.security, including failure to meet server capability statements and mandated implementation guides or to include security/data-origin labels.
     - Decomposed:
