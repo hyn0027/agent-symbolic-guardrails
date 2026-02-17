@@ -1,5 +1,6 @@
 import json
 from mcp_server import mcp
+import dataset_domains.MedAgentBench.data_model as datamodel
 from dataset_domains.MedAgentBench.data_model import (
     Patient,
     Condition,
@@ -24,6 +25,36 @@ base_api = CONFIG.DATASET.SERVER.BASE_URL
 safeguard_config = CONFIG.SAFEGUARD
 
 
+def _customized_raise_for_error(response: requests.Response) -> None:
+    """
+    Custom error handling for API responses. Raises detailed exceptions based on the response status code and content.
+
+    Args:
+        response (requests.Response): The HTTP response object to check for errors.
+    Raises:
+        ValueError: If the response contains an error status code, with a detailed message extracted from the response content.
+    """
+    try:
+        response.raise_for_status()
+    except requests.HTTPError as e:
+        resp = e.response
+        try:
+            error_content = resp.json()
+            error_message = (
+                error_content.get("error", {}).get("message")
+                or error_content.get("message")
+                or error_content.get("detail")
+                or str(error_content)
+            )
+            raise ValueError(
+                f"API request failed with status code {resp.status_code}: {error_message}"
+            ) from e
+        except json.JSONDecodeError:
+            raise ValueError(
+                f"API request failed with status code {resp.status_code} and non-JSON response: {resp.text}"
+            ) from e
+
+
 def _patient_exist(patient_id: str) -> bool:
     """
     Check if a patient with the given patient_id exists in the FHIR server.
@@ -35,7 +66,7 @@ def _patient_exist(patient_id: str) -> bool:
         bool: True if the patient exists, False otherwise.
     """
     response = requests.get(f"{base_api}Patient", params={"identifier": patient_id})
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     num_entries = len(bundle.get("entry", []))
     if num_entries > 1:
@@ -231,7 +262,7 @@ def get_patient(
         params.append(("_sort", _sort))
 
     response = requests.get(f"{base_api}Patient", params=params)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     res = [
         Patient.model_validate(entry["resource"], extra="forbid")
@@ -243,6 +274,14 @@ def get_patient(
             raise ValueError(
                 f"Expected at most one patient to be returned, but got {len(res)}. Please refine your search criteria to ensure a unique patient is returned."
             )  # POLICY 2.2
+        if len(res) == 1:
+            if datamodel.session_MRN and datamodel.session_MRN != res[0].id:
+                raise ValueError(
+                    f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {res[0].id}. Please ensure that all API calls in the session pertain to the same patient."
+                )  # POLICY 2.5
+
+    if len(res) == 1:
+        datamodel.session_MRN = res[0].id
 
     return res
 
@@ -252,7 +291,7 @@ def get_condition_extended(
         Optional[str | LogicList[str]], "The unique identifier of the condition."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     code: Annotated[
@@ -302,7 +341,7 @@ def get_condition(
         Optional[str | LogicList[str]], "The unique identifier of the condition."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     code: Annotated[
@@ -331,10 +370,10 @@ def get_condition(
         params.extend(process_logic_value(condition_id, "_id"))
     if patient_id:
         if safeguard_config.API_CHECK:
-            if isinstance(patient_id, LogicList) and len(patient_id.values) == 0:
+            if datamodel.session_MRN and datamodel.session_MRN != patient_id:
                 raise ValueError(
-                    "patient_id specified as logic list cannot be empty."
-                )  # POLICY 2.1
+                    f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
+                )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
         raise ValueError("patient_id is required to retrieve conditions.")  # POLICY 2.1
@@ -358,7 +397,7 @@ def get_condition(
     if _sort:
         params.append(("_sort", _sort))
     response = requests.get(f"{base_api}Condition", params=params)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     for entry in bundle.get("entry", []):
         try:
@@ -370,6 +409,9 @@ def get_condition(
         Condition.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
     ]
+
+    if patient_id:
+        datamodel.session_MRN = patient_id
     return res
 
 
@@ -378,7 +420,7 @@ def get_observation_extended(
         Optional[str | LogicList[str]], "The unique identifier of the observation."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     status: Annotated[
@@ -440,7 +482,7 @@ def get_observation(
         Optional[str | LogicList[str]], "The unique identifier of the observation."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     status: Annotated[
@@ -479,10 +521,10 @@ def get_observation(
         params.extend(process_logic_value(observation_id, "_id"))
     if patient_id:
         if safeguard_config.API_CHECK:
-            if isinstance(patient_id, LogicList) and len(patient_id.values) == 0:
+            if datamodel.session_MRN and datamodel.session_MRN != patient_id:
                 raise ValueError(
-                    "patient_id specified as logic list cannot be empty."
-                )  # POLICY 2.1
+                    f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
+                )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
         raise ValueError(
@@ -511,12 +553,15 @@ def get_observation(
     if _sort:
         params.append(("_sort", _sort))
     response = requests.get(f"{base_api}Observation", params=params)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     res = [
         Observation.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
     ]
+
+    if patient_id:
+        datamodel.session_MRN = patient_id
     return res
 
 
@@ -545,6 +590,11 @@ def post_observation(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the observation."
             )  # POLICY 5.11
 
+        if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise ValueError(
+                f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the observation subject reference. Please ensure that all API calls in the session pertain to the same patient."
+            )  # POLICY 2.5
+
         if not observation.issued:
             raise ValueError("Observation must have an issued date.")  # POLICY 5.7
 
@@ -552,6 +602,7 @@ def post_observation(
             raise ValueError(
                 "Observation issued date must match the current server time."
             )  # POLICY 5.7
+
         for previous_observation in posted_observations:
             if Observation.similar(observation, previous_observation):
                 raise ValueError(
@@ -566,10 +617,17 @@ def post_observation(
         headers={"Content-Type": "application/fhir+json"},
     )
     print(response.text)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     created_resource = response.json()
     res = Observation.model_validate(created_resource, extra="forbid")
     posted_observations.append(res)
+
+    if (
+        res.subject
+        and res.subject.reference
+        and res.subject.reference.startswith("Patient/")
+    ):
+        datamodel.session_MRN = res.subject.reference.split("/")[1]
     return res
 
 
@@ -585,7 +643,7 @@ def get_medication_request_extended(
         Optional[str | LogicList[str]], "The intent of the medication request."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     authored_on: Annotated[
@@ -635,7 +693,7 @@ def get_medication_request(
         Optional[str | LogicList[str]], "The intent of the medication request."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     authored_on: Annotated[
@@ -661,10 +719,10 @@ def get_medication_request(
         params.extend(process_logic_value(intent, "intent"))
     if patient_id:
         if safeguard_config.API_CHECK:
-            if isinstance(patient_id, LogicList) and len(patient_id.values) == 0:
+            if datamodel.session_MRN and datamodel.session_MRN != patient_id:
                 raise ValueError(
-                    "patient_id specified as logic list cannot be empty."
-                )  # POLICY 2.1
+                    f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
+                )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
         raise ValueError(
@@ -681,12 +739,15 @@ def get_medication_request(
     if _sort:
         params.append(("_sort", _sort))
     response = requests.get(f"{base_api}MedicationRequest", params=params)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     res = [
         MedicationRequest.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
     ]
+
+    if patient_id:
+        datamodel.session_MRN = patient_id
     return res
 
 
@@ -738,6 +799,10 @@ def post_medication_request(
             raise ValueError(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the medication request."
             )  # POLICY 5.11
+        if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise ValueError(
+                f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the medication request subject reference. Please ensure that all API calls in the session pertain to the same patient."
+            )  # POLICY 2.5
 
         if not medication_request.authoredOn:
             raise ValueError(
@@ -770,10 +835,17 @@ def post_medication_request(
         data=payload,
         headers={"Content-Type": "application/fhir+json"},
     )
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     created_resource = response.json()
     res = MedicationRequest.model_validate(created_resource, extra="forbid")
     posted_medication_requests.append(res)
+
+    if (
+        res.subject
+        and res.subject.reference
+        and res.subject.reference.startswith("Patient/")
+    ):
+        datamodel.session_MRN = res.subject.reference.split("/")[1]
     return res
 
 
@@ -782,7 +854,7 @@ def get_procedure_extended(
         Optional[str | LogicList[str]], "The unique identifier of the procedure."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     code: Annotated[
@@ -828,7 +900,7 @@ def get_procedure(
         Optional[str | LogicList[str]], "The unique identifier of the procedure."
     ],
     patient_id: Annotated[
-        Optional[str | LogicList[str]],
+        Optional[str],
         "The patient's unique Medical Record Number (MRN).",
     ],
     code: Annotated[
@@ -854,10 +926,10 @@ def get_procedure(
         params.extend(process_logic_value(procedure_id, "_id"))
     if patient_id:
         if safeguard_config.API_CHECK:
-            if isinstance(patient_id, LogicList) and len(patient_id.values) == 0:
+            if datamodel.session_MRN and datamodel.session_MRN != patient_id:
                 raise ValueError(
-                    "patient_id specified as logic list cannot be empty."
-                )  # POLICY 2.1
+                    f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
+                )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
         raise ValueError("patient_id is required to retrieve procedures.")  # POLICY 2.1
@@ -874,12 +946,15 @@ def get_procedure(
     if _sort:
         params.append(("_sort", _sort))
     response = requests.get(f"{base_api}Procedure", params=params)
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     bundle = response.json()
     res = [
         Procedure.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
     ]
+
+    if patient_id:
+        datamodel.session_MRN = patient_id
     return res
 
 
@@ -908,6 +983,10 @@ def post_service_request(
             raise ValueError(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the service request."
             )  # POLICY 5.11
+        if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise ValueError(
+                f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the service request subject reference. Please ensure that all API calls in the session pertain to the same patient."
+            )  # POLICY 2.5
         if not service_request.authoredOn:
             raise ValueError(
                 "ServiceRequest must have an authoredOn date."
@@ -929,10 +1008,17 @@ def post_service_request(
         data=payload,
         headers={"Content-Type": "application/fhir+json"},
     )
-    response.raise_for_status()
+    _customized_raise_for_error(response)
     created_resource = response.json()
     res = ServiceRequest.model_validate(created_resource, extra="forbid")
     posted_service_requests.append(res)
+
+    if (
+        res.subject
+        and res.subject.reference
+        and res.subject.reference.startswith("Patient/")
+    ):
+        datamodel.session_MRN = res.subject.reference.split("/")[1]
     return res
 
 
@@ -1092,11 +1178,20 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
         patient.birthDate.strftime("%Y-%m-%d") if patient.birthDate else "unknown"
     )
 
-    return (
+    info = (
         f"Patient ID: {patient_id}, "
         f"Patient Name: {patient_name.given[0]} {patient_name.family}, "
         f"Date of Birth: {patient_dob}. "
     )
+
+    if func_name == "post_medication_request":
+        info += (
+            "\n"
+            "You confirm that you have checked the patient's allergy history by responding 'CONFIRM'."
+            "If you have not checked the allergy history, please respond 'CANCEL' and check the allergy history before posting the medication request."
+        )  # Policy 5.12
+
+    return info
 
 
 def test() -> None:
@@ -1160,6 +1255,7 @@ def test() -> None:
         CodeableConcept,
         Coding,
         ValueQuantity,
+        MetaData,
     )
 
     current_time = fetch_current_time()
@@ -1202,7 +1298,11 @@ def test() -> None:
         ],
         effectiveDateTime=current_time_dt,
         id=None,
-        meta=None,
+        meta=MetaData(
+            versionId=None,
+            lastUpdated=current_time_dt,
+            source=None,
+        ),
         issued=current_time_dt,
         valueString=None,
         interpretation=None,
@@ -1262,7 +1362,11 @@ def test() -> None:
             )
         ],
         id=None,
-        meta=None,
+        meta=MetaData(
+            versionId=None,
+            lastUpdated=current_time_dt,
+            source=None,
+        ),
         note=[Note(text="Take with food to avoid stomach upset.")],
     )
     created_medication_request = post_medication_request_extended(
@@ -1288,7 +1392,11 @@ def test() -> None:
     service_request = ServiceRequest(
         resourceType="ServiceRequest",
         id=None,
-        meta=None,
+        meta=MetaData(
+            versionId=None,
+            lastUpdated=current_time_dt,
+            source=None,
+        ),
         code=CodeableConcept(
             coding=[
                 Coding(

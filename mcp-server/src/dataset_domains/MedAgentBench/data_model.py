@@ -3,6 +3,7 @@ from typing import Optional, List, Literal, TypeVar, Generic, Dict
 from datetime import datetime
 
 T = TypeVar("T")
+session_MRN: Optional[str] = None
 
 
 class LogicList(BaseModel, Generic[T]):
@@ -107,7 +108,7 @@ class MetaData(BaseModel):
     versionId: Optional[str] = Field(
         description="The version identifier of the resource."
     )
-    lastUpdated: Optional[datetime] = Field(
+    lastUpdated: datetime = Field(
         description="The last updated timestamp of the resource."
     )
     source: Optional[str] = Field(description="The source of the resource.")
@@ -117,8 +118,6 @@ class MetaData(BaseModel):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "versionId" not in data:
             data["versionId"] = None
-        if isinstance(data, dict) and "lastUpdated" not in data:
-            data["lastUpdated"] = None
         if isinstance(data, dict) and "source" not in data:
             data["source"] = None
         return data
@@ -464,7 +463,7 @@ class Patient(Resource):
     """A patient resource representing an individual receiving healthcare."""
 
     id: str = Field(description="The patient's unique Medical Record Number (MRN).")
-    meta: Optional[MetaData] = Field(description="Metadata about the patient resource.")
+    meta: MetaData
     extension: Optional[List[Extension]] = Field(
         description="A list of extensions for additional information."
     )
@@ -493,8 +492,6 @@ class Patient(Resource):
             data["id"] = None
         if isinstance(data, dict) and "extension" not in data:
             data["extension"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "extension" not in data:
             data["extension"] = None
         if isinstance(data, dict) and "telecom" not in data:
@@ -520,9 +517,7 @@ class Condition(Resource):
     """A condition resource representing a clinical condition or diagnosis."""
 
     id: str = Field(description="The unique identifier for the condition.")
-    meta: Optional[MetaData] = Field(
-        description="Metadata about the condition resource."
-    )
+    meta: MetaData
     code: Optional[CodeableConcept] = Field(
         description="The specific condition or diagnosis."
     )
@@ -544,8 +539,6 @@ class Condition(Resource):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "id" not in data:
             data["id"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "code" not in data:
             data["code"] = None
         if isinstance(data, dict) and "subject" not in data:
@@ -588,9 +581,7 @@ class MedicationRequest(Resource):
     id: Optional[str] = Field(
         description="The unique identifier for the medication request."
     )
-    meta: Optional[MetaData] = Field(
-        description="Metadata about the medication request resource."
-    )
+    meta: MetaData
     status: Optional[MedicationRequestStatus] = Field(
         description="The status of the medication request (e.g., active, completed).",
     )
@@ -618,8 +609,6 @@ class MedicationRequest(Resource):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "id" not in data:
             data["id"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "status" not in data:
             data["status"] = None
         if isinstance(data, dict) and "intent" not in data:
@@ -677,9 +666,7 @@ class MedicationRequest(Resource):
 
 class Procedure(Resource):
     id: str = Field(description="The unique identifier for the procedure.")
-    meta: Optional[MetaData] = Field(
-        description="Metadata about the procedure resource."
-    )
+    meta: MetaData
     code: Optional[CodeableConcept] = Field(
         description="The specific procedure that was performed."
     )
@@ -698,8 +685,6 @@ class Procedure(Resource):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "id" not in data:
             data["id"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "performedDateTime" not in data:
             data["performedDateTime"] = None
         if isinstance(data, dict) and "code" not in data:
@@ -732,9 +717,7 @@ class Observation(Resource):
     """
 
     id: Optional[str] = Field(description="The unique identifier for the observation.")
-    meta: Optional[MetaData] = Field(
-        description="Metadata about the observation resource."
-    )
+    meta: MetaData
     status: Optional[ObservationStatus] = Field(
         description="The status of the observation (e.g., final, amended).",
     )
@@ -768,8 +751,6 @@ class Observation(Resource):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "id" not in data:
             data["id"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "status" not in data:
             data["status"] = None
         if isinstance(data, dict) and "category" not in data:
@@ -854,9 +835,7 @@ class ServiceRequest(Resource):
     id: Optional[str] = Field(
         description="The unique identifier for the service request."
     )
-    meta: Optional[MetaData] = Field(
-        description="Metadata about the service request resource."
-    )
+    meta: MetaData
     code: Optional[CodeableConcept] = Field(
         description="The specific service that is being requested, which can include LOINC, SNOMED, CPT, CBV, THL, or Kuntalitto codes.",
     )
@@ -887,8 +866,6 @@ class ServiceRequest(Resource):
     def default_missing_to_none(cls, data) -> Dict:
         if isinstance(data, dict) and "id" not in data:
             data["id"] = None
-        if isinstance(data, dict) and "meta" not in data:
-            data["meta"] = None
         if isinstance(data, dict) and "code" not in data:
             data["code"] = None
         if isinstance(data, dict) and "subject" not in data:
