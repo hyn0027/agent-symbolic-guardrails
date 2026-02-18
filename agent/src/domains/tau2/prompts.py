@@ -54,6 +54,7 @@ def assess_end_conversation(message: str) -> bool:
         "###OUT-OF-SCOPE###",
     ]
     for indicator in end_indicators:
+        
         if indicator in message:
             return True
     return False

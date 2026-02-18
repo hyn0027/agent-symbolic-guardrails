@@ -67,7 +67,7 @@ def human_interaction() -> None:
                 break
             response = agent.ReAct_loop(user_input)
             LOGGER.info(f"Agent: {response}")
-            if assess_end_conversation(agent_message) or agent.end_conversation:
+            if assess_end_conversation(response) or agent.end_conversation:
                 LOGGER.info(f"Conversation ended by agent response.")
                 break
     except KeyboardInterrupt:

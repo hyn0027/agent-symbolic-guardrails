@@ -8,7 +8,7 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/tau2/full_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/tau2/test_config.yml"
 
   MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/tau2/golden_config.yml"
 
@@ -87,4 +87,4 @@ SAFEGUARD:
 
   TOOL_BLOCKING: true
 
-  NO_TOOL_CALL_DISCLOSURE_MESSAGE:  "No tool calls to the airline system or external systems have been made since the last message."
+  NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to the airline system or external systems have been made since the last message."

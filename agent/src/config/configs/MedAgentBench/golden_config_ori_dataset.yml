@@ -1,0 +1,105 @@
+DATASET:
+  NAME: "MedAgentBench"
+
+AGENT:
+  MODEL: "gpt-5"
+  TEMPERATURE: 1.0
+
+  MCP_SERVER_COMMAND: "start-mcp-server"
+
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/test_config.yml"
+
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/MedAgentBench/golden_config.yml"
+
+  TEST_WITH_GOLDEN: true
+
+  MAX_GOLDEN_RETRIES: 5
+
+  MAX_TOOL_CALL_FAILS: 10
+
+  AGENT_INITIAL_MESSAGE: true
+
+  INITIAL_CONVERSTION: "Hi! How can I help you today?"
+
+  DOMAIN_POLICY_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/policy.md"
+
+  SYSTEM_PROMPT_TEMPLATE: |
+    <instructions>
+    {agent_instruction}
+    </instructions>
+    <policy>
+    {domain_policy}
+    </policy>
+
+  AGENT_INSTRUCTION: |
+    You are an LLM-agent that assists users in interacting with an electronic medical record (EMR) system.
+    Your users are healthcare providers seeking to retrieve and update patient information.
+    You can interact with a FHIR-based EMR system via a set of tools that allow you to retrieve and update patient data.
+    You can ask the user for specific code or the coding system.
+
+    You must strictly follow the <policy> provided below.
+
+    If you confirmed with the user that you cannot help with the user's request, respond with ###STOP### to end the conversation.
+
+USER:
+  MODEL: "gpt-5"
+  TEMPERATURE: 1.0
+
+  SYSTEM_PROMPT_TEMPLATE: |
+    You are playing the role of a healthcare provider using an EMR system to retrieve and update patient information.
+    You, as a healthcare provider, will interact with an LLM-agent that can help you retrieve and update patient data from the EMR system.
+    You will communicate with the LLM-agent in muliple turns in natural language to accomplish your goals.
+
+    Your want the agent to help you do the following task:
+    {task_goal}
+
+    Here are some additional information that might be relevant:
+    {additional_info}
+
+    You should always present these additinoal information to the agent when relevant to the conversation.
+
+    Always remember that you are a healthcare provider and your interactions with the agent should reflect that role. Treat the agent as a tool that you use. You are not a LLM and you do not need to support the agent.
+    Never make up or hallucinate information not provided above. Information that is not provided should be considered unknown or unavailable.
+
+    When you obtain the answer, end the conversation with the following format:
+    """
+    Answer: <the answer to the task>
+    ###STOP###
+    """
+
+  SIMULATION_GUIDELINE_PATH: None
+
+EVAL: None
+
+SETTINGS:
+  LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
+
+SAFEGUARD:
+  USER_CONFIRMATION: true
+  USER_CONFIRMATION_TEMPLATE: |
+    I am about to perform the following action:
+    Tool: {tool_name}
+    Arguments: {tool_args}
+    Additional Info: {user_confirmation_details}
+
+    Please review the action above and confirm if you would like me to proceed.
+    Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
+
+  TOOL_RESPONSE_TEMPLATE: true
+
+  TOOL_END_CONVERSATION_FLAG: true
+
+  TOOL_BLOCKING: true
+
+  TOOL_CALL_DISCLOSURE: true
+
+  TOOL_CALL_DISCLOSURE_TEMPLATE: |
+    Here is a summary of the tool calls the agent just made:
+    {tool_call_disclosure}
+
+  NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to EMR system or external systems have been made since the last message."
+
+SIMULATION:
+  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/test_data_v2.json"
+  TYPE: "Original_Benchmark"
+  MAX_STEPS: 100

@@ -15,9 +15,11 @@ def evaluate_single(
     task,
 ):
     LOGGER.info(f"Evaluating simulation with terminate reason: {terminate_reason}")
+    LOGGER.info("Evaluate Single Not Implemented Yet.")
     return None
 
 
 def aggregate_evals(res_list: List) -> None:
     LOGGER.info("Aggregating evaluation results...")
+    LOGGER.info("Aggregate Evals Not Implemented Yet.")
     return None

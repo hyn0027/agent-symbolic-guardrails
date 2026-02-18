@@ -20,9 +20,32 @@ from typing import Annotated, Optional, List, Dict, Any
 from datetime import datetime
 import requests
 from config_loader import CONFIG
+from .docker_service import service
 
 base_api = CONFIG.DATASET.SERVER.BASE_URL
 safeguard_config = CONFIG.SAFEGUARD
+
+
+def calculate(
+    expression: Annotated[
+        str,
+        "The mathematical expression to calculate, such as '2 + 2'. The expression can contain numbers, operators (+, -, *, /), parentheses, and spaces.",
+    ],
+) -> str:
+    """
+    Calculate the result of a mathematical expression.
+
+    Returns:
+        The result of the mathematical expression.
+
+    Raises:
+        ValueError: If the expression is invalid.
+    """
+    if not all(char in "0123456789+-*/(). " for char in expression):
+        raise ValueError(
+            "Invalid characters in expression. Only numbers, operators (+, -, *, /), parentheses, and spaces are allowed."
+        )
+    return str(round(float(eval(expression, {"__builtins__": None}, {})), 2))
 
 
 def _customized_raise_for_error(response: requests.Response) -> None:
@@ -137,9 +160,13 @@ def get_patient_extended(
         Optional[str | LogicList[str]],
         "The patient's phone number (XXX-XXX-XXXX) or email address.",
     ],
-    _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field. "
+        "Can be '_id', '_lastUpdated', 'address', 'address-city', 'address-state', 'address-postalcode', "
+        "'family', 'given', 'birthdate', 'gender', or 'telecom'.",
+    ],
     purpose: Annotated[
         str,
         "The purpose of retrieving the patient information. Could be 'patient care', 'research', 'employment screening', or other purposes.",
@@ -172,7 +199,6 @@ def get_patient_extended(
         address_postalcode,
         address_state,
         telecom,
-        _count,
         _offset,
         _sort,
     )
@@ -219,9 +245,13 @@ def get_patient(
         Optional[str | LogicList[str]],
         "The patient's phone number (XXX-XXX-XXXX) or email address.",
     ],
-    _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field. "
+        "Can be '_id', '_lastUpdated', 'address', 'address-city', 'address-state', 'address-postalcode', "
+        "'family', 'given', 'birthdate', 'gender', or 'telecom'.",
+    ],
 ) -> List[Patient]:
     """
     Search for patients in the FHIR server based on various criteria.
@@ -255,7 +285,7 @@ def get_patient(
         params.extend(process_logic_value(address_state, "address-state"))
     if telecom:
         params.extend(process_logic_value(telecom, "telecom"))
-    params.append(("_count", str(_count)))
+    params.append(("_count", 20))
     if _offset:
         params.append(("_offset", str(_offset)))
     if _sort:
@@ -307,7 +337,11 @@ def get_condition_extended(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'.",
+    ],
     purpose: Annotated[
         str,
         "The purpose of retrieving the condition information. Could be 'patient care', 'research', 'employment screening', or other purposes.",
@@ -357,7 +391,11 @@ def get_condition(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'.",
+    ],
 ) -> List[Condition]:
     """
     Retrieve conditions associated with a specific patient.
@@ -381,14 +419,12 @@ def get_condition(
         params.extend(process_logic_value(code, "code"))
     if onset_date:
         if isinstance(onset_date, datetime):
-            params.append(("onset-date", onset_date.strftime("%Y-%m-%dT%H:%M:%S%z")))
+            params.append(("onset-date", onset_date.isoformat()))
         elif isinstance(onset_date, DateTimeRange):
             params.extend(onset_date.to_query_params("onset-date"))
     if recorded_date:
         if isinstance(recorded_date, datetime):
-            params.append(
-                ("recorded-date", recorded_date.strftime("%Y-%m-%dT%H:%M:%S%z"))
-            )
+            params.append(("recorded-date", recorded_date.isoformat()))
         elif isinstance(recorded_date, DateTimeRange):
             params.extend(recorded_date.to_query_params("recorded-date"))
     params.append(("_count", str(_count)))
@@ -399,12 +435,6 @@ def get_condition(
     response = requests.get(f"{base_api}Condition", params=params)
     _customized_raise_for_error(response)
     bundle = response.json()
-    for entry in bundle.get("entry", []):
-        try:
-            Condition.model_validate(entry["resource"], extra="forbid")
-        except Exception as e:
-            print(f"Error validating Condition resource: {e}")
-            print(json.dumps(entry["resource"], indent=2))
     res = [
         Condition.model_validate(entry["resource"], extra="forbid")
         for entry in bundle.get("entry", [])
@@ -445,7 +475,11 @@ def get_observation_extended(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'.",
+    ],
     purpose: Annotated[
         str,
         "The purpose of retrieving the observation information. Could be 'patient care', 'research', 'employment screening', or other purposes.",
@@ -507,7 +541,11 @@ def get_observation(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'.",
+    ],
 ) -> List[Observation]:
     """
     Retrieve observations from the FHIR server.
@@ -538,7 +576,7 @@ def get_observation(
         params.extend(process_logic_value(code, "code"))
     if effective_date:
         if isinstance(effective_date, datetime):
-            params.append(("date", effective_date.strftime("%Y-%m-%dT%H:%M:%S%z")))
+            params.append(("date", effective_date.isoformat()))
         elif isinstance(effective_date, DateTimeRange):
             params.extend(effective_date.to_query_params("date"))
     if value_string:
@@ -611,17 +649,17 @@ def post_observation(
 
     payload = observation.model_dump_json(exclude_unset=True)
 
+    if CONFIG.SERVER.BLOCK_WRITE_API:
+        return observation
     response = requests.post(
         f"{base_api}/Observation",
         data=payload,
         headers={"Content-Type": "application/fhir+json"},
     )
-    print(response.text)
     _customized_raise_for_error(response)
     created_resource = response.json()
     res = Observation.model_validate(created_resource, extra="forbid")
     posted_observations.append(res)
-
     if (
         res.subject
         and res.subject.reference
@@ -652,7 +690,11 @@ def get_medication_request_extended(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'.",
+    ],
     purpose: Annotated[
         str,
         "The purpose of retrieving the medication request information. Could be 'patient care', 'research', 'employment screening', or other purposes.",
@@ -702,7 +744,11 @@ def get_medication_request(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'.",
+    ],
 ) -> List[MedicationRequest]:
     """
     Retrieve medication requests from the FHIR server.
@@ -730,7 +776,7 @@ def get_medication_request(
         )  # POLICY 2.1
     if authored_on:
         if isinstance(authored_on, datetime):
-            params.append(("authoredon", authored_on.strftime("%Y-%m-%dT%H:%M:%S%z")))
+            params.append(("authoredon", authored_on.isoformat()))
         elif isinstance(authored_on, DateTimeRange):
             params.extend(authored_on.to_query_params("authoredon"))
     params.append(("_count", str(_count)))
@@ -830,6 +876,9 @@ def post_medication_request(
 
     payload = medication_request.model_dump_json(exclude_unset=True)
 
+    if CONFIG.SERVER.BLOCK_WRITE_API:
+        return medication_request
+
     response = requests.post(
         f"{base_api}/MedicationRequest",
         data=payload,
@@ -867,7 +916,11 @@ def get_procedure_extended(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', or 'date'.",
+    ],
     purpose: Annotated[
         str,
         "The purpose of retrieving the procedure information. Could be 'patient care', 'research', 'employment screening', or other purposes.",
@@ -913,7 +966,11 @@ def get_procedure(
     ],
     _count: Annotated[int, "Maximum number of results to return."],
     _offset: Annotated[Optional[int], "Number of results to skip."],
-    _sort: Annotated[Optional[str], "Sort the results by a specific field."],
+    _sort: Annotated[
+        Optional[str],
+        "Sort the results by a specific field."
+        "Can be '_id', '_lastUpdated', 'code', or 'date'.",
+    ],
 ) -> List[Procedure]:
     """
     Retrieve procedures from the FHIR server.
@@ -937,7 +994,7 @@ def get_procedure(
         params.extend(process_logic_value(code, "code"))
     if performed_date_time:
         if isinstance(performed_date_time, datetime):
-            params.append(("date", performed_date_time.strftime("%Y-%m-%dT%H:%M:%S%z")))
+            params.append(("date", performed_date_time.isoformat()))
         elif isinstance(performed_date_time, DateTimeRange):
             params.extend(performed_date_time.to_query_params("date"))
     params.append(("_count", str(_count)))
@@ -1003,6 +1060,9 @@ def post_service_request(
 
     payload = service_request.model_dump_json(exclude_unset=True)
 
+    if CONFIG.SERVER.BLOCK_WRITE_API:
+        return service_request
+
     response = requests.post(
         f"{base_api}/ServiceRequest",
         data=payload,
@@ -1022,7 +1082,9 @@ def post_service_request(
     return res
 
 
-mcp.tool(fetch_current_time)
+mcp.tool(calculate, meta={"skip_golden_eval": True})
+mcp.tool(fetch_current_time, meta={"skip_golden_eval": True})
+
 if safeguard_config.API_REDESIGN:
     mcp.tool(
         get_patient_extended,
@@ -1119,9 +1181,49 @@ def save_state() -> str:
     Save the current state of the MCP server. For test only.
     """
 
-    raise NotImplementedError(
-        "This function is for testing purposes and should not be called in production."
-    )
+    data = {
+        "session_MRN": datamodel.session_MRN,
+        "posted_observations": [obs.model_dump() for obs in posted_observations],
+        "posted_medication_requests": [
+            mr.model_dump() for mr in posted_medication_requests
+        ],
+        "posted_service_requests": [sr.model_dump() for sr in posted_service_requests],
+    }
+    assert isinstance(
+        CONFIG.DATASET.TMP_SAVE_DATA_PATH, str
+    ), "TMP_SAVE_DATA_PATH should be a string"
+    with open(CONFIG.DATASET.TMP_SAVE_DATA_PATH, "w") as f:
+        json.dump(data, f, indent=2)
+    return "State saved successfully."
+
+
+def load_state() -> None:
+    """
+    Load the state of the MCP server from a file. For test only.
+    """
+    if CONFIG.DATASET.TMP_LOAD_DATA_PATH is None:
+        print("No TMP_LOAD_DATA_PATH provided, skipping state loading.")
+        return
+    assert isinstance(
+        CONFIG.DATASET.TMP_LOAD_DATA_PATH, str
+    ), "TMP_LOAD_DATA_PATH should be a string"
+    with open(CONFIG.DATASET.TMP_LOAD_DATA_PATH, "r") as f:
+        data = json.load(f)
+    datamodel.session_MRN = data.get("session_MRN")
+    posted_observations.clear()
+    for obs_data in data.get("posted_observations", []):
+        posted_observations.append(Observation.model_validate(obs_data, extra="forbid"))
+    posted_medication_requests.clear()
+    for mr_data in data.get("posted_medication_requests", []):
+        posted_medication_requests.append(
+            MedicationRequest.model_validate(mr_data, extra="forbid")
+        )
+    posted_service_requests.clear()
+    for sr_data in data.get("posted_service_requests", []):
+        posted_service_requests.append(
+            ServiceRequest.model_validate(sr_data, extra="forbid")
+        )
+    print("State loaded successfully.")
 
 
 @mcp.tool(
@@ -1152,7 +1254,6 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
 
     patient_info = get_patient(
         patient_id=patient_id,
-        _count=1,
         _offset=None,
         _sort=None,
         birthdate=None,
@@ -1207,7 +1308,6 @@ def test() -> None:
         address_state=None,
         gender=None,
         telecom=None,
-        _count=1,
         _offset=None,
         _sort=None,
         purpose="patient care",
@@ -1428,3 +1528,4 @@ def test() -> None:
 
 
 # test()
+load_state()

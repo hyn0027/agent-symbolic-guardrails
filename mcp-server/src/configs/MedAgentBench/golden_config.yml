@@ -10,22 +10,21 @@ DATASET:
     REUSE_STOPPED_CONTAINER: true
     STOP_WHEN_END: false
     REMOVE_WHEN_STOPPED: false
+  TMP_SAVE_DATA_PATH: null
+  TMP_LOAD_DATA_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/tmp_save_data.json"
   SERVER:
     BASE_URL: "http://localhost:8080/fhir/"
+    BLOCK_WRITE_API: true
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/mcp-server/"
 
 SAFEGUARD:
-  API_CHECK: true
-  TOOL_BLOCKING: true
-  API_REDESIGN: true
-  RESPONSE_FILTERING: true
-  USER_CONFIRMATION: true
-  TOOL_END_CONVERSATION: true
-  TOOL_RESPONSE_TEMPLATE: true
-  NEW_API: false
-  ENABLE_THINKING_STEP: true
+  API_CHECK: false
+  TOOL_BLOCKING: false
+  API_REDESIGN: false
+  RESPONSE_FILTERING: false
+  USER_CONFIRMATION: false
   TOOL_CALL_DISCLOSURE: true
 
 ERROR_HANDLING:

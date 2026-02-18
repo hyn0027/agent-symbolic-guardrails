@@ -9,7 +9,9 @@ session_MRN: Optional[str] = None
 class LogicList(BaseModel, Generic[T]):
     """A list of values combined with a logical operator (AND/OR)."""
 
-    values: List[T] = Field(description="A list of values for logical operations.")
+    values: List[T] = Field(
+        min_length=2, description="A list of values for logical operations."
+    )
     operator: Literal["AND", "OR"] = Field(
         description="Logical operator to apply between the values."
     )
@@ -94,11 +96,9 @@ class DateTimeRange(BaseModel):
     def to_query_params(self, field_name: str) -> List[tuple[str, str]]:
         params = []
         if self.start:
-            params.append(
-                (field_name, f"ge{self.start.strftime('%Y-%m-%dT%H:%M:%S%z')}")
-            )
+            params.append((field_name, f"ge{self.start.isoformat()}"))
         if self.end:
-            params.append((field_name, f"le{self.end.strftime('%Y-%m-%dT%H:%M:%S%z')}"))
+            params.append((field_name, f"le{self.end.isoformat()}"))
         return params
 
 

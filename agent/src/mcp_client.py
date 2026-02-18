@@ -134,12 +134,15 @@ class MCPClient:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
         try:
             async with self.client:
-                result = await self.client.call_tool(name="save_state", arguments={})
+                result = await self.client.call_tool(
+                    name="save_state", arguments={}, timeout=90
+                )
             res = self._tool_call_res_to_json(result)
             if res["is_error"]:
                 return False
             return True
         except Exception as e:
+            raise RuntimeError(f"Error saving state: {str(e)}") from e
             return False
 
     async def get_user_confirmation_details(

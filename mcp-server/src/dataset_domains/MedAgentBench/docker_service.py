@@ -162,11 +162,26 @@ class DockerService:
 
         raise TimeoutError(f"Timed out waiting for HTTP server at {url}.")
 
+    def duplicate(self, new_image_name: str) -> None:
+        if not self._client:
+            raise RuntimeError("Docker client not initialized.")
+        if not self._container:
+            raise RuntimeError("Container not initialized.")
+
+        print(
+            f"Committing container {self.container_name} to new image {new_image_name} ..."
+        )
+        try:
+            image = self._container.commit(repository=new_image_name, tag="latest")
+            print(f"Successfully created image {new_image_name} with ID {image.id}.")
+        except APIError as e:
+            raise RuntimeError(f"Failed to commit container to image: {e}") from e
+
 
 _shutdown_once = threading.Event()
 
 
-def start_service() -> None:
+def start_service() -> DockerService:
     assert (
         DOCKER_CONFIG is not None
     ), "DOCKER_CONFIG must be defined in the configuration."
@@ -227,3 +242,8 @@ def start_service() -> None:
     signal.signal(signal.SIGTERM, _handle_signal)
 
     service.start()
+
+    return service
+
+
+service = start_service()

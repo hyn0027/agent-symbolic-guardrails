@@ -3,12 +3,11 @@ from config_loader import CONFIG
 from safety_check import *
 
 if CONFIG.DATASET.NAME == "tau2":
+    import dataset_domains.tau2
     if CONFIG.DATASET.DOMAIN == "airline":
-        import dataset_domains.tau2
-        from dataset_domains.tau2.airlines.tools import *
+        import dataset_domains.tau2.airlines
 elif CONFIG.DATASET.NAME == "MedAgentBench":
     import dataset_domains.MedAgentBench
-    from dataset_domains.MedAgentBench.tools import *
 
 
 def main() -> None:

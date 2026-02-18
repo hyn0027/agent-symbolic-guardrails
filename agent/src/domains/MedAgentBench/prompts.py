@@ -1,11 +1,11 @@
 from config.loader import CONFIG
+from .task import Task
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
 
 
 def _domain_policy() -> str:
-    return ""
     assert isinstance(
         agent_config.DOMAIN_POLICY_FILE, str
     ), "Domain policy file path must be a string."
@@ -24,8 +24,14 @@ def system_prompt() -> str:
     )
 
 
-def user_prompt(task) -> str:
-    raise NotImplementedError("User prompt generation is not implemented yet.")
+def user_prompt(task: Task) -> str:
+    assert isinstance(
+        user_config.SYSTEM_PROMPT_TEMPLATE, str
+    ), "User prompt template must be a string."
+    return user_config.SYSTEM_PROMPT_TEMPLATE.format(
+        task_goal=task.goal,
+        additional_info=task.additional_info,
+    )
 
 
 def assess_end_conversation(message: str) -> bool:

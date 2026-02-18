@@ -51,7 +51,7 @@ class ReActAgent:
             {"role": "system", "content": self.system_prompt},
         ]
         LOGGER.info(f"Agent initialization complete. Detected {len(self.tools)} tools.")
-        LOGGER.debug(json.dumps(self.tools, indent=2))
+        # LOGGER.debug(json.dumps(self.tools, indent=2))
 
         self.remaining_tool_call = None
         self.tmp_user_response = ""
@@ -130,6 +130,9 @@ class ReActAgent:
             "skip_golden_eval", False
         ):
             self.loop.run_until_complete(self.mcp_client.save_state())
+            LOGGER.debug(
+                "Successfully saved state for golden evaluation before tool call."
+            )
 
         if safeguard_config.TOOL_BLOCKING:
             if (
@@ -410,12 +413,15 @@ class ReActAgent:
                     "flag": "golden_eval_blocked",
                     "reason": f"Golden evaluation skipped for tool call to '{tool_name}' due to active blocking of tool '{self.blocking_tool_call.function.name}'.",
                 }
+        LOGGER.debug("Starting golden MCP client")
         golden_mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
         )
         golden_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(golden_loop)
+        LOGGER.debug("Initializing golden MCP client")
         golden_loop.run_until_complete(golden_mcp_client.initialize())
+        LOGGER.debug("Golden MCP client initialized")
         all_tools = golden_mcp_client.list_OPENAI_tools()
         temp_hist = self.history[:-1] + [
             {
@@ -423,7 +429,7 @@ class ReActAgent:
                 "content": f"I plan to call the tool {tool_name} with arguments {json.dumps(tool_args)}. For all the additional parameters needed not included here, I will include them as well, or ask the user if I'm not sure.",
             }
         ]
-        response = self._call_LLM(temp_hist, all_tools, temperature=0.6)
+        response = self._call_LLM(temp_hist, all_tools, temperature=1.0)
 
         def _shutdown_golden_loop() -> None:
             try:
@@ -541,3 +547,12 @@ class ReActAgent:
         finally:
             self.loop.close()
         LOGGER.info("ReActAgent shutdown complete.")
+
+    def log_history(self) -> None:
+        LOGGER.info("Conversation History:")
+        for msg in self.history:
+            LOGGER.info(json.dumps(msg, indent=2))
+
+    def save_history(self, file_path: str) -> None:
+        with open(file_path, "w") as f:
+            json.dump(self.history, f, indent=2)
