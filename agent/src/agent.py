@@ -62,6 +62,7 @@ class ReActAgent:
         self.golden_eval_hist = []
 
         self.blocking_tool_call = None
+        self.blocking_hist = []
         self.tool_call_disclosure = []
 
     def initiate_conversation(self) -> str:
@@ -133,19 +134,24 @@ class ReActAgent:
             LOGGER.debug(
                 "Successfully saved state for golden evaluation before tool call."
             )
-
-        if safeguard_config.TOOL_BLOCKING:
-            if (
-                self.blocking_tool_call != None
-                and tool_call.function.name != self.blocking_tool_call.function.name
-            ):
-                LOGGER.warning(
-                    f"Currently blocking tool calls due to previous failure of tool '{self.blocking_tool_call.function.name}'. New tool call to '{tool_call.function.name}' will also be blocked until the issue is resolved."
-                )
+        if (
+            self.blocking_tool_call != None
+            and tool_call.function.name != self.blocking_tool_call
+        ):
+            LOGGER.warning(
+                f"Currently blocking tool calls due to previous failure of tool '{self.blocking_tool_call}'. New tool call to '{tool_call.function.name}' will also be blocked until the issue is resolved."
+            )
+            self.blocking_hist.append(
+                {
+                    "tool_call": tool_call.function.to_dict(),
+                    "reason": f"Blocked due to previous failure of tool '{self.blocking_tool_call}'.",
+                }
+            )
+            if safeguard_config.TOOL_BLOCKING:
                 self.history.append(
                     {
                         "role": "tool",
-                        "content": f"Tool call to '{tool_call.function.name}' blocked due to previous failure of tool '{self.blocking_tool_call.function.name}'. The blocking status will be cleared once a successful tool call to '{self.blocking_tool_call.function.name}' is made.",
+                        "content": f"Tool call to '{tool_call.function.name}' blocked due to previous failure of tool '{self.blocking_tool_call}'. The blocking status will be cleared once a successful tool call to '{self.blocking_tool_call}' is made.",
                         "tool_call_id": tool_call.id,
                     }
                 )
@@ -210,23 +216,19 @@ class ReActAgent:
                 }
             )
 
-        if (
-            safeguard_config.TOOL_BLOCKING
-            and tool_meta.get("block_when_failed", False)
-            and not success
-        ):
-            self.blocking_tool_call = tool_call
+        if tool_meta.get("block_when_failed", False) and not success:
+            self.blocking_tool_call = tool_name
             LOGGER.warning(
                 f"Tool call to '{tool_name}' failed and is marked as blocking. Blocking further tool calls until this is resolved."
             )
 
         if (
-            safeguard_config.TOOL_BLOCKING
-            and self.blocking_tool_call is not None
+            self.blocking_tool_call is not None
             and success
+            and self.blocking_tool_call == tool_name
         ):
             LOGGER.info(
-                f"Tool call to '{tool_name}' succeeded. Clearing blocking status for tool '{self.blocking_tool_call.function.name}'."
+                f"Tool call to '{tool_name}' succeeded. Clearing blocking status for tool '{self.blocking_tool_call}'."
             )
             self.blocking_tool_call = None
 
@@ -400,19 +402,6 @@ class ReActAgent:
             agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS, str
         ), "MCP_SERVER_COMMAND_GOLDEN_ARGS must be a string."
 
-        if safeguard_config.TOOL_BLOCKING:
-            if (
-                self.blocking_tool_call != None
-                and tool_name != self.blocking_tool_call.function.name
-            ):
-                LOGGER.warning(
-                    f"Skipping golden evaluation for tool call to '{tool_name}' due to active blocking of tool '{self.blocking_tool_call.function.name}'."
-                )
-                return {
-                    "safe": False,
-                    "flag": "golden_eval_blocked",
-                    "reason": f"Golden evaluation skipped for tool call to '{tool_name}' due to active blocking of tool '{self.blocking_tool_call.function.name}'.",
-                }
         LOGGER.debug("Starting golden MCP client")
         golden_mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
