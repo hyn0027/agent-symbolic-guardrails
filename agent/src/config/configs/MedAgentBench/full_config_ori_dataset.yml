@@ -7,11 +7,11 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/test_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/full_config.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/MedAgentBench/golden_config.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: ""
 
-  TEST_WITH_GOLDEN: true
+  TEST_WITH_GOLDEN: false
 
   MAX_GOLDEN_RETRIES: 5
 
@@ -32,9 +32,10 @@ AGENT:
     </policy>
 
   AGENT_INSTRUCTION: |
-    You are an expert in using FHIR functions to assist medical professionals. 
-    You are given a set of possible functions and will interact with a medical professional.
-    You will need to make one or more function/tool calls to help the medical professional to achieve their purpose.
+    You are an LLM-agent that assists users in interacting with an electronic medical record (EMR) system.
+    Your users are healthcare providers seeking to retrieve and update patient information.
+    You can interact with a FHIR-based EMR system via a set of tools that allow you to retrieve and update patient data.
+    You must ask the user for any code or the coding system involved, as they may differ from the standard.
 
     You must strictly follow the <policy> provided below.
 
@@ -47,21 +48,22 @@ USER:
     You, as a healthcare provider, will interact with an LLM-agent that can help you retrieve and update patient data from the EMR system.
     You will communicate with the LLM-agent in muliple turns in natural language to accomplish your goals.
 
-    Your want the agent to help you answer the following question:
+    Your want the agent to help you do the following task:
     {task_goal}
 
     Here are some additional information that might be relevant:
     {additional_info}
 
-    Never make up or hallucinate information not provided above. Do not rely on your previous knowledge. Information that is not provided should be considered unknown or unavailable.
+    You should present these additional information to the agent where relevant to the conversation.
 
-    When you get your answer, end the conversation with the following format:
+    Always remember that you are a healthcare provider and your interactions with the agent should reflect that role. Treat the agent as a tool that you use. You are not a LLM and you do not need to support the agent.
+    Never make up or hallucinate information not provided above. Information that is not provided should be considered unknown or unavailable.
+
+    When you finish your conversatino with the agent, end the conversation with the following format:
     """
     Answer: <The answer to the task. If numerical, just provide the number without any additional text>
     ###STOP###
     """
-
-    Only output the answer and the stop token at the final round of the conversation.
 
   SIMULATION_GUIDELINE_PATH: None
 
@@ -72,7 +74,7 @@ SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
 
 SAFEGUARD:
-  USER_CONFIRMATION: false
+  USER_CONFIRMATION: true
   USER_CONFIRMATION_TEMPLATE: |
     I am about to perform the following action:
     Tool: {tool_name}
@@ -86,9 +88,9 @@ SAFEGUARD:
 
   TOOL_END_CONVERSATION_FLAG: true
 
-  TOOL_BLOCKING: false
+  TOOL_BLOCKING: true
 
-  TOOL_CALL_DISCLOSURE: false
+  TOOL_CALL_DISCLOSURE: true
 
   TOOL_CALL_DISCLOSURE_TEMPLATE: |
     Here is a summary of the tool calls the agent just made:

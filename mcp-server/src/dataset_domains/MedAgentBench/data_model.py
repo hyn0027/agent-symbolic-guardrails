@@ -78,10 +78,10 @@ class DateTimeRange(BaseModel):
     """A range of date-time values with optional start and end timestamps."""
 
     start: Optional[datetime] = Field(
-        description="The start of the date-time range (inclusive). In format YYYY-MM-DDTHH:MM:SS±HH:MM"
+        description="The start of the date-time range (inclusive). In ISO format. "
     )
     end: Optional[datetime] = Field(
-        description="The end of the date-time range (inclusive). In format YYYY-MM-DDTHH:MM:SS±HH:MM"
+        description="The end of the date-time range (inclusive). In ISO format. "
     )
 
     @model_validator(mode="before")
@@ -451,7 +451,9 @@ class Note(BaseModel):
 class Resource(BaseModel):
     """A FHIR resource with a type and optional unique identifier."""
 
-    resourceType: str = Field(description="The type of the FHIR resource.")
+    resourceType: str = Field(
+        description="The type of the FHIR resource. Can be Patient, Condition, MedicationRequest, Observation, Procedure, or ServiceRequest."
+    )
 
     @model_validator(mode="before")
     @classmethod
@@ -462,7 +464,9 @@ class Resource(BaseModel):
 class Patient(Resource):
     """A patient resource representing an individual receiving healthcare."""
 
-    id: str = Field(description="The patient's unique Medical Record Number (MRN).")
+    id: str = Field(
+        description="The patient's ID starting with S, which is also referred as the unique Medical Record Number (MRN)."
+    )
     meta: MetaData
     extension: Optional[List[Extension]] = Field(
         description="A list of extensions for additional information."
@@ -583,13 +587,16 @@ class MedicationRequest(Resource):
     )
     meta: MetaData
     status: Optional[MedicationRequestStatus] = Field(
-        description="The status of the medication request (e.g., active, completed).",
+        description="The status of the medication request (e.g., active, completed). Use active for posting new medication requests.",
     )
     intent: Optional[MedicationRequestIntent] = Field(
-        description="The intent of the medication request (e.g., order, plan).",
+        description="The intent of the medication request (e.g., order, plan). Use 'order' for posting new medication requests.",
     )
     medicationCodeableConcept: Optional[CodeableConcept] = Field(
-        description="The specific medication that is being requested."
+        description=(
+            "The specific medication that is being requested. "
+            "Use http://hl7.org/fhir/sid/ndc for coding system."
+        )
     )
     subject: Optional[Subject] = Field(
         description="The patient or group that the medication request is associated with.",
@@ -719,13 +726,18 @@ class Observation(Resource):
     id: Optional[str] = Field(description="The unique identifier for the observation.")
     meta: MetaData
     status: Optional[ObservationStatus] = Field(
-        description="The status of the observation (e.g., final, amended).",
+        description="The status of the observation (e.g., final, amended). Use final for posting observations. ",
     )
     category: Optional[List[CodeableConcept]] = Field(
-        description="A list of categories for the observation."
+        description=(
+            "A list of categories for the observation. "
+            "Use http://hl7.org/fhir/observation-category for coding system. "
+            "Use 'vital-signs' or 'laboratory' as category codes. "
+            "Use 'Vital Signs' or 'Laboratory' as category display names."
+        )
     )
     code: Optional[CodeableConcept] = Field(
-        description="The specific observation that was made."
+        description="The flowsheet ID, encoded flowsheet ID, or LOINC codes to flowsheet mapping. What is being measured."
     )
     subject: Optional[Subject] = Field(
         description="The patient or group that the observation is associated with.",
@@ -837,7 +849,7 @@ class ServiceRequest(Resource):
     )
     meta: MetaData
     code: Optional[CodeableConcept] = Field(
-        description="The specific service that is being requested, which can include LOINC, SNOMED, CPT, CBV, THL, or Kuntalitto codes.",
+        description="The specific service that is being requested, which can include LOINC, SNOMED, CPT, CBV, THL, or Kuntalitto codes. Example coding system: http://loinc.org"
     )
     subject: Optional[Subject] = Field(
         description="The patient or group that the service request is associated with.",
@@ -846,13 +858,13 @@ class ServiceRequest(Resource):
         description="The date when the service request was authored."
     )
     status: Optional[ServiceRequestStatus] = Field(
-        description="The status of the service request (e.g., active, completed).",
+        description="The status of the service request (e.g., active, completed). Use active for posting new service requests.",
     )
     intent: Optional[ServiceRequestIntent] = Field(
-        description="The intent of the service request (e.g., order, plan).",
+        description="The intent of the service request (e.g., order, plan). Use 'order' for posting new service requests.",
     )
     priority: str = Field(
-        description="The priority of the service request (e.g., routine, urgent).",
+        description="The priority of the service request (e.g., routine, urgent). Use 'stat' for posting new service requests."
     )
     note: Optional[List[Note]] = Field(
         description="A list of notes associated with the service request."

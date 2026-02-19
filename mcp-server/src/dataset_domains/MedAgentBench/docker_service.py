@@ -96,6 +96,7 @@ class DockerService:
                 detach=True,
                 ports={f"{self.container_port}/tcp": self.host_port},
                 remove=False,
+                cpu_shares=4096,
             )
         except APIError as e:
             if "port is already allocated" in str(e).lower():

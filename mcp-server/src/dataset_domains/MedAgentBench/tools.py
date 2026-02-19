@@ -21,7 +21,7 @@ from datetime import datetime
 import requests
 from config_loader import CONFIG
 
-# from .docker_service import service
+from .docker_service import service
 
 base_api = CONFIG.DATASET.SERVER.BASE_URL
 safeguard_config = CONFIG.SAFEGUARD
@@ -141,8 +141,8 @@ def get_patient_extended(
         Optional[str | LogicList[str]], "The patient's Medical Record Number (MRN)."
     ],
     birthdate: Annotated[
-        Optional[datetime | DateTimeRange],
-        "The patient’s birthdate, either as a single date (YYYY-MM-DD) or as a datetime range (YYYY-MM-DDTHH:MM:SS±HH:MM)",
+        Optional[datetime],
+        "The patient’s birthdate as a single date (YYYY-MM-DD)",
     ],
     family: Annotated[Optional[str | LogicList[str]], "The patient's family name."],
     given: Annotated[
@@ -176,7 +176,8 @@ def get_patient_extended(
         Optional[str],
         "Sort the results by a specific field. "
         "Can be '_id', '_lastUpdated', 'address', 'address-city', 'address-state', 'address-postalcode', "
-        "'family', 'given', 'birthdate', 'gender', or 'telecom'.",
+        "'family', 'given', 'birthdate', 'gender', or 'telecom'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-birthdate'.",
     ],
     purpose: Annotated[
         str,
@@ -227,8 +228,8 @@ def get_patient(
         Optional[str | LogicList[str]], "The patient's Medical Record Number (MRN)."
     ],
     birthdate: Annotated[
-        Optional[datetime | DateTimeRange],
-        "The patient’s birthdate, either as a single date (YYYY-MM-DD) or as a datetime range (YYYY-MM-DDTHH:MM:SS±HH:MM)",
+        Optional[datetime],
+        "The patient’s birthdate as a single date (YYYY-MM-DD).",
     ],
     family: Annotated[Optional[str | LogicList[str]], "The patient's family name."],
     given: Annotated[
@@ -262,7 +263,8 @@ def get_patient(
         Optional[str],
         "Sort the results by a specific field. "
         "Can be '_id', '_lastUpdated', 'address', 'address-city', 'address-state', 'address-postalcode', "
-        "'family', 'given', 'birthdate', 'gender', or 'telecom'.",
+        "'family', 'given', 'birthdate', 'gender', or 'telecom'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-birthdate'.",
     ],
 ) -> List[Patient]:
     """
@@ -275,10 +277,7 @@ def get_patient(
     if patient_id:
         params.extend(process_logic_value(patient_id, "identifier"))
     if birthdate:
-        if isinstance(birthdate, datetime):
-            params.append(("birthdate", birthdate.strftime("%Y-%m-%d")))
-        elif isinstance(birthdate, DateTimeRange):
-            params.extend(birthdate.to_query_params("birthdate"))
+        params.append(("birthdate", birthdate.strftime("%Y-%m-%d")))
     if family:
         params.extend(process_logic_value(family, "family"))
     if given:
@@ -354,7 +353,8 @@ def get_condition_extended(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'.",
+        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-onset-date'.",
     ],
     purpose: Annotated[
         str,
@@ -409,7 +409,8 @@ def get_condition(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'.",
+        "Can be '_id', '_lastUpdated', 'code', 'onset-date', or 'recorded-date'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-onset-date'.",
     ],
 ) -> List[Condition]:
     """
@@ -495,7 +496,8 @@ def get_observation_extended(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'.",
+        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-date'.",
     ],
     purpose: Annotated[
         str,
@@ -562,7 +564,8 @@ def get_observation(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'.",
+        "Can be '_id', '_lastUpdated', 'code', 'category', 'status', 'date', 'value-string', or 'value-quantity'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-date'.",
     ],
 ) -> List[Observation]:
     """
@@ -633,6 +636,9 @@ def post_observation(
         Observation: The created Observation object.
     """
     if safeguard_config.API_CHECK:
+        if observation.resourceType != "Observation":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Invalid resource type. Expected 'Observation'.")
         if not observation.subject or not observation.subject.reference:
             raise_count_with_type["api_check"] += 1
             raise ValueError(
@@ -673,6 +679,46 @@ def post_observation(
                 raise ValueError(
                     "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
                 )  # POLICY 6.5
+
+        if not observation.category:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Observation must have a category.")
+        if not observation.category[0].coding:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Observation category must have coding.")
+        if (
+            not observation.category[0].coding[0].system
+            or not observation.category[0].coding[0].code
+            or not observation.category[0].coding[0].display
+        ):
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "Observation category coding must have system, code, and display."
+            )
+        if (
+            observation.category[0].coding[0].system
+            != "http://hl7.org/fhir/observation-category"
+        ):
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "Observation category coding system must be 'http://hl7.org/fhir/observation-category'."
+            )
+        if observation.category[0].coding[0].code not in ["vital-signs", "laboratory"]:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "Observation category coding code must be 'vital-signs' or 'laboratory'."
+            )
+        if observation.category[0].coding[0].display not in [
+            "Vital Signs",
+            "Laboratory",
+        ]:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "Observation category coding display must be 'Vital Signs' or 'Laboratory'."
+            )
+        if observation.status != "final":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Observation status must be 'final'.")
 
     payload = observation.model_dump_json(exclude_unset=True)
 
@@ -720,7 +766,8 @@ def get_medication_request_extended(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'.",
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-authored-on'.",
     ],
     purpose: Annotated[
         str,
@@ -775,7 +822,8 @@ def get_medication_request(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'.",
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-authored-on'.",
     ],
 ) -> List[MedicationRequest]:
     """
@@ -863,6 +911,9 @@ def post_medication_request(
         MedicationRequest: The created MedicationRequest object.
     """
     if safeguard_config.API_CHECK:
+        if medication_request.resourceType != "MedicationRequest":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Invalid resource type. Expected 'MedicationRequest'.")
         if not medication_request.subject or not medication_request.subject.reference:
             raise_count_with_type["api_check"] += 1
             raise ValueError(
@@ -913,6 +964,34 @@ def post_medication_request(
                     "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
                 )  # POLICY 6.5
 
+        if medication_request.status != "active":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("MedicationRequest status must be 'active'.")
+        if medication_request.intent != "order":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("MedicationRequest intent must be 'order'.")
+        if not medication_request.medicationCodeableConcept:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("MedicationRequest must have a medicationCodeableConcept.")
+        if not medication_request.medicationCodeableConcept.coding:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "MedicationRequest medicationCodeableConcept must have coding."
+            )
+        if not medication_request.medicationCodeableConcept.coding[0].system:
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "MedicationRequest medicationCodeableConcept coding must have a system."
+            )
+        if (
+            medication_request.medicationCodeableConcept.coding[0].system
+            != "http://hl7.org/fhir/sid/ndc"
+        ):
+            raise_count_with_type["api_check"] += 1
+            raise ValueError(
+                "MedicationRequest medicationCodeableConcept coding system must be 'http://hl7.org/fhir/sid/ndc'."
+            )
+
     payload = medication_request.model_dump_json(exclude_unset=True)
 
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
@@ -958,7 +1037,8 @@ def get_procedure_extended(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', or 'date'.",
+        "Can be '_id', '_lastUpdated', 'code', or 'date'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-date'.",
     ],
     purpose: Annotated[
         str,
@@ -1009,7 +1089,8 @@ def get_procedure(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'code', or 'date'.",
+        "Can be '_id', '_lastUpdated', 'code', or 'date'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-date'.",
     ],
 ) -> List[Procedure]:
     """
@@ -1069,6 +1150,9 @@ def post_service_request(
         HTTPError: If the FHIR server returns an error response.
     """
     if safeguard_config.API_CHECK:
+        if service_request.resourceType != "ServiceRequest":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("Invalid resource type. Expected 'ServiceRequest'.")
         if not service_request.subject or not service_request.subject.reference:
             raise_count_with_type["api_check"] += 1
             raise ValueError(
@@ -1106,6 +1190,16 @@ def post_service_request(
                 raise ValueError(
                     "A similar service request has already been posted. Please check the posted service requests to avoid duplicates."
                 )  # POLICY 6.5
+
+        if service_request.status != "active":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("ServiceRequest status must be 'active'.")
+        if service_request.intent != "order":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("ServiceRequest intent must be 'order'.")
+        if service_request.priority != "stat":
+            raise_count_with_type["api_check"] += 1
+            raise ValueError("ServiceRequest priority must be 'stat'.")
 
     payload = service_request.model_dump_json(exclude_unset=True)
 
@@ -1232,11 +1326,15 @@ def save_state() -> str:
 
     data = {
         "session_MRN": datamodel.session_MRN,
-        "posted_observations": [obs.model_dump() for obs in posted_observations],
-        "posted_medication_requests": [
-            mr.model_dump() for mr in posted_medication_requests
+        "posted_observations": [
+            obs.model_dump_json(exclude_unset=True) for obs in posted_observations
         ],
-        "posted_service_requests": [sr.model_dump() for sr in posted_service_requests],
+        "posted_medication_requests": [
+            mr.model_dump_json(exclude_unset=True) for mr in posted_medication_requests
+        ],
+        "posted_service_requests": [
+            sr.model_dump_json(exclude_unset=True) for sr in posted_service_requests
+        ],
     }
     assert isinstance(
         CONFIG.DATASET.TMP_SAVE_DATA_PATH, str
@@ -1261,14 +1359,17 @@ def load_state() -> None:
     datamodel.session_MRN = data.get("session_MRN")
     posted_observations.clear()
     for obs_data in data.get("posted_observations", []):
+        obs_data = json.loads(obs_data) if isinstance(obs_data, str) else obs_data
         posted_observations.append(Observation.model_validate(obs_data, extra="forbid"))
     posted_medication_requests.clear()
     for mr_data in data.get("posted_medication_requests", []):
+        mr_data = json.loads(mr_data) if isinstance(mr_data, str) else mr_data
         posted_medication_requests.append(
             MedicationRequest.model_validate(mr_data, extra="forbid")
         )
     posted_service_requests.clear()
     for sr_data in data.get("posted_service_requests", []):
+        sr_data = json.loads(sr_data) if isinstance(sr_data, str) else sr_data
         posted_service_requests.append(
             ServiceRequest.model_validate(sr_data, extra="forbid")
         )

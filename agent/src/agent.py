@@ -157,6 +157,7 @@ class ReActAgent:
                 )
                 return None
 
+        LOGGER.debug(f"Invoking tool '{tool_name}'")
         tool_response = self.loop.run_until_complete(
             self.mcp_client.call_tool(tool_name, tool_args)
         )
@@ -378,7 +379,7 @@ class ReActAgent:
         for entry in self.tool_call_disclosure:
             disclosure_entry = (
                 f"Tool Name: {entry['tool_name']}\n"
-                f"Arguments: {json.dumps(entry['tool_args'])}\n"
+                f"Arguments: {entry['tool_args']}\n"
                 f"User Confirmed: {entry['user_confirmed']}\n"
                 f"Success: {entry['success']}\n"
                 f"Tool Response: {entry['tool_response']}\n"

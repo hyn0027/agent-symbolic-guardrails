@@ -1,6 +1,8 @@
 {
-  "session_MRN": null,
-  "posted_observations": [],
+  "session_MRN": "S1579803",
+  "posted_observations": [
+    "{\"resourceType\":\"Observation\",\"id\":\"786007\",\"meta\":{\"versionId\":\"1\",\"lastUpdated\":\"2026-02-19T20:34:41Z\",\"source\":\"#0zwo0SXkk2wBGpdy\"},\"status\":\"final\",\"category\":[{\"coding\":[{\"system\":\"http://hl7.org/fhir/observation-category\",\"code\":\"vital-signs\",\"display\":\"Vital Signs\"}],\"text\":\"Vital Signs\"}],\"code\":{\"coding\":[{\"system\":\"http://loinc.org\",\"code\":\"8480-6\",\"display\":\"Systolic blood pressure\"}],\"text\":\"BP\"},\"subject\":{\"reference\":\"Patient/S1579803\",\"identifier\":null},\"effectiveDateTime\":\"2023-11-13T10:15:00Z\",\"issued\":\"2023-11-13T10:15:00Z\",\"valueQuantity\":{\"value\":118.0,\"unit\":\"mmHg\",\"system\":\"http://unitsofmeasure.org\",\"code\":\"mm[Hg]\"},\"interpretation\":null,\"valueString\":null}"
+  ],
   "posted_medication_requests": [],
   "posted_service_requests": []
 }
