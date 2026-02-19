@@ -5,7 +5,7 @@
 from datetime import datetime
 from copy import deepcopy
 from typing import List, Optional, Annotated, Tuple
-from safety_check import process_error
+from dataset_domains.tau2.safety_check import process_error
 
 from .data_model import (
     AirportCode,

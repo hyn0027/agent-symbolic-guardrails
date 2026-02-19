@@ -426,7 +426,11 @@ class ReActAgent:
         temp_hist = self.history[:-1] + [
             {
                 "role": "assistant",
-                "content": f"I plan to call the tool {tool_name} with arguments {json.dumps(tool_args)}. For all the additional parameters needed not included here, I will include them as well, or ask the user if I'm not sure.",
+                "content": (
+                    f"For the next step, I will call the tool {tool_name} with (partial) arguments {json.dumps(tool_args)}. "
+                    "I will follow those arguments, include those set to NULL or empty string. \n"
+                    "For all the additional fields not already covered above, I will include them as well, or ask the user if I'm not sure."
+                ),
             }
         ]
         response = self._call_LLM(temp_hist, all_tools, temperature=1.0)

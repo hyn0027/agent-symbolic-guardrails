@@ -6,6 +6,7 @@ user_config = CONFIG.USER
 
 
 def _domain_policy() -> str:
+    return ""
     assert isinstance(
         agent_config.DOMAIN_POLICY_FILE, str
     ), "Domain policy file path must be a string."

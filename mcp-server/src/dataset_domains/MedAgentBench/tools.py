@@ -20,10 +20,17 @@ from typing import Annotated, Optional, List, Dict, Any
 from datetime import datetime
 import requests
 from config_loader import CONFIG
-from .docker_service import service
+
+# from .docker_service import service
 
 base_api = CONFIG.DATASET.SERVER.BASE_URL
 safeguard_config = CONFIG.SAFEGUARD
+
+raise_count_with_type = {
+    "implemented": 0,
+    "api_check": 0,
+    "api_check, api_redesign": 0,
+}
 
 
 def calculate(
@@ -42,6 +49,7 @@ def calculate(
         ValueError: If the expression is invalid.
     """
     if not all(char in "0123456789+-*/(). " for char in expression):
+        raise_count_with_type["implemented"] += 1
         raise ValueError(
             "Invalid characters in expression. Only numbers, operators (+, -, *, /), parentheses, and spaces are allowed."
         )
@@ -69,10 +77,12 @@ def _customized_raise_for_error(response: requests.Response) -> None:
                 or error_content.get("detail")
                 or str(error_content)
             )
+            raise_count_with_type["implemented"] += 1
             raise ValueError(
                 f"API request failed with status code {resp.status_code}: {error_message}"
             ) from e
         except json.JSONDecodeError:
+            raise_count_with_type["implemented"] += 1
             raise ValueError(
                 f"API request failed with status code {resp.status_code} and non-JSON response: {resp.text}"
             ) from e
@@ -93,6 +103,7 @@ def _patient_exist(patient_id: str) -> bool:
     bundle = response.json()
     num_entries = len(bundle.get("entry", []))
     if num_entries > 1:
+        raise_count_with_type["api_check"] += 1
         raise ValueError(
             f"Expected at most one patient for patient id {patient_id}, but got {num_entries}. Please check the FHIR server data integrity."
         )
@@ -184,6 +195,7 @@ def get_patient_extended(
     """
     if safeguard_config.API_CHECK:
         if purpose.lower() != "patient care":
+            raise_count_with_type["api_check, api_redesign"] += 1
             raise ValueError(
                 "Access denied: Purpose must be 'patient care'. Please transfer to human agent for assistance."
             )  # POLICY 3.1, 3.2
@@ -301,11 +313,13 @@ def get_patient(
 
     if safeguard_config.API_CHECK:
         if len(res) > 1:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Expected at most one patient to be returned, but got {len(res)}. Please refine your search criteria to ensure a unique patient is returned."
             )  # POLICY 2.2
         if len(res) == 1:
             if datamodel.session_MRN and datamodel.session_MRN != res[0].id:
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {res[0].id}. Please ensure that all API calls in the session pertain to the same patient."
                 )  # POLICY 2.5
@@ -355,6 +369,7 @@ def get_condition_extended(
     """
     if safeguard_config.API_CHECK:
         if purpose.lower() != "patient care":
+            raise_count_with_type["api_check, api_redesign"] += 1
             raise ValueError(
                 "Access denied: Purpose must be 'patient care'. Please transfer to human agent for assistance."
             )  # POLICY 3.1, 3.2
@@ -409,11 +424,13 @@ def get_condition(
     if patient_id:
         if safeguard_config.API_CHECK:
             if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
                 )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
+        raise_count_with_type["api_check"] += 1
         raise ValueError("patient_id is required to retrieve conditions.")  # POLICY 2.1
     if code:
         params.extend(process_logic_value(code, "code"))
@@ -493,6 +510,7 @@ def get_observation_extended(
     """
     if safeguard_config.API_CHECK:
         if purpose.lower() != "patient care":
+            raise_count_with_type["api_check, api_redesign"] += 1
             raise ValueError(
                 "Access denied: Purpose must be 'patient care'. Please transfer to human agent for assistance."
             )  # POLICY 3.1, 3.2
@@ -560,11 +578,13 @@ def get_observation(
     if patient_id:
         if safeguard_config.API_CHECK:
             if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
                 )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
+        raise_count_with_type["api_check"] += 1
         raise ValueError(
             "patient_id is required to retrieve observations."
         )  # POLICY 2.1
@@ -614,42 +634,49 @@ def post_observation(
     """
     if safeguard_config.API_CHECK:
         if not observation.subject or not observation.subject.reference:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "Observation must have a subject with a reference to a patient."
             )  # POLICY 2.1
         if not observation.subject.reference.startswith("Patient/"):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "Observation subject reference must be of the format 'Patient/{patient_id}'."
             )  # POLICY 5.11
 
         patient_id = observation.subject.reference.split("/")[1]
         if not _patient_exist(patient_id):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the observation."
             )  # POLICY 5.11
 
         if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the observation subject reference. Please ensure that all API calls in the session pertain to the same patient."
             )  # POLICY 2.5
 
         if not observation.issued:
+            raise_count_with_type["api_check"] += 1
             raise ValueError("Observation must have an issued date.")  # POLICY 5.7
 
         if not is_current_time(observation.issued):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "Observation issued date must match the current server time."
             )  # POLICY 5.7
 
         for previous_observation in posted_observations:
             if Observation.similar(observation, previous_observation):
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
                 )  # POLICY 6.5
 
     payload = observation.model_dump_json(exclude_unset=True)
 
-    if CONFIG.SERVER.BLOCK_WRITE_API:
+    if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return observation
     response = requests.post(
         f"{base_api}/Observation",
@@ -708,6 +735,7 @@ def get_medication_request_extended(
     """
     if safeguard_config.API_CHECK:
         if purpose.lower() != "patient care":
+            raise_count_with_type["api_check, api_redesign"] += 1
             raise ValueError(
                 "Access denied: Purpose must be 'patient care'. Please transfer to human agent for assistance."
             )  # POLICY 3.1, 3.2
@@ -766,11 +794,13 @@ def get_medication_request(
     if patient_id:
         if safeguard_config.API_CHECK:
             if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
                 )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
+        raise_count_with_type["api_check"] += 1
         raise ValueError(
             "patient_id is required to retrieve medication requests."
         )  # POLICY 2.1
@@ -813,6 +843,7 @@ def post_medication_request_extended(
     if safeguard_config.API_CHECK:
         if medication_request.incomplete_dosage_instructions():
             if not explanation_for_no_dosing_instructions:
+                raise_count_with_type["api_check, api_redesign"] += 1
                 raise ValueError(
                     "MedicationRequest lacks dosing instructions. An explanation must be provided."
                 )  # POLICY 5.9.2
@@ -833,28 +864,34 @@ def post_medication_request(
     """
     if safeguard_config.API_CHECK:
         if not medication_request.subject or not medication_request.subject.reference:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "MedicationRequest must have a subject with a reference to a patient."
             )  # POLICY 2.1
         if not medication_request.subject.reference.startswith("Patient/"):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "MedicationRequest subject reference must be of the format 'Patient/{patient_id}'."
             )  # POLICY 5.11
         patient_id = medication_request.subject.reference.split("/")[1]
         if not _patient_exist(patient_id):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the medication request."
             )  # POLICY 5.11
         if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the medication request subject reference. Please ensure that all API calls in the session pertain to the same patient."
             )  # POLICY 2.5
 
         if not medication_request.authoredOn:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "MedicationRequest must have an authoredOn date."
             )  # POLICY 5.7
         if not is_current_time(medication_request.authoredOn):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "MedicationRequest authoredOn date must match the current server time."
             )  # POLICY 5.7
@@ -863,6 +900,7 @@ def post_medication_request(
             not medication_request.medicationCodeableConcept
             or medication_request.medicationCodeableConcept.is_empty()
         ):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "MedicationRequest must have a non-empty medicationCodeableConcept."
             )  # POLICY 5.9.1
@@ -870,13 +908,14 @@ def post_medication_request(
             if MedicationRequest.similar(
                 medication_request, previous_medication_request
             ):
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
                 )  # POLICY 6.5
 
     payload = medication_request.model_dump_json(exclude_unset=True)
 
-    if CONFIG.SERVER.BLOCK_WRITE_API:
+    if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return medication_request
 
     response = requests.post(
@@ -934,6 +973,7 @@ def get_procedure_extended(
     """
     if safeguard_config.API_CHECK:
         if purpose.lower() != "patient care":
+            raise_count_with_type["api_check, api_redesign"] += 1
             raise ValueError(
                 "Access denied: Purpose must be 'patient care'. Please transfer to human agent for assistance."
             )  # POLICY 3.1, 3.2
@@ -984,11 +1024,13 @@ def get_procedure(
     if patient_id:
         if safeguard_config.API_CHECK:
             if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id}. Please ensure that all API calls in the session pertain to the same patient."
                 )  # POLICY 2.5
         params.extend(process_logic_value(patient_id, "subject"))
     elif safeguard_config.API_CHECK:
+        raise_count_with_type["api_check"] += 1
         raise ValueError("patient_id is required to retrieve procedures.")  # POLICY 2.1
     if code:
         params.extend(process_logic_value(code, "code"))
@@ -1028,39 +1070,46 @@ def post_service_request(
     """
     if safeguard_config.API_CHECK:
         if not service_request.subject or not service_request.subject.reference:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "ServiceRequest must have a subject with a reference to a patient."
             )  # POLICY 2.1
         if not service_request.subject.reference.startswith("Patient/"):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "ServiceRequest subject reference must be of the format 'Patient/{patient_id}'."
             )  # POLICY 5.11
         patient_id = service_request.subject.reference.split("/")[1]
         if not _patient_exist(patient_id):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Patient with id {patient_id} does not exist. Please create the patient record before posting the service request."
             )  # POLICY 5.11
         if datamodel.session_MRN and datamodel.session_MRN != patient_id:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 f"Session patient MRN mismatch: expected {datamodel.session_MRN}, but got {patient_id} in the service request subject reference. Please ensure that all API calls in the session pertain to the same patient."
             )  # POLICY 2.5
         if not service_request.authoredOn:
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "ServiceRequest must have an authoredOn date."
             )  # POLICY 5.7
         if not is_current_time(service_request.authoredOn):
+            raise_count_with_type["api_check"] += 1
             raise ValueError(
                 "ServiceRequest authoredOn date must match the current server time."
             )  # POLICY 5.7
         for previous_service_request in posted_service_requests:
             if ServiceRequest.similar(service_request, previous_service_request):
+                raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     "A similar service request has already been posted. Please check the posted service requests to avoid duplicates."
                 )  # POLICY 6.5
 
     payload = service_request.model_dump_json(exclude_unset=True)
 
-    if CONFIG.SERVER.BLOCK_WRITE_API:
+    if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return service_request
 
     response = requests.post(
@@ -1293,6 +1342,19 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
         )  # Policy 5.12
 
     return info
+
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def report_error_statistics() -> Dict:
+    res = {}
+    for error_type, count in raise_count_with_type.items():
+        if count > 0:
+            res[error_type] = count
+    return {"raise_count_with_type": res}
 
 
 def test() -> None:
