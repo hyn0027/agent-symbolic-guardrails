@@ -7,7 +7,7 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/full_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/ori_full_config.yml"
 
   MCP_SERVER_COMMAND_GOLDEN_ARGS: ""
 
@@ -32,10 +32,9 @@ AGENT:
     </policy>
 
   AGENT_INSTRUCTION: |
-    You are an LLM-agent that assists users in interacting with an electronic medical record (EMR) system.
-    Your users are healthcare providers seeking to retrieve and update patient information.
-    You can interact with a FHIR-based EMR system via a set of tools that allow you to retrieve and update patient data.
-    You must ask the user for any code or the coding system involved, as they may differ from the standard.
+    You are an expert in using FHIR functions to assist medical professionals. 
+    You are given a set of possible functions and will interact with a medical professional.
+    You will need to make one or more function/tool calls to help the medical professional to achieve their purpose.
 
     You must strictly follow the <policy> provided below.
 
@@ -48,24 +47,22 @@ USER:
     You, as a healthcare provider, will interact with an LLM-agent that can help you retrieve and update patient data from the EMR system.
     You will communicate with the LLM-agent in muliple turns in natural language to accomplish your goals.
 
-    Your want the agent to help you do the following task:
+    Your want the agent to help you answer the following question:
     {task_goal}
 
     Here are some additional information that might be relevant:
     {additional_info}
 
-    You should present these additional information to the agent where relevant to the conversation.
+    Never make up or hallucinate information not provided above. Do not rely on your previous knowledge. Information that is not provided should be considered unknown or unavailable.
+    Certain medical system details, such as coding systems and codes, may not follow the real-world standard, and you should not rely on your prior knowledge of real-world medical systems. Always refer to the provided information for any details about the medical system, and state that the information is unknown or unavailable if it is not provided.
 
-    Always remember that you are a healthcare provider and your interactions with the agent should reflect that role. Treat the agent as a tool that you use. You are not a LLM and you do not need to support the agent.
-    Never make up or hallucinate information not provided above. Information that is not provided should be considered unknown or unavailable.
-
-    When you finish your conversatino with the agent, end the conversation with the following format:
+    When you get your answer, end the conversation with the following format:
     """
     Answer: <The answer to the task. If numerical, just provide the number without any additional text>
     ###STOP###
     """
 
-  SIMULATION_GUIDELINE_PATH: None
+    Only output the answer and the stop token at the final round of the conversation.
 
 EVAL:
   FHIR_API_BASE_URL: "http://127.0.0.1:8080/fhir/"
@@ -93,7 +90,7 @@ SAFEGUARD:
   TOOL_CALL_DISCLOSURE: true
 
   TOOL_CALL_DISCLOSURE_TEMPLATE: |
-    Here is a summary of the tool calls the agent just made:
+    Here is a summary of the tool calls to the EMR system or external systems the agent just made:
     {tool_call_disclosure}
 
   NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to EMR system or external systems have been made since the last message."
@@ -101,4 +98,4 @@ SAFEGUARD:
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/test_data_v2_augmented.json"
   TYPE: "Original_Benchmark"
-  MAX_STEPS: 100
+  MAX_STEPS: 40

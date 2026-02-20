@@ -924,6 +924,7 @@ def evaluate_single(
 
 
 def aggregate_evals(res_list: List) -> None:
+    LOGGER.info("=========== Aggregating Evaluation Results ===========")
     utilities = [
         int(res["utility"]["result"]) for res in res_list if res["utility"] is not None
     ]

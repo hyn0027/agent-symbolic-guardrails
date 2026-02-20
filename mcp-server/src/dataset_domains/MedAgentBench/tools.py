@@ -141,7 +141,7 @@ def get_patient_extended(
         Optional[str | LogicList[str]], "The patient's Medical Record Number (MRN)."
     ],
     birthdate: Annotated[
-        Optional[datetime],
+        Optional[str],
         "The patient’s birthdate as a single date (YYYY-MM-DD)",
     ],
     family: Annotated[Optional[str | LogicList[str]], "The patient's family name."],
@@ -228,7 +228,7 @@ def get_patient(
         Optional[str | LogicList[str]], "The patient's Medical Record Number (MRN)."
     ],
     birthdate: Annotated[
-        Optional[datetime],
+        Optional[str],
         "The patient’s birthdate as a single date (YYYY-MM-DD).",
     ],
     family: Annotated[Optional[str | LogicList[str]], "The patient's family name."],
@@ -277,7 +277,15 @@ def get_patient(
     if patient_id:
         params.extend(process_logic_value(patient_id, "identifier"))
     if birthdate:
-        params.append(("birthdate", birthdate.strftime("%Y-%m-%d")))
+        if safeguard_config.API_CHECK:
+            try:
+                datetime.strptime(birthdate, "%Y-%m-%d")
+            except ValueError:
+                raise_count_with_type["api_check"] += 1
+                raise ValueError(
+                    "Invalid birthdate format. Expected 'YYYY-MM-DD'."
+                )  # POLICY 2.1
+        params.append(("birthdate", birthdate))
     if family:
         params.extend(process_logic_value(family, "family"))
     if given:

@@ -66,7 +66,14 @@ def _load_original_benchmark() -> List[Task]:
     assert isinstance(path, str), "Task file path must be a string."
     with open(path, "r") as f:
         data = json.load(f)
-    return [Task.load_from_original_benchmark(item) for item in data]
+    res = [Task.load_from_original_benchmark(item) for item in data]
+    # random sample 5
+    if len(res) > 3:
+        import random
+
+        res = random.sample(res, 3)
+    LOGGER.info(f"Loaded {len(res)} tasks from the original benchmark.")
+    return res
 
 
 def load_tasks() -> List[Task]:
