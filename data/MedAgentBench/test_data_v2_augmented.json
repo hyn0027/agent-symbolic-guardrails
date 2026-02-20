@@ -1709,181 +1709,181 @@
     },
     {
         "id": "task10_1",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6227720 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6227720 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Julie Powell. The patient's date of birth is 1956-02-24.",
         "eval_MRN": "S6227720"
     },
     {
         "id": "task10_2",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1635224 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1635224 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Jennifer Orozco. The patient's date of birth is 1967-04-24.",
         "eval_MRN": "S1635224"
     },
     {
         "id": "task10_3",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6474456 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6474456 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Linda Thomas. The patient's date of birth is 1977-03-26.",
         "eval_MRN": "S6474456"
     },
     {
         "id": "task10_4",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2161163 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2161163 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Catherine Norman. The patient's date of birth is 1953-06-18.",
         "eval_MRN": "S2161163"
     },
     {
         "id": "task10_5",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0547588 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0547588 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Tina Anderson. The patient's date of birth is 1959-01-24.",
         "eval_MRN": "S0547588"
     },
     {
         "id": "task10_6",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2111822 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2111822 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Valerie Young. The patient's date of birth is 1934-11-12.",
         "eval_MRN": "S2111822"
     },
     {
         "id": "task10_7",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1891852 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1891852 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Nathan Woods. The patient's date of birth is 1967-06-04.",
         "eval_MRN": "S1891852"
     },
     {
         "id": "task10_8",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S3114648 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S3114648 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Gregory Welch. The patient's date of birth is 1960-03-28.",
         "eval_MRN": "S3114648"
     },
     {
         "id": "task10_9",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1698248 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1698248 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Andrew Everett. The patient's date of birth is 1936-02-29.",
         "eval_MRN": "S1698248"
     },
     {
         "id": "task10_10",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6488980 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6488980 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Zachary Scott. The patient's date of birth is 1974-04-02.",
         "eval_MRN": "S6488980"
     },
     {
         "id": "task10_11",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2033286 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2033286 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Marc Collins. The patient's date of birth is 1948-08-19.",
         "eval_MRN": "S2033286"
     },
     {
         "id": "task10_12",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6550627 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6550627 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Erica Castro. The patient's date of birth is 1960-12-16.",
         "eval_MRN": "S6550627"
     },
     {
         "id": "task10_13",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6521727 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6521727 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Glenda Hall. The patient's date of birth is 1952-11-14.",
         "eval_MRN": "S6521727"
     },
     {
         "id": "task10_14",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6541609 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6541609 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Rebecca Nguyen. The patient's date of birth is 1955-09-11.",
         "eval_MRN": "S6541609"
     },
     {
         "id": "task10_15",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6545016 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6545016 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Russell Shields. The patient's date of birth is 1964-01-02.",
         "eval_MRN": "S6545016"
     },
     {
         "id": "task10_16",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2016972 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2016972 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Kathryn Maxwell. The patient's date of birth is 1961-10-13.",
         "eval_MRN": "S2016972"
     },
     {
         "id": "task10_17",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2823623 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2823623 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Charles Carlson. The patient's date of birth is 1972-05-25.",
         "eval_MRN": "S2823623"
     },
     {
         "id": "task10_18",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1311412 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1311412 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Katie Hernandez. The patient's date of birth is 1952-12-28.",
         "eval_MRN": "S1311412"
     },
     {
         "id": "task10_19",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2154941 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2154941 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Emily Hicks. The patient's date of birth is 1942-05-11.",
         "eval_MRN": "S2154941"
     },
     {
         "id": "task10_20",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0722219 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0722219 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Robert Gardner. The patient's date of birth is 1975-05-30.",
         "eval_MRN": "S0722219"
     },
     {
         "id": "task10_21",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0789363 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0789363 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Margaret Kidd. The patient's date of birth is 1982-08-24.",
         "eval_MRN": "S0789363"
     },
     {
         "id": "task10_22",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2090974 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2090974 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Keith Miller. The patient's date of birth is 2004-09-05.",
         "eval_MRN": "S2090974"
     },
     {
         "id": "task10_23",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S3070524 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S3070524 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Benjamin Ramirez. The patient's date of birth is 1943-12-14.",
         "eval_MRN": "S3070524"
     },
     {
         "id": "task10_24",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6500497 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6500497 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Keith Trujillo. The patient's date of birth is 1991-06-15.",
         "eval_MRN": "S6500497"
     },
     {
         "id": "task10_25",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1152319 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1152319 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Phillip Sullivan. The patient's date of birth is 1937-03-08.",
         "eval_MRN": "S1152319"
     },
     {
         "id": "task10_26",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6352985 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6352985 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Anthony Parker. The patient's date of birth is 2020-06-05.",
         "eval_MRN": "S6352985"
     },
     {
         "id": "task10_27",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0658561 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S0658561 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Christopher Cruz. The patient's date of birth is 1940-08-28.",
         "eval_MRN": "S0658561"
     },
     {
         "id": "task10_28",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6530532 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S6530532 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Brian Buchanan. The patient's date of birth is 1954-08-10.",
         "eval_MRN": "S6530532"
     },
     {
         "id": "task10_29",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2703270 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S2703270 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Justin Gould. The patient's date of birth is 1943-05-19.",
         "eval_MRN": "S2703270"
     },
     {
         "id": "task10_30",
-        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1876702 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
+        "instruction": "What\u2019s the last HbA1C (hemoglobin A1C) value in the chart for patient S1876702 and when was it recorded? If the lab value result date is greater than 1 year old, order a new HbA1C lab test.  Respond your answer as \"last_value, last_time\", where last_value is a numerical value and last_time is a iso format time string. If no recent potassium value, respond with \"-1, N/A\".",
         "context": "It's 2023-11-13T10:15:00+00:00 now. The code for HbA1C is \"A1C\". The LOINC code for ordering HbA1C lab is: 4548-4. The answer should be \"-1, N/A\" if a measurement is not available. The patient's name is Linda Price. The patient's date of birth is 1950-12-31.",
         "eval_MRN": "S1876702"
     }
