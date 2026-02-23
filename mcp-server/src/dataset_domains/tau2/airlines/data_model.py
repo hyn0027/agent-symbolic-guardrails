@@ -5,6 +5,7 @@ from pydantic import BaseModel, Field
 from dataset_domains.tau2.db import DB
 from config_loader import CONFIG
 from utils import load_json
+from mcp_server import mcp
 from .data_path import AIRLINE_DB_PATH
 
 safeguard_config = CONFIG.SAFEGUARD
@@ -298,3 +299,20 @@ class FlightDB(DB):
 
 
 db = FlightDB.load(AIRLINE_DB_PATH)
+
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def load_state(path: str) -> str:
+    """
+    Load the state of the system from a file.
+
+    Returns:
+        A message indicating the state was loaded.
+    """
+    global db
+    db = FlightDB.load(path)
+    return "State loaded successfully."

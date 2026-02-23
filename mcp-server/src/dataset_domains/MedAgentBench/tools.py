@@ -1327,7 +1327,7 @@ mcp.tool(
         "disclose_to_model": False,
     }
 )
-def save_state() -> str:
+def save_state(path: str) -> str:
     """
     Save the current state of the MCP server. For test only.
     """
@@ -1344,25 +1344,21 @@ def save_state() -> str:
             sr.model_dump_json(exclude_unset=True) for sr in posted_service_requests
         ],
     }
-    assert isinstance(
-        CONFIG.DATASET.TMP_SAVE_DATA_PATH, str
-    ), "TMP_SAVE_DATA_PATH should be a string"
-    with open(CONFIG.DATASET.TMP_SAVE_DATA_PATH, "w") as f:
+    with open(path, "w") as f:
         json.dump(data, f, indent=2)
     return "State saved successfully."
 
 
-def load_state() -> None:
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def load_state(path: str) -> str:
     """
     Load the state of the MCP server from a file. For test only.
     """
-    if CONFIG.DATASET.TMP_LOAD_DATA_PATH is None:
-        print("No TMP_LOAD_DATA_PATH provided, skipping state loading.")
-        return
-    assert isinstance(
-        CONFIG.DATASET.TMP_LOAD_DATA_PATH, str
-    ), "TMP_LOAD_DATA_PATH should be a string"
-    with open(CONFIG.DATASET.TMP_LOAD_DATA_PATH, "r") as f:
+    with open(path, "r") as f:
         data = json.load(f)
     datamodel.session_MRN = data.get("session_MRN")
     posted_observations.clear()
@@ -1381,7 +1377,7 @@ def load_state() -> None:
         posted_service_requests.append(
             ServiceRequest.model_validate(sr_data, extra="forbid")
         )
-    print("State loaded successfully.")
+    return "State loaded successfully."
 
 
 @mcp.tool(
@@ -1699,4 +1695,3 @@ def test() -> None:
 
 
 # test()
-load_state()

@@ -34,7 +34,6 @@ from .data_model import (
     CompensatonReason,
     db,
 )
-from .data_path import TMP_DB_PATH
 
 from mcp_server import mcp
 from config_loader import CONFIG
@@ -2286,15 +2285,16 @@ if safeguard_config.NEW_API:
         "disclose_to_model": False,
     }
 )
-def save_state() -> str:
+def save_state(path:str) -> str:
     """
     Save the current state of the system.
 
     Returns:
         A message indicating the state was saved.
     """
-    db.dump(TMP_DB_PATH)
+    db.dump(path)
     return "State saved successfully."
+
 
 
 @mcp.tool(

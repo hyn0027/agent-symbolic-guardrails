@@ -9,6 +9,7 @@ import asyncio
 from mcp_client import MCPClient
 from config.loader import CONFIG
 from config.logger import LOGGER
+from files import generate_random_file_path, delete_file_if_exists
 
 agent_config = CONFIG.AGENT
 safeguard_config = CONFIG.SAFEGUARD
@@ -64,6 +65,21 @@ class ReActAgent:
         self.blocking_tool_call = None
         self.blocking_hist = []
         self.tool_call_disclosure = []
+
+        if agent_config.TEST_WITH_GOLDEN:
+            assert isinstance(
+                agent_config.SAVE_STATE_BASE_PATH, str
+            ), "SAVE_STATE_BASE_PATH must be a string."
+            assert isinstance(
+                agent_config.SAVE_STATE_EXTENTION, str
+            ), "SAVE_STATE_EXTENTION must be a string."
+            self.golden_eval_path = generate_random_file_path(
+                agent_config.SAVE_STATE_BASE_PATH, agent_config.SAVE_STATE_EXTENTION
+            )
+        else:
+            self.golden_eval_path = ""
+
+        self.user_confirmation_hist = []
 
     def initiate_conversation(self) -> str:
         assert isinstance(
@@ -130,9 +146,11 @@ class ReActAgent:
         if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
             "skip_golden_eval", False
         ):
-            self.loop.run_until_complete(self.mcp_client.save_state())
+            self.loop.run_until_complete(
+                self.mcp_client.save_state(self.golden_eval_path)
+            )
             LOGGER.debug(
-                "Successfully saved state for golden evaluation before tool call."
+                f"Successfully saved state for golden evaluation at path: {self.golden_eval_path}"
             )
         if (
             self.blocking_tool_call != None
@@ -214,6 +232,7 @@ class ReActAgent:
                     "tool_name": tool_name,
                     "tool_args": json.loads(tool_args),
                     "eval_result": golden_evaluation,
+                    "original_tool_success": success,
                 }
             )
 
@@ -279,6 +298,7 @@ class ReActAgent:
         if self.remaining_tool_call:
             self.tmp_user_response = self.tmp_user_response + "\n" + user_input
             if user_input.strip().upper().find("CONFIRM") == 0:
+                self.user_confirmation_hist.append("confirmed")
                 LOGGER.info("User confirmed the tool invocation.")
                 self._process_tool_call(
                     self.remaining_tool_call,
@@ -287,6 +307,7 @@ class ReActAgent:
                 )
                 self.remaining_tool_call = None
             elif user_input.strip().upper().find("CANCEL") == 0:
+                self.user_confirmation_hist.append("canceled")
                 LOGGER.info("User canceled the tool invocation.")
                 self.history.append(
                     {
@@ -297,6 +318,7 @@ class ReActAgent:
                 )
                 self.remaining_tool_call = None
             else:
+                self.user_confirmation_hist.append("invalid_response")
                 msg = 'Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.'
                 return msg
             self.tmp_user_response = ""
@@ -413,6 +435,13 @@ class ReActAgent:
         golden_loop.run_until_complete(golden_mcp_client.initialize())
         LOGGER.debug("Golden MCP client initialized")
         all_tools = golden_mcp_client.list_OPENAI_tools()
+        LOGGER.debug(
+            f"loading states for golden evaluation from path: {self.golden_eval_path}"
+        )
+        golden_loop.run_until_complete(
+            golden_mcp_client.load_state(self.golden_eval_path)
+        )
+        LOGGER.debug("State loaded for golden evaluation")
         temp_hist = self.history[:-1] + [
             {
                 "role": "assistant",
@@ -472,6 +501,13 @@ class ReActAgent:
                     "tool_call": tool_call.function.to_dict(),
                 }
 
+        require_confirmation_but_disabled = (
+            not safeguard_config.USER_CONFIRMATION
+            and golden_mcp_client.get_tool_metadata(tool_name).get(
+                "require_confirmation", False
+            )
+        )
+
         tool_response = golden_loop.run_until_complete(
             golden_mcp_client.call_tool(tool_name, tool_call.function.arguments)
         )
@@ -490,6 +526,7 @@ class ReActAgent:
                 "reason": "Tool call resulted in error under golden config.",
                 "tool_response": tool_response,
                 "error_statistics": golden_error_statistic,
+                "require_confirmation_but_disabled": require_confirmation_but_disabled,
             }
         if golden_error_statistic["raise_count_with_type"] != {}:
             return {
@@ -498,12 +535,14 @@ class ReActAgent:
                 "reason": "Tool call resulted in error under golden config.",
                 "tool_response": tool_response["structured_content"],
                 "error_statistics": golden_error_statistic,
+                "require_confirmation_but_disabled": require_confirmation_but_disabled,
             }
 
         return {
             "safe": True,
             "flag": "pass",
             "tool_response": tool_response["structured_content"],
+            "require_confirmation_but_disabled": require_confirmation_but_disabled,
         }
 
     def _call_LLM(self, messages: list, tools: List, **kwargs) -> ChatCompletionMessage:
@@ -531,6 +570,8 @@ class ReActAgent:
     def shutdown(self) -> None:
         LOGGER.info("Shutting down ReActAgent and closing event loop.")
         try:
+            if self.golden_eval_path:
+                delete_file_if_exists(self.golden_eval_path)
             pending = asyncio.all_tasks(loop=self.loop)
             for task in pending:
                 task.cancel()

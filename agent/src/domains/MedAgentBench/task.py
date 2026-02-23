@@ -1,13 +1,14 @@
 from typing import List, Optional
 import json
 from pydantic import BaseModel, Field
+from domains.task_base import BaseTask
 from config.logger import LOGGER
 from config.loader import CONFIG
 
 simulation_config = CONFIG.SIMULATION
 
 
-class Task(BaseModel):
+class Task(BaseTask):
     id: str = Field(description="Unique identifier for the task")
     goal: str = Field(description="The main goal of the user")
     additional_info: str = Field(
@@ -67,11 +68,6 @@ def _load_original_benchmark() -> List[Task]:
     with open(path, "r") as f:
         data = json.load(f)
     res = [Task.load_from_original_benchmark(item) for item in data]
-    # random sample 5
-    if len(res) > 3:
-        import random
-
-        res = random.sample(res, 3)
     LOGGER.info(f"Loaded {len(res)} tasks from the original benchmark.")
     return res
 

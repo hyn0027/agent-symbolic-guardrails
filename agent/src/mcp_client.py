@@ -128,14 +128,14 @@ class MCPClient:
         except Exception as e:
             return {"error": str(e)}
 
-    async def save_state(self) -> bool:
+    async def save_state(self, path: str) -> bool:
         """Call the save_state tool to persist the current state."""
         if not self.initialized:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
         try:
             async with self.client:
                 result = await self.client.call_tool(
-                    name="save_state", arguments={}, timeout=90
+                    name="save_state", arguments={"path": path}, timeout=90
                 )
             res = self._tool_call_res_to_json(result)
             if res["is_error"]:
@@ -143,7 +143,22 @@ class MCPClient:
             return True
         except Exception as e:
             raise RuntimeError(f"Error saving state: {str(e)}") from e
-            return False
+
+    async def load_state(self, path: str) -> bool:
+        """Call the load_state tool to load a previously saved state."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        try:
+            async with self.client:
+                result = await self.client.call_tool(
+                    name="load_state", arguments={"path": path}, timeout=90
+                )
+            res = self._tool_call_res_to_json(result)
+            if res["is_error"]:
+                return False
+            return True
+        except Exception as e:
+            raise RuntimeError(f"Error loading state: {str(e)}") from e
 
     async def get_user_confirmation_details(
         self, func_name: str, func_args: Dict[str, Any]

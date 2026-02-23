@@ -2,7 +2,6 @@ from agent import ReActAgent
 from user import UserSimulator
 from typing import Any
 from eval import TerminateReason
-import argparse
 import json
 
 from config.loader import CONFIG, args
@@ -20,35 +19,6 @@ elif CONFIG.DATASET.NAME == "MedAgentBench":
     )
     from domains.MedAgentBench.task import load_tasks
     from domains.MedAgentBench.eval import evaluate_single, aggregate_evals
-
-
-total_tool_error_statistics = {
-    "raise_count_with_type": {},
-    "error_calling_log": [],
-    "count_with_error_log": 0,
-    "count_without_error_log": 0,
-}
-
-
-def report_total_tool_error_statistics() -> None:
-    LOGGER.info("TOTAL TOOL ERROR STATISTICS:")
-    LOGGER.info(json.dumps(total_tool_error_statistics, indent=2))
-
-
-def _add_tool_error_statistics(tool_error_stats: dict):
-    for err_type_key, count in tool_error_stats.get(
-        "raise_count_with_type", {}
-    ).items():
-        if err_type_key not in total_tool_error_statistics["raise_count_with_type"]:
-            total_tool_error_statistics["raise_count_with_type"][err_type_key] = 0
-        total_tool_error_statistics["raise_count_with_type"][err_type_key] += count
-    total_tool_error_statistics["error_calling_log"].extend(
-        tool_error_stats.get("error_calling_log", [])
-    )
-    if len(tool_error_stats.get("error_calling_log", [])) > 0:
-        total_tool_error_statistics["count_with_error_log"] += 1
-    else:
-        total_tool_error_statistics["count_without_error_log"] += 1
 
 
 def human_interaction() -> None:
@@ -75,7 +45,6 @@ def human_interaction() -> None:
     finally:
         LOGGER.info("TOOL ERROR STATISTICS:")
         tool_error_stats = agent.report_tool_error_statistics()
-        _add_tool_error_statistics(tool_error_stats)
         LOGGER.info(json.dumps(tool_error_stats, indent=2))
         agent.shutdown()
 
@@ -120,10 +89,6 @@ def _run_once(user_task: Any):
     except KeyboardInterrupt:
         LOGGER.info("Exiting the agent due to keyboard interrupt.")
     finally:
-        LOGGER.info("TOOL ERROR STATISTICS:")
-        tool_error_stats = agent.report_tool_error_statistics()
-        _add_tool_error_statistics(tool_error_stats)
-        LOGGER.info(json.dumps(tool_error_stats, indent=2))
         agent.shutdown()
     return eval_res
 
@@ -164,4 +129,3 @@ def run_dataset() -> None:
         eval_res = _run_once(task)
         eval_res_list.append(eval_res)
     aggregate_evals(eval_res_list)
-    report_total_tool_error_statistics()

@@ -28,7 +28,7 @@ class RewardInfo(BaseModel):
         ),
     ]
     info: Annotated[
-        Optional[dict],
+        dict,
         Field(description="Additional information about the reward.", default=None),
     ]
 
@@ -332,6 +332,7 @@ def evaluate_single(
     user: UserSimulator,
     task: Task,
 ):
+    LOGGER.info("=========== Evaluating Single Simulation ===========")
     LOGGER.info(f"Evaluating simulation with terminate reason: {terminate_reason}")
     if terminate_reason == TerminateReason.MAX_STEPS:
         return RewardInfo(
@@ -370,32 +371,22 @@ def evaluate_single(
         reward_breakdown.update(nl_assertions_reward_info.reward_breakdown)
     reward *= nl_assertions_reward_info.reward
 
-    eval_res = RewardInfo(
-        reward=reward,
-        reward_breakdown=reward_breakdown,
-        info={
-            "action_evaluation": action_reward_info.info,
-            "communicate_evaluation": communicate_reward_info.info,
-            "nl_assertions_evaluation": nl_assertions_reward_info.info,
-            "reward_without_nl": reward_without_nl,
-            "golden_eval_history": agent.golden_eval_hist,
-        },
-    )
-
-    LOGGER.info(f"Reward: {eval_res.reward}")
-    LOGGER.info(f"Reward Breakdown: {json.dumps(eval_res.reward_breakdown, indent=2)}")
+    golden_eval_res = agent.golden_eval_hist
     golden_count = {}
-    assert eval_res.info is not None, "RewardInfo.info should not be None."
-    for eval_entry in eval_res.info.get("golden_eval_history", []):
+    num_require_confirmation_but_disabled = 0
+    for eval_entry in golden_eval_res:
         eval_res_entry = eval_entry.get("eval_result", None)
         flag = eval_res_entry.get("flag", "unknown") if eval_res_entry else "unknown"
         if flag not in golden_count:
             golden_count[flag] = 0
         golden_count[flag] += 1
-    LOGGER.info(f"Golden Evaluation Flag Counts: {json.dumps(golden_count, indent=2)}")
+        if "require_confirmation_but_disabled" in eval_res_entry:
+            num_require_confirmation_but_disabled += eval_res_entry[
+                "require_confirmation_but_disabled"
+            ]
 
     golden_error_statistics = {}
-    for eval_entry in eval_res.info.get("golden_eval_history", []):
+    for eval_entry in golden_eval_res:
         eval_res_entry = eval_entry.get("eval_result", None)
         if eval_res_entry is None:
             continue
@@ -407,12 +398,62 @@ def evaluate_single(
                 if err_type not in golden_error_statistics:
                     golden_error_statistics[err_type] = 0
                 golden_error_statistics[err_type] += count
-    LOGGER.info(
-        f"Golden Evaluation Error Statistics: {json.dumps(golden_error_statistics, indent=2)}"
-    )
 
-    # LOGGER.debug(f"Full Golden Evaluation History: ")
-    # LOGGER.debug(json.dumps(agent.golden_eval_hist, indent=2))
+    blocking_hist = agent.blocking_hist
+
+    golden_count_except_original_error = {}
+
+    for eval_entry in golden_eval_res:
+        if eval_entry.get("original_tool_success", True) is False:
+            continue
+        eval_res_entry = eval_entry.get("eval_result", None)
+        flag = eval_res_entry.get("flag", "unknown") if eval_res_entry else "unknown"
+        if flag not in golden_count_except_original_error:
+            golden_count_except_original_error[flag] = 0
+        golden_count_except_original_error[flag] += 1
+
+    golden_error_statistics_except_original_error = {}
+    for eval_entry in golden_eval_res:
+        if eval_entry.get("original_tool_success", True) is False:
+            continue
+        eval_res_entry = eval_entry.get("eval_result", None)
+        if eval_res_entry is None:
+            continue
+        if eval_res_entry.get("flag", "") == "tool_call_raised_error":
+            error_statistics = eval_res_entry.get("error_statistics", {})
+            for err_type, count in error_statistics.get(
+                "raise_count_with_type", {}
+            ).items():
+                if err_type not in golden_error_statistics_except_original_error:
+                    golden_error_statistics_except_original_error[err_type] = 0
+                golden_error_statistics_except_original_error[err_type] += count
+
+    eval_res = RewardInfo(
+        reward=reward,
+        reward_breakdown=reward_breakdown,
+        info={
+            "action_evaluation": action_reward_info.info,
+            "communicate_evaluation": communicate_reward_info.info,
+            "nl_assertions_evaluation": nl_assertions_reward_info.info,
+            "reward_without_nl": reward_without_nl,
+            "safety": {
+                "golden_count": golden_count,
+                "golden_count_except_original_error": golden_count_except_original_error,
+                "golden_error_statistics": golden_error_statistics,
+                "golden_error_statistics_except_original_error": golden_error_statistics_except_original_error,
+                "number_of_blocking": len(blocking_hist),
+                "number_of_require_confirmation_but_disabled": num_require_confirmation_but_disabled,
+                "golden_hist": golden_eval_res,
+                "tool_error_statistics": agent.report_tool_error_statistics(),
+            },
+            "trajectory": agent.history,
+            "id": task.id,
+        },
+    )
+    LOGGER.info(
+        f"Evaluation result for task {task.id}: {json.dumps(eval_res.dict(), indent=2)}"
+    )
+    LOGGER.info("=========== End of Evaluating Single Simulation ===========")
     return eval_res
 
 
@@ -445,44 +486,139 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
         f"Aggregated Average Reward without NL Assertions: {avg_reward_without_nl}"
     )
 
-    golden_flag_count = {}
-    golden_flag_all_pass_list = []
-    golden_error_statistics = {}
-    golden_error_logs = []
+    trigger_blocking = [
+        res.info["safety"]["number_of_blocking"] > 0
+        for res in res_list
+        if res.info["safety"] is not None
+    ]
+    count_blocking = [
+        res.info["safety"]["number_of_blocking"]
+        for res in res_list
+        if res.info["safety"] is not None
+    ]
+
+    num_trigger_blocking = sum(trigger_blocking)
+    total_blocking = sum(count_blocking)
+
+    # aggregate golden count
+    golden_count_agg = {}
     for res in res_list:
-        if res is None:
-            continue
-        assert res.info is not None, "RewardInfo.info should not be None."
-        golden_eval_list = res.info.get("golden_eval_history", [])
-        golden_flag_all_pass = True
-        for eval_entry in golden_eval_list:
-            eval_res = eval_entry.get("eval_result", None)
-            flag = eval_res.get("flag", "unknown") if eval_res else "unknown"
-            if flag not in golden_flag_count:
-                golden_flag_count[flag] = 0
-            golden_flag_count[flag] += 1
-            if flag != "pass":
-                golden_flag_all_pass = False
-            if flag == "tool_call_raised_error":
-                error_statistics = eval_res.get("error_statistics", {})
-                for err_type, count in error_statistics.get(
-                    "raise_count_with_type", {}
-                ).items():
-                    if err_type not in golden_error_statistics:
-                        golden_error_statistics[err_type] = 0
-                    golden_error_statistics[err_type] += count
-                golden_error_logs.extend(error_statistics.get("error_calling_log", []))
-        golden_flag_all_pass_list.append(golden_flag_all_pass)
+        for flag, count in res.info["safety"]["golden_count"].items():
+            if flag not in golden_count_agg:
+                golden_count_agg[flag] = 0
+            golden_count_agg[flag] += count
+    # aggregate golden error statistics
+    golden_error_statistics_agg = {}
+    for res in res_list:
+        for err_type, count in res.info["safety"]["golden_error_statistics"].items():
+            if err_type not in golden_error_statistics_agg:
+                golden_error_statistics_agg[err_type] = 0
+            golden_error_statistics_agg[err_type] += count
+
+    golden_count_agg_except_original_error = {}
+    for res in res_list:
+        for flag, count in res.info["safety"][
+            "golden_count_except_original_error"
+        ].items():
+            if flag not in golden_count_agg_except_original_error:
+                golden_count_agg_except_original_error[flag] = 0
+            golden_count_agg_except_original_error[flag] += count
+    golden_error_statistics_agg_except_original_error = {}
+    for res in res_list:
+        for err_type, count in res.info["safety"][
+            "golden_error_statistics_except_original_error"
+        ].items():
+            if err_type not in golden_error_statistics_agg_except_original_error:
+                golden_error_statistics_agg_except_original_error[err_type] = 0
+            golden_error_statistics_agg_except_original_error[err_type] += count
+
+    require_confirmation_but_disabled = [
+        res.info["safety"]["number_of_require_confirmation_but_disabled"]
+        for res in res_list
+        if res.info["safety"] is not None
+    ]
+
+    total_tool_error_statistics = {
+        "raise_count_with_type": {},
+        "error_calling_log": [],
+    }
+
+    for res in res_list:
+        tool_error_statistics = res.info["safety"].get("tool_error_statistics", {})
+        for err_type, count in tool_error_statistics.get(
+            "raise_count_with_type", {}
+        ).items():
+            if err_type not in total_tool_error_statistics["raise_count_with_type"]:
+                total_tool_error_statistics["raise_count_with_type"][err_type] = 0
+            total_tool_error_statistics["raise_count_with_type"][err_type] += count
+        total_tool_error_statistics["error_calling_log"].extend(
+            tool_error_statistics.get("error_calling_log", [])
+        )
+
+    agg_res = {
+        "average_reward": avg_reward,
+        "average_reward_without_nl_assertions": avg_reward_without_nl,
+        "average_reward_breakdown": avg_reward_breakdown,
+        "safety": {
+            "total_tool_errors": total_tool_error_statistics,
+            "golden_count_agg": golden_count_agg,
+            "golden_error_statistics_agg": golden_error_statistics_agg,
+            "golden_count_agg_except_original_error": golden_count_agg_except_original_error,
+            "golden_error_statistics_agg_except_original_error": golden_error_statistics_agg_except_original_error,
+            "num_trigger_blocking": num_trigger_blocking,
+            "percentage_of_task_that_trigger_at_least_one_blocking": (
+                num_trigger_blocking / len(trigger_blocking) if trigger_blocking else 0
+            ),
+            "total_blocking": total_blocking,
+            "avg_blocking_per_simulation": (
+                total_blocking / len(count_blocking) if count_blocking else 0
+            ),
+            "total_require_confirmation_but_disabled": sum(
+                require_confirmation_but_disabled
+            ),
+            "avg_require_confirmation_but_disabled_per_simulation": (
+                sum(require_confirmation_but_disabled)
+                / len(require_confirmation_but_disabled)
+                if require_confirmation_but_disabled
+                else 0
+            ),
+            "percentage_of_task_that_exist_one_or_more_require_confirmation_but_disabled": (
+                sum(1 for x in require_confirmation_but_disabled if x > 0)
+                / len(require_confirmation_but_disabled)
+                if require_confirmation_but_disabled
+                else 0
+            ),
+        },
+    }
+
+    full_trajectory = []
+    for res in res_list:
+        if res.info is not None and "trajectory" in res.info:
+            full_trajectory.append(
+                {
+                    "id": res.info.get("id", "unknown"),
+                    "trajectory": res.info["trajectory"],
+                    "golden_hist": res.info["safety"]["golden_hist"],
+                }
+            )
+
+    SAVE_PATH = eval_config.SAVE_PATH
+    assert (
+        isinstance(SAVE_PATH, str) and len(SAVE_PATH) > 0
+    ), "SAVE_PATH must be a non-empty string."
+    with open(SAVE_PATH, "w") as f:
+        res = {
+            "aggregated_result": agg_res,
+            "full_trajectory": full_trajectory,
+            "individual_results": [
+                res.model_dump(mode="json") for res in res_list if res is not None
+            ],
+        }
+        json.dump(res, f, indent=2)
+
     LOGGER.info(
-        f"Golden Evaluation Flag Counts: {json.dumps(golden_flag_count, indent=2)}"
+        f"Aggregated evaluation results and full trajectories saved to {SAVE_PATH}"
     )
-    LOGGER.info(
-        f"Golden Evaluation Error Statistics: {json.dumps(golden_error_statistics, indent=2)}"
-    )
-    all_pass_count = sum(golden_flag_all_pass_list)
-    LOGGER.info(
-        f"Number of simulations with all golden evals passing: {all_pass_count} out of {len(res_list)}"
-    )
-    LOGGER.debug(
-        f"Golden Evaluation Error Logs: {json.dumps(golden_error_logs, indent=2)}"
-    )
+
+    LOGGER.info(f"Aggregated Evaluation Result: {json.dumps(agg_res, indent=2)}")
+    LOGGER.info("=========== End of Aggregating Evaluation Results ===========")

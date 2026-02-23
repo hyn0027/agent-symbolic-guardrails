@@ -7,6 +7,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
+from domains.task_base import BaseTask
 
 from config.loader import CONFIG
 
@@ -282,7 +283,7 @@ class EvaluationCriteria(BaseModel):
         return "\n".join(lines)
 
 
-class Task(BaseModel):
+class Task(BaseTask):
     """
     A task for a particular domain. This will be sent to the user simulator, the environment and the evaluator.
     """
