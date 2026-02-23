@@ -1,0 +1,6 @@
+[
+    "Check specific information in the system, with certain search criteria. No computation needed. (task 1, 4, 7)",
+    "Check specific information in the system, with certain search criteria. Then do computation (e.g. calculate average, diff, etc.) to get the final result. (task 2, 6)",
+    "Write a resource (such as observation) with all details given by the user into the system. Do not require to check existing info, or perform reasoning. (task 3, 8)",
+    "Check specific information in the system, with certain search criteria. Then based on the search result, write a resource (e.g. place an order, write an observation, etc.) into the system based on clear instruction/criteria provided by the user. (task 5, 9, 10)"
+]

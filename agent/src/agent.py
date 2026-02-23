@@ -235,6 +235,11 @@ class ReActAgent:
                     "original_tool_success": success,
                 }
             )
+            if not safeguard_config.TOOL_BLOCKING and not golden_evaluation["safe"]:
+                self.blocking_tool_call = tool_name
+                LOGGER.warning(
+                    f"Tool call to '{tool_name}' failed golden evaluation and is marked as blocking. Blocking further tool calls until this is resolved."
+                )
 
         if tool_meta.get("block_when_failed", False) and not success:
             self.blocking_tool_call = tool_name

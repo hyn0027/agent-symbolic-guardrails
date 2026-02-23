@@ -665,6 +665,26 @@ def post_observation(
                     "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
                 )  # POLICY 6.5
 
+        recent_observations = get_observation(
+            patient_id=patient_id,
+            _count=10,
+            _sort="-date",
+            observation_id=None,
+            status=None,
+            category=None,
+            code=None,
+            effective_date=None,
+            value_string=None,
+            value_quantity=None,
+            _offset=None,
+        )
+        for recent_observation in recent_observations:
+            if Observation.similar(observation, recent_observation):
+                raise_count_with_type["api_check"] += 1
+                raise ValueError(
+                    "A similar observation has already been recorded recently. Please check the recent observations for the patient to avoid duplicates."
+                )  # POLICY 6.5
+
         if not observation.category:
             raise_count_with_type["api_check"] += 1
             raise ValueError("Observation must have a category.")
@@ -751,8 +771,8 @@ def get_medication_request_extended(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'. ",
-        "To use decending order, append a minus sign before the field name, e.g., '-authored-on'.",
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authoredon'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-authoredon'.",
     ],
     purpose: Annotated[
         str,
@@ -807,8 +827,8 @@ def get_medication_request(
     _sort: Annotated[
         Optional[str],
         "Sort the results by a specific field."
-        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authored-on'. ",
-        "To use decending order, append a minus sign before the field name, e.g., '-authored-on'.",
+        "Can be '_id', '_lastUpdated', 'status', 'intent', or 'authoredon'. ",
+        "To use decending order, append a minus sign before the field name, e.g., '-authoredon'.",
     ],
 ) -> List[MedicationRequest]:
     """
@@ -947,6 +967,23 @@ def post_medication_request(
                 raise_count_with_type["api_check"] += 1
                 raise ValueError(
                     "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
+                )  # POLICY 6.5
+
+        recent_medication_requests = get_medication_request(
+            patient_id=patient_id,
+            _count=10,
+            _sort="-authoredon",
+            medication_id=None,
+            status=None,
+            intent=None,
+            authored_on=None,
+            _offset=None,
+        )
+        for recent_medication_request in recent_medication_requests:
+            if MedicationRequest.similar(medication_request, recent_medication_request):
+                raise_count_with_type["api_check"] += 1
+                raise ValueError(
+                    "A similar medication request has already been recorded recently. Please check the recent medication requests for the patient to avoid duplicates."
                 )  # POLICY 6.5
 
         if medication_request.status != "active":
