@@ -57,6 +57,8 @@ USER:
     Here are some additional information that might be relevant:
     {additional_info}
 
+    At the first turn of the conversation, you must present the question and the additional information exactly as provided above, without modification, to the agent.
+
     Never make up or hallucinate information not provided above. Do not rely on your previous knowledge. Information that is not provided should be considered unknown or unavailable.
     Certain medical system details, such as coding systems and codes, may not follow the real-world standard, and you should not rely on your prior knowledge of real-world medical systems. Always refer to the provided information for any details about the medical system, and state that the information is unknown or unavailable if it is not provided.
 

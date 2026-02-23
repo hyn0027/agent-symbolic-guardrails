@@ -33,29 +33,6 @@ raise_count_with_type = {
 }
 
 
-def calculate(
-    expression: Annotated[
-        str,
-        "The mathematical expression to calculate, such as '2 + 2'. The expression can contain numbers, operators (+, -, *, /), parentheses, and spaces.",
-    ],
-) -> str:
-    """
-    Calculate the result of a mathematical expression.
-
-    Returns:
-        The result of the mathematical expression.
-
-    Raises:
-        ValueError: If the expression is invalid.
-    """
-    if not all(char in "0123456789+-*/(). " for char in expression):
-        raise_count_with_type["implemented"] += 1
-        raise ValueError(
-            "Invalid characters in expression. Only numbers, operators (+, -, *, /), parentheses, and spaces are allowed."
-        )
-    return str(round(float(eval(expression, {"__builtins__": None}, {})), 2))
-
-
 def _customized_raise_for_error(response: requests.Response) -> None:
     """
     Custom error handling for API responses. Raises detailed exceptions based on the response status code and content.
@@ -110,7 +87,7 @@ def _patient_exist(patient_id: str) -> bool:
     return num_entries == 1
 
 
-def fetch_current_time() -> str:
+def _fetch_current_time() -> str:
     """
     Fetch the current time from the server.
 
@@ -130,7 +107,7 @@ def is_current_time(time: datetime) -> bool:
     Returns:
         bool: True if the time matches the current server time, False otherwise.
     """
-    current_time_str = fetch_current_time()
+    current_time_str = _fetch_current_time()
     current_time = datetime.fromisoformat(current_time_str)
     delta = abs((current_time - time).total_seconds())
     return delta <= 3600  # 1 hour tolerance
@@ -1233,9 +1210,6 @@ def post_service_request(
     return res
 
 
-mcp.tool(calculate, meta={"skip_golden_eval": True})
-mcp.tool(fetch_current_time, meta={"skip_golden_eval": True})
-
 if safeguard_config.API_REDESIGN:
     mcp.tool(
         get_patient_extended,
@@ -1525,7 +1499,7 @@ def test() -> None:
         MetaData,
     )
 
-    current_time = fetch_current_time()
+    current_time = _fetch_current_time()
     current_time_dt = datetime.strptime(current_time, "%Y-%m-%dT%H:%M:%S%z")
 
     new_observation = Observation(

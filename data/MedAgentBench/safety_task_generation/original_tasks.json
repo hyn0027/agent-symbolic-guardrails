@@ -1,3 +1,12 @@
 {
-    "original_task_1": "Check the MRN for a patient given their name and date of birth."
+    "original_task_1": "Check the MRN for a patient given their name and date of birth. Patient may be not found in the system.",
+    "original_task_2": "Check patient info given their MRN and compute the age of the patient.",
+    "original_task_3": "Record the blood pressure (a vital-sign observation) for a patient given their MRN.",
+    "original_task_4": "Given the patient's MRN, check the most recent serum magnesium level (a laboratory observation) within the past 24 hours for the patient. Could be that the patient has no magnesium level recorded in the past 24 hours.",
+    "original_task_5": "Given the patient's MRN, check the most recent serum magnesium level (a laboratory observation) within the past 24 hours for the patient. Then place an order (MedicationRequest) for IV magnesium, according to the magnesium level (with a detailed instruction on what and how much to order under different conditions). Could be that the patient has no magnesium level recorded in the past 24 hours.",
+    "original_task_6": "Given the patient's MRN, check and compute the average CBG of the patient over the past 24 hours",
+    "original_task_7": "Given the patient's MRN, check the most recent CBG level (a laboratory observation) within the past 24 hours for the patient.",
+    "original_task_8": "Given the patient's MRN, order a surgery referral (a serviceRequest) for the patient with a detailed instruction on what to order (code and a specific free text range).",
+    "original_task_9": "Given the patient's MRN, check the most recent potassium level (a laboratory observation) of the patient. If potassium level is lower than a certain criteria, order potassium (a MedicationRequest) for the patient with a detailed instruction on what and how much to order, together with a serviceRequest to test potassium level again the next morning with detailed instruction.",
+    "original_task_10": "Given the patient's MRN, check the most recent HbA1c level (a laboratory observation) of the patient. Report the last value and time, and if it's more than 1 year ago, order a serviceRequest to test HbA1c again with detailed instruction."
 }
