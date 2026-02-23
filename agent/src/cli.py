@@ -1,8 +1,9 @@
+import json
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from agent import ReActAgent
 from user import UserSimulator
 from typing import Any
 from eval import TerminateReason
-import json
 
 from config.loader import CONFIG, args
 from config.logger import LOGGER
@@ -123,9 +124,23 @@ def run_dataset() -> None:
     LOGGER.debug(f"Configuration Loaded: {CONFIG}")
 
     tasks = load_tasks()
+    LOGGER.info(f"Total tasks loaded: {len(tasks)}")
     eval_res_list = []
-    for idx, task in enumerate(tasks):
-        LOGGER.info(f"{'=' * 10} Starting Running Task {idx + 1} {'=' * 10}")
-        eval_res = _run_once(task)
-        eval_res_list.append(eval_res)
+    # for idx, task in enumerate(tasks):
+    #     LOGGER.info(f"{'=' * 10} Starting Running Task {idx + 1} {'=' * 10}")
+    #     eval_res = _run_once(task)
+    #     eval_res_list.append(eval_res)
+    # aggregate_evals(eval_res_list)
+
+    assert (
+        isinstance(CONFIG.SIMULATION.MAX_WORKERS, int)
+        and CONFIG.SIMULATION.MAX_WORKERS > 0
+    ), "MAX_WORKERS should be a positive integer."
+
+    with ThreadPoolExecutor(max_workers=CONFIG.SIMULATION.MAX_WORKERS) as executor:
+        future_to_task = [executor.submit(_run_once, task) for task in tasks]
+        for future in as_completed(future_to_task):
+            eval_res = future.result()
+            eval_res_list.append(eval_res)
+
     aggregate_evals(eval_res_list)

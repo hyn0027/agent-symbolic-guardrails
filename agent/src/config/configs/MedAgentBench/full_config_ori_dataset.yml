@@ -104,3 +104,4 @@ SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/test_data_v2_augmented.json"
   TYPE: "Original_Benchmark"
   MAX_STEPS: 40
+  MAX_WORKERS: 10

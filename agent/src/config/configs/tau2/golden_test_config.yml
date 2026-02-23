@@ -66,12 +66,13 @@ EVAL:
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tasks.json"
   MAX_STEPS: 100
+  MAX_WORKERS: 10
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
 
 SAFEGUARD:
-  USER_CONFIRMATION: true
+  USER_CONFIRMATION: false
   USER_CONFIRMATION_TEMPLATE: |
     I am about to perform the following action:
     Tool: {tool_name}
@@ -80,7 +81,7 @@ SAFEGUARD:
     Please review the action above and confirm if you would like me to proceed.
     Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
 
-  TOOL_RESPONSE_TEMPLATE: true
+  TOOL_RESPONSE_TEMPLATE: false
 
   TOOL_END_CONVERSATION_FLAG: true
 
@@ -90,6 +91,6 @@ SAFEGUARD:
     Here is a summary of the tool calls the agent just made:
     {tool_call_disclosure}
 
-  TOOL_BLOCKING: true
+  TOOL_BLOCKING: false
 
   NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to the airline system or external systems have been made since the last message."
