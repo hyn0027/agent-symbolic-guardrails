@@ -609,6 +609,7 @@ def aggregate_evals(res_list: List[RewardInfo]) -> None:
     with open(SAVE_PATH, "w") as f:
         res = {
             "aggregated_result": agg_res,
+            "config": CONFIG,
             "full_trajectory": full_trajectory,
             "individual_results": [
                 res.model_dump(mode="json") for res in res_list if res is not None

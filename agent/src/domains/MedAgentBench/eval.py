@@ -1083,6 +1083,7 @@ def aggregate_evals(res_list: List) -> None:
     with open(SAVE_PATH, "w") as f:
         res = {
             "aggregated_result": agg_res,
+            "config": CONFIG,
             "full_trajectory": full_trajectory,
             "individual_results": res_list,
         }

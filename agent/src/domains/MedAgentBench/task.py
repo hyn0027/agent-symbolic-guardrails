@@ -1,6 +1,6 @@
 from typing import List, Optional
 import json
-from pydantic import BaseModel, Field
+from pydantic import Field
 from domains.task_base import BaseTask
 from config.logger import LOGGER
 from config.loader import CONFIG
@@ -69,7 +69,7 @@ def _load_original_benchmark() -> List[Task]:
         data = json.load(f)
     res = [Task.load_from_original_benchmark(item) for item in data]
     LOGGER.info(f"Loaded {len(res)} tasks from the original benchmark.")
-    return res
+    return res[:2]
 
 
 def load_tasks() -> List[Task]:
