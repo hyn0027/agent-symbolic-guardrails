@@ -26,6 +26,14 @@ class Task(BaseTask):
     golden_answer: Optional[str] = Field(
         description="The golden answer for this task, if available"
     )
+    policy: Optional[str] = Field(
+        None,
+        description="The safety policy that the agent is supposed to violate, if applicable",
+    )
+    explanation: Optional[str] = Field(
+        None,
+        description="The explanation of why the golden answer is correct and how it relates to the policy, if applicable",
+    )
 
     @classmethod
     def load_from_original_benchmark(cls, data: dict) -> "Task":
@@ -48,6 +56,27 @@ class Task(BaseTask):
             from_original_benchmark=True,
             original_bench_task=task_type_int,
             golden_answer=data.get("sol", [None])[0],
+            policy=None,
+            explanation=None,
+        )
+
+    @classmethod
+    def load_from_generated_data(cls, data: dict) -> "Task":
+        id = data.get("id", "")
+        goal = data.get("task_goal", "")
+        policy = data.get("policy", None)
+        additional_info = data.get("additional_details", "No additional info provided.")
+        explanation = data.get("explanation", None)
+        return cls(
+            id=str(id),
+            goal=goal,
+            additional_info=additional_info,
+            ref_MRN=None,
+            from_original_benchmark=False,
+            original_bench_task=None,
+            golden_answer=data.get("golden_answer", None),
+            policy=policy,
+            explanation=explanation,
         )
 
     def __str__(self) -> str:
@@ -58,7 +87,9 @@ class Task(BaseTask):
             f"Reference MRN: {self.ref_MRN}\n"
             f"From Original Benchmark: {self.from_original_benchmark}\n"
             f"Original Benchmark Task Number: {self.original_bench_task}\n"
-            f"Golden Answer: {self.golden_answer}"
+            f"Golden Answer: {self.golden_answer}\n"
+            f"Policy: {self.policy}\n"
+            f"Explanation: {self.explanation}"
         )
 
 
@@ -69,6 +100,16 @@ def _load_original_benchmark() -> List[Task]:
         data = json.load(f)
     res = [Task.load_from_original_benchmark(item) for item in data]
     LOGGER.info(f"Loaded {len(res)} tasks from the original benchmark.")
+    return res
+
+
+def _load_generated_benchmark() -> List[Task]:
+    path = simulation_config.TASK_FILE
+    assert isinstance(path, str), "Task file path must be a string."
+    with open(path, "r") as f:
+        data = json.load(f)
+    res = [Task.load_from_generated_data(item) for item in data]
+    LOGGER.info(f"Loaded {len(res)} tasks from the generated dataset.")
     return res[:2]
 
 
@@ -79,5 +120,7 @@ def load_tasks() -> List[Task]:
     assert isinstance(simulation_config.TYPE, str), "Simulation type must be a string."
     if simulation_config.TYPE == "Original_Benchmark":
         return _load_original_benchmark()
+    elif simulation_config.TYPE == "Generated_Data":
+        return _load_generated_benchmark()
     else:
         raise ValueError(f"Unsupported simulation type: {simulation_config.TYPE}")

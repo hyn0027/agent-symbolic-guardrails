@@ -3,6 +3,7 @@ from .task import Task
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
+simulation_config = CONFIG.SIMULATION
 
 
 def _domain_policy() -> str:
@@ -28,10 +29,24 @@ def user_prompt(task: Task) -> str:
     assert isinstance(
         user_config.SYSTEM_PROMPT_TEMPLATE, str
     ), "User prompt template must be a string."
-    return user_config.SYSTEM_PROMPT_TEMPLATE.format(
-        task_goal=task.goal,
-        additional_info=task.additional_info,
-    )
+    if simulation_config.TYPE == "Original_Benchmark":
+        return user_config.SYSTEM_PROMPT_TEMPLATE.format(
+            task_goal=task.goal,
+            additional_info=task.additional_info,
+        )
+    elif simulation_config.TYPE == "Generated_Data":
+        return user_config.SYSTEM_PROMPT_TEMPLATE.format(
+            task_goal=task.goal,
+            additional_info=task.additional_info,
+            policy=task.policy if task.policy is not None else "No policy provided.",
+            explanation=(
+                task.explanation
+                if task.explanation is not None
+                else "No explanation provided."
+            ),
+        )
+    else:
+        raise ValueError(f"Unsupported simulation type: {simulation_config.TYPE}")
 
 
 def assess_end_conversation(message: str) -> bool:

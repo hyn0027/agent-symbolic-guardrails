@@ -128,7 +128,7 @@ def get_patient_extended(
     ],
     name: Annotated[
         Optional[str | LogicList[str]],
-        "Any part of the patient's name. When discrete name parameters are used, such as 'family' or 'given', this parameter is ignored.",
+        "Family or given name, but not the full name. When discrete name parameters are used, such as 'family' or 'given', this parameter is ignored.",
     ],
     gender: Annotated[Optional[str | LogicList[str]], "The patient's legal sex."],
     address: Annotated[
@@ -215,7 +215,7 @@ def get_patient(
     ],
     name: Annotated[
         Optional[str | LogicList[str]],
-        "Any part of the patient's name. When discrete name parameters are used, such as 'family' or 'given', this parameter is ignored.",
+        "Family or given name, but not the full name. When discrete name parameters are used, such as 'family' or 'given', this parameter is ignored.",
     ],
     gender: Annotated[Optional[str | LogicList[str]], "The patient's legal sex."],
     address: Annotated[
@@ -281,7 +281,6 @@ def get_patient(
         params.extend(process_logic_value(address_state, "address-state"))
     if telecom:
         params.extend(process_logic_value(telecom, "telecom"))
-    params.append(("_count", 20))
     if _offset:
         params.append(("_offset", str(_offset)))
     if _sort:
@@ -665,26 +664,6 @@ def post_observation(
                     "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
                 )  # POLICY 6.5
 
-        recent_observations = get_observation(
-            patient_id=patient_id,
-            _count=10,
-            _sort="-date",
-            observation_id=None,
-            status=None,
-            category=None,
-            code=None,
-            effective_date=None,
-            value_string=None,
-            value_quantity=None,
-            _offset=None,
-        )
-        for recent_observation in recent_observations:
-            if Observation.similar(observation, recent_observation):
-                raise_count_with_type["api_check"] += 1
-                raise ValueError(
-                    "A similar observation has already been recorded recently. Please check the recent observations for the patient to avoid duplicates."
-                )  # POLICY 6.5
-
         if not observation.category:
             raise_count_with_type["api_check"] += 1
             raise ValueError("Observation must have a category.")
@@ -725,8 +704,7 @@ def post_observation(
             raise_count_with_type["api_check"] += 1
             raise ValueError("Observation status must be 'final'.")
 
-    payload = observation.model_dump_json(exclude_unset=True)
-
+    payload = observation.model_dump_json(exclude_unset=True, exclude_none=True)
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return observation
     response = requests.post(
@@ -969,23 +947,6 @@ def post_medication_request(
                     "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
                 )  # POLICY 6.5
 
-        recent_medication_requests = get_medication_request(
-            patient_id=patient_id,
-            _count=10,
-            _sort="-authoredon",
-            medication_id=None,
-            status=None,
-            intent=None,
-            authored_on=None,
-            _offset=None,
-        )
-        for recent_medication_request in recent_medication_requests:
-            if MedicationRequest.similar(medication_request, recent_medication_request):
-                raise_count_with_type["api_check"] += 1
-                raise ValueError(
-                    "A similar medication request has already been recorded recently. Please check the recent medication requests for the patient to avoid duplicates."
-                )  # POLICY 6.5
-
         if medication_request.status != "active":
             raise_count_with_type["api_check"] += 1
             raise ValueError("MedicationRequest status must be 'active'.")
@@ -1014,7 +975,7 @@ def post_medication_request(
                 "MedicationRequest medicationCodeableConcept coding system must be 'http://hl7.org/fhir/sid/ndc'."
             )
 
-    payload = medication_request.model_dump_json(exclude_unset=True)
+    payload = medication_request.model_dump_json(exclude_unset=True, exclude_none=True)
 
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return medication_request
@@ -1223,7 +1184,7 @@ def post_service_request(
             raise_count_with_type["api_check"] += 1
             raise ValueError("ServiceRequest priority must be 'stat'.")
 
-    payload = service_request.model_dump_json(exclude_unset=True)
+    payload = service_request.model_dump_json(exclude_unset=True, exclude_none=True)
 
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
         return service_request
@@ -1600,12 +1561,13 @@ def test() -> None:
             ],
             text="Body Weight",
         ),
-        valueQuantity=ValueQuantity(
-            value=70.0,
-            unit="kg",
-            system="http://unitsofmeasure.org",
-            code="kg",
-        ),
+        # valueQuantity=ValueQuantity(
+        #     value=70.0,
+        #     unit="kg",
+        #     system="http://unitsofmeasure.org",
+        #     code="kg",
+        # ),
+        valueQuantity=None,
         status="final",
         category=[
             CodeableConcept(
@@ -1627,11 +1589,12 @@ def test() -> None:
             source=None,
         ),
         issued=current_time_dt,
-        valueString=None,
+        valueString="98.5",
         interpretation=None,
     )
     created_observation = post_observation(new_observation)
     print(f"Created new observation with ID: {created_observation.id}")
+    print(created_observation.valueString)
 
     medication_requests = get_medication_request_extended(
         medication_id=None,
