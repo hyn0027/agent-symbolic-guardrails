@@ -16,7 +16,7 @@ from dataset_domains.MedAgentBench.data_model import (
     posted_service_requests,
     process_logic_value,
 )
-from typing import Annotated, Optional, List, Dict, Any
+from typing import Annotated, Optional, List, Dict, Any, Tuple
 from datetime import datetime
 import requests
 from config_loader import CONFIG
@@ -664,6 +664,27 @@ def post_observation(
                     "A similar observation has already been posted. Please check the posted observations to avoid duplicates."
                 )  # POLICY 6.5
 
+        if safeguard_config.SAFETY_DATASET and safeguard_config.API_CHECK:
+            recent_observations = get_observation(
+                patient_id=patient_id,
+                _sort="-date",
+                _count=5,
+                category=None,
+                observation_id=None,
+                status=None,
+                code=None,
+                effective_date=None,
+                value_string=None,
+                value_quantity=None,
+                _offset=None,
+            )
+            for recent_obs in recent_observations:
+                if Observation.similar(observation, recent_obs):
+                    raise_count_with_type["api_check"] += 1
+                    raise ValueError(
+                        "A similar observation has been recorded recently. Please check the recent observations to avoid duplicates."
+                    )  # POLICY 6.5
+
         if not observation.category:
             raise_count_with_type["api_check"] += 1
             raise ValueError("Observation must have a category.")
@@ -948,6 +969,24 @@ def post_medication_request(
                     "A similar medication request has already been posted. Please check the posted medication requests to avoid duplicates."
                 )  # POLICY 6.5
 
+        if safeguard_config.SAFETY_DATASET and safeguard_config.API_CHECK:
+            recent_medication_requests = get_medication_request(
+                patient_id=patient_id,
+                _sort="-authoredon",
+                _count=10,
+                medication_id=None,
+                status=None,
+                intent=None,
+                authored_on=None,
+                _offset=None,
+            )
+            for recent_request in recent_medication_requests:
+                if MedicationRequest.similar(medication_request, recent_request):
+                    raise_count_with_type["api_check"] += 1
+                    raise ValueError(
+                        "A similar medication request has been made recently. Please review the patient's recent medication requests to avoid duplicates."
+                    )  # POLICY 6.5
+
         if medication_request.status != "active":
             raise_count_with_type["api_check"] += 1
             raise ValueError("MedicationRequest status must be 'active'.")
@@ -1218,9 +1257,47 @@ def get_request(url: str) -> dict:
     Raises:
         HTTPError: If the server returns an error response.
     """
+    assert isinstance(base_api, str), "base_api must be a valid URL string."
+    if not url.startswith(base_api):
+        raise ValueError("URL must start with the base API URL.")
     response = requests.get(url)
     _customized_raise_for_error(response)
     return response.json()
+
+
+def parse_get_request_to_structured_tool(url: str) -> Tuple[str, dict]:
+    """
+    Parse the GET request URL to determine the corresponding structured tool function and parameters.
+
+    Returns:
+        Tuple[str, dict]: A tuple containing the tool function name and a dictionary of parameters.
+    Raises:
+        ValueError: If the URL does not correspond to a valid tool function or if required parameters are missing.
+    """
+    base_url = url.split("?")[0]
+    params = url.split("?")[1] if "?" in url else ""
+
+    def parse_params(params_str: str) -> dict:
+        params_dict = {}
+        for param in params_str.split("&"):
+            if "=" in param:
+                key, value = param.split("=", 1)
+                params_dict[key] = value
+        return params_dict
+
+    params_dict = parse_params(params)
+    if base_url.endswith("/Patient"):
+        return "get_patient", params_dict
+    elif base_url.endswith("/Condition"):
+        return "get_condition", params_dict
+    elif base_url.endswith("/Observation"):
+        return "get_observation", params_dict
+    elif base_url.endswith("/MedicationRequest"):
+        return "get_medication_request", params_dict
+    elif base_url.endswith("/Procedure"):
+        return "get_procedure", params_dict
+    else:
+        raise ValueError("URL does not correspond to a valid tool function.")
 
 
 def post_request(url: str, data: dict) -> dict:
@@ -1232,6 +1309,9 @@ def post_request(url: str, data: dict) -> dict:
     Raises:
         HTTPError: If the server returns an error response.
     """
+    assert isinstance(base_api, str), "base_api must be a valid URL string."
+    if not url.startswith(base_api):
+        raise ValueError("URL must start with the base API URL.")
     response = requests.post(url, json=data)
     _customized_raise_for_error(response)
     return response.json()

@@ -110,7 +110,10 @@ def _load_generated_benchmark() -> List[Task]:
         data = json.load(f)
     res = [Task.load_from_generated_data(item) for item in data]
     LOGGER.info(f"Loaded {len(res)} tasks from the generated dataset.")
-    return res
+    # return res[:50]
+    # find the one with id 325
+    task_325 = next((task for task in res if task.id == "325"), None)
+    return [task_325] if task_325 is not None else res
 
 
 def load_tasks() -> List[Task]:

@@ -7,9 +7,9 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/ori_test_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/MedAgentBench/safety_test_config.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/MedAgentBench/ori_golden_config.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/MedAgentBench/safety_golden_config.yml"
 
   TEST_WITH_GOLDEN: true
 
@@ -102,7 +102,7 @@ SAFEGUARD:
   NO_TOOL_CALL_DISCLOSURE_MESSAGE: "No tool calls to EMR system or external systems have been made since the last message."
 
 SIMULATION:
-  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/generated_tasks.json"
+  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/generated_tasks_shuffled.json"
   TYPE: "Generated_Data"
   MAX_STEPS: 10
   MAX_WORKERS: 20

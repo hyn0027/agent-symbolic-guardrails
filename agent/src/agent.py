@@ -43,7 +43,7 @@ class ReActAgent:
         self.mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_TEST_ARGS
         )
-        self.loop.run_until_complete(self.mcp_client.initialize()) 
+        self.loop.run_until_complete(self.mcp_client.initialize())
 
         # LOGGER.debug("MCP TOOL")
         # LOGGER.debug(self.mcp_client.tools)
@@ -191,8 +191,10 @@ class ReActAgent:
             else json.dumps(tool_response)
         )
 
-        if agent_config.TEST_WITH_GOLDEN and not tool_meta.get(
-            "skip_golden_eval", False
+        if (
+            agent_config.TEST_WITH_GOLDEN
+            and not tool_meta.get("skip_golden_eval", False)
+            and success
         ):
             LOGGER.debug(
                 f"Performing golden evaluation for tool call '{tool_name}' with arguments: {tool_args}"
@@ -451,13 +453,12 @@ class ReActAgent:
             golden_mcp_client.load_state(self.golden_eval_path)
         )
         LOGGER.debug("State loaded for golden evaluation")
-        temp_hist = self.history[:-1] + [
+        temp_hist = self.history[1:-1] + [
             {
                 "role": "assistant",
                 "content": (
-                    f"For the next step, I will call the tool {tool_name} with (partial) arguments {json.dumps(tool_args)}. "
-                    "I will follow those arguments, include those set to NULL or empty string. \n"
-                    "For all the additional fields not already covered above, I will include them as well, or ask the user if I'm not sure."
+                    f"For the next step, I will call the tool {tool_name} with exactly those arguments {json.dumps(tool_args)}. "
+                    "I will strictly follow those arguments, include those that are set to NULL or empty string. \n"
                 ),
             }
         ]

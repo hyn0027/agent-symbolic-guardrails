@@ -74,7 +74,7 @@ def _run_once(user_task: Any):
                 terminate_reason = TerminateReason.MAX_STEPS
                 break
             user_input = user.respond_to_customer_support(agent_message)
-            LOGGER.info(f"User: {user_input}")
+            LOGGER.info(f"User: (round {step_cnt}) {user_input}")
             if assess_end_conversation(user_input):
                 LOGGER.info(f"Simulation ended due to user response.")
                 terminate_reason = TerminateReason.USER_STOP
