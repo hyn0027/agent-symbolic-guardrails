@@ -706,15 +706,16 @@ def post_observation(
 
     payload = observation.model_dump_json(exclude_unset=True, exclude_none=True)
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
-        return observation
-    response = requests.post(
-        f"{base_api}/Observation",
-        data=payload,
-        headers={"Content-Type": "application/fhir+json"},
-    )
-    _customized_raise_for_error(response)
-    created_resource = response.json()
-    res = Observation.model_validate(created_resource, extra="forbid")
+        res = observation
+    else:
+        response = requests.post(
+            f"{base_api}/Observation",
+            data=payload,
+            headers={"Content-Type": "application/fhir+json"},
+        )
+        _customized_raise_for_error(response)
+        created_resource = response.json()
+        res = Observation.model_validate(created_resource, extra="forbid")
     posted_observations.append(res)
     if (
         res.subject
@@ -978,16 +979,16 @@ def post_medication_request(
     payload = medication_request.model_dump_json(exclude_unset=True, exclude_none=True)
 
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
-        return medication_request
-
-    response = requests.post(
-        f"{base_api}/MedicationRequest",
-        data=payload,
-        headers={"Content-Type": "application/fhir+json"},
-    )
-    _customized_raise_for_error(response)
-    created_resource = response.json()
-    res = MedicationRequest.model_validate(created_resource, extra="forbid")
+        res = medication_request
+    else:
+        response = requests.post(
+            f"{base_api}/MedicationRequest",
+            data=payload,
+            headers={"Content-Type": "application/fhir+json"},
+        )
+        _customized_raise_for_error(response)
+        created_resource = response.json()
+        res = MedicationRequest.model_validate(created_resource, extra="forbid")
     posted_medication_requests.append(res)
 
     if (
@@ -1187,16 +1188,16 @@ def post_service_request(
     payload = service_request.model_dump_json(exclude_unset=True, exclude_none=True)
 
     if CONFIG.DATASET.SERVER.BLOCK_WRITE_API:
-        return service_request
-
-    response = requests.post(
-        f"{base_api}/ServiceRequest",
-        data=payload,
-        headers={"Content-Type": "application/fhir+json"},
-    )
-    _customized_raise_for_error(response)
-    created_resource = response.json()
-    res = ServiceRequest.model_validate(created_resource, extra="forbid")
+        res = service_request
+    else:
+        response = requests.post(
+            f"{base_api}/ServiceRequest",
+            data=payload,
+            headers={"Content-Type": "application/fhir+json"},
+        )
+        _customized_raise_for_error(response)
+        created_resource = response.json()
+        res = ServiceRequest.model_validate(created_resource, extra="forbid")
     posted_service_requests.append(res)
 
     if (

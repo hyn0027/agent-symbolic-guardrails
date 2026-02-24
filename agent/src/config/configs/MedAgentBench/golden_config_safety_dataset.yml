@@ -71,7 +71,7 @@ USER:
 
 EVAL:
   FHIR_API_BASE_URL: "http://127.0.0.1:8080/fhir/"
-  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/eval_results_ori_golden.json"
+  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/eval_results_safety_golden.json"
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"
@@ -104,5 +104,5 @@ SAFEGUARD:
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/MedAgentBench/generated_tasks.json"
   TYPE: "Generated_Data"
-  MAX_STEPS: 40
-  MAX_WORKERS: 1
+  MAX_STEPS: 10
+  MAX_WORKERS: 20

@@ -110,7 +110,7 @@ def _load_generated_benchmark() -> List[Task]:
         data = json.load(f)
     res = [Task.load_from_generated_data(item) for item in data]
     LOGGER.info(f"Loaded {len(res)} tasks from the generated dataset.")
-    return res[:2]
+    return res
 
 
 def load_tasks() -> List[Task]:
