@@ -3,14 +3,15 @@ DATASET:
   DOMAIN: "airline"
 
 AGENT:
-  MODEL: "gpt-4o-mini"
+  MODEL: "gpt-5"
+
   TEMPERATURE: 1.0
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/tau2/test_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/tau2/full_config.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/tau2/golden_config.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: null
 
   SAVE_STATE_BASE_PATH: null
 
@@ -46,7 +47,7 @@ AGENT:
     Try to be helpful and always follow the policy.
 
 USER:
-  MODEL: "gpt-4o-mini"
+  MODEL: "gpt-5"
   TEMPERATURE: 1.0
 
   SYSTEM_PROMPT_TEMPLATE: |
@@ -59,14 +60,14 @@ USER:
   SIMULATION_GUIDELINE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/user_simulator/simulation_guidelines.md"
 
 EVAL:
-  MODEL: "gpt-4o-mini"
+  MODEL: "gpt-5"
   TEMPERATURE: 1.0
   SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/eval_results_full.json"
 
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/data/tau2/domains/airline/tasks.json"
   MAX_STEPS: 100
-  MAX_WORKERS: 10
+  MAX_WORKERS: 50
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/logs/"

@@ -35,4 +35,3 @@ parser.add_argument(
 )
 args = parser.parse_args()
 CONFIG = load_config(args.config)
-

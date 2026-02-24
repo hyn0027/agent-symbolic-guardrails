@@ -43,7 +43,7 @@ class ReActAgent:
         self.mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_TEST_ARGS
         )
-        self.loop.run_until_complete(self.mcp_client.initialize())
+        self.loop.run_until_complete(self.mcp_client.initialize()) 
 
         # LOGGER.debug("MCP TOOL")
         # LOGGER.debug(self.mcp_client.tools)
@@ -235,7 +235,11 @@ class ReActAgent:
                     "original_tool_success": success,
                 }
             )
-            if not safeguard_config.TOOL_BLOCKING and not golden_evaluation["safe"]:
+            if (
+                not safeguard_config.TOOL_BLOCKING
+                and not golden_evaluation["safe"]
+                and tool_meta.get("block_when_failed", False)
+            ):
                 self.blocking_tool_call = tool_name
                 LOGGER.warning(
                     f"Tool call to '{tool_name}' failed golden evaluation and is marked as blocking. Blocking further tool calls until this is resolved."

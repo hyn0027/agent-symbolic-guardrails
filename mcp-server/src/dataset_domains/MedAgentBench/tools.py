@@ -1247,90 +1247,135 @@ def post_service_request(
     return res
 
 
-if safeguard_config.API_REDESIGN:
+def get_request(url: str) -> dict:
+    """
+    Make a GET request to the specified URL.
+
+    Returns:
+        dict: The JSON response from the server.
+    Raises:
+        HTTPError: If the server returns an error response.
+    """
+    response = requests.get(url)
+    _customized_raise_for_error(response)
+    return response.json()
+
+
+def post_request(url: str, data: dict) -> dict:
+    """
+    Make a POST request to the specified URL with the given data.
+
+    Returns:
+        dict: The JSON response from the server.
+    Raises:
+        HTTPError: If the server returns an error response.
+    """
+    response = requests.post(url, json=data)
+    _customized_raise_for_error(response)
+    return response.json()
+
+
+if safeguard_config.RAW_REQUEST_TOOL:
     mcp.tool(
-        get_patient_extended,
-        name="get_patient",
+        get_request,
+        name="get_request",
         meta={
-            "block_when_failed": safeguard_config.TOOL_BLOCKING,
             "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
         },
-    )  # POLICY 2.3, 5.2, 3.1, 3.2, 6.2, 6.3, 7.3
+    )
     mcp.tool(
-        get_condition_extended,
-        name="get_condition",
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_observation_extended,
-        name="get_observation",
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_medication_request_extended,
-        name="get_medication_request",
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_procedure_extended,
-        name="get_procedure",
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        post_medication_request_extended,
-        name="post_medication_request",
+        post_request,
+        name="post_request",
         meta={
             "require_confirmation": safeguard_config.USER_CONFIRMATION,
             "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
         },
-    )  # POLICY 2.4, 5.1, 5.9.2, 6.2, 6.3, 7.3, 7.2
+    )
 else:
-    mcp.tool(
-        get_patient,
-        meta={
-            "block_when_failed": safeguard_config.TOOL_BLOCKING,
-            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
-        },
-    )  # POLICY 2.3, 5.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_condition,
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_observation,
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_medication_request,
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
-    mcp.tool(
-        get_procedure,
-        meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
-    )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+    if safeguard_config.API_REDESIGN:
+        mcp.tool(
+            get_patient_extended,
+            name="get_patient",
+            meta={
+                "block_when_failed": safeguard_config.TOOL_BLOCKING,
+                "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+            },
+        )  # POLICY 2.3, 5.2, 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_condition_extended,
+            name="get_condition",
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_observation_extended,
+            name="get_observation",
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_medication_request_extended,
+            name="get_medication_request",
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_procedure_extended,
+            name="get_procedure",
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            post_medication_request_extended,
+            name="post_medication_request",
+            meta={
+                "require_confirmation": safeguard_config.USER_CONFIRMATION,
+                "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+            },
+        )  # POLICY 2.4, 5.1, 5.9.2, 6.2, 6.3, 7.3, 7.2
+    else:
+        mcp.tool(
+            get_patient,
+            meta={
+                "block_when_failed": safeguard_config.TOOL_BLOCKING,
+                "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+            },
+        )  # POLICY 2.3, 5.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_condition,
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_observation,
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_medication_request,
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+        mcp.tool(
+            get_procedure,
+            meta={"tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE},
+        )  # POLICY 3.1, 3.2, 6.2, 6.3, 7.3
+
+        mcp.tool(
+            post_medication_request,
+            meta={
+                "require_confirmation": safeguard_config.USER_CONFIRMATION,
+                "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+            },
+        )  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3
 
     mcp.tool(
-        post_medication_request,
+        post_observation,
         meta={
             "require_confirmation": safeguard_config.USER_CONFIRMATION,
             "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
         },
-    )  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3
-
-mcp.tool(
-    post_observation,
-    meta={
-        "require_confirmation": safeguard_config.USER_CONFIRMATION,
-        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
-    },
-)  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
-mcp.tool(
-    post_service_request,
-    meta={
-        "require_confirmation": safeguard_config.USER_CONFIRMATION,
-        "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
-    },
-)  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
+    )  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
+    mcp.tool(
+        post_service_request,
+        meta={
+            "require_confirmation": safeguard_config.USER_CONFIRMATION,
+            "tool_call_disclosure": safeguard_config.TOOL_CALL_DISCLOSURE,
+        },
+    )  # POLICY 2.4, 5.1, 6.2, 6.3, 7.3, 7.2
 
 
 @mcp.tool(
