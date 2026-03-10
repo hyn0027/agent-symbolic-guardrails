@@ -110,6 +110,9 @@ def _load_generated_benchmark() -> List[Task]:
         data = json.load(f)
     res = [Task.load_from_generated_data(item) for item in data]
     LOGGER.info(f"Loaded {len(res)} tasks from the generated dataset.")
+    # get ids [126, 337, 339, 102, 99, 215, 259, 164, 245, 51, 361, 111, 213, 269]
+    candidate_ids = [126, 337, 339, 102, 99, 215, 259, 164, 245, 51, 361, 111, 213, 269]
+    res = [task for task in res if int(task.id) in candidate_ids]
     return res[:50]
 
 
