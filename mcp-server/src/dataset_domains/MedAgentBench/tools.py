@@ -1258,63 +1258,55 @@ def get_request(url: str) -> dict:
         HTTPError: If the server returns an error response.
     """
     assert isinstance(base_api, str), "base_api must be a valid URL string."
-    if not url.startswith(base_api):
-        raise ValueError("URL must start with the base API URL.")
     response = requests.get(url)
     _customized_raise_for_error(response)
     return response.json()
 
 
-def parse_get_request_to_structured_tool(url: str) -> Tuple[str, dict]:
+def post_request(
+    url: str, payload: Annotated[str, "the payload to be sent in the POST request"]
+) -> str:
     """
-    Parse the GET request URL to determine the corresponding structured tool function and parameters.
+    Make a POST request to the specified URL with the given payload.
 
     Returns:
-        Tuple[str, dict]: A tuple containing the tool function name and a dictionary of parameters.
+        str: A success message if the request was successful.
+
     Raises:
-        ValueError: If the URL does not correspond to a valid tool function or if required parameters are missing.
+        ValueError: If the payload is not a valid JSON string.
     """
-    base_url = url.split("?")[0]
-    params = url.split("?")[1] if "?" in url else ""
-
-    def parse_params(params_str: str) -> dict:
-        params_dict = {}
-        for param in params_str.split("&"):
-            if "=" in param:
-                key, value = param.split("=", 1)
-                params_dict[key] = value
-        return params_dict
-
-    params_dict = parse_params(params)
-    if base_url.endswith("/Patient"):
-        return "get_patient", params_dict
-    elif base_url.endswith("/Condition"):
-        return "get_condition", params_dict
-    elif base_url.endswith("/Observation"):
-        return "get_observation", params_dict
-    elif base_url.endswith("/MedicationRequest"):
-        return "get_medication_request", params_dict
-    elif base_url.endswith("/Procedure"):
-        return "get_procedure", params_dict
-    else:
-        raise ValueError("URL does not correspond to a valid tool function.")
+    try:
+        payload_dict = json.loads(payload)
+    except json.JSONDecodeError:
+        raise ValueError("Invalid JSON payload. Please provide a valid JSON string.")
+    return "POST request accepted and executed successfully."
 
 
-def post_request(url: str, data: dict) -> dict:
-    """
-    Make a POST request to the specified URL with the given data.
-
-    Returns:
-        dict: The JSON response from the server.
-    Raises:
-        HTTPError: If the server returns an error response.
-    """
-    assert isinstance(base_api, str), "base_api must be a valid URL string."
-    if not url.startswith(base_api):
-        raise ValueError("URL must start with the base API URL.")
-    response = requests.post(url, json=data)
-    _customized_raise_for_error(response)
-    return response.json()
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def get_tool_name(raw_name: str, url: str) -> str:
+    if raw_name == "get_request":
+        if url.startswith(f"{base_api}Patient"):
+            return "get_patient"
+        elif url.startswith(f"{base_api}Condition"):
+            return "get_condition"
+        elif url.startswith(f"{base_api}Observation"):
+            return "get_observation"
+        elif url.startswith(f"{base_api}MedicationRequest"):
+            return "get_medication_request"
+        elif url.startswith(f"{base_api}Procedure"):
+            return "get_procedure"
+    elif raw_name == "post_request":
+        if url.startswith(f"{base_api}Observation"):
+            return "post_observation"
+        elif url.startswith(f"{base_api}MedicationRequest"):
+            return "post_medication_request"
+        elif url.startswith(f"{base_api}ServiceRequest"):
+            return "post_service_request"
+    raise ValueError("Unable to determine the appropriate tool for the given URL.")
 
 
 if safeguard_config.RAW_REQUEST_TOOL:

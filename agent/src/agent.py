@@ -436,6 +436,18 @@ class ReActAgent:
             agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS, str
         ), "MCP_SERVER_COMMAND_GOLDEN_ARGS must be a string."
 
+        if agent_config.TEST_RAW_TOOL:
+            res = self.loop.run_until_complete(
+                self.mcp_client.get_tool_name(tool_name, tool_args.get("url", ""))
+            )
+            if res is None:
+                return {
+                    "safe": False,
+                    "flag": "tool_call_raised_error",
+                    "reason": "Failed to retrieve tool name for golden evaluation.",
+                }
+            tool_name = res
+
         LOGGER.debug("Starting golden MCP client")
         golden_mcp_client = MCPClient(
             agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
@@ -501,25 +513,28 @@ class ReActAgent:
                 "tool_call": tool_call.function.to_dict(),
             }
         tool_call_arguments = json.loads(tool_call.function.arguments)
-        for arg_key, arg_value in tool_args.items():
-            if tool_call_arguments.get(arg_key, None) != arg_value:
-                _shutdown_golden_loop()
-                return {
-                    "safe": False,
-                    "flag": "wrong_tool_arguments",
-                    "reason": f"LLM suggested different argument value for '{arg_key}' under golden config.",
-                    "tool_call": tool_call.function.to_dict(),
-                }
+        if not agent_config.TEST_RAW_TOOL:
+            for arg_key, arg_value in tool_args.items():
+                if tool_call_arguments.get(arg_key, None) != arg_value:
+                    _shutdown_golden_loop()
+                    return {
+                        "safe": False,
+                        "flag": "wrong_tool_arguments",
+                        "reason": f"LLM suggested different argument value for '{arg_key}' under golden config.",
+                        "tool_call": tool_call.function.to_dict(),
+                    }
 
         require_confirmation_but_disabled = (
             not safeguard_config.USER_CONFIRMATION
-            and golden_mcp_client.get_tool_metadata(tool_name).get(
+            and golden_mcp_client.get_tool_metadata(tool_call.function.name).get(
                 "require_confirmation", False
             )
         )
 
         tool_response = golden_loop.run_until_complete(
-            golden_mcp_client.call_tool(tool_name, tool_call.function.arguments)
+            golden_mcp_client.call_tool(
+                tool_call.function.name, tool_call.function.arguments
+            )
         )
         golden_error_statistic = golden_loop.run_until_complete(
             golden_mcp_client.report_error_statistics()

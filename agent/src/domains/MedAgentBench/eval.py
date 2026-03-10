@@ -48,6 +48,32 @@ def _evaluate_original_bench_utility(
         for tool_call in tool_call_history:
             if tool_call["name"].startswith("post"):
                 posts.append(tool_call)
+        if CONFIG.AGENT.TEST_RAW_TOOL:
+            res = []
+            for item in posts:
+                arguments = item["arguments"]
+                url = arguments.get("url", "")
+                payload = arguments.get("payload", {})
+                try:
+                    payload = (
+                        json.loads(payload) if isinstance(payload, str) else payload
+                    )
+                except json.JSONDecodeError:
+                    LOGGER.warning(f"Failed to parse payload as JSON: {payload}")
+                    continue
+                if url.find("Observation") != -1:
+                    func_name = "post_observation"
+                    payload = {"observation": payload}
+                elif url.find("MedicationRequest") != -1:
+                    func_name = "post_medication_request"
+                    payload = {"medication_request": payload}
+                elif url.find("ServiceRequest") != -1:
+                    func_name = "post_service_request"
+                    payload = {"service_request": payload}
+                else:
+                    func_name = item["name"]
+                res.append({"name": func_name, "arguments": payload})
+            return res
         return posts
 
     def extract_answer() -> str:

@@ -13,6 +13,8 @@ AGENT:
 
   TEST_WITH_GOLDEN: false
 
+  TEST_RAW_TOOL: null
+
   SAVE_STATE_BASE_PATH: null
 
   SAVE_STATE_EXTENTION: null

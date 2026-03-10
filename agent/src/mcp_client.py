@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict, Any, Union
+from typing import List, Dict, Any, Optional, Union
 
 from fastmcp import Client
 from mcp.types import Tool
@@ -159,6 +159,26 @@ class MCPClient:
             return True
         except Exception as e:
             raise RuntimeError(f"Error loading state: {str(e)}") from e
+
+    async def get_tool_name(self, raw_name: str, url: str) -> Optional[str]:
+        """Call the get_tool_name tool to get the standardized tool name based on raw name and url."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        try:
+            arguments = {"raw_name": raw_name, "url": url}
+            LOGGER.debug(f"Getting tool name with arguments: {arguments}")
+            async with self.client:
+                result = await self.client.call_tool(
+                    name="get_tool_name", arguments=arguments
+                )
+            res = self._tool_call_res_to_json(result)
+            LOGGER.debug(f"Get tool name response: {res}")
+            if res["is_error"]:
+                return None
+            return res["data"]
+        except Exception as e:
+            LOGGER.error(f"Error getting tool name: {str(e)}")
+            return None
 
     async def get_user_confirmation_details(
         self, func_name: str, func_args: Dict[str, Any]
