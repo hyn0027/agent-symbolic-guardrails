@@ -5,31 +5,22 @@ import random
 from openai import AsyncOpenAI
 
 
-async def llm_annotate_papers(papers) -> list:
+async def llm_annotate(
+    sys_prompt, user_prompt, papers, label_key, prompt_cache_key, model="gpt-5-nano"
+) -> list:
     client = AsyncOpenAI()
-    model = "gpt-5-nano"
-    system_prompt = (
-        "You are an assistant that helps user filter papers based on their title and abstract. "
-        "For the paper title and abstract, you will determine whether the paper propose a benchmark or dataset. "
-        "If the paper propose a benchmark or dataset, you will return 1, otherwise, you will return 0. "
-        "If you are unsure about the paper, you will return -1.\n"
-        "You should output a single number (1, 0, or -1) without any explanation or additional text."
-    )
-    user_prompt = "Title: {title}\nAbstract: {abstract}\n"
 
     MAX_CONCURRENCY = 30
 
     async def process_paper(paper) -> str:
         title = paper["title"]
         abstract = paper["summary"]
-        prompt = (
-            system_prompt + "\n" + user_prompt.format(title=title, abstract=abstract)
-        )
+        prompt = sys_prompt + "\n" + user_prompt.format(title=title, abstract=abstract)
 
         response = await client.responses.create(
             model=model,
             input=prompt,
-            prompt_cache_key="prompt_cache_key_filter_paper_hyn",
+            prompt_cache_key=prompt_cache_key,
         )
         return response.output_text.strip()
 
@@ -39,7 +30,7 @@ async def llm_annotate_papers(papers) -> list:
                 result = await process_paper(paper)
             except Exception:
                 result = "-1"
-            paper["result"] = result
+            paper[label_key] = result
             return paper
 
     sem = asyncio.Semaphore(MAX_CONCURRENCY)
@@ -47,37 +38,51 @@ async def llm_annotate_papers(papers) -> list:
     return await asyncio.gather(*tasks)
 
 
-def print_paper_info(paper) -> None:
+async def llm_annotate_paper_is_benchmark(papers) -> list:
+    system_prompt = (
+        "You are an assistant that helps user filter papers based on their title and abstract. "
+        "For the paper title and abstract, you will determine whether the paper propose a benchmark or dataset. "
+        "If the paper propose a benchmark or dataset, you will return 1, otherwise, you will return 0. "
+        "If you are unsure about the paper, you will return -1.\n"
+        "You should output a single number (1, 0, or -1) without any explanation or additional text."
+    )
+    user_prompt = "Title: {title}\nAbstract: {abstract}\n"
+
+    return await llm_annotate(
+        sys_prompt=system_prompt,
+        user_prompt=user_prompt,
+        papers=papers,
+        label_key="llm_annotate_is_benchmark",
+        prompt_cache_key="prompt_cache_key_filter_paper_hyn",
+    )
+
+
+def print_paper_info(paper, keywords) -> None:
     title = paper["title"]
     abstract = paper["summary"]
-    paper_info = f"\033[91mTitle:\033[0m {title}\n\033[91mAbstract:\033[0m {abstract}\n"
-    for keyword in [
-        "agent",
-        "bench",
-        "dataset",
-        "framework",
-        "propose",
-        "eval",
-        "assess",
-    ]:
+    pdf_url = paper.get("pdf_url", "N/A")
+    paper_info = f"\033[91mTitle:\033[0m {title}\n\033[91mAbstract:\033[0m {abstract}\n\033[91mPDF URL:\033[0m {pdf_url}\n"
+    for keyword in keywords:
         # change to red color regardless of case
         paper_info = paper_info.replace(keyword, f"\033[91m{keyword}\033[0m")
         paper_info = paper_info.replace(
             keyword.capitalize(), f"\033[91m{keyword.capitalize()}\033[0m"
         )
+        paper_info = paper_info.replace(
+            keyword.upper(), f"\033[91m{keyword.upper()}\033[0m"
+        )
 
     print(paper_info)
 
 
-def human_label(papers, num_label) -> list:
-
+def human_label(
+    papers, num_label, llm_key, human_key, request_human_label_info, keywords
+) -> list:
     def request_human_label(paper) -> str:
-        if "human_label" in paper:
-            return paper["human_label"]
-        print_paper_info(paper)
-        label = input(
-            "Does this paper propose a benchmark or dataset? (1 for yes, 0 for no, -1 for unsure): "
-        )
+        if human_key in paper:
+            return paper[human_key]
+        print_paper_info(paper, keywords)
+        label = input(request_human_label_info)
         while label not in ["1", "0", "-1"]:
             label = input(
                 "Invalid input. Please enter 1 for yes, 0 for no, or -1 for unsure: "
@@ -85,22 +90,29 @@ def human_label(papers, num_label) -> list:
         return label
 
     def compute_agreement(papers) -> None:
-        # stat test agreement between result and human_label
-        from sklearn.metrics import cohen_kappa_score
-
         pairs = [
-            (int(paper["result"]), int(paper["human_label"]))
+            (int(paper[llm_key]), int(paper[human_key]))
             for paper in papers
-            if "human_label" in paper
+            if human_key in paper and int(paper[llm_key]) != -1
         ]
         if not pairs:
             print("No papers have human labels.")
             return
-        kappa = cohen_kappa_score(
-            [pair[0] for pair in pairs], [pair[1] for pair in pairs]
-        )
-        print(f"Cohen's kappa: {kappa}")
+        print("-" * 50)
         print(f"Total papers with human labels: {len(pairs)}")
+
+        # 95% confidence interval for kappa
+        import numpy as np
+        from statsmodels.stats.inter_rater import cohens_kappa, to_table
+
+        data = np.asarray(pairs, dtype=int)  # shape should be (n, 2)
+
+        table, bin = to_table(data)
+        res = cohens_kappa(table)
+
+        print(f"kappa = {res.kappa:.3f}")
+        print(f"SE = {res.std_kappa:.3f}")
+        print(f"95% CI = [{res.kappa_low:.3f}, {res.kappa_upp:.3f}]")
 
         confusion_matrix = {
             "TP": sum(1 for pair in pairs if pair[0] == 1 and pair[1] == 1),
@@ -128,73 +140,179 @@ def human_label(papers, num_label) -> list:
         ground_truth_negative = sum(1 for pair in pairs if pair[1] == 0)
         print(f"Ground Truth Positive Ratio: {ground_truth_positive / len(pairs):.2f}")
         print(f"Ground Truth Negative Ratio: {ground_truth_negative / len(pairs):.2f}")
-
-        labeled_positive = sum(int(paper["result"]) for paper in papers)
-        labeled_negative = sum(1 - int(paper["result"]) for paper in papers)
+        labeled_positive = sum(int(paper[llm_key]) for paper in papers)
+        labeled_negative = sum(1 - int(paper[llm_key]) for paper in papers)
         print(f"Labeled Positive Ratio: {labeled_positive / len(papers):.2f}")
         print(f"Labeled Negative Ratio: {labeled_negative / len(papers):.2f}")
+        print("-" * 50)
+
+    # label -1
+    for paper in papers:
+        if llm_key not in paper:
+            paper[llm_key] = "-1"
+        if paper[llm_key] == "-1" and human_key not in paper:
+            print_paper_info(paper, keywords)
+            label = input(request_human_label_info)
+            while label not in ["1", "0", "-1"]:
+                label = input(
+                    "Invalid input. Please enter 1 for yes, 0 for no, or -1 for unsure: "
+                )
+            paper[human_key] = label
 
     unlabeled_paper_idxs = [
-        idx for idx, paper in enumerate(papers) if "human_label" not in paper
+        idx for idx, paper in enumerate(papers) if human_key not in paper
     ]
     random_ids = random.sample(
         unlabeled_paper_idxs, min(num_label, len(unlabeled_paper_idxs))
     )
+    compute_agreement(papers)
     for idx in random_ids:
         paper = papers[idx]
         label = request_human_label(paper)
-        paper["human_label"] = label
-    compute_agreement(papers)
+        paper[human_key] = label
+        try:
+            compute_agreement(papers)
+        except Exception as e:
+            print(f"Error computing agreement: {e}")
+        with open("human_labeled_tool_use_llm_agent_papers.json", "w") as f:
+            json.dump(papers, f, indent=4)
     return papers
+
+
+def human_label_paper_is_benchmark(papers, num_label) -> list:
+
+    return human_label(
+        papers,
+        num_label,
+        llm_key="llm_annotate_is_benchmark",
+        human_key="human_annotate_is_benchmark",
+        request_human_label_info="Does this paper propose a benchmark or dataset? Enter 1 for yes, 0 for no, or -1 for unsure: ",
+        keywords=[
+            "agent",
+            "bench",
+            "dataset",
+            "framework",
+            "propose",
+            "eval",
+            "assess",
+        ],
+    )
+
+
+async def llm_annotate_paper_is_for_llm_based_tool_use_agents(papers) -> list:
+    system_prompt = (
+        "You are an assistant that helps user filter papers based on their title and abstract. "
+        "The given paper proposes one or more benchmark or dataset. You will determine whether any of the benchmarks or datasets is designed for evaluating tool-use LLM-based agents. "
+        "Tool use includes, but is not limited to, using search engine, calling API, interacting with codebases or software tools, accessing databases, browsing or exploring webpages, interacting with computer or app interfaces, and using other external tools or environments to complete tasks. "
+        "If any of the benchmarks or datasets is designed for evaluating tool-use LLM-based agents, you will return 1, otherwise, you will return 0. "
+        "If you are unsure about the answer, or if the paper does not propose any benchmarks or datasets, you will return -1.\n"
+        "You should output a single number (1, 0, or -1) without any explanation or additional text."
+    )
+    user_prompt = "Title: {title}\nAbstract: {abstract}\n"
+
+    return await llm_annotate(
+        sys_prompt=system_prompt,
+        user_prompt=user_prompt,
+        papers=papers,
+        label_key="llm_annotate_is_tool_use_llm_agent",
+        prompt_cache_key="prompt_cache_key_filter_paper_for_tool_use_llm_agent_hyn",
+    )
+
+
+def human_label_paper_is_for_llm_based_tool_use_agents(papers, num_label) -> list:
+
+    return human_label(
+        papers,
+        num_label,
+        llm_key="llm_annotate_is_tool_use_llm_agent",
+        human_key="human_annotate_is_tool_use_llm_agent",
+        request_human_label_info="Is the benchmark or dataset proposed in this paper designed for evaluating LLM-based tool use agents? Enter 1 for yes, 0 for no, or -1 for unsure: ",
+        keywords=[
+            "agent",
+            "llm",
+            "tool",
+            "interaction",
+            "domain",
+            "environment",
+            "large language model",
+            "propose",
+            "bench",
+        ],
+    )
 
 
 def main() -> None:
     path = "filtered_papers.json"
     with open(path, "r") as f:
         data = json.load(f)
+    print(f"Total papers to label: {len(data)}")
 
     if os.path.exists("filtered_paper_with_results.json"):
         with open("filtered_paper_with_results.json", "r") as f:
             results = json.load(f)
     else:
-        results = asyncio.run(llm_annotate_papers(data))
+        results = asyncio.run(llm_annotate_paper_is_benchmark(data))
         with open("filtered_paper_with_results.json", "w") as f:
             json.dump(results, f, indent=4)
 
-    count_res = {}
-
+    label_counts = {}
     for paper in results:
-        res = paper["result"]
-        count_res[res] = count_res.get(res, 0) + 1
-    print(count_res)
+        label = paper.get("llm_annotate_is_benchmark", "-1")
+        label_counts[label] = label_counts.get(label, 0) + 1
+    print("Label distribution for benchmark/dataset:")
+    for label, count in label_counts.items():
+        print(f"Label {label}: {count} papers")
 
     if os.path.exists("human_labeled_papers.json"):
         with open("human_labeled_papers.json", "r") as f:
             results = json.load(f)
-    else:
-        with open("human_labeled_papers.json", "w") as f:
-            json.dump(results, f, indent=4)
-
-    if os.path.exists("human_labeled_papers.json"):
-        with open("human_labeled_papers.json", "r") as f:
-            results = json.load(f)
-        results = human_label(
+        results = human_label_paper_is_benchmark(
             results, num_label=0
         )  # print statistics of agreement between human labels and LLM results
     else:
-        results = human_label(results, num_label=100)
+        results = human_label_paper_is_benchmark(results, num_label=100)
         with open("human_labeled_papers.json", "w") as f:
             json.dump(results, f, indent=4)
 
-    if os.path.exists("labeled_benchmark_papers.json"):
-        with open("labeled_benchmark_papers.json", "r") as f:
+    labeled_benchmark_papers = []
+    for paper in results:
+        if (
+            "human_annotate_is_benchmark" in paper
+            and paper["human_annotate_is_benchmark"] == "1"
+        ):
+            labeled_benchmark_papers.append(paper)
+        elif (
+            "human_annotate_is_benchmark" not in paper
+            and paper["llm_annotate_is_benchmark"] == "1"
+        ):
+            labeled_benchmark_papers.append(paper)
+    with open("labeled_benchmark_papers.json", "w") as f:
+        json.dump(labeled_benchmark_papers, f, indent=4)
+    results = labeled_benchmark_papers
+    print(f"Total papers labeled as benchmark/dataset: {len(results)}")
+
+    if os.path.exists("labeled_benchmark_papers_with_tool_use_llm_agent.json"):
+        with open("labeled_benchmark_papers_with_tool_use_llm_agent.json", "r") as f:
             results = json.load(f)
     else:
-        labeled_benchmark_papers = [
-            paper for paper in results if paper["result"] == "1"
-        ]
-        with open("labeled_benchmark_papers.json", "w") as f:
-            json.dump(labeled_benchmark_papers, f, indent=4)
+        results = asyncio.run(
+            llm_annotate_paper_is_for_llm_based_tool_use_agents(results)
+        )
+        with open("labeled_benchmark_papers_with_tool_use_llm_agent.json", "w") as f:
+            json.dump(results, f, indent=4)
+
+    if os.path.exists("human_labeled_tool_use_llm_agent_papers.json"):
+        with open("human_labeled_tool_use_llm_agent_papers.json", "r") as f:
+            results = json.load(f)
+        results = human_label_paper_is_for_llm_based_tool_use_agents(
+            results, num_label=0
+        )  # print statistics of agreement between human labels and LLM results
+    else:
+        results = human_label_paper_is_for_llm_based_tool_use_agents(
+            results, num_label=50
+        )
+        with open("human_labeled_tool_use_llm_agent_papers.json", "w") as f:
+            json.dump(results, f, indent=4)
 
 
 if __name__ == "__main__":

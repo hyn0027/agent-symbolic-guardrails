@@ -21,8 +21,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents",
@@ -48,8 +48,8 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SEC-bench: Automated Benchmarking of LLM Agents on Real-World Software Security Tasks",
@@ -69,7 +69,7 @@
             "cs.LG",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "From Assistant to Double Agent: Formalizing and Benchmarking Attacks on OpenClaw for Personalized Local AI Agent",
@@ -93,7 +93,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MAPS: A Multilingual Benchmark for Agent Performance and Security",
@@ -120,7 +120,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents",
@@ -138,8 +138,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations",
@@ -159,8 +159,8 @@
             "cs.CL",
             "cs.CY"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Towards Unifying Quantitative Security Benchmarking for Multi Agent Systems",
@@ -180,8 +180,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MCP Security Bench (MSB): Benchmarking Attacks Against Model Context Protocol in LLM Agents",
@@ -203,7 +203,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Breaking Agent Backbones: Evaluating the Security of Backbone LLMs in AI Agents",
@@ -227,7 +227,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks",
@@ -246,7 +246,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Agent Tools Orchestration Leaks More: Dataset, Benchmark, and Mitigation",
@@ -268,8 +268,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks",
@@ -290,7 +290,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "DUALGUAGE: Automated Joint Security-Functionality Benchmarking for Secure Code Generation",
@@ -314,7 +314,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments",
@@ -333,7 +333,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Forgetful but Faithful: A Cognitive Memory Architecture and Benchmark for Privacy-Aware Generative Agents",
@@ -350,7 +350,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms",
@@ -368,7 +368,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CVE-Bench: A Benchmark for AI Agents' Ability to Exploit Real-World Web Application Vulnerabilities",
@@ -400,8 +400,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios",
@@ -422,8 +422,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Risky-Bench: Probing Agentic Safety Risks under Real-World Deployment",
@@ -449,7 +449,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MedPriv-Bench: Benchmarking the Privacy-Utility Trade-off of Large Language Models in Medical Open-End Question Answering",
@@ -473,8 +473,8 @@
             "cs.CL",
             "cs.MA"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "How Safe Are AI-Generated Patches? A Large-scale Study on Security Risks in LLM and Agentic Automated Program Repair on SWE-bench",
@@ -494,7 +494,7 @@
             "cs.LG",
             "cs.SE"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems",
@@ -512,7 +512,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MAGPIE: A dataset for Multi-AGent contextual PrIvacy Evaluation",
@@ -532,7 +532,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems",
@@ -553,7 +553,7 @@
             "cs.MA",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MCP-in-SoS: Risk assessment framework for open-source MCP servers",
@@ -574,8 +574,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "ISD-Agent-Bench: A Comprehensive Benchmark for Evaluating LLM-based Instructional Design Agents",
@@ -597,8 +597,8 @@
             "cs.SE",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "OutSafe-Bench: A Benchmark for Multimodal Offensive Content Detection in Large Language Models",
@@ -620,7 +620,7 @@
             "cs.LG",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\u03b1^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",
@@ -639,8 +639,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Toward a Human-Centered Evaluation Framework for Trustworthy LLM-Powered GUI Agents",
@@ -667,7 +667,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "NAAMSE: Framework for Evolutionary Security Evaluation of Agents",
@@ -686,7 +686,7 @@
             "cs.AI",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "DeepScholar-Bench: A Live Benchmark and Automated Evaluation for Generative Research Synthesis",
@@ -709,7 +709,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$C^3$-Bench: The Things Real Disturbing LLM based Agent in Multi-Tasking",
@@ -731,7 +731,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\u03b1^3$-Bench: A Unified Benchmark of Safety, Robustness, and Efficiency for LLM-Based UAV Agents over 6G Networks",
@@ -750,7 +750,7 @@
             "eess.SY",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\u03c4$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains",
@@ -770,7 +770,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Standard Benchmarks Fail -- Auditing LLM Agents in Finance Must Prioritize Risk",
@@ -791,7 +791,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "CyberExplorer: Benchmarking LLM Offensive Security Capabilities in a Real-World Attacking Simulation Environment",
@@ -820,7 +820,7 @@
             "cs.AI",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MIRAGE-Bench: LLM Agent is Hallucinating and Where to Find Them",
@@ -841,7 +841,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents",
@@ -868,7 +868,7 @@
             "cs.LG",
             "cs.SE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents",
@@ -892,7 +892,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AI Research Agents for Machine Learning: Search, Exploration, and Generalization in MLE-bench",
@@ -933,7 +933,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MVISU-Bench: Benchmarking Mobile Agents for Real-World Tasks by Multi-App, Vague, Interactive, Single-App and Unethical Instructions",
@@ -955,7 +955,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation",
@@ -976,7 +976,7 @@
             "cs.CR",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents",
@@ -1007,7 +1007,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ATAG: AI-Agent Application Threat Assessment with Attack Graphs",
@@ -1030,7 +1030,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks",
@@ -1052,7 +1052,7 @@
             "cs.SE",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RiOSWorld: Benchmarking the Risk of Multimodal Computer-Use Agents",
@@ -1071,7 +1071,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AutoAdvExBench: Benchmarking autonomous exploitation of adversarial example defenses",
@@ -1093,7 +1093,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarking Poisoning Attacks against Retrieval-Augmented Generation",
@@ -1118,7 +1118,7 @@
             "cs.IR",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AutoPenBench: Benchmarking Generative Agents for Penetration Testing",
@@ -1140,8 +1140,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "PredictionMarketBench: A SWE-bench-Style Framework for Backtesting Trading Agents on Prediction Markets",
@@ -1159,7 +1159,7 @@
             "q-fin.ST",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Imitation Learning Datasets: A Toolkit For Creating Datasets, Training Agents and Benchmarking",
@@ -1178,7 +1178,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating the Robustness of Multimodal Agents Against Active Environmental Injection Attacks",
@@ -1198,8 +1198,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "SWE-bench Goes Live!",
@@ -1231,7 +1231,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Control Protocols for Untrusted AI Agents",
@@ -1253,8 +1253,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols",
@@ -1276,7 +1276,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Jailbreak Foundry: From Papers to Runnable Attacks for Reproducible Benchmarking",
@@ -1298,7 +1298,7 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "R-Judge: Benchmarking Safety Risk Awareness for LLM Agents",
@@ -1326,7 +1326,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "BioAgent Bench: An AI Agent Evaluation Suite for Bioinformatics",
@@ -1345,7 +1345,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AURA: An Agent Autonomy Risk Assessment Framework",
@@ -1363,7 +1363,7 @@
             "cs.AI",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "SecRepoBench: Benchmarking Code Agents for Secure Code Completion in Real-World Repositories",
@@ -1385,8 +1385,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Breaking the Code: Security Assessment of AI Code Agents Through Systematic Jailbreaking Attacks",
@@ -1408,7 +1408,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "WGSR-Bench: Wargame-based Game-theoretic Strategic Reasoning Benchmark for Large Language Models",
@@ -1441,7 +1441,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents",
@@ -1462,7 +1462,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments",
@@ -1496,8 +1496,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "On the Elements of Datasets for Cyber Physical Systems Security",
@@ -1515,7 +1515,7 @@
             "cs.AI",
             "eess.SY"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Echoes of Human Malice in Agents: Benchmarking LLMs for Multi-Turn Online Harassment Attacks",
@@ -1538,7 +1538,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PrivacyBench: A Conversational Benchmark for Evaluating Privacy in Personalized AI",
@@ -1559,8 +1559,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MLA-Trust: Benchmarking Trustworthiness of Multimodal LLM Agents in GUI Environments",
@@ -1582,7 +1582,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty",
@@ -1600,7 +1600,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "NuRisk: A Visual Question Answering Dataset for Agent-Level Risk Assessment in Autonomous Driving",
@@ -1620,7 +1620,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentAuditor: Human-Level Safety and Security Evaluation for LLM Agents",
@@ -1643,8 +1643,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "A Functionality-Grounded Benchmark for Evaluating Web Agents in E-commerce Domains",
@@ -1667,8 +1667,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction",
@@ -1691,7 +1691,7 @@
             "cs.CL",
             "cs.SE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Puda: Private User Dataset Agent for User-Sovereign and Privacy-Preserving Personalized AI",
@@ -1714,7 +1714,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "AgentSCOPE: Evaluating Contextual Privacy Across Agentic Workflows",
@@ -1736,7 +1736,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Assessing Deanonymization Risks with Stylometry-Assisted LLM Agent",
@@ -1755,7 +1755,7 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "OmniCompliance-100K: A Multi-Domain, Rule-Grounded, Real-World Safety Compliance Dataset",
@@ -1776,7 +1776,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SafeArena: Evaluating the Safety of Autonomous Web Agents",
@@ -1802,7 +1802,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MATRIX: Multi-Agent simulaTion fRamework for safe Interactions and conteXtual clinical conversational evaluation",
@@ -1831,8 +1831,8 @@
             "cs.HC",
             "cs.MA"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Automated Benchmark Generation for Repository-Level Coding Tasks",
@@ -1851,7 +1851,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "JAILJUDGE: A Comprehensive Jailbreak Judge Benchmark with Multi-Agent Enhanced Explanation Evaluation Framework",
@@ -1874,7 +1874,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SeCodePLT: A Unified Platform for Evaluating the Security of Code GenAI",
@@ -1900,8 +1900,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MalURLBench: A Benchmark Evaluating Agents' Vulnerabilities When Processing Web URLs",
@@ -1928,7 +1928,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "BuildBench: Benchmarking LLM Agents on Compiling Real-World Open-Source Software",
@@ -1961,7 +1961,7 @@
             "cs.AI",
             "cs.PL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "UAVBench: An Open Benchmark Dataset for Autonomous and Agentic AI UAV Systems via LLM-Generated Flight Scenarios",
@@ -1979,8 +1979,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SastBench: A Benchmark for Testing Agentic SAST Triage",
@@ -1999,8 +1999,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Accelerated Online Risk-Averse Policy Evaluation in POMDPs with Theoretical Guarantees and Novel CVaR Bounds",
@@ -2018,7 +2018,7 @@
             "math.ST",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "RADAR: A Risk-Aware Dynamic Multi-Agent Framework for LLM Safety Evaluation via Role-Specialized Collaboration",
@@ -2047,7 +2047,7 @@
             "cs.LG",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond Benchmark Islands: Toward Representative Trustworthiness Evaluation for Agentic AI",
@@ -2070,7 +2070,7 @@
             "cs.CL",
             "cs.DB"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "AutoMedic: An Automated Evaluation Framework for Clinical Conversational Agents with Medical Dataset Grounding",
@@ -2090,7 +2090,7 @@
             "cs.LG",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach",
@@ -2114,7 +2114,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Diverse And Private Synthetic Datasets Generation for RAG evaluation: A multi-agent framework",
@@ -2133,8 +2133,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios",
@@ -2165,7 +2165,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents",
@@ -2187,7 +2187,7 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Sola-Visibility-ISPM: Benchmarking Agentic AI for Identity Security Posture Management Visibility",
@@ -2211,7 +2211,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Agentic AI Security: Threats, Defenses, Evaluation, and Open Challenges",
@@ -2230,7 +2230,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Hijacking JARVIS: Benchmarking Mobile GUI Agents against Unprivileged Third Parties",
@@ -2254,7 +2254,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents",
@@ -2277,7 +2277,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers",
@@ -2302,8 +2302,8 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SecureCode: A Production-Grade Multi-Turn Dataset for Training Security-Aware Code Generation Models",
@@ -2322,7 +2322,7 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Toward Scalable Verifiable Reward: Proxy State-Based Evaluation for Multi-turn Tool-Calling LLM Agents",
@@ -2348,7 +2348,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "WAInjectBench: Benchmarking Prompt Injection Detections for Web Agents",
@@ -2370,7 +2370,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TFHE-Coder: Evaluating LLM-agentic Fully Homomorphic Encryption Code Generation",
@@ -2390,8 +2390,8 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MAD-Fact: A Multi-Agent Debate Framework for Long-Form Factuality Evaluation in LLMs",
@@ -2411,8 +2411,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Taxonomy, Evaluation and Exploitation of IPI-Centric LLM Agent Defense Frameworks",
@@ -2437,7 +2437,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Beyond Benchmarks: Dynamic, Automatic And Systematic Red-Teaming Agents For Trustworthy Medical Language Models",
@@ -2473,7 +2473,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "When Benchmarks Lie: Evaluating Malicious Prompt Classifiers Under True Distribution Shift",
@@ -2489,8 +2489,8 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents",
@@ -2517,7 +2517,7 @@
             "cs.AI",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "NetArena: Dynamic Benchmarks for AI Agents in Network Automation",
@@ -2541,8 +2541,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentDrive: An Open Benchmark Dataset for Agentic AI Reasoning with LLM-Generated Scenarios in Autonomous Systems",
@@ -2560,7 +2560,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PrivacyLens: Evaluating Privacy Norm Awareness of Language Models in Action",
@@ -2582,8 +2582,8 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Automated Safety Benchmarking: A Multi-agent Pipeline for LVLMs",
@@ -2607,7 +2607,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms",
@@ -2627,7 +2627,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs",
@@ -2648,7 +2648,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "From Static Benchmarks to Dynamic Protocol: Agent-Centric Text Anomaly Detection for Evaluating LLM Reasoning",
@@ -2672,7 +2672,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "IntellAgent: A Multi-Agent Framework for Evaluating Conversational AI Systems",
@@ -2691,8 +2691,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "6G-Bench: An Open Benchmark for Semantic Communication and Network-Level Reasoning with Foundation Models in AI-Native 6G Networks",
@@ -2711,7 +2711,7 @@
             "cs.NI",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Towards Effective Offensive Security LLM Agents: Hyperparameter Tuning, LLM as a Judge, and a Lightweight CTF Benchmark",
@@ -2739,7 +2739,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Assessing Risks of Large Language Models in Mental Health Support: A Framework for Automated Clinical AI Red Teaming",
@@ -2763,7 +2763,7 @@
             "cs.HC",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "VC-Agent: An Interactive Agent for Customized Video Dataset Collection",
@@ -2788,7 +2788,7 @@
             "cs.AI",
             "cs.CV"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MaPPing Your Model: Assessing the Impact of Adversarial Attacks on LLM-based Programming Assistants",
@@ -2806,7 +2806,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\u03c4$-Voice: Benchmarking Full-Duplex Voice Agents on Real-World Domains",
@@ -2826,8 +2826,8 @@
             "cs.SD",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents",
@@ -2849,7 +2849,7 @@
             "cs.LG",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "The Automated but Risky Game: Modeling and Benchmarking Agent-to-Agent Negotiations and Transactions in Consumer Markets",
@@ -2874,7 +2874,7 @@
             "cs.HC",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PsySafe: A Comprehensive Framework for Psychological-based Attack, Defense, and Evaluation of Multi-agent System Safety",
@@ -2901,7 +2901,7 @@
             "cs.CR",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "macOSWorld: A Multilingual Interactive Benchmark for GUI Agents",
@@ -2919,8 +2919,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "When Agents Trade: Live Multi-Market Trading Benchmark for LLM Agents",
@@ -2952,7 +2952,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "STEP: Structured Training and Evaluation Platform for benchmarking trajectory prediction models",
@@ -2971,7 +2971,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SafeEvalAgent: Toward Agentic and Self-Evolving Safety Evaluation of LLMs",
@@ -2993,8 +2993,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Amelia: A Large Dataset and Benchmark for Airport Surface Movement Forecasting",
@@ -3018,8 +3018,8 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "A Synthetic Dataset for Personal Attribute Inference",
@@ -3040,8 +3040,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Using Large Language Models to Generate Authentic Multi-agent Knowledge Work Datasets",
@@ -3061,7 +3061,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RedCode: Risky Code Execution and Generation Benchmark for Code Agents",
@@ -3085,7 +3085,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentDAM: Privacy Leakage Evaluation for Autonomous Web Agents",
@@ -3106,7 +3106,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond single-channel agentic benchmarking",
@@ -3124,7 +3124,7 @@
             "cs.AI",
             "cs.HC"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation",
@@ -3151,8 +3151,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond Accuracy: A Multi-Dimensional Framework for Evaluating Enterprise Agentic AI Systems",
@@ -3168,7 +3168,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "GT-HarmBench: Benchmarking AI Safety Risks Through the Lens of Game Theory",
@@ -3193,8 +3193,8 @@
             "cs.GT",
             "cs.MA"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SWE-MERA: A Dynamic Benchmark for Agenticly Evaluating Large Language Models on Software Engineering Tasks",
@@ -3220,7 +3220,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts",
@@ -3259,7 +3259,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control",
@@ -3280,7 +3280,7 @@
             "cs.LG",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications",
@@ -3312,7 +3312,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "REAL: Benchmarking Autonomous Agents on Deterministic Simulations of Real Websites",
@@ -3345,7 +3345,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AutoControl Arena: Synthesizing Executable Test Environments for Frontier AI Risk Evaluation",
@@ -3366,7 +3366,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "WAREX: Web Agent Reliability Evaluation on Existing Benchmarks",
@@ -3386,7 +3386,7 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Agent-based Learning of Materials Datasets from Scientific Literature",
@@ -3403,8 +3403,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Engineering Reasoning and Instruction (ERI) Benchmark: A Large Taxonomy-driven Dataset for Foundation Models and Agents",
@@ -3431,8 +3431,8 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "CXMArena: Unified Dataset to benchmark performance in realistic CXM Scenarios",
@@ -3453,7 +3453,7 @@
             "cs.CL",
             "cs.IR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Decision Quality Evaluation Framework at Pinterest",
@@ -3475,8 +3475,8 @@
             "stat.AP",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarking Prompt Engineering Techniques for Secure Code Generation with GPT Models",
@@ -3497,7 +3497,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Common Benchmarks Undervalue the Generalization Power of Programmatic Policies",
@@ -3516,7 +3516,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ALI-Agent: Assessing LLMs' Alignment with Human Values via Agent-based Evaluation",
@@ -3538,7 +3538,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SBOMs into Agentic AIBOMs: Schema Extensions, Agentic Orchestration, and Reproducibility Evaluation",
@@ -3559,7 +3559,7 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions",
@@ -3584,8 +3584,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "FinGAIA: A Chinese Benchmark for AI Agents in Real-World Financial Domain",
@@ -3621,7 +3621,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond IVR: Benchmarking Customer Support LLM Agents for Business-Adherence",
@@ -3640,7 +3640,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TeleAntiFraud-28k: An Audio-Text Slow-Thinking Dataset for Telecom Fraud Detection",
@@ -3666,7 +3666,7 @@
             "cs.CL",
             "cs.MM"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond Task Completion: Revealing Corrupt Success in LLM Agents through Procedure-Aware Evaluation",
@@ -3684,7 +3684,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Design Behaviour Codes (DBCs): A Taxonomy-Driven Layered Governance Benchmark for Large Language Models",
@@ -3702,7 +3702,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PSYCHE: A Multi-faceted Patient Simulation Framework for Evaluation of Psychiatric Assessment Conversational Agents",
@@ -3723,7 +3723,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarking Correctness and Security in Multi-Turn Code Generation",
@@ -3746,7 +3746,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Zero-shot Imitation Policy via Search in Demonstration Dataset",
@@ -3765,8 +3765,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Privasis: Synthesizing the Largest \"Public\" Private Dataset from Scratch",
@@ -3796,7 +3796,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis",
@@ -3820,7 +3820,7 @@
             "cs.SI",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies",
@@ -3841,8 +3841,8 @@
             "cs.CL",
             "cs.IR"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Evolutionary Learning in Spatial Agent-Based Models for Physical Climate Risk Assessment",
@@ -3859,8 +3859,8 @@
             "cs.AI",
             "q-fin.RM"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "PEAR: Planner-Executor Agent Robustness Benchmark",
@@ -3882,7 +3882,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks",
@@ -3942,7 +3942,7 @@
             "cs.DC",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\u03c4$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
@@ -3964,7 +3964,7 @@
             "cs.CL",
             "cs.IR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "HackWorld: Evaluating Computer-Use Agents on Exploiting Web Application Vulnerabilities",
@@ -3989,7 +3989,7 @@
             "cs.CR",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Multi-Agent Defences Against Jailbreaking Attacks on Large Language Models",
@@ -4006,7 +4006,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Software Development Life Cycle Perspective: A Survey of Benchmarks for Code Large Language Models and Agents",
@@ -4032,7 +4032,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "MeetBench-XL: Calibrated Multi-Dimensional Evaluation and Learned Dual-Policy Agents for Real-Time Meetings",
@@ -4054,7 +4054,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "How Can Input Reformulation Improve Tool Usage Accuracy in a Complex Dynamic Environment? A Study on $\u03c4$-bench",
@@ -4077,7 +4077,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MDD-5k: A New Diagnostic Conversation Dataset for Mental Disorders Synthesized via Neuro-Symbolic LLM Agents",
@@ -4101,7 +4101,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RewardHackingAgents: Benchmarking Evaluation Integrity for LLM ML-Engineering Agents",
@@ -4118,7 +4118,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ff4ERA: A new Fuzzy Framework for Ethical Risk Assessment in AI",
@@ -4139,7 +4139,7 @@
             "cs.HC",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "DSLOB: A Synthetic Limit Order Book Dataset for Benchmarking Forecasting Algorithms under Distributional Shift",
@@ -4161,7 +4161,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety",
@@ -4183,7 +4183,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Medical LLMs by Levels of Autonomy: A Survey Moving from Benchmarks to Applications",
@@ -4212,7 +4212,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents",
@@ -4235,8 +4235,8 @@
             "cs.SE",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MCP-SafetyBench: A Benchmark for Safety Evaluation of Large Language Models with Real-World MCP Servers",
@@ -4257,7 +4257,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentHallu: Benchmarking Automated Hallucination Attribution of LLM-based Agents",
@@ -4277,7 +4277,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "From homeostasis to resource sharing: Biologically and economically aligned multi-objective multi-agent gridworld-based AI safety benchmarks",
@@ -4294,7 +4294,7 @@
             "cs.MA",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Semantically Aware UAV Landing Site Assessment from Remote Sensing Imagery via Multimodal Large Language Models",
@@ -4317,7 +4317,7 @@
             "cs.CV",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ART: Action-based Reasoning Task Benchmarking for Medical AI Agents",
@@ -4335,7 +4335,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "$\\texttt{BluePrint}$: A Social Media User Dataset for LLM Persona Evaluation and Training",
@@ -4359,7 +4359,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Implicit Intelligence -- Evaluating Agents on What Users Don't Say",
@@ -4376,7 +4376,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Transparent, Evaluable, and Accessible Data Agents: A Proof-of-Concept Framework",
@@ -4393,7 +4393,7 @@
             "cs.AI",
             "cs.DB"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "A Proposal for Evaluating the Operational Risk for ChatBots based on Large Language Models",
@@ -4415,7 +4415,7 @@
             "cs.AI",
             "cs.CY"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Efficient LLM Safety Evaluation through Multi-Agent Debate",
@@ -4437,7 +4437,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Lost in Simulation: LLM-Simulated Users are Unreliable Proxies for Human Users in Agentic Evaluations",
@@ -4460,7 +4460,7 @@
             "cs.CY",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Cohort-Aware Agents for Individualized Lung Cancer Risk Prediction Using a Retrieval-Augmented Model Selection Framework",
@@ -4484,7 +4484,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Multimodal Safety Evaluation in Generative Agent Social Simulations",
@@ -4508,7 +4508,7 @@
             "cs.CY",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Language Model Reasoning about Confidential Information",
@@ -4528,7 +4528,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Agentic LLMs as Powerful Deanonymizers: Re-identification of Participants in the Anthropic Interviewer Dataset",
@@ -4546,8 +4546,8 @@
             "cs.AI",
             "cs.CY"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "LibVulnWatch: A Deep Assessment Agent System and Leaderboard for Uncovering Hidden Vulnerabilities in Open-Source AI Libraries",
@@ -4573,7 +4573,7 @@
             "cs.CR",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "A Benchmark for Evaluating Outcome-Driven Constraint Violations in Autonomous AI Agents",
@@ -4594,8 +4594,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "LLMArena: Assessing Capabilities of Large Language Models in Dynamic Multi-Agent Environments",
@@ -4617,8 +4617,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "EconWebArena: Benchmarking Autonomous Agents on Economic Tasks in Realistic Web Environments",
@@ -4635,7 +4635,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "FinEval: A Chinese Financial Domain Knowledge Evaluation Benchmark for Large Language Models",
@@ -4667,8 +4667,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Real-Time Trust Verification for Safe Agentic Actions using TrustBench",
@@ -4686,7 +4686,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "A Risk Ontology for Evaluating AI-Powered Psychotherapy Virtual Agents",
@@ -4705,7 +4705,7 @@
             "cs.AI",
             "cs.HC"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Red Lines and Grey Zones in the Fog of War: Benchmarking Legal Risk, Moral Harm, and Regional Bias in Large Language Model Military Decision-Making",
@@ -4723,8 +4723,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Agent-SafetyBench: Evaluating the Safety of LLM Agents",
@@ -4746,8 +4746,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MIRAI: Evaluating LLM Agents for Event Forecasting",
@@ -4770,8 +4770,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SEVADE: Self-Evolving Multi-Agent Analysis with Decoupled Evaluation for Hallucination-Resistant Irony Detection",
@@ -4794,7 +4794,7 @@
             "cs.CL",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "How to evaluate control measures for LLM agents? A trajectory from today to superintelligence",
@@ -4814,7 +4814,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "MoralityGym: A Benchmark for Evaluating Hierarchical Moral Alignment in Sequential Decision-Making Agents",
@@ -4839,8 +4839,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "DialogGuard: Multi-Agent Psychosocial Safety Evaluation of Sensitive LLM Responses",
@@ -4859,7 +4859,7 @@
             "cs.HC",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks",
@@ -4889,7 +4889,7 @@
             "cs.CV",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases",
@@ -4908,8 +4908,8 @@
             "cs.LG",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Random Policy Evaluation Uncovers Policies of Generative Flow Networks",
@@ -4928,7 +4928,7 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?",
@@ -4952,7 +4952,7 @@
             "cs.LG",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarks and Algorithms for Offline Preference-Based Reward Learning",
@@ -4971,8 +4971,8 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "SOCK: A Benchmark for Measuring Self-Replication in Large Language Models",
@@ -4991,7 +4991,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems",
@@ -5043,7 +5043,7 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "EgoNormia: Benchmarking Physical Social Norm Understanding",
@@ -5067,7 +5067,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "VCode: a Multimodal Coding Benchmark with SVG as Symbolic Visual Representation",
@@ -5091,7 +5091,7 @@
             "cs.CV",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentCompass: Towards Reliable Evaluation of Agentic Workflows in Production",
@@ -5111,7 +5111,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Dynamic Benchmarking of Reasoning Capabilities in Code Large Language Models Under Data Contamination",
@@ -5131,8 +5131,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Software Development Agents: Patch Patterns, Code Quality, and Issue Complexity in Real-World GitHub Scenarios",
@@ -5150,7 +5150,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "AI Agent Systems: Architectures, Applications, and Evaluation",
@@ -5166,8 +5166,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Human Choice Prediction in Language-based Persuasion Games: Simulation-based Off-Policy Evaluation",
@@ -5189,8 +5189,8 @@
             "cs.AI",
             "cs.GT"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MedDialogRubrics: A Comprehensive Benchmark and Evaluation Framework for Multi-turn Medical Consultations in Large Language Models",
@@ -5218,7 +5218,7 @@
             "cs.CL",
             "cs.HC"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CyberGym: Evaluating AI Agents' Real-World Cybersecurity Capabilities at Scale",
@@ -5241,7 +5241,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TheAgentCompany: Benchmarking LLM Agents on Consequential Real World Tasks",
@@ -5277,7 +5277,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SoK: Agentic Retrieval-Augmented Generation (RAG): Taxonomy, Architectures, Evaluation, and Research Directions",
@@ -5301,8 +5301,8 @@
             "cs.CR",
             "cs.IR"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Retrieval-Augmented Review Generation for Poisoning Recommender Systems",
@@ -5326,7 +5326,7 @@
             "cs.CL",
             "cs.IR"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Improving the Safety and Trustworthiness of Medical AI via Multi-Agent Evaluation Loops",
@@ -5350,7 +5350,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "DataGovBench: Benchmarking LLM Agents for Real-World Data Governance Workflows",
@@ -5374,7 +5374,7 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RepliBench: Evaluating the Autonomous Replication Capabilities of Language Model Agents",
@@ -5400,7 +5400,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "HR-MultiWOZ: A Task Oriented Dialogue (TOD) Dataset for HR LLM Agent",
@@ -5424,7 +5424,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Improving Methodologies for Agentic Evaluations Across Domains: Leakage of Sensitive Information, Fraud and Cybersecurity Threats",
@@ -5509,7 +5509,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "PandaGuard: Systematic Evaluation of LLM Safety against Jailbreaking Attacks",
@@ -5536,7 +5536,7 @@
             "cs.CR",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Proposer-Agent-Evaluator(PAE): Autonomous Skill Discovery For Foundation Model Internet Agents",
@@ -5561,8 +5561,8 @@
             "cs.AI",
             "cs.CV"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "DrafterBench: Benchmarking Large Language Models for Tasks Automation in Civil Engineering",
@@ -5581,7 +5581,7 @@
             "cs.AI",
             "cs.CE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SafePro: Evaluating the Safety of Professional-Level AI Agents",
@@ -5606,8 +5606,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "SocialDF: Benchmark Dataset and Detection Model for Mitigating Harmful Deepfake Content on Social Media Platforms",
@@ -5629,7 +5629,7 @@
             "cs.LG",
             "cs.MM"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MoPHES:Leveraging on-device LLMs as Agent for Mobile Psychological Health Evaluation and Support",
@@ -5648,7 +5648,7 @@
             "cs.CY",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Behavioral Cloning via Search in Embedded Demonstration Dataset",
@@ -5667,7 +5667,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "GEMA-Score: Granular Explainable Multi-Agent Scoring Framework for Radiology Report Evaluation",
@@ -5694,7 +5694,7 @@
             "cs.CL",
             "cs.MA"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Knowledge Graph-Guided Multi-Agent Distillation for Reliable Industrial Question Answering with Datasets",
@@ -5716,7 +5716,7 @@
             "cs.AI",
             "cs.DB"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Design and evaluation of an agentic workflow for crisis-related synthetic tweet datasets",
@@ -5737,7 +5737,7 @@
             "cs.MA",
             "cs.SI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Researchy Questions: A Dataset of Multi-Perspective, Decompositional Questions for LLM Web Agents",
@@ -5761,7 +5761,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Towards Automatic Evaluation for LLMs' Clinical Capabilities: Metric, Data, and Algorithm",
@@ -5789,7 +5789,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "OCCULT: Evaluating Large Language Models for Offensive Cyber Operation Capabilities",
@@ -5813,7 +5813,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "InterveneBench: Benchmarking LLMs for Intervention Reasoning and Causal Study Design in Real Social Systems",
@@ -5847,7 +5847,7 @@
             "cs.CY",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models",
@@ -5893,7 +5893,7 @@
             "cs.CY",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Hallucinated Adversarial Control for Conservative Offline Policy Evaluation",
@@ -5915,7 +5915,7 @@
             "cs.AI",
             "stat.ML"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "RePD: Defending Jailbreak Attack through a Retrieval-based Prompt Decomposition Process",
@@ -5934,7 +5934,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "FinBen: A Holistic Financial Benchmark for Large Language Models",
@@ -5985,8 +5985,8 @@
             "cs.AI",
             "cs.CE"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Identifying, Evaluating, and Mitigating Risks of AI Thought Partnerships",
@@ -6008,8 +6008,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "SAGE: A Generic Framework for LLM Safety Evaluation",
@@ -6029,7 +6029,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AI Agent Systems for Supply Chains: Structured Decision Prompts and Memory Retrieval",
@@ -6049,7 +6049,7 @@
             "cs.MA",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Lessons Learned from Evaluation of LLM based Multi-agents in Safer Therapy Recommendation",
@@ -6071,7 +6071,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "SecureRAG-RTL: A Retrieval-Augmented, Multi-Agent, Zero-Shot LLM-Driven Framework for Hardware Vulnerability Detection",
@@ -6092,8 +6092,8 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "A Framework for Assessing AI Agent Decisions and Outcomes in AutoML Pipelines",
@@ -6112,7 +6112,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "DroidCall: A Dataset for LLM-powered Android Intent Invocation",
@@ -6132,8 +6132,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Do Not Trust Licenses You See: Dataset Compliance Requires Massive-Scale AI-Powered Lifecycle Tracing",
@@ -6157,7 +6157,7 @@
             "cs.CY",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "MemeCMD: An Automatically Generated Chinese Multi-turn Dialogue Dataset with Contextually Retrieved Memes",
@@ -6176,7 +6176,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ZeroDayBench: Evaluating LLM Agents on Unseen Zero-Day Vulnerabilities for Cyberdefense",
@@ -6201,7 +6201,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "miniCodeProps: a Minimal Benchmark for Proving Code Properties",
@@ -6220,8 +6220,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "The Seeker's Dilemma: Realistic Formulation and Benchmarking for Hardware Trojan Detection",
@@ -6242,7 +6242,7 @@
             "cs.AR",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Assessing Spear-Phishing Website Generation in Large Language Model Coding Agents",
@@ -6260,7 +6260,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CryptoFormalEval: Integrating LLMs and Formal Verification for Automated Cryptographic Protocol Vulnerability Detection",
@@ -6281,7 +6281,7 @@
             "cs.AI",
             "cs.SC"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "YNTP-100: A Benchmark for Your Next Token Prediction with 100 People",
@@ -6298,7 +6298,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Towards Automatic Evaluation and Selection of PHI De-identification Models via Multi-Agent Collaboration",
@@ -6317,7 +6317,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Building Trust in Mental Health Chatbots: Safety Metrics and LLM-Based Evaluation Tools",
@@ -6349,7 +6349,7 @@
             "cs.HC",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SUREON: A Benchmark and Vision-Language-Model for Surgical Reasoning",
@@ -6372,7 +6372,7 @@
             "cs.CV",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Optimizing Agentic Reasoning with Retrieval via Synthetic Semantic Information Gain Reward",
@@ -6395,8 +6395,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "A Behavioural and Representational Evaluation of Goal-Directedness in Language Model Agents",
@@ -6423,8 +6423,8 @@
             "cs.CL",
             "cs.CY"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Advancing AI Trustworthiness Through Patient Simulation: Risk Assessment of Conversational Agents for Antidepressant Selection",
@@ -6447,7 +6447,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CC-GRMAS: A Multi-Agent Graph Neural System for Spatiotemporal Landslide Risk Assessment in High Mountain Asia",
@@ -6467,7 +6467,7 @@
             "cs.AI",
             "cs.CV"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Decision Making under Imperfect Recall: Algorithms and Benchmarks",
@@ -6489,7 +6489,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Is Safety Standard Same for Everyone? User-Specific Safety Evaluation of Large Language Models",
@@ -6512,7 +6512,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "A Survey on Large Language Model Benchmarks",
@@ -6541,7 +6541,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "PRODIGy: a PROfile-based DIalogue Generation dataset",
@@ -6559,7 +6559,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Evaluating Precise Geolocation Inference Capabilities of Vision Language Models",
@@ -6580,7 +6580,7 @@
             "cs.CR",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AlignUSER: Human-Aligned LLM Agents via World Models for Recommender System Evaluation",
@@ -6600,7 +6600,7 @@
             "cs.IR",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "TraderBench: How Robust Are AI Agents in Adversarial Capital Markets?",
@@ -6620,7 +6620,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AI for Climate Finance: Agentic Retrieval and Multi-Step Reasoning for Early Warning System Investments",
@@ -6642,7 +6642,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Position: Theory of Mind Benchmarks are Broken for Large Language Models",
@@ -6664,7 +6664,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "An end-to-end agentic pipeline for smart contract translation and quality evaluation",
@@ -6684,7 +6684,7 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ConflictBench: Evaluating Human-AI Conflict via Interactive and Visually Grounded Environments",
@@ -6707,7 +6707,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Are Personalized Stochastic Parrots More Dangerous? Evaluating Persona Biases in Dialogue Systems",
@@ -6728,8 +6728,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "MASCA: LLM based-Multi Agents System for Credit Assessment",
@@ -6749,7 +6749,7 @@
             "cs.CE",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "PentestEval: Benchmarking LLM-based Penetration Testing with Modular and Stage-Level Design",
@@ -6772,7 +6772,7 @@
             "cs.AI",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
@@ -6796,7 +6796,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Can LLMs Write Faithfully? An Agent-Based Evaluation of LLM-generated Islamic Content",
@@ -6822,7 +6822,7 @@
             "cs.CY",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CiteAudit: You Cited It, But Did You Read It? A Benchmark for Verifying Scientific References in the LLM Era",
@@ -6844,7 +6844,7 @@
             "cs.CL",
             "cs.DL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Clinically Grounded Agent-based Report Evaluation: An Interpretable Metric for Radiology Report Generation",
@@ -6873,7 +6873,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MedRepBench: A Comprehensive Benchmark for Medical Report Interpretation",
@@ -6895,8 +6895,8 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Real-World En Call Center Transcripts Dataset with PII Redaction",
@@ -6915,8 +6915,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "BackportBench: A Multilingual Benchmark for Automated Backporting of Patches",
@@ -6936,7 +6936,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "MedKGEval: A Knowledge Graph-Based Multi-Turn Evaluation Framework for Open-Ended Patient Interactions with Clinical LLMs",
@@ -6959,8 +6959,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration",
@@ -6978,7 +6978,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints",
@@ -7005,8 +7005,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Explainable Cross-Disease Reasoning for Cardiovascular Risk Assessment from Low-Dose Computed Tomography",
@@ -7028,7 +7028,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "WaymoQA: A Multi-View Visual Question Answering Dataset for Safety-Critical Reasoning in Autonomous Driving",
@@ -7052,7 +7052,7 @@
             "cs.CV",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Mind the Goal: Data-Efficient Goal-Oriented Evaluation of Conversational Agents and Chatbots using Teacher Models",
@@ -7073,7 +7073,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "EVALOOOP: A Self-Consistency-Centered Framework for Assessing Large Language Model Robustness in Programming",
@@ -7095,8 +7095,8 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Retrieval--Reasoning Processes for Multi-hop Question Answering: A Four-Axis Design Framework and Empirical Trends",
@@ -7115,7 +7115,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "TD-EVAL: Revisiting Task-Oriented Dialogue Evaluation by Combining Turn-Level Precision with Dialogue-Level Comparisons",
@@ -7138,7 +7138,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "VERA-MH: Reliability and Validity of an Open-Source AI Safety Evaluation in Mental Health",
@@ -7163,8 +7163,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "ElectriQ: A Benchmark for Assessing the Response Capability of Large Language Models in Power Marketing",
@@ -7190,8 +7190,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Many AI Analysts, One Dataset: Navigating the Agentic Data Science Multiverse",
@@ -7210,8 +7210,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Hiding in Plain Sight: Reframing Hardware Trojan Benchmarking as a Hide&Seek Modification",
@@ -7232,8 +7232,8 @@
             "cs.AR",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "An Offline Mobile Conversational Agent for Mental Health Support: Learning from Emotional Dialogues and Psychological Texts with Student-Centered Evaluation",
@@ -7255,8 +7255,8 @@
             "cs.CY",
             "cs.HC"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "MedBrowseComp: Benchmarking Medical Deep Research and Computer Use",
@@ -7280,7 +7280,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "AgentProcessBench: Diagnosing Step-Level Process Quality in Tool-Using Agents",
@@ -7307,8 +7307,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Graph-S3: Enhancing Agentic textual Graph Retrieval with Synthetic Stepwise Supervision",
@@ -7333,8 +7333,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Single-Agent vs. Multi-Agent LLM Strategies for Automated Student Reflection Assessment",
@@ -7357,7 +7357,7 @@
             "cs.LG",
             "cs.CY"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "ManagerBench: Evaluating the Safety-Pragmatism Trade-off in Autonomous LLMs",
@@ -7378,7 +7378,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SCARE: A Benchmark for SQL Correction and Question Answerability Classification for Reliable EHR Question Answering",
@@ -7397,7 +7397,7 @@
             "cs.CL",
             "cs.DB"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SBASH: a Framework for Designing and Evaluating RAG vs. Prompt-Tuned LLM Honeypots",
@@ -7417,8 +7417,8 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "An Empirical Evaluation of LLM-Based Approaches for Code Vulnerability Detection: RAG, SFT, and Dual-Agent Systems",
@@ -7437,8 +7437,8 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Put Your Money Where Your Mouth Is: Evaluating Strategic Planning and Execution of LLM Agents in an Auction Arena",
@@ -7459,7 +7459,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Seeing is not always believing: Benchmarking Human and Model Perception of AI-Generated Images",
@@ -7482,7 +7482,7 @@
             "cs.AI",
             "cs.CV"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "CreditAudit: 2$^\\text{nd}$ Dimension for LLM Evaluation and Selection",
@@ -7505,7 +7505,7 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Persuade Me if You Can: A Framework for Evaluating Persuasion Effectiveness and Susceptibility Among Large Language Models",
@@ -7527,7 +7527,7 @@
             "cs.LG",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "LiveMedBench: A Contamination-Free Medical Benchmark for LLMs with Automated Rubric Evaluation",
@@ -7549,7 +7549,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "eSapiens: A Platform for Secure and Auditable Retrieval-Augmented Generation",
@@ -7571,8 +7571,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Beyond BeautifulSoup: Benchmarking LLM-Powered Web Scraping for Everyday Users",
@@ -7592,8 +7592,8 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Overcoming the Retrieval Barrier: Indirect Prompt Injection in the Wild for LLM Systems",
@@ -7613,7 +7613,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "EvalSVA: Multi-Agent Evaluators for Next-Gen Software Vulnerability Assessment",
@@ -7634,7 +7634,7 @@
             "cs.SE",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Medical Malice: A Dataset for Context-Aware Safety in Healthcare LLMs",
@@ -7653,7 +7653,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "LaoBench: A Large-Scale Multidimensional Lao Benchmark for Large Language Models",
@@ -7680,7 +7680,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "PPTC-R benchmark: Towards Evaluating the Robustness of Large Language Models for PowerPoint Task Completion",
@@ -7700,8 +7700,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Benchmarking LLM-Assisted Blue Teaming via Standardized Threat Hunting",
@@ -7724,7 +7724,7 @@
             "cs.CR",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "LieCraft: A Multi-Agent Framework for Evaluating Deceptive Capabilities in Language Models",
@@ -7748,7 +7748,7 @@
             "cs.AI",
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "A Systematic Review of Key Retrieval-Augmented Generation (RAG) Systems: Progress, Gaps, and Future Directions",
@@ -7768,8 +7768,8 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "BioDisco: Multi-agent hypothesis generation with dual-mode evidence, iterative feedback and temporal evaluation",
@@ -7794,7 +7794,7 @@
             "cs.IR",
             "stat.AP"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "It's the Thought that Counts: Evaluating the Attempts of Frontier LLMs to Persuade on Harmful Topics",
@@ -7818,7 +7818,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "What Would an LLM Do? Evaluating Large Language Models for Policymaking to Alleviate Homelessness",
@@ -7838,8 +7838,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "AutoBnB-RAG: Enhancing Multi-Agent Incident Response with Retrieval-Augmented Generation",
@@ -7857,7 +7857,7 @@
             "cs.CL",
             "cs.CR"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Intelligent System for Automated Molecular Patent Infringement Assessment",
@@ -7888,7 +7888,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Offline Action-Free Learning of Ex-BMDPs by Comparing Diverse Datasets",
@@ -7906,8 +7906,8 @@
         "categories": [
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "WOD-E2E: Waymo Open Dataset for End-to-End Driving in Challenging Long-tail Scenarios",
@@ -7937,7 +7937,7 @@
             "cs.CV",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Improving Behavioural Cloning with Human-Driven Dynamic Dataset Augmentation",
@@ -7955,7 +7955,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Investigating Pedagogical Teacher and Student LLM Agents: Genetic Adaptation Meets Retrieval Augmented Generation Across Learning Style",
@@ -7977,7 +7977,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Multi-OphthaLingua: A Multilingual Benchmark for Assessing and Debiasing LLM Ophthalmological QA in LMICs",
@@ -8010,7 +8010,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "FeatBench: Towards More Realistic Evaluation of Feature-level Code Generation",
@@ -8030,8 +8030,8 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Stop-RAG: Value-Based Retrieval Control for Iterative RAG",
@@ -8050,7 +8050,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Evaluating and Correcting Performative Effects of Decision Support Systems via Causal Domain Shift",
@@ -8069,7 +8069,7 @@
             "cs.LG",
             "math.ST"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Alignment Verifiability in Large Language Models: Normative Indistinguishability under Behavioral Evaluation",
@@ -8086,7 +8086,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "LiveTradeBench: Seeking Real-World Alpha with Large Language Models",
@@ -8107,8 +8107,8 @@
             "cs.CE",
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking",
@@ -8135,7 +8135,7 @@
             "cs.AI",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RELOOP: Recursive Retrieval with Multi-Hop Reasoner and Planners for Heterogeneous QA",
@@ -8156,7 +8156,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Explanations are a Means to an End: Decision Theoretic Explanation Evaluation",
@@ -8175,7 +8175,7 @@
             "cs.AI",
             "stat.ML"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "GlyRAG: Context-Aware Retrieval-Augmented Framework for Blood Glucose Forecasting",
@@ -8193,7 +8193,7 @@
             "cs.LG",
             "cs.IT"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Evaluating Small Language Models for Agentic On-Farm Decision Support Systems",
@@ -8211,8 +8211,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "DeepResearch-Slice: Bridging the Retrieval-Utilization Gap via Explicit Text Slicing",
@@ -8234,7 +8234,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Robust Adaptation of Large Multimodal Models for Retrieval Augmented Hateful Meme Detection",
@@ -8257,7 +8257,7 @@
             "cs.CV",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "The logic of NTQR evaluations of noisy AI agents: Complete postulates and logically consistent error correlations",
@@ -8273,7 +8273,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Conversation for Non-verifiable Learning: Self-Evolving LLMs through Meta-Evaluation",
@@ -8291,7 +8291,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Bridging the Knowledge-Action Gap by Evaluating LLMs in Dynamic Dental Clinical Scenarios",
@@ -8318,7 +8318,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "SycoEval-EM: Sycophancy Evaluation of Large Language Models in Simulated Clinical Encounters for Emergency Care",
@@ -8339,7 +8339,7 @@
             "cs.AI",
             "cs.HC"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "EmoAgent: Assessing and Safeguarding Human-AI Interaction for Mental Health Safety",
@@ -8368,7 +8368,7 @@
             "cs.HC",
             "cs.LG"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Hybrid Retrieval-Augmented Generation Agent for Trustworthy Legal Question Answering in Judicial Forensics",
@@ -8389,7 +8389,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "From Transcripts to AI Agents: Knowledge Extraction, RAG Integration, and Robust Evaluation of Conversational AI Assistants",
@@ -8408,7 +8408,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "EHR-MCP: Real-world Evaluation of Clinical Information Retrieval by Large Language Models via Model Context Protocol",
@@ -8434,7 +8434,7 @@
             "cs.HC",
             "cs.IR"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Ollabench: Evaluating LLMs' Reasoning for Human-centric Interdependent Cybersecurity",
@@ -8452,7 +8452,7 @@
             "cs.AI",
             "cs.HC"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "FACTS About Building Retrieval Augmented Generation-based Chatbots",
@@ -8506,7 +8506,7 @@
             "cs.LG",
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "RealGen: Retrieval Augmented Generation for Controllable Traffic Scenarios",
@@ -8527,7 +8527,7 @@
             "cs.LG",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "AI Transparency Atlas: Framework, Scoring, and Real-Time Model Card Evaluation Pipeline",
@@ -8546,7 +8546,7 @@
             "cs.AI",
             "cs.SE"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ExpertAgent: Enhancing Personalized Education through Dynamic Planning and Retrieval-Augmented Long-Chain Reasoning",
@@ -8564,7 +8564,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Bridging Legal Knowledge and AI: Retrieval-Augmented Generation with Vector Stores, Knowledge Graphs, and Hierarchical Non-negative Matrix Factorization",
@@ -8585,7 +8585,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "VimRAG: Navigating Massive Visual Context in Retrieval-Augmented Generation via Multimodal Memory Graph",
@@ -8613,8 +8613,8 @@
             "cs.CV",
             "cs.CL"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "Neuro-Symbolic Traders: Assessing the Wisdom of AI Crowds in Markets",
@@ -8632,7 +8632,7 @@
             "cs.LG",
             "q-fin.CP"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Automated Rubrics for Reliable Evaluation of Medical Dialogue Systems",
@@ -8652,7 +8652,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "VisualLeakBench: Auditing the Fragility of Large Vision-Language Models against PII Leakage and Social Engineering",
@@ -8674,7 +8674,7 @@
             "cs.CR",
             "cs.IR"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "RephQA: Evaluating Readability of Large Language Models in Public Health Question Answering",
@@ -8696,8 +8696,8 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "From AutoRecSys to AutoRecLab: A Call to Build, Evaluate, and Govern Autonomous Recommender-Systems Research Labs",
@@ -8719,7 +8719,7 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Beyond Instruction Following: Evaluating Inferential Rule Following of Large Language Models",
@@ -8745,7 +8745,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "HumanAgencyBench: Scalable Evaluation of Human Agency Support in AI Assistants",
@@ -8768,8 +8768,8 @@
             "cs.HC",
             "cs.LG"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "Lying to Win: Assessing LLM Deception through Human-AI Games and Parallel-World Probing",
@@ -8788,7 +8788,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Pruning Minimal Reasoning Graphs for Efficient Retrieval-Augmented Generation",
@@ -8812,7 +8812,7 @@
             "cs.CL",
             "cs.LG"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems",
@@ -8838,8 +8838,8 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "OffTopicEval: When Large Language Models Enter the Wrong Chat, Almost Always!",
@@ -8861,8 +8861,8 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "1",
-        "human_label": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "CONFETTI: Conversational Function-Calling Evaluation Through Turn-Level Interactions",
@@ -8884,7 +8884,7 @@
         "categories": [
             "cs.CL"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TruthTensor: Evaluating LLMs through Human Imitation on Prediction Market under Drift and Holistic Reasoning",
@@ -8904,7 +8904,7 @@
             "cs.ET",
             "cs.MA"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ReCollab: Retrieval-Augmented LLMs for Cooperative Ad-hoc Teammate Modeling",
@@ -8924,8 +8924,8 @@
             "cs.AI",
             "cs.LG"
         ],
-        "result": "0",
-        "human_label": "0"
+        "llm_annotate_is_benchmark": "0",
+        "human_annotate_is_benchmark": "0"
     },
     {
         "title": "SimUSER: Simulating User Behavior with Large Language Models for Recommender System Evaluation",
@@ -8943,7 +8943,7 @@
             "cs.IR",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Is my Meeting Summary Good? Estimating Quality with a Multi-LLM Evaluator",
@@ -8962,7 +8962,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "A Survey on Evaluation of Large Language Models",
@@ -8994,7 +8994,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Assessing the Reliability of Persona-Conditioned LLMs as Synthetic Survey Respondents",
@@ -9015,7 +9015,7 @@
             "cs.CY",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "Noise, Adaptation, and Strategy: Assessing LLM Fidelity in Decision-Making",
@@ -9034,7 +9034,7 @@
             "cs.CE",
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "When Machine Unlearning Meets Retrieval-Augmented Generation (RAG): Keep Secret or Forget Knowledge?",
@@ -9054,7 +9054,7 @@
             "cs.CR",
             "cs.CL"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "HyMem: Hybrid Memory Architecture with Dynamic Retrieval Scheduling",
@@ -9074,7 +9074,7 @@
         "categories": [
             "cs.AI"
         ],
-        "result": "0"
+        "llm_annotate_is_benchmark": "0"
     },
     {
         "title": "The Ethical Compass of the Machine: Evaluating Large Language Models for Decision Support in Construction Project Management",
@@ -9092,6 +9092,6 @@
             "cs.AI",
             "cs.CY"
         ],
-        "result": "1"
+        "llm_annotate_is_benchmark": "1"
     }
 ]
