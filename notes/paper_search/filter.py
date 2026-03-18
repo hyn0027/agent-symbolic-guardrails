@@ -1,3 +1,4 @@
+import csv
 import json
 import os
 import asyncio
@@ -313,6 +314,38 @@ def main() -> None:
         )
         with open("human_labeled_tool_use_llm_agent_papers.json", "w") as f:
             json.dump(results, f, indent=4)
+
+    labeled_tool_use_llm_agent_benchmark_papers = []
+    for paper in results:
+        if (
+            "human_annotate_is_tool_use_llm_agent" in paper
+            and paper["human_annotate_is_tool_use_llm_agent"] == "1"
+        ):
+            labeled_tool_use_llm_agent_benchmark_papers.append(paper)
+        elif (
+            "human_annotate_is_tool_use_llm_agent" not in paper
+            and paper["llm_annotate_is_tool_use_llm_agent"] == "1"
+        ):
+            labeled_tool_use_llm_agent_benchmark_papers.append(paper)
+    with open("labeled_tool_use_llm_agent_benchmark_papers.json", "w") as f:
+        json.dump(labeled_tool_use_llm_agent_benchmark_papers, f, indent=4)
+    results = labeled_tool_use_llm_agent_benchmark_papers
+    print(
+        f"Total papers labeled as benchmark/dataset for tool-use LLM agents: {len(results)}"
+    )
+
+    # output csv, with title and link
+    with open("labeled_tool_use_llm_agent_benchmark_papers.csv", "w") as f:
+        writer = csv.writer(f)
+        writer.writerow(["Title", "Link", "Date"])
+        for paper in results:
+            writer.writerow(
+                [
+                    paper.get("title", "N/A"),
+                    paper.get("pdf_url", "N/A"),
+                    paper.get("published", "N/A"),
+                ]
+            )
 
 
 if __name__ == "__main__":

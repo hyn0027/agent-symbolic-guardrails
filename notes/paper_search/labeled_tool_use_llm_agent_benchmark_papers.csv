@@ -1,0 +1,116 @@
+Title,Link,Date
+Agent Security Bench (ASB): Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents,https://arxiv.org/pdf/2410.02644v4,2024-10-03 16:30:47+00:00
+VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents,https://arxiv.org/pdf/2506.02456v2,2025-06-03 05:21:50+00:00
+SEC-bench: Automated Benchmarking of LLM Agents on Real-World Software Security Tasks,https://arxiv.org/pdf/2506.11791v2,2025-06-13 13:54:30+00:00
+From Assistant to Double Agent: Formalizing and Benchmarking Attacks on OpenClaw for Personalized Local AI Agent,https://arxiv.org/pdf/2602.08412v2,2026-02-09 09:14:58+00:00
+MAPS: A Multilingual Benchmark for Agent Performance and Security,https://arxiv.org/pdf/2505.15935v3,2025-05-21 18:42:00+00:00
+ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations,https://arxiv.org/pdf/2511.05359v1,2025-11-07 15:49:49+00:00
+MCP Security Bench (MSB): Benchmarking Attacks Against Model Context Protocol in LLM Agents,https://arxiv.org/pdf/2510.15994v1,2025-10-14 07:36:25+00:00
+AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,https://arxiv.org/pdf/2602.16901v1,2026-02-18 21:30:20+00:00
+"Agent Tools Orchestration Leaks More: Dataset, Benchmark, and Mitigation",https://arxiv.org/pdf/2512.16310v2,2025-12-18 08:50:57+00:00
+WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,https://arxiv.org/pdf/2504.18575v3,2025-04-22 17:51:03+00:00
+RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,https://arxiv.org/pdf/2506.15253v1,2025-06-18 08:30:36+00:00
+CVE-Bench: A Benchmark for AI Agents' Ability to Exploit Real-World Web Application Vulnerabilities,https://arxiv.org/pdf/2503.17332v4,2025-03-21 17:32:32+00:00
+LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios,https://arxiv.org/pdf/2602.03255v1,2026-02-03 08:40:24+00:00
+TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems,https://arxiv.org/pdf/2511.05269v1,2025-11-07 14:30:26+00:00
+ISD-Agent-Bench: A Comprehensive Benchmark for Evaluating LLM-based Instructional Design Agents,https://arxiv.org/pdf/2602.10620v1,2026-02-11 08:11:31+00:00
+"$α^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",https://arxiv.org/pdf/2601.18754v1,2026-01-26 18:25:07+00:00
+DeepScholar-Bench: A Live Benchmark and Automated Evaluation for Generative Research Synthesis,https://arxiv.org/pdf/2508.20033v2,2025-08-27 16:36:34+00:00
+$C^3$-Bench: The Things Real Disturbing LLM based Agent in Multi-Tasking,https://arxiv.org/pdf/2505.18746v4,2025-05-24 15:25:44+00:00
+"$α^3$-Bench: A Unified Benchmark of Safety, Robustness, and Efficiency for LLM-Based UAV Agents over 6G Networks",https://arxiv.org/pdf/2601.03281v1,2026-01-01 12:07:06+00:00
+$τ$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains,https://arxiv.org/pdf/2406.12045v1,2024-06-17 19:33:08+00:00
+CyberExplorer: Benchmarking LLM Offensive Security Capabilities in a Real-World Attacking Simulation Environment,https://arxiv.org/pdf/2602.08023v2,2026-02-08 15:56:22+00:00
+MIRAGE-Bench: LLM Agent is Hallucinating and Where to Find Them,https://arxiv.org/pdf/2507.21017v1,2025-07-28 17:38:29+00:00
+Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,https://arxiv.org/pdf/2602.13379v1,2026-02-13 18:38:18+00:00
+Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents,https://arxiv.org/pdf/2509.17488v1,2025-09-22 08:19:06+00:00
+AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents,https://arxiv.org/pdf/2410.09024v3,2024-10-11 17:39:22+00:00
+RiOSWorld: Benchmarking the Risk of Multimodal Computer-Use Agents,https://arxiv.org/pdf/2506.00618v3,2025-05-31 16:04:59+00:00
+AutoAdvExBench: Benchmarking autonomous exploitation of adversarial example defenses,https://arxiv.org/pdf/2503.01811v1,2025-03-03 18:39:48+00:00
+AutoPenBench: Benchmarking Generative Agents for Penetration Testing,https://arxiv.org/pdf/2410.03225v2,2024-10-04 08:24:15+00:00
+PredictionMarketBench: A SWE-bench-Style Framework for Backtesting Trading Agents on Prediction Markets,https://arxiv.org/pdf/2602.00133v1,2026-01-28 06:41:12+00:00
+SWE-bench Goes Live!,https://arxiv.org/pdf/2505.23419v2,2025-05-29 13:09:44+00:00
+MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,https://arxiv.org/pdf/2508.13220v3,2025-08-17 11:49:16+00:00
+R-Judge: Benchmarking Safety Risk Awareness for LLM Agents,https://arxiv.org/pdf/2401.10019v3,2024-01-18 14:40:46+00:00
+BioAgent Bench: An AI Agent Evaluation Suite for Bioinformatics,https://arxiv.org/pdf/2601.21800v2,2026-01-29 14:44:03+00:00
+SecRepoBench: Benchmarking Code Agents for Secure Code Completion in Real-World Repositories,https://arxiv.org/pdf/2504.21205v3,2025-04-29 22:22:44+00:00
+Breaking the Code: Security Assessment of AI Code Agents Through Systematic Jailbreaking Attacks,https://arxiv.org/pdf/2510.01359v1,2025-10-01 18:38:20+00:00
+ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents,https://arxiv.org/pdf/2410.06703v6,2024-10-09 09:13:38+00:00
+FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments,https://arxiv.org/pdf/2601.07853v1,2026-01-09 03:25:45+00:00
+MLA-Trust: Benchmarking Trustworthiness of Multimodal LLM Agents in GUI Environments,https://arxiv.org/pdf/2506.01616v1,2025-06-02 12:56:27+00:00
+CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,https://arxiv.org/pdf/2601.22027v1,2026-01-29 17:33:42+00:00
+A Functionality-Grounded Benchmark for Evaluating Web Agents in E-commerce Domains,https://arxiv.org/pdf/2508.15832v1,2025-08-18 21:58:43+00:00
+Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,https://arxiv.org/pdf/2602.02455v1,2026-02-02 18:46:16+00:00
+AgentSCOPE: Evaluating Contextual Privacy Across Agentic Workflows,https://arxiv.org/pdf/2603.04902v1,2026-03-05 07:45:31+00:00
+SafeArena: Evaluating the Safety of Autonomous Web Agents,https://arxiv.org/pdf/2503.04957v1,2025-03-06 20:43:14+00:00
+BuildBench: Benchmarking LLM Agents on Compiling Real-World Open-Source Software,https://arxiv.org/pdf/2509.25248v1,2025-09-27 03:02:46+00:00
+SastBench: A Benchmark for Testing Agentic SAST Triage,https://arxiv.org/pdf/2601.02941v1,2026-01-06 11:36:30+00:00
+PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach,https://arxiv.org/pdf/2511.20703v1,2025-11-24 18:46:44+00:00
+SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,https://arxiv.org/pdf/2509.22097v1,2025-09-26 09:18:57+00:00
+AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,https://arxiv.org/pdf/2406.13352v3,2024-06-19 08:55:56+00:00
+Sola-Visibility-ISPM: Benchmarking Agentic AI for Identity Security Posture Management Visibility,https://arxiv.org/pdf/2601.07880v1,2026-01-11 18:36:33+00:00
+WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents,https://arxiv.org/pdf/2601.08406v1,2026-01-13 10:21:28+00:00
+MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,https://arxiv.org/pdf/2508.14925v1,2025-08-19 10:12:35+00:00
+Toward Scalable Verifiable Reward: Proxy State-Based Evaluation for Multi-turn Tool-Calling LLM Agents,https://arxiv.org/pdf/2602.16246v2,2026-02-18 07:49:47+00:00
+NetArena: Dynamic Benchmarks for AI Agents in Network Automation,https://arxiv.org/pdf/2506.03231v2,2025-06-03 14:04:22+00:00
+PrivacyLens: Evaluating Privacy Norm Awareness of Language Models in Action,https://arxiv.org/pdf/2409.00138v3,2024-08-29 17:58:38+00:00
+Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms,https://arxiv.org/pdf/2507.06323v1,2025-07-08 18:24:28+00:00
+IntellAgent: A Multi-Agent Framework for Evaluating Conversational AI Systems,https://arxiv.org/pdf/2501.11067v1,2025-01-19 14:58:35+00:00
+"Towards Effective Offensive Security LLM Agents: Hyperparameter Tuning, LLM as a Judge, and a Lightweight CTF Benchmark",https://arxiv.org/pdf/2508.05674v1,2025-08-05 03:25:09+00:00
+VC-Agent: An Interactive Agent for Customized Video Dataset Collection,https://arxiv.org/pdf/2509.21291v1,2025-09-25 15:08:28+00:00
+Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,https://arxiv.org/pdf/2509.25302v1,2025-09-29 17:49:50+00:00
+RedCode: Risky Code Execution and Generation Benchmark for Code Agents,https://arxiv.org/pdf/2411.07781v1,2024-11-12 13:30:06+00:00
+AgentDAM: Privacy Leakage Evaluation for Autonomous Web Agents,https://arxiv.org/pdf/2503.09780v3,2025-03-12 19:30:31+00:00
+SWE-MERA: A Dynamic Benchmark for Agenticly Evaluating Large Language Models on Software Engineering Tasks,https://arxiv.org/pdf/2507.11059v2,2025-07-15 07:52:33+00:00
+RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts,https://arxiv.org/pdf/2411.15114v2,2024-11-22 18:30:46+00:00
+MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,https://arxiv.org/pdf/2410.17520v3,2024-10-23 02:51:43+00:00
+VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications,https://arxiv.org/pdf/2509.26490v2,2025-09-30 16:33:49+00:00
+REAL: Benchmarking Autonomous Agents on Deterministic Simulations of Real Websites,https://arxiv.org/pdf/2504.11543v2,2025-04-15 18:22:55+00:00
+WAREX: Web Agent Reliability Evaluation on Existing Benchmarks,https://arxiv.org/pdf/2510.03285v1,2025-09-28 20:51:05+00:00
+Engineering Reasoning and Instruction (ERI) Benchmark: A Large Taxonomy-driven Dataset for Foundation Models and Agents,https://arxiv.org/pdf/2603.02239v1,2026-02-16 12:38:08+00:00
+CXMArena: Unified Dataset to benchmark performance in realistic CXM Scenarios,https://arxiv.org/pdf/2505.09436v2,2025-05-14 14:44:30+00:00
+ALI-Agent: Assessing LLMs' Alignment with Human Values via Agent-based Evaluation,https://arxiv.org/pdf/2405.14125v3,2024-05-23 02:57:42+00:00
+CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions,https://arxiv.org/pdf/2505.18878v1,2025-05-24 21:33:22+00:00
+Beyond IVR: Benchmarking Customer Support LLM Agents for Business-Adherence,https://arxiv.org/pdf/2601.00596v1,2026-01-02 07:21:23+00:00
+$τ$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge,https://arxiv.org/pdf/2603.04370v1,2026-03-04 18:34:47+00:00
+HackWorld: Evaluating Computer-Use Agents on Exploiting Web Application Vulnerabilities,https://arxiv.org/pdf/2510.12200v1,2025-10-14 06:52:15+00:00
+MeetBench-XL: Calibrated Multi-Dimensional Evaluation and Learned Dual-Policy Agents for Real-Time Meetings,https://arxiv.org/pdf/2602.03285v1,2026-02-03 09:08:18+00:00
+How Can Input Reformulation Improve Tool Usage Accuracy in a Complex Dynamic Environment? A Study on $τ$-bench,https://arxiv.org/pdf/2508.20931v2,2025-08-28 15:57:33+00:00
+OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety,https://arxiv.org/pdf/2507.06134v2,2025-07-08 16:18:54+00:00
+OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,https://arxiv.org/pdf/2506.14866v2,2025-06-17 17:59:31+00:00
+MCP-SafetyBench: A Benchmark for Safety Evaluation of Large Language Models with Real-World MCP Servers,https://arxiv.org/pdf/2512.15163v2,2025-12-17 08:00:32+00:00
+AgentHallu: Benchmarking Automated Hallucination Attribution of LLM-based Agents,https://arxiv.org/pdf/2601.06818v1,2026-01-11 09:04:26+00:00
+"Transparent, Evaluable, and Accessible Data Agents: A Proof-of-Concept Framework",https://arxiv.org/pdf/2509.24127v1,2025-09-28 23:54:41+00:00
+EconWebArena: Benchmarking Autonomous Agents on Economic Tasks in Realistic Web Environments,https://arxiv.org/pdf/2506.08136v2,2025-06-09 18:39:48+00:00
+FinEval: A Chinese Financial Domain Knowledge Evaluation Benchmark for Large Language Models,https://arxiv.org/pdf/2308.09975v2,2023-08-19 10:38:00+00:00
+Agent-SafetyBench: Evaluating the Safety of LLM Agents,https://arxiv.org/pdf/2412.14470v2,2024-12-19 02:35:15+00:00
+MIRAI: Evaluating LLM Agents for Event Forecasting,https://arxiv.org/pdf/2407.01231v1,2024-07-01 12:22:46+00:00
+Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks,https://arxiv.org/pdf/2505.24876v1,2025-05-30 17:59:53+00:00
+SOCK: A Benchmark for Measuring Self-Replication in Large Language Models,https://arxiv.org/pdf/2509.25643v3,2025-09-30 01:27:46+00:00
+BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems,https://arxiv.org/pdf/2505.15216v3,2025-05-21 07:44:52+00:00
+VCode: a Multimodal Coding Benchmark with SVG as Symbolic Visual Representation,https://arxiv.org/pdf/2511.02778v1,2025-11-04 18:00:18+00:00
+TheAgentCompany: Benchmarking LLM Agents on Consequential Real World Tasks,https://arxiv.org/pdf/2412.14161v3,2024-12-18 18:55:40+00:00
+DataGovBench: Benchmarking LLM Agents for Real-World Data Governance Workflows,https://arxiv.org/pdf/2512.04416v2,2025-12-04 03:25:12+00:00
+RepliBench: Evaluating the Autonomous Replication Capabilities of Language Model Agents,https://arxiv.org/pdf/2504.18565v2,2025-04-21 11:39:22+00:00
+DrafterBench: Benchmarking Large Language Models for Tasks Automation in Civil Engineering,https://arxiv.org/pdf/2507.11527v1,2025-07-15 17:56:04+00:00
+"Researchy Questions: A Dataset of Multi-Perspective, Decompositional Questions for LLM Web Agents",https://arxiv.org/pdf/2402.17896v1,2024-02-27 21:27:16+00:00
+OCCULT: Evaluating Large Language Models for Offensive Cyber Operation Capabilities,https://arxiv.org/pdf/2502.15797v1,2025-02-18 19:33:14+00:00
+Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models,https://arxiv.org/pdf/2408.08926v4,2024-08-15 17:23:10+00:00
+FinBen: A Holistic Financial Benchmark for Large Language Models,https://arxiv.org/pdf/2402.12659v2,2024-02-20 02:16:16+00:00
+DroidCall: A Dataset for LLM-powered Android Intent Invocation,https://arxiv.org/pdf/2412.00402v1,2024-11-30 08:55:39+00:00
+ZeroDayBench: Evaluating LLM Agents on Unseen Zero-Day Vulnerabilities for Cyberdefense,https://arxiv.org/pdf/2603.02297v1,2026-03-02 18:21:22+00:00
+miniCodeProps: a Minimal Benchmark for Proving Code Properties,https://arxiv.org/pdf/2406.11915v2,2024-06-16 21:11:23+00:00
+CryptoFormalEval: Integrating LLMs and Formal Verification for Automated Cryptographic Protocol Vulnerability Detection,https://arxiv.org/pdf/2411.13627v1,2024-11-20 14:16:55+00:00
+Evaluating Precise Geolocation Inference Capabilities of Vision Language Models,https://arxiv.org/pdf/2502.14412v1,2025-02-20 09:59:28+00:00
+PentestEval: Benchmarking LLM-based Penetration Testing with Modular and Stage-Level Design,https://arxiv.org/pdf/2512.14233v1,2025-12-16 09:37:21+00:00
+PostTrainBench: Can LLM Agents Automate LLM Post-Training?,https://arxiv.org/pdf/2603.08640v2,2026-03-09 17:18:00+00:00
+AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration,https://arxiv.org/pdf/2502.09809v1,2025-02-13 23:00:33+00:00
+SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints,https://arxiv.org/pdf/2503.08669v2,2025-03-11 17:53:02+00:00
+TD-EVAL: Revisiting Task-Oriented Dialogue Evaluation by Combining Turn-Level Precision with Dialogue-Level Comparisons,https://arxiv.org/pdf/2504.19982v2,2025-04-28 16:57:17+00:00
+MedBrowseComp: Benchmarking Medical Deep Research and Computer Use,https://arxiv.org/pdf/2505.14963v1,2025-05-20 22:42:33+00:00
+AgentProcessBench: Diagnosing Step-Level Process Quality in Tool-Using Agents,https://arxiv.org/pdf/2603.14465v1,2026-03-15 16:13:58+00:00
+Beyond BeautifulSoup: Benchmarking LLM-Powered Web Scraping for Everyday Users,https://arxiv.org/pdf/2601.06301v1,2026-01-09 20:34:28+00:00
+PPTC-R benchmark: Towards Evaluating the Robustness of Large Language Models for PowerPoint Task Completion,https://arxiv.org/pdf/2403.03788v1,2024-03-06 15:33:32+00:00
+Benchmarking LLM-Assisted Blue Teaming via Standardized Threat Hunting,https://arxiv.org/pdf/2509.23571v2,2025-09-28 02:08:17+00:00
+Evaluating Small Language Models for Agentic On-Farm Decision Support Systems,https://arxiv.org/pdf/2512.14043v1,2025-12-16 03:18:34+00:00
+"From AutoRecSys to AutoRecLab: A Call to Build, Evaluate, and Govern Autonomous Recommender-Systems Research Labs",https://arxiv.org/pdf/2510.18104v1,2025-10-20 20:58:50+00:00
+CONFETTI: Conversational Function-Calling Evaluation Through Turn-Level Interactions,https://arxiv.org/pdf/2506.01859v1,2025-06-02 16:48:11+00:00
