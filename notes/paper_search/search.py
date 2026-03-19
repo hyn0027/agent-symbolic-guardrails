@@ -40,7 +40,7 @@ def search_papers(max_results: int = 200) -> List[Dict]:
         "(ti:agent OR abs:agent) AND "
         "(NOT abs:robot) AND (NOT abs:self-driving) AND (NOT abs:embodied) AND (NOT abs:reinforcement) AND "
         "(NOT ti:robot) AND (NOT ti:self-driving) AND (NOT ti:embodied) AND (NOT ti:reinforcement) AND "
-        "(submittedDate:[202201010000 TO 300012312359])"
+        "(submittedDate:[202201010000 TO 202603170000])"
     )
 
     logger.info("Starting arXiv search (max_results=%d)", max_results)

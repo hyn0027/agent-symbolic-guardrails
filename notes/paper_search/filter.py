@@ -200,48 +200,6 @@ def human_label_paper_is_benchmark(papers, num_label) -> list:
     )
 
 
-async def llm_annotate_paper_is_for_llm_based_tool_use_agents(papers) -> list:
-    system_prompt = (
-        "You are an assistant that helps user filter papers based on their title and abstract. "
-        "The given paper proposes one or more benchmark or dataset. You will determine whether any of the benchmarks or datasets is designed for evaluating tool-use LLM-based agents. "
-        "Tool use includes, but is not limited to, using search engine, calling API, interacting with codebases or software tools, accessing databases, browsing or exploring webpages, interacting with computer or app interfaces, and using other external tools or environments to complete tasks. "
-        "If any of the benchmarks or datasets is designed for evaluating tool-use LLM-based agents, you will return 1, otherwise, you will return 0. "
-        "If you are unsure about the answer, or if the paper does not propose any benchmarks or datasets, you will return -1.\n"
-        "You should output a single number (1, 0, or -1) without any explanation or additional text."
-    )
-    user_prompt = "Title: {title}\nAbstract: {abstract}\n"
-
-    return await llm_annotate(
-        sys_prompt=system_prompt,
-        user_prompt=user_prompt,
-        papers=papers,
-        label_key="llm_annotate_is_tool_use_llm_agent",
-        prompt_cache_key="prompt_cache_key_filter_paper_for_tool_use_llm_agent_hyn",
-    )
-
-
-def human_label_paper_is_for_llm_based_tool_use_agents(papers, num_label) -> list:
-
-    return human_label(
-        papers,
-        num_label,
-        llm_key="llm_annotate_is_tool_use_llm_agent",
-        human_key="human_annotate_is_tool_use_llm_agent",
-        request_human_label_info="Is the benchmark or dataset proposed in this paper designed for evaluating LLM-based tool use agents? Enter 1 for yes, 0 for no, or -1 for unsure: ",
-        keywords=[
-            "agent",
-            "llm",
-            "tool",
-            "interaction",
-            "domain",
-            "environment",
-            "large language model",
-            "propose",
-            "bench",
-        ],
-    )
-
-
 def main() -> None:
     path = "filtered_papers.json"
     with open(path, "r") as f:
