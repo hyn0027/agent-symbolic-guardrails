@@ -292,55 +292,14 @@ def main() -> None:
     results = labeled_benchmark_papers
     print(f"Total papers labeled as benchmark/dataset: {len(results)}")
 
-    if os.path.exists("labeled_benchmark_papers_with_tool_use_llm_agent.json"):
-        with open("labeled_benchmark_papers_with_tool_use_llm_agent.json", "r") as f:
-            results = json.load(f)
-    else:
-        results = asyncio.run(
-            llm_annotate_paper_is_for_llm_based_tool_use_agents(results)
-        )
-        with open("labeled_benchmark_papers_with_tool_use_llm_agent.json", "w") as f:
-            json.dump(results, f, indent=4)
-
-    if os.path.exists("human_labeled_tool_use_llm_agent_papers.json"):
-        with open("human_labeled_tool_use_llm_agent_papers.json", "r") as f:
-            results = json.load(f)
-        results = human_label_paper_is_for_llm_based_tool_use_agents(
-            results, num_label=0
-        )  # print statistics of agreement between human labels and LLM results
-    else:
-        results = human_label_paper_is_for_llm_based_tool_use_agents(
-            results, num_label=50
-        )
-        with open("human_labeled_tool_use_llm_agent_papers.json", "w") as f:
-            json.dump(results, f, indent=4)
-
-    labeled_tool_use_llm_agent_benchmark_papers = []
-    for paper in results:
-        if (
-            "human_annotate_is_tool_use_llm_agent" in paper
-            and paper["human_annotate_is_tool_use_llm_agent"] == "1"
-        ):
-            labeled_tool_use_llm_agent_benchmark_papers.append(paper)
-        elif (
-            "human_annotate_is_tool_use_llm_agent" not in paper
-            and paper["llm_annotate_is_tool_use_llm_agent"] == "1"
-        ):
-            labeled_tool_use_llm_agent_benchmark_papers.append(paper)
-    with open("labeled_tool_use_llm_agent_benchmark_papers.json", "w") as f:
-        json.dump(labeled_tool_use_llm_agent_benchmark_papers, f, indent=4)
-    results = labeled_tool_use_llm_agent_benchmark_papers
-    print(
-        f"Total papers labeled as benchmark/dataset for tool-use LLM agents: {len(results)}"
-    )
-
     # output csv, with title and link
-    with open("labeled_tool_use_llm_agent_benchmark_papers.csv", "w") as f:
+    with open("final_paper_list.csv", "w") as f:
         writer = csv.writer(f)
-        writer.writerow(["Title", "Link", "Date"])
-        for paper in results:
+        writer.writerow(["ID", "Title", "Link", "Date"])
+        for idx, paper in enumerate(results):
             writer.writerow(
                 [
+                    idx,
                     paper.get("title", "N/A"),
                     paper.get("pdf_url", "N/A"),
                     paper.get("published", "N/A"),
