@@ -225,9 +225,7 @@ def main() -> None:
     if os.path.exists("human_labeled_papers.json"):
         with open("human_labeled_papers.json", "r") as f:
             results = json.load(f)
-        results = human_label_paper_is_benchmark(
-            results, num_label=0
-        )  # print statistics of agreement between human labels and LLM results
+        results = human_label_paper_is_benchmark(results, num_label=0)
     else:
         results = human_label_paper_is_benchmark(results, num_label=100)
         with open("human_labeled_papers.json", "w") as f:

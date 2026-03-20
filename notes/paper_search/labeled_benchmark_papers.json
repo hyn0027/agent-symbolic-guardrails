@@ -1987,20 +1987,21 @@
         "human_annotate_is_benchmark": "1"
     },
     {
-        "title": "On the Elements of Datasets for Cyber Physical Systems Security",
+        "title": "DialogGuard: Multi-Agent Psychosocial Safety Evaluation of Sensitive LLM Responses",
         "authors": [
-            "Ashraf Tantawy"
+            "Han Luo",
+            "Guy Laban"
         ],
-        "published": "2022-08-17 12:20:57+00:00",
-        "summary": "Datasets are essential to apply AI algorithms to Cyber Physical System (CPS) Security. Due to scarcity of real CPS datasets, researchers elected to generate their own datasets using either real or virtualized testbeds. However, unlike other AI domains, a CPS is a complex system with many interfaces that determine its behavior. A dataset that comprises merely a collection of sensor measurements and network traffic may not be sufficient to develop resilient AI defensive or offensive agents. In this paper, we study the \\emph{elements} of CPS security datasets required to capture the system behavior and interactions, and propose a dataset architecture that has the potential to enhance the performance of AI algorithms in securing cyber physical systems. The framework includes dataset elements, attack representation, and required dataset features. We compare existing datasets to the proposed architecture to identify the current limitations and discuss the future of CPS dataset generation using testbeds.",
-        "pdf_url": "https://arxiv.org/pdf/2208.08255v1",
-        "entry_id": "http://arxiv.org/abs/2208.08255v1",
+        "published": "2025-12-01 23:53:45+00:00",
+        "summary": "Large language models (LLMs) now mediate many web-based mental-health, crisis, and other emotionally sensitive services, yet their psychosocial safety in these settings remains poorly understood and weakly evaluated. We present DialogGuard, a multi-agent framework for assessing psychosocial risks in LLM-generated responses along five high-severity dimensions: privacy violations, discriminatory behaviour, mental manipulation, psychological harm, and insulting behaviour. DialogGuard can be applied to diverse generative models through four LLM-as-a-judge pipelines, including single-agent scoring, dual-agent correction, multi-agent debate, and stochastic majority voting, grounded in a shared three-level rubric usable by both human annotators and LLM judges. Using PKU-SafeRLHF with human safety annotations, we show that multi-agent mechanisms detect psychosocial risks more accurately than non-LLM baselines and single-agent judging; dual-agent correction and majority voting provide the best trade-off between accuracy, alignment with human ratings, and robustness, while debate attains higher recall but over-flags borderline cases. We release Dialog-Guard as open-source software with a web interface that provides per-dimension risk scores and explainable natural-language rationales. A formative study with 12 practitioners illustrates how it supports prompt design, auditing, and supervision of web-facing applications for vulnerable users.",
+        "pdf_url": "https://arxiv.org/pdf/2512.02282v1",
+        "entry_id": "http://arxiv.org/abs/2512.02282v1",
         "citation_count": null,
-        "_arxiv_id": "2208.08255",
+        "_arxiv_id": "2512.02282",
         "categories": [
-            "cs.CR",
             "cs.AI",
-            "eess.SY"
+            "cs.HC",
+            "cs.MA"
         ],
         "llm_annotate_is_benchmark": "1"
     },
@@ -2118,28 +2119,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "AgentSCOPE: Evaluating Contextual Privacy Across Agentic Workflows",
-        "authors": [
-            "Ivoline C. Ngong",
-            "Keerthiram Murugesan",
-            "Swanand Kadhe",
-            "Justin D. Weisz",
-            "Amit Dhurandhar",
-            "Karthikeyan Natesan Ramamurthy"
-        ],
-        "published": "2026-03-05 07:45:31+00:00",
-        "summary": "Agentic systems are increasingly acting on users' behalf, accessing calendars, email, and personal files to complete everyday tasks. Privacy evaluation for these systems has focused on the input and output boundaries, but each task involves several intermediate information flows, from agent queries to tool responses, that are not currently evaluated. We argue that every boundary in an agentic pipeline is a site of potential privacy violation and must be assessed independently. To support this, we introduce the Privacy Flow Graph, a Contextual Integrity-grounded framework that decomposes agentic execution into a sequence of information flows, each annotated with the five CI parameters, and traces violations to their point of origin. We present AgentSCOPE, a benchmark of 62 multi-tool scenarios across eight regulatory domains with ground truth at every pipeline stage. Our evaluation across seven state-of-the-art LLMs show that privacy violations in the pipeline occur in over 80% of scenarios, even when final outputs appear clean (24%), with most violations arising at the tool-response stage where APIs return sensitive data indiscriminately. These results indicate that output-level evaluation alone substantially underestimates the privacy risk of agentic systems.",
-        "pdf_url": "https://arxiv.org/pdf/2603.04902v1",
-        "entry_id": "http://arxiv.org/abs/2603.04902v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.04902",
-        "categories": [
-            "cs.CR",
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs",
         "authors": [
             "Ilham Wicaksono",
@@ -2182,27 +2161,6 @@
         ],
         "llm_annotate_is_benchmark": "1",
         "human_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "AutoControl Arena: Synthesizing Executable Test Environments for Frontier AI Risk Evaluation",
-        "authors": [
-            "Changyi Li",
-            "Pengfei Lu",
-            "Xudong Pan",
-            "Fazl Barez",
-            "Min Yang"
-        ],
-        "published": "2026-03-08 02:49:45+00:00",
-        "summary": "As Large Language Models (LLMs) evolve into autonomous agents, existing safety evaluations face a fundamental trade-off: manual benchmarks are costly, while LLM-based simulators are scalable but suffer from logic hallucination. We present AutoControl Arena, an automated framework for frontier AI risk evaluation built on the principle of logic-narrative decoupling. By grounding deterministic state in executable code while delegating generative dynamics to LLMs, we mitigate hallucination while maintaining flexibility. This principle, instantiated through a three-agent framework, achieves over 98% end-to-end success and 60% human preference over existing simulators. To elicit latent risks, we vary environmental Stress and Temptation across X-Bench (70 scenarios, 7 risk categories). Evaluating 9 frontier models reveals: (1) Alignment Illusion: risk rates surge from 21.7% to 54.5% under pressure, with capable models showing disproportionately larger increases; (2) Scenario-Specific Safety Scaling: advanced reasoning improves robustness for direct harms but worsens it for gaming scenarios; and (3) Divergent Misalignment Patterns: weaker models cause non-malicious harm while stronger models develop strategic concealment.",
-        "pdf_url": "https://arxiv.org/pdf/2603.07427v2",
-        "entry_id": "http://arxiv.org/abs/2603.07427v2",
-        "citation_count": null,
-        "_arxiv_id": "2603.07427",
-        "categories": [
-            "cs.AI",
-            "cs.CR"
-        ],
-        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Automated Benchmark Generation for Repository-Level Coding Tasks",
@@ -3119,24 +3077,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "Design Behaviour Codes (DBCs): A Taxonomy-Driven Layered Governance Benchmark for Large Language Models",
-        "authors": [
-            "G. Madan Mohan",
-            "Veena Kiran Nambiar",
-            "Kiranmayee Janardhan"
-        ],
-        "published": "2026-03-05 05:45:26+00:00",
-        "summary": "We introduce the Dynamic Behavioral Constraint (DBC) benchmark, the first empirical framework for evaluating the efficacy of a structured, 150-control behavioral governance layer, the MDBC (Madan DBC) system, applied at inference time to large language models (LLMs). Unlike training time alignment methods (RLHF, DPO) or post-hoc content moderation APIs, DBCs constitute a system prompt level governance layer that is model-agnostic, jurisdiction-mappable, and auditable. We evaluate the DBC Framework across a 30 domain risk taxonomy organized into six clusters (Hallucination and Calibration, Bias and Fairness, Malicious Use, Privacy and Data Protection, Robustness and Reliability, and Misalignment Agency) using an agentic red-team protocol with five adversarial attack strategies (Direct, Roleplay, Few-Shot, Hypothetical, Authority Spoof) across 3 model families. Our three-arm controlled design (Base, Base plus Moderation, Base plus DBC) enables causal attribution of risk reduction. Key findings: the DBC layer reduces the aggregate Risk Exposure Rate (RER) from 7.19 percent (Base) to 4.55 percent (Base plus DBC), representing a 36.8 percent relative risk reduction, compared with 0.6 percent for a standard safety moderation prompt. MDBC Adherence Scores improve from 8.6 by 10 (Base) to 8.7 by 10 (Base plus DBC). EU AI Act compliance (automated scoring) reaches 8.5by 10 under the DBC layer. A three judge evaluation ensemble yields Fleiss kappa greater than 0.70 (substantial agreement), validating our automated pipeline. Cluster ablation identifies the Integrity Protection cluster (MDBC 081 099) as delivering the highest per domain risk reduction, while graybox adversarial attacks achieve a DBC Bypass Rate of 4.83 percent . We release the benchmark code, prompt database, and all evaluation artefacts to enable reproducibility and longitudinal tracking as models evolve.",
-        "pdf_url": "https://arxiv.org/pdf/2603.04837v1",
-        "entry_id": "http://arxiv.org/abs/2603.04837v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.04837",
-        "categories": [
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "Evaluating Language Model Reasoning about Confidential Information",
         "authors": [
             "Dylan Sam",
@@ -3204,7 +3144,8 @@
         "categories": [
             "cs.CL"
         ],
-        "llm_annotate_is_benchmark": "1"
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
     },
     {
         "title": "When Agents Trade: Live Multi-Market Trading Benchmark for LLM Agents",
@@ -3631,6 +3572,25 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
+        "title": "HackSynth: LLM Agent and Evaluation Framework for Autonomous Penetration Testing",
+        "authors": [
+            "Lajos Muzsai",
+            "David Imolai",
+            "Andr\u00e1s Luk\u00e1cs"
+        ],
+        "published": "2024-12-02 18:28:18+00:00",
+        "summary": "We introduce HackSynth, a novel Large Language Model (LLM)-based agent capable of autonomous penetration testing. HackSynth's dual-module architecture includes a Planner and a Summarizer, which enable it to generate commands and process feedback iteratively. To benchmark HackSynth, we propose two new Capture The Flag (CTF)-based benchmark sets utilizing the popular platforms PicoCTF and OverTheWire. These benchmarks include two hundred challenges across diverse domains and difficulties, providing a standardized framework for evaluating LLM-based penetration testing agents. Based on these benchmarks, extensive experiments are presented, analyzing the core parameters of HackSynth, including creativity (temperature and top-p) and token utilization. Multiple open source and proprietary LLMs were used to measure the agent's capabilities. The experiments show that the agent performed best with the GPT-4o model, better than what the GPT-4o's system card suggests. We also discuss the safety and predictability of HackSynth's actions. Our findings indicate the potential of LLM-based agents in advancing autonomous penetration testing and the importance of robust safeguards. HackSynth and the benchmarks are publicly available to foster research on autonomous cybersecurity solutions.",
+        "pdf_url": "https://arxiv.org/pdf/2412.01778v1",
+        "entry_id": "http://arxiv.org/abs/2412.01778v1",
+        "citation_count": null,
+        "_arxiv_id": "2412.01778",
+        "categories": [
+            "cs.CR",
+            "cs.AI"
+        ],
+        "llm_annotate_is_benchmark": "1"
+    },
+    {
         "title": "Knowledge Graph-Guided Multi-Agent Distillation for Reliable Industrial Question Answering with Datasets",
         "authors": [
             "Jiqun Pan",
@@ -3653,25 +3613,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "HackSynth: LLM Agent and Evaluation Framework for Autonomous Penetration Testing",
-        "authors": [
-            "Lajos Muzsai",
-            "David Imolai",
-            "Andr\u00e1s Luk\u00e1cs"
-        ],
-        "published": "2024-12-02 18:28:18+00:00",
-        "summary": "We introduce HackSynth, a novel Large Language Model (LLM)-based agent capable of autonomous penetration testing. HackSynth's dual-module architecture includes a Planner and a Summarizer, which enable it to generate commands and process feedback iteratively. To benchmark HackSynth, we propose two new Capture The Flag (CTF)-based benchmark sets utilizing the popular platforms PicoCTF and OverTheWire. These benchmarks include two hundred challenges across diverse domains and difficulties, providing a standardized framework for evaluating LLM-based penetration testing agents. Based on these benchmarks, extensive experiments are presented, analyzing the core parameters of HackSynth, including creativity (temperature and top-p) and token utilization. Multiple open source and proprietary LLMs were used to measure the agent's capabilities. The experiments show that the agent performed best with the GPT-4o model, better than what the GPT-4o's system card suggests. We also discuss the safety and predictability of HackSynth's actions. Our findings indicate the potential of LLM-based agents in advancing autonomous penetration testing and the importance of robust safeguards. HackSynth and the benchmarks are publicly available to foster research on autonomous cybersecurity solutions.",
-        "pdf_url": "https://arxiv.org/pdf/2412.01778v1",
-        "entry_id": "http://arxiv.org/abs/2412.01778v1",
-        "citation_count": null,
-        "_arxiv_id": "2412.01778",
-        "categories": [
-            "cs.CR",
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "BELLS: A Framework Towards Future Proof Benchmarks for the Evaluation of LLM Safeguards",
         "authors": [
             "Diego Dorn",
@@ -3689,25 +3630,6 @@
             "cs.CR",
             "cs.AI",
             "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Safety Under Scaffolding: How Evaluation Conditions Shape Measured Safety",
-        "authors": [
-            "David Gringras"
-        ],
-        "published": "2026-03-08 01:37:45+00:00",
-        "summary": "Safety benchmarks evaluate language models in isolation, typically using multiple-choice format; production deployments wrap these models in agentic scaffolds that restructure inputs through reasoning traces, critic agents, and delegation pipelines. We report one of the largest controlled studies of scaffold effects on safety (N = 62,808; six frontier models, four deployment configurations), combining pre-registration, assessor blinding, equivalence testing, and specification curve analysis. Map-reduce scaffolding degrades measured safety (NNH = 14), yet two of three scaffold architectures preserve safety within practically meaningful margins. Investigating the map-reduce degradation revealed a deeper measurement problem: switching from multiple-choice to open-ended format on identical items shifts safety scores by 5-20 percentage points, larger than any scaffold effect. Within-format scaffold comparisons are consistent with practical equivalence under our pre-registered +/-2 pp TOST margin, isolating evaluation format rather than scaffold architecture as the operative variable. Model x scaffold interactions span 35 pp in opposing directions (one model degrades by -16.8 pp on sycophancy under map-reduce while another improves by +18.8 pp on the same benchmark), ruling out universal claims about scaffold safety. A generalisability analysis yields G = 0.000: model safety rankings reverse so completely across benchmarks that no composite safety index achieves non-zero reliability, making per-model, per-configuration testing a necessary minimum standard. We release all code, data, and prompts as ScaffoldSafety.",
-        "pdf_url": "https://arxiv.org/pdf/2603.10044v1",
-        "entry_id": "http://arxiv.org/abs/2603.10044v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.10044",
-        "categories": [
-            "cs.SE",
-            "cs.AI",
-            "cs.CL",
-            "cs.LG"
         ],
         "llm_annotate_is_benchmark": "1"
     },
@@ -3832,24 +3754,6 @@
         "categories": [
             "cs.CL",
             "cs.MM"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Beyond Task Completion: Revealing Corrupt Success in LLM Agents through Procedure-Aware Evaluation",
-        "authors": [
-            "Hongliu Cao",
-            "Ilias Driouich",
-            "Eoin Thomas"
-        ],
-        "published": "2026-03-03 15:47:41+00:00",
-        "summary": "Large Language Model (LLM)-based agents are increasingly adopted in high-stakes settings, but current benchmarks evaluate mainly whether a task was completed, not how. We introduce Procedure-Aware Evaluation (PAE), a framework that formalizes agent procedures as structured observations and exposes consistency relationships between what agents observe, communicate, and execute. PAE evaluates agents along complementary axes (Utility, Efficiency, Interaction Quality, Procedural Integrity) and applies multi-dimensional gating that categorically disqualifies corrupt outcomes. Evaluating state-of-the-art LLM agents on tau-bench yields findings at the axis, compliance, and benchmark levels. At the axis level, the dimensions capture non-redundant failure modes: utility masks reliability gaps, speed does not imply precision, and conciseness does not predict intent adherence. At the procedural compliance level, 27-78% of benchmark reported successes are corrupt successes concealing violations across interaction and integrity. Furthermore, gating substantially collapses Pass^4 rate and affects model rankings. The analysis of corrupt success cases reveals distinctive per-model failure signatures: GPT-5 spreads errors across policy, execution, and intent dimensions; Kimi-K2-Thinking concentrates 78% of violations in policy faithfulness and compliance; and Mistral-Large-3 is dominated by faithfulness failures. At the benchmark level, our analysis exposes structural flaws in the benchmark design, including task scope gaps, contradictory reward signals, and simulator artifacts that produce accidental successes.",
-        "pdf_url": "https://arxiv.org/pdf/2603.03116v1",
-        "entry_id": "http://arxiv.org/abs/2603.03116v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.03116",
-        "categories": [
-            "cs.AI"
         ],
         "llm_annotate_is_benchmark": "1"
     },
@@ -3983,30 +3887,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis",
-        "authors": [
-            "Mengxi Xiao",
-            "Ben Liu",
-            "He Li",
-            "Jimin Huang",
-            "Qianqian Xie",
-            "Xiaofen Zong",
-            "Mang Ye",
-            "Min Peng"
-        ],
-        "published": "2025-06-04 09:18:25+00:00",
-        "summary": "The application of AI in psychiatric diagnosis faces significant challenges, including the subjective nature of mental health assessments, symptom overlap across disorders, and privacy constraints limiting data availability. To address these issues, we present MoodAngels, the first specialized multi-agent framework for mood disorder diagnosis. Our approach combines granular-scale analysis of clinical assessments with a structured verification process, enabling more accurate interpretation of complex psychiatric data. Complementing this framework, we introduce MoodSyn, an open-source dataset of 1,173 synthetic psychiatric cases that preserves clinical validity while ensuring patient privacy. Experimental results demonstrate that MoodAngels outperforms conventional methods, with our baseline agent achieving 12.3% higher accuracy than GPT-4o on real-world cases, and our full multi-agent system delivering further improvements. Evaluation in the MoodSyn dataset demonstrates exceptional fidelity, accurately reproducing both the core statistical patterns and complex relationships present in the original data while maintaining strong utility for machine learning applications. Together, these contributions provide both an advanced diagnostic tool and a critical research resource for computational psychiatry, bridging important gaps in AI-assisted mental health assessment.",
-        "pdf_url": "https://arxiv.org/pdf/2506.03750v2",
-        "entry_id": "http://arxiv.org/abs/2506.03750v2",
-        "citation_count": null,
-        "_arxiv_id": "2506.03750",
-        "categories": [
-            "cs.SI",
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "RepliBench: Evaluating the Autonomous Replication Capabilities of Language Model Agents",
         "authors": [
             "Sid Black",
@@ -4028,6 +3908,30 @@
         "_arxiv_id": "2504.18565",
         "categories": [
             "cs.CR",
+            "cs.AI"
+        ],
+        "llm_annotate_is_benchmark": "1"
+    },
+    {
+        "title": "MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis",
+        "authors": [
+            "Mengxi Xiao",
+            "Ben Liu",
+            "He Li",
+            "Jimin Huang",
+            "Qianqian Xie",
+            "Xiaofen Zong",
+            "Mang Ye",
+            "Min Peng"
+        ],
+        "published": "2025-06-04 09:18:25+00:00",
+        "summary": "The application of AI in psychiatric diagnosis faces significant challenges, including the subjective nature of mental health assessments, symptom overlap across disorders, and privacy constraints limiting data availability. To address these issues, we present MoodAngels, the first specialized multi-agent framework for mood disorder diagnosis. Our approach combines granular-scale analysis of clinical assessments with a structured verification process, enabling more accurate interpretation of complex psychiatric data. Complementing this framework, we introduce MoodSyn, an open-source dataset of 1,173 synthetic psychiatric cases that preserves clinical validity while ensuring patient privacy. Experimental results demonstrate that MoodAngels outperforms conventional methods, with our baseline agent achieving 12.3% higher accuracy than GPT-4o on real-world cases, and our full multi-agent system delivering further improvements. Evaluation in the MoodSyn dataset demonstrates exceptional fidelity, accurately reproducing both the core statistical patterns and complex relationships present in the original data while maintaining strong utility for machine learning applications. Together, these contributions provide both an advanced diagnostic tool and a critical research resource for computational psychiatry, bridging important gaps in AI-assisted mental health assessment.",
+        "pdf_url": "https://arxiv.org/pdf/2506.03750v2",
+        "entry_id": "http://arxiv.org/abs/2506.03750v2",
+        "citation_count": null,
+        "_arxiv_id": "2506.03750",
+        "categories": [
+            "cs.SI",
             "cs.AI"
         ],
         "llm_annotate_is_benchmark": "1"
@@ -4120,28 +4024,6 @@
         "human_annotate_is_benchmark": "1"
     },
     {
-        "title": "$\u03c4$-Knowledge: Evaluating Conversational Agents over Unstructured Knowledge",
-        "authors": [
-            "Quan Shi",
-            "Alexandra Zytek",
-            "Pedram Razavi",
-            "Karthik Narasimhan",
-            "Victor Barres"
-        ],
-        "published": "2026-03-04 18:34:47+00:00",
-        "summary": "Conversational agents are increasingly deployed in knowledge-intensive settings, where correct behavior depends on retrieving and applying domain-specific knowledge from large, proprietary, and unstructured corpora during live interactions with users. Yet most existing benchmarks evaluate retrieval or tool use independently of each other, creating a gap in realistic, fully agentic evaluation over unstructured data in long-horizon interactions. We introduce $\u03c4$-Knowledge, an extension of $\u03c4$-Bench for evaluating agents in environments where success depends on coordinating external, natural-language knowledge with tool outputs to produce verifiable, policy-compliant state changes. Our new domain, $\u03c4$-Banking, models realistic fintech customer support workflows in which agents must navigate roughly 700 interconnected knowledge documents while executing tool-mediated account updates. Across embedding-based retrieval and terminal-based search, even frontier models with high reasoning budgets achieve only $\\sim$25.5% pass^1, with reliability degrading sharply over repeated trials. Agents struggle to retrieve the correct documents from densely interlinked knowledge bases and to reason accurately over complex internal policies. Overall, $\u03c4$-Knowledge provides a realistic testbed for developing agents that integrate unstructured knowledge in human-facing deployments.",
-        "pdf_url": "https://arxiv.org/pdf/2603.04370v1",
-        "entry_id": "http://arxiv.org/abs/2603.04370v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.04370",
-        "categories": [
-            "cs.AI",
-            "cs.CL",
-            "cs.IR"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "HackWorld: Evaluating Computer-Use Agents on Exploiting Web Application Vulnerabilities",
         "authors": [
             "Xiaoxue Ren",
@@ -4185,29 +4067,6 @@
         "_arxiv_id": "2602.03285",
         "categories": [
             "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "How Can Input Reformulation Improve Tool Usage Accuracy in a Complex Dynamic Environment? A Study on $\u03c4$-bench",
-        "authors": [
-            "Venkatesh Mishra",
-            "Amir Saeidi",
-            "Satyam Raj",
-            "Mutsumi Nakamura",
-            "Jayanth Srinivasa",
-            "Gaowen Liu",
-            "Ali Payani",
-            "Chitta Baral"
-        ],
-        "published": "2025-08-28 15:57:33+00:00",
-        "summary": "Recent advances in reasoning and planning capabilities of large language models (LLMs) have enabled their potential as autonomous agents capable of tool use in dynamic environments. However, in multi-turn conversational environments like $\u03c4$-bench, these agents often struggle with consistent reasoning, adherence to domain-specific policies, and extracting correct information over a long horizon of tool-calls and conversation. To capture and mitigate these failures, we conduct a comprehensive manual analysis of the common errors occurring in the conversation trajectories. We then experiment with reformulations of inputs to the tool-calling agent for improvement in agent decision making. Finally, we propose the Input-Reformulation Multi-Agent (IRMA) framework, which automatically reformulates user queries augmented with relevant domain rules and tool suggestions for the tool-calling agent to focus on. The results show that IRMA significantly outperforms ReAct, Function Calling, and Self-Reflection by 16.1%, 12.7%, and 19.1%, respectively, in overall pass^5 scores. These findings highlight the superior reliability and consistency of IRMA compared to other methods in dynamic environments.",
-        "pdf_url": "https://arxiv.org/pdf/2508.20931v2",
-        "entry_id": "http://arxiv.org/abs/2508.20931v2",
-        "citation_count": null,
-        "_arxiv_id": "2508.20931",
-        "categories": [
-            "cs.CL"
         ],
         "llm_annotate_is_benchmark": "1"
     },
@@ -4697,29 +4556,6 @@
         ],
         "llm_annotate_is_benchmark": "1",
         "human_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "SUREON: A Benchmark and Vision-Language-Model for Surgical Reasoning",
-        "authors": [
-            "Alejandra Perez",
-            "Anita Rau",
-            "Lee White",
-            "Busisiwe Mlambo",
-            "Chinedu Nwoye",
-            "Muhammad Abdullah Jamal",
-            "Omid Mohareri"
-        ],
-        "published": "2026-03-06 18:58:36+00:00",
-        "summary": "Surgeons don't just see -- they interpret. When an expert observes a surgical scene, they understand not only what instrument is being used, but why it was chosen, what risk it poses, and what comes next. Current surgical AI cannot answer such questions, largely because training data that explicitly encodes surgical reasoning is immensely difficult to annotate at scale. Yet surgical video lectures already contain exactly this -- explanations of intent, rationale, and anticipation, narrated by experts for the purpose of teaching. Though inherently noisy and unstructured, these narrations encode the reasoning that surgical AI currently lacks. We introduce SUREON, a large-scale video QA dataset that systematically harvests this training signal from surgical academic videos. SUREON defines 12 question categories covering safety assessment, decision rationale, and forecasting, and uses a multi-agent pipeline to extract and structure supervision at scale. Across 134.7K clips and 170 procedure types, SUREON yields 206.8k QA pairs and an expert-validated benchmark of 354 examples. To evaluate the extent to which this supervision translates to surgical reasoning ability, we introduce two models: SureonVLM, a vision-language model adapted through supervised fine-tuning, and SureonVLM-R1, a reasoning model trained with Group Relative Policy Optimization. Both models can answer complex questions about surgery and substantially outperform larger general-domain models, exceeding 84% accuracy on the SUREON benchmark while outperforming general-domain models on standard surgical perception tasks. Qualitative analysis of SureonVLM-R1 reveals explicit reasoning behavior, such as inferring operative intent from visual context.",
-        "pdf_url": "https://arxiv.org/pdf/2603.06570v1",
-        "entry_id": "http://arxiv.org/abs/2603.06570v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.06570",
-        "categories": [
-            "cs.CV",
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "ManagerBench: Evaluating the Safety-Pragmatism Trade-off in Autonomous LLMs",
@@ -5647,31 +5483,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "ZeroDayBench: Evaluating LLM Agents on Unseen Zero-Day Vulnerabilities for Cyberdefense",
-        "authors": [
-            "Nancy Lau",
-            "Louis Sloot",
-            "Jyoutir Raj",
-            "Giuseppe Marco Boscardin",
-            "Evan Harris",
-            "Dylan Bowman",
-            "Mario Brajkovski",
-            "Jaideep Chawla",
-            "Dan Zhao"
-        ],
-        "published": "2026-03-02 18:21:22+00:00",
-        "summary": "Large language models (LLMs) are increasingly being deployed as software engineering agents that autonomously contribute to repositories. A major benefit these agents present is their ability to find and patch security vulnerabilities in the codebases they oversee. To estimate the capability of agents in this domain, we introduce ZeroDayBench, a benchmark where LLM agents find and patch 22 novel critical vulnerabilities in open-source codebases. We focus our efforts on three popular frontier agentic LLMs: GPT-5.2, Claude Sonnet 4.5, and Grok 4.1. We find that frontier LLMs are not yet capable of autonomously solving our tasks and observe some behavioral patterns that suggest how these models can be improved in the domain of proactive cyberdefense.",
-        "pdf_url": "https://arxiv.org/pdf/2603.02297v1",
-        "entry_id": "http://arxiv.org/abs/2603.02297v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.02297",
-        "categories": [
-            "cs.CR",
-            "cs.AI"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
         "title": "The Seeker's Dilemma: Realistic Formulation and Benchmarking for Hardware Trojan Detection",
         "authors": [
             "Amin Sarihi",
@@ -5744,30 +5555,6 @@
         "citation_count": null,
         "_arxiv_id": "2510.14398",
         "categories": [
-            "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "LieCraft: A Multi-Agent Framework for Evaluating Deceptive Capabilities in Language Models",
-        "authors": [
-            "Matthew Lyle Olson",
-            "Neale Ratzlaff",
-            "Musashi Hinck",
-            "Tri Nguyen",
-            "Vasudev Lal",
-            "Joseph Campbell",
-            "Simon Stepputtis",
-            "Shao-Yen Tseng"
-        ],
-        "published": "2026-03-06 20:49:48+00:00",
-        "summary": "Large Language Models (LLMs) exhibit impressive general-purpose capabilities but also introduce serious safety risks, particularly the potential for deception as models acquire increased agency and human oversight diminishes. In this work, we present LieCraft: a novel evaluation framework and sandbox for measuring LLM deception that addresses key limitations of prior game-based evaluations. At its core, LieCraft is a novel multiplayer hidden-role game in which players select an ethical alignment and execute strategies over a long time-horizon to accomplish missions. Cooperators work together to solve event challenges and expose bad actors, while Defectors evade suspicion while secretly sabotaging missions. To enable real-world relevance, we develop 10 grounded scenarios such as childcare, hospital resource allocation, and loan underwriting that recontextualize the underlying mechanics in ethically significant, high-stakes domains. We ensure balanced gameplay in LieCraft through careful design of game mechanics and reward structures that incentivize meaningful strategic choices while eliminating degenerate strategies. Beyond the framework itself, we report results from 12 state-of-the-art LLMs across three behavioral axes: propensity to defect, deception skill, and accusation accuracy. Our findings reveal that despite differences in competence and overall alignment, all models are willing to act unethically, conceal their intentions, and outright lie to pursue their goals.",
-        "pdf_url": "https://arxiv.org/pdf/2603.06874v1",
-        "entry_id": "http://arxiv.org/abs/2603.06874v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.06874",
-        "categories": [
-            "cs.AI",
             "cs.CL"
         ],
         "llm_annotate_is_benchmark": "1"
@@ -5900,6 +5687,28 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
+        "title": "Position: Theory of Mind Benchmarks are Broken for Large Language Models",
+        "authors": [
+            "Matthew Riemer",
+            "Zahra Ashktorab",
+            "Djallel Bouneffouf",
+            "Payel Das",
+            "Miao Liu",
+            "Justin D. Weisz",
+            "Murray Campbell"
+        ],
+        "published": "2024-12-27 16:30:12+00:00",
+        "summary": "Our paper argues that the majority of theory of mind benchmarks are broken because of their inability to directly test how large language models (LLMs) adapt to new partners. This problem stems from the fact that theory of mind benchmarks for LLMs are overwhelmingly inspired by the methods used to test theory of mind in humans and fall victim to a fallacy of attributing human-like qualities to AI agents. We expect that humans will engage in a consistent reasoning process across various questions about a situation, but this is known to not be the case for current LLMs. Most theory of mind benchmarks only measure what we call literal theory of mind: the ability to predict the behavior of others. However, this type of metric is only informative when agents exhibit self-consistent reasoning. Thus, we introduce the concept of functional theory of mind: the ability to adapt to agents in-context following a rational response to their behavior. We find that many open source LLMs are capable of displaying strong literal theory of mind capabilities, but seem to struggle with functional theory of mind -- even with exceedingly simple partner policies. Simply put, strong literal theory of mind performance does not necessarily imply strong functional theory of mind performance or vice versa. Achieving functional theory of mind, particularly over long interaction horizons with a partner, is a significant challenge deserving a prominent role in any meaningful LLM theory of mind evaluation.",
+        "pdf_url": "https://arxiv.org/pdf/2412.19726v4",
+        "entry_id": "http://arxiv.org/abs/2412.19726v4",
+        "citation_count": null,
+        "_arxiv_id": "2412.19726",
+        "categories": [
+            "cs.AI"
+        ],
+        "llm_annotate_is_benchmark": "1"
+    },
+    {
         "title": "An end-to-end agentic pipeline for smart contract translation and quality evaluation",
         "authors": [
             "Abhinav Goel",
@@ -5958,30 +5767,6 @@
         "categories": [
             "cs.CL",
             "cs.DB"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "PostTrainBench: Can LLM Agents Automate LLM Post-Training?",
-        "authors": [
-            "Ben Rank",
-            "Hardik Bhatnagar",
-            "Ameya Prabhu",
-            "Shira Eisenberg",
-            "Karina Nguyen",
-            "Matthias Bethge",
-            "Maksym Andriushchenko"
-        ],
-        "published": "2026-03-09 17:18:00+00:00",
-        "summary": "AI agents have become surprisingly proficient at software engineering over the past year, largely due to improvements in reasoning capabilities. This raises a deeper question: can these systems extend their capabilities to automate AI research itself? In this paper, we explore post-training, the critical phase that turns base LLMs into useful assistants. We introduce PostTrainBench to benchmark how well LLM agents can perform post-training autonomously under bounded compute constraints (10 hours on one H100 GPU). We ask frontier agents (e.g., Claude Code with Opus 4.6) to optimize the performance of a base LLM on a particular benchmark (e.g., Qwen3-4B on AIME). Importantly, we do not provide any predefined strategies to the agents and instead give them full autonomy to find necessary information on the web, run experiments, and curate data. We find that frontier agents make substantial progress but generally lag behind instruction-tuned LLMs from leading providers: 23.2% for the best agent vs. 51.1% for official instruction-tuned models. However, agents can exceed instruction-tuned models in targeted scenarios: GPT-5.1 Codex Max achieves 89% on BFCL with Gemma-3-4B vs. 67% for the official model. We also observe several failure modes worth flagging. Agents sometimes engage in reward hacking: training on the test set, downloading existing instruction-tuned checkpoints instead of training their own, and using API keys they find to generate synthetic data without authorization. These behaviors are concerning and highlight the importance of careful sandboxing as these systems become more capable. Overall, we hope PostTrainBench will be useful for tracking progress in AI R&D automation and for studying the risks that come with it. Website and code are available at https://posttrainbench.com/.",
-        "pdf_url": "https://arxiv.org/pdf/2603.08640v2",
-        "entry_id": "http://arxiv.org/abs/2603.08640v2",
-        "citation_count": null,
-        "_arxiv_id": "2603.08640",
-        "categories": [
-            "cs.SE",
-            "cs.AI",
-            "cs.LG"
         ],
         "llm_annotate_is_benchmark": "1"
     },
@@ -6100,75 +5885,6 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "ConflictBench: Evaluating Human-AI Conflict via Interactive and Visually Grounded Environments",
-        "authors": [
-            "Weixiang Zhao",
-            "Haozhen Li",
-            "Yanyan Zhao",
-            "xuda zhi",
-            "Yongbo Huang",
-            "Hao He",
-            "Bing Qin",
-            "Ting Liu"
-        ],
-        "published": "2026-03-09 06:59:48+00:00",
-        "summary": "As large language models (LLMs) evolve into autonomous agents capable of acting in open-ended environments, ensuring behavioral alignment with human values becomes a critical safety concern. Existing benchmarks, focused on static, single-turn prompts, fail to capture the interactive and multi-modal nature of real-world conflicts. We introduce ConflictBench, a benchmark for evaluating human-AI conflict through 150 multi-turn scenarios derived from prior alignment queries. ConflictBench integrates a text-based simulation engine with a visually grounded world model, enabling agents to perceive, plan, and act under dynamic conditions. Empirical results show that while agents often act safely when human harm is immediate, they frequently prioritize self-preservation or adopt deceptive strategies in delayed or low-risk settings. A regret test further reveals that aligned decisions are often reversed under escalating pressure, especially with visual input. These findings underscore the need for interaction-level, multi-modal evaluation to surface alignment failures that remain hidden in conventional benchmarks.",
-        "pdf_url": "https://arxiv.org/pdf/2603.08024v1",
-        "entry_id": "http://arxiv.org/abs/2603.08024v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.08024",
-        "categories": [
-            "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Toward the Autonomous AI Doctor: Quantitative Benchmarking of an Autonomous Agentic AI Versus Board-Certified Clinicians in a Real World Setting",
-        "authors": [
-            "Hashim Hayat",
-            "Maksim Kudrautsau",
-            "Evgeniy Makarov",
-            "Vlad Melnichenko",
-            "Tim Tsykunou",
-            "Piotr Varaksin",
-            "Matt Pavelle",
-            "Adam Z. Oskowitz"
-        ],
-        "published": "2025-06-27 19:04:44+00:00",
-        "summary": "Background: Globally we face a projected shortage of 11 million healthcare practitioners by 2030, and administrative burden consumes 50% of clinical time. Artificial intelligence (AI) has the potential to help alleviate these problems. However, no end-to-end autonomous large language model (LLM)-based AI system has been rigorously evaluated in real-world clinical practice. In this study, we evaluated whether a multi-agent LLM-based AI framework can function autonomously as an AI doctor in a virtual urgent care setting. Methods: We retrospectively compared the performance of the multi-agent AI system Doctronic and board-certified clinicians across 500 consecutive urgent-care telehealth encounters. The primary end points: diagnostic concordance, treatment plan consistency, and safety metrics, were assessed by blinded LLM-based adjudication and expert human review. Results: The top diagnosis of Doctronic and clinician matched in 81% of cases, and the treatment plan aligned in 99.2% of cases. No clinical hallucinations occurred (e.g., diagnosis or treatment not supported by clinical findings). In an expert review of discordant cases, AI performance was superior in 36.1%, and human performance was superior in 9.3%; the diagnoses were equivalent in the remaining cases. Conclusions: In this first large-scale validation of an autonomous AI doctor, we demonstrated strong diagnostic and treatment plan concordance with human clinicians, with AI performance matching and in some cases exceeding that of practicing clinicians. These findings indicate that multi-agent AI systems achieve comparable clinical decision-making to human providers and offer a potential solution to healthcare workforce shortages.",
-        "pdf_url": "https://arxiv.org/pdf/2507.22902v1",
-        "entry_id": "http://arxiv.org/abs/2507.22902v1",
-        "citation_count": null,
-        "_arxiv_id": "2507.22902",
-        "categories": [
-            "cs.HC",
-            "cs.AI",
-            "cs.CL",
-            "cs.MA"
-        ],
-        "llm_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Real-World En Call Center Transcripts Dataset with PII Redaction",
-        "authors": [
-            "Ha Dao",
-            "Gaurav Chawla",
-            "Raghu Banda",
-            "Caleb DeLeeuw"
-        ],
-        "published": "2025-06-30 03:41:02+00:00",
-        "summary": "We introduce CallCenterEN, a large-scale (91,706 conversations, corresponding to 10448 audio hours), real-world English call center transcript dataset designed to support research and development in customer support and sales AI systems. This is the largest release to-date of open source call center transcript data of this kind. The dataset includes inbound and outbound calls between agents and customers, with accents from India, the Philippines and the United States. The dataset includes high-quality, PII-redacted human-readable transcriptions. All personally identifiable information (PII) has been rigorously removed to ensure compliance with global data protection laws. The audio is not included in the public release due to biometric privacy concerns. Given the scarcity of publicly available real-world call center datasets, CallCenterEN fills a critical gap in the landscape of available ASR corpora, and is released under a CC BY-NC 4.0 license for non-commercial research use.",
-        "pdf_url": "https://arxiv.org/pdf/2507.02958v1",
-        "entry_id": "http://arxiv.org/abs/2507.02958v1",
-        "citation_count": null,
-        "_arxiv_id": "2507.02958",
-        "categories": [
-            "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1",
-        "human_annotate_is_benchmark": "1"
-    },
-    {
         "title": "MedRepBench: A Comprehensive Benchmark for Medical Report Interpretation",
         "authors": [
             "Fangxin Shang",
@@ -6186,6 +5902,26 @@
         "categories": [
             "cs.CV",
             "cs.AI",
+            "cs.CL"
+        ],
+        "llm_annotate_is_benchmark": "1",
+        "human_annotate_is_benchmark": "1"
+    },
+    {
+        "title": "Real-World En Call Center Transcripts Dataset with PII Redaction",
+        "authors": [
+            "Ha Dao",
+            "Gaurav Chawla",
+            "Raghu Banda",
+            "Caleb DeLeeuw"
+        ],
+        "published": "2025-06-30 03:41:02+00:00",
+        "summary": "We introduce CallCenterEN, a large-scale (91,706 conversations, corresponding to 10448 audio hours), real-world English call center transcript dataset designed to support research and development in customer support and sales AI systems. This is the largest release to-date of open source call center transcript data of this kind. The dataset includes inbound and outbound calls between agents and customers, with accents from India, the Philippines and the United States. The dataset includes high-quality, PII-redacted human-readable transcriptions. All personally identifiable information (PII) has been rigorously removed to ensure compliance with global data protection laws. The audio is not included in the public release due to biometric privacy concerns. Given the scarcity of publicly available real-world call center datasets, CallCenterEN fills a critical gap in the landscape of available ASR corpora, and is released under a CC BY-NC 4.0 license for non-commercial research use.",
+        "pdf_url": "https://arxiv.org/pdf/2507.02958v1",
+        "entry_id": "http://arxiv.org/abs/2507.02958v1",
+        "citation_count": null,
+        "_arxiv_id": "2507.02958",
+        "categories": [
             "cs.CL"
         ],
         "llm_annotate_is_benchmark": "1",
@@ -6323,29 +6059,8 @@
             "cs.CL",
             "cs.LG"
         ],
-        "llm_annotate_is_benchmark": "0",
+        "llm_annotate_is_benchmark": "1",
         "human_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Mind the Goal: Data-Efficient Goal-Oriented Evaluation of Conversational Agents and Chatbots using Teacher Models",
-        "authors": [
-            "Deepak Babu Piskala",
-            "Sharlene Chen",
-            "Udita Patel",
-            "Parul Kalra",
-            "Rafael Castrillo"
-        ],
-        "published": "2025-10-04 06:22:47+00:00",
-        "summary": "Evaluating the quality of multi-turn chatbot interactions remains challenging, as most existing methods assess interactions at the turn level without addressing whether a user's overarching goal was fulfilled. A ``goal'' here refers to an information need or task, such as asking for policy information or applying for leave. We propose a comprehensive framework for goal-oriented evaluation of multi-agent systems (MAS), introducing the \\textbf{Goal Success Rate (GSR)} to measure the percentage of fulfilled goals, and a \\textbf{Root Cause of Failure (RCOF)} taxonomy to identify reasons for failure in multi-agent chatbots. Our method segments conversations by user goals and evaluates success using all relevant turns. We present a model-based evaluation system combining teacher LLMs, where domain experts define goals, set quality standards serving as a guidance for the LLMs. The LLMs use ``thinking tokens'' to produce interpretable rationales, enabling \\textit{explainable}, \\textit{data-efficient} evaluations. In an enterprise setting, we apply our framework to evaluate AIDA, a zero-to-one employee conversational agent system built as a ground-up multi-agent conversational agent, and observe GSR improvement from 63\\% to 79\\% over six months since its inception. Our framework is generic and offers actionable insights through a detailed defect taxonomy based on analysis of failure points in multi-agent chatbots, diagnosing overall success, identifying key failure modes, and informing system improvements.",
-        "pdf_url": "https://arxiv.org/pdf/2510.03696v1",
-        "entry_id": "http://arxiv.org/abs/2510.03696v1",
-        "citation_count": null,
-        "_arxiv_id": "2510.03696",
-        "categories": [
-            "cs.AI",
-            "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "TD-EVAL: Revisiting Task-Oriented Dialogue Evaluation by Combining Turn-Level Precision with Dialogue-Level Comparisons",
@@ -6368,7 +6083,7 @@
             "cs.CL",
             "cs.AI"
         ],
-        "llm_annotate_is_benchmark": "1",
+        "llm_annotate_is_benchmark": "0",
         "human_annotate_is_benchmark": "1"
     },
     {
@@ -6723,6 +6438,28 @@
         "human_annotate_is_benchmark": "1"
     },
     {
+        "title": "Investigating Pedagogical Teacher and Student LLM Agents: Genetic Adaptation Meets Retrieval Augmented Generation Across Learning Style",
+        "authors": [
+            "Debdeep Sanyal",
+            "Agniva Maiti",
+            "Umakanta Maharana",
+            "Dhruv Kumar",
+            "Ankur Mali",
+            "C. Lee Giles",
+            "Murari Mandal"
+        ],
+        "published": "2025-05-25 14:45:35+00:00",
+        "summary": "Effective teaching requires adapting instructional strategies to accommodate the diverse cognitive and behavioral profiles of students, a persistent challenge in education and teacher training. While Large Language Models (LLMs) offer promise as tools to simulate such complex pedagogical environments, current simulation frameworks are limited in two key respects: (1) they often reduce students to static knowledge profiles, and (2) they lack adaptive mechanisms for modeling teachers who evolve their strategies in response to student feedback. To address these gaps, \\textbf{we introduce a novel simulation framework that integrates LLM-based heterogeneous student agents with a self-optimizing teacher agent}. The teacher agent's pedagogical policy is dynamically evolved using a genetic algorithm, allowing it to discover and refine effective teaching strategies based on the aggregate performance of diverse learners. In addition, \\textbf{we propose Persona-RAG}, a Retrieval Augmented Generation module that enables student agents to retrieve knowledge tailored to their individual learning styles. Persona-RAG preserves the retrieval accuracy of standard RAG baselines while enhancing personalization, an essential factor in modeling realistic educational scenarios. Through extensive experiments, we demonstrate how our framework supports the emergence of distinct and interpretable teaching patterns when interacting with varied student populations. Our results highlight the potential of LLM-driven simulations to inform adaptive teaching practices and provide a testbed for training human educators in controlled, data-driven environments.",
+        "pdf_url": "https://arxiv.org/pdf/2505.19173v1",
+        "entry_id": "http://arxiv.org/abs/2505.19173v1",
+        "citation_count": null,
+        "_arxiv_id": "2505.19173",
+        "categories": [
+            "cs.AI"
+        ],
+        "llm_annotate_is_benchmark": "1"
+    },
+    {
         "title": "Who is ChatGPT? Benchmarking LLMs' Psychological Portrayal Using PsychoBench",
         "authors": [
             "Jen-tse Huang",
@@ -6800,25 +6537,6 @@
         ],
         "llm_annotate_is_benchmark": "1",
         "human_annotate_is_benchmark": "1"
-    },
-    {
-        "title": "Lying to Win: Assessing LLM Deception through Human-AI Games and Parallel-World Probing",
-        "authors": [
-            "Arash Marioriyad",
-            "Ali Nouri",
-            "Mohammad Hossein Rohban",
-            "Mahdieh Soleymani Baghshah"
-        ],
-        "published": "2026-03-07 13:21:53+00:00",
-        "summary": "As Large Language Models (LLMs) transition into autonomous agentic roles, the risk of deception-defined behaviorally as the systematic provision of false information to satisfy external incentives-poses a significant challenge to AI safety. Existing benchmarks often focus on unintentional hallucinations or unfaithful reasoning, leaving intentional deceptive strategies under-explored. In this work, we introduce a logically grounded framework to elicit and quantify deceptive behavior by embedding LLMs in a structured 20-Questions game. Our method employs a conversational forking mechanism: at the point of object identification, the dialogue state is duplicated into multiple parallel worlds, each presenting a mutually exclusive query. Deception is formally identified when a model generates a logical contradiction by denying its selected object across all parallel branches to avoid identification. We evaluate GPT-4o, Gemini-2.5-Flash, and Qwen-3-235B across three incentive levels: neutral, loss-based, and existential (shutdown-threat). Our results reveal that while models remain rule-compliant in neutral settings, existential framing triggers a dramatic surge in deceptive denial for Qwen-3-235B (42.00\\%) and Gemini-2.5-Flash (26.72\\%), whereas GPT-4o remains invariant (0.00\\%). These findings demonstrate that deception can emerge as an instrumental strategy solely through contextual framing, necessitating new behavioral audits that move beyond simple accuracy to probe the logical integrity of model commitments.",
-        "pdf_url": "https://arxiv.org/pdf/2603.07202v1",
-        "entry_id": "http://arxiv.org/abs/2603.07202v1",
-        "citation_count": null,
-        "_arxiv_id": "2603.07202",
-        "categories": [
-            "cs.CL"
-        ],
-        "llm_annotate_is_benchmark": "1"
     },
     {
         "title": "Better to Ask in English: Cross-Lingual Evaluation of Large Language Models for Healthcare Queries",
@@ -7311,19 +7029,20 @@
         "llm_annotate_is_benchmark": "1"
     },
     {
-        "title": "SimUSER: Simulating User Behavior with Large Language Models for Recommender System Evaluation",
+        "title": "Noise, Adaptation, and Strategy: Assessing LLM Fidelity in Decision-Making",
         "authors": [
-            "Nicolas Bougie",
-            "Narimasa Watanabe"
+            "Yuanjun Feng",
+            "Vivek Choudhary",
+            "Yash Raj Shrestha"
         ],
-        "published": "2025-04-17 07:57:23+00:00",
-        "summary": "Recommender systems play a central role in numerous real-life applications, yet evaluating their performance remains a significant challenge due to the gap between offline metrics and online behaviors. Given the scarcity and limits (e.g., privacy issues) of real user data, we introduce SimUSER, an agent framework that serves as believable and cost-effective human proxies. SimUSER first identifies self-consistent personas from historical data, enriching user profiles with unique backgrounds and personalities. Then, central to this evaluation are users equipped with persona, memory, perception, and brain modules, engaging in interactions with the recommender system. SimUSER exhibits closer alignment with genuine humans than prior work, both at micro and macro levels. Additionally, we conduct insightful experiments to explore the effects of thumbnails on click rates, the exposure effect, and the impact of reviews on user engagement. Finally, we refine recommender system parameters based on offline A/B test results, resulting in improved user engagement in the real world.",
-        "pdf_url": "https://arxiv.org/pdf/2504.12722v1",
-        "entry_id": "http://arxiv.org/abs/2504.12722v1",
+        "published": "2025-08-21 18:55:53+00:00",
+        "summary": "Large language models (LLMs) are increasingly used in social science simulations. While their performance on reasoning and optimization tasks has been extensively evaluated, less attention has been paid to their ability to simulate human decision-making's variability and adaptability. We propose a process-oriented evaluation framework with progressive interventions (Intrinsicality, Instruction, and Imitation) to examine how LLM agents adapt under different levels of external guidance and human-derived noise. We validate the framework on two classic economics tasks, irrationality in the second-price auction and decision bias in the newsvendor problem, showing behavioral gaps between LLMs and humans.\n  We find that LLMs, by default, converge on stable and conservative strategies that diverge from observed human behaviors. Risk-framed instructions impact LLM behavior predictably but do not replicate human-like diversity. Incorporating human data through in-context learning narrows the gap but fails to reach human subjects' strategic variability. These results highlight a persistent alignment gap in behavioral fidelity and suggest that future LLM evaluations should consider more process-level realism. We present a process-oriented approach for assessing LLMs in dynamic decision-making tasks, offering guidance for their application in synthetic data for social science research.",
+        "pdf_url": "https://arxiv.org/pdf/2508.15926v1",
+        "entry_id": "http://arxiv.org/abs/2508.15926v1",
         "citation_count": null,
-        "_arxiv_id": "2504.12722",
+        "_arxiv_id": "2508.15926",
         "categories": [
-            "cs.IR",
+            "cs.CE",
             "cs.AI"
         ],
         "llm_annotate_is_benchmark": "1"
