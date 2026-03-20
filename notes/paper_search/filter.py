@@ -175,7 +175,7 @@ def human_label(
             compute_agreement(papers)
         except Exception as e:
             print(f"Error computing agreement: {e}")
-        with open("human_labeled_tool_use_llm_agent_papers.json", "w") as f:
+        with open("human_labeled_papers.json", "w") as f:
             json.dump(papers, f, indent=4)
     return papers
 

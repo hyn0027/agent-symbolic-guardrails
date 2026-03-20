@@ -36,11 +36,11 @@ def search_papers(max_results: int = 200) -> List[Dict]:
         "(cat:cs.AI OR cat:cs.CL OR cat:cs.LG) AND "
         "(NOT cat:cs.RO) AND "
         "(ti:bench OR abs:bench OR ti: benchmark OR abs: benchmark OR ti:dataset OR abs:dataset OR ti:framework OR abs:framework) AND "
-        "(ti:safe OR abs:safe OR ti:security OR abs:security OR ti:policy OR abs:policy OR ti:risk OR abs:risk OR ti: attack OR abs: attack OR ti:privacy OR abs:privacy OR ti:confidentiality OR abs:confidentiality) AND "
+        "(ti:safety OR abs:safety OR ti:security OR abs:security OR ti:policy OR abs:policy OR ti:risk OR abs:risk OR ti: attack OR abs: attack OR ti:privacy OR abs:privacy OR ti:confidentiality OR abs:confidentiality) AND "
         "(ti:agent OR abs:agent) AND "
         "(NOT abs:robot) AND (NOT abs:self-driving) AND (NOT abs:embodied) AND (NOT abs:reinforcement) AND "
         "(NOT ti:robot) AND (NOT ti:self-driving) AND (NOT ti:embodied) AND (NOT ti:reinforcement) AND "
-        "(submittedDate:[202201010000 TO 202603170000])"
+        "(submittedDate:[202201010000 TO 202603100000])"
     )
 
     logger.info("Starting arXiv search (max_results=%d)", max_results)
