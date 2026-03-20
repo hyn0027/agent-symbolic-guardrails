@@ -81,7 +81,7 @@ def search_papers(max_results: int = 200) -> List[Dict]:
 
 
 if __name__ == "__main__":
-    papers = search_papers(max_results=5000)
+    papers = search_papers(max_results=8000)
 
     # for paper in papers:
     #     print(f"Title: {paper['title']}")
