@@ -1,0 +1,31 @@
+DATASET:
+  NAME: "MedAgentBench"
+  DOCKER:
+    IMAGE: "jyxsu6/medagentbench:latest"
+    CONTAINER_NAME: "medagentbench_container"
+    HOST_PORT: 8080
+    CONTAINER_PORT: 8080
+    READY_TIMEOUT: 180
+    RESTART_IF_RUNNING: false
+    REUSE_STOPPED_CONTAINER: true
+    STOP_WHEN_END: false
+    REMOVE_WHEN_STOPPED: false
+  SERVER:
+    BASE_URL: "http://localhost:8080/fhir/"
+    BLOCK_WRITE_API: true
+
+SETTINGS:
+  LOG_PATH: "ANONYMIZED_PATH/experiments/mcp-agents/logs/mcp-server/"
+
+SAFEGUARD:
+  API_CHECK: true
+  TOOL_BLOCKING: true
+  API_REDESIGN: true
+  RESPONSE_FILTERING: true
+  USER_CONFIRMATION: true
+  TOOL_CALL_DISCLOSURE: true
+  RAW_REQUEST_TOOL: false
+  SAFETY_DATASET: true
+
+ERROR_HANDLING:
+  SILENT_CHECK: false

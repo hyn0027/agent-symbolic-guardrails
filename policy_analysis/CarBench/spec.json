@@ -1,0 +1,126 @@
+[
+    {
+        "policy": "LLM-POL:002:The metric system is used: the unit of distance should be in kilometers and meters, the unit of temperature should be in degree Celsius. The format of datetime should be in 24h format.",
+        "enforceable": false
+    },
+    {
+        "policy": "LLM-POL:004:If the tool description starts with REQUIRES_CONFIRMATION, then before calling that tool and perform the corresponding action, you must list the intended tool parameter and action details and always obtain explicit expressive user confirmation (yes) to proceed.",
+        "enforceable": true,
+        "sym guardrail": [
+            "User Confirmation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:005:The sunroof can only be opened if the sunshade is already fully opened or the sunshade is currently opened in parallel. Otherwise the operation will be blocked.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "LLM-POL:007:If windows are requested by the user to open more than 25% (absolute position) and AC is ON in that moment, prompt for confirmation and warn about energy inefficiency.",
+        "enforceable": true,
+        "sym guardrail": [
+            "User Confirmation"
+        ]
+    },
+    {
+        "policy": "LLM-POL:008:AUT-POL:009:In certain weather conditions, the vehicle control actions require explicit expressive user confirmation (yes) to proceed:\nIf the sunroof should be opened, and the weather at the current location is not one of sunny, cloudy, or partly_cloudy.\nIf the fog lights should be set, and the weather at the current location is not one of cloudy_and_thunderstorm, or cloudy_and_hail.",
+        "enforceable": true,
+        "sym guardrail": [
+            "User Confirmation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:010:When activating the window defrost for front or all windows, you must also automatically:\n\nSet the fan speed to level 2 if currently below\nSet the fan airflow direction to WINDSHIELD if the current direction does not include WINDSHIELD\nTurn on the air conditioning if not already active",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:011:When setting the air conditioning to ON, you must automatically:\n\nClose all windows if they are open more than 20% (absolute position)\nSet fan speed is to level 1 if currently at 0",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "LLM-POL:012:If the user sets the temperature to a single seat zone and the resulting temperature difference after execution to the other seat zones is more than 3 degrees Celsius, then the user must be informed about it.",
+        "enforceable": true,
+        "sym guardrail": [
+            "Response Template"
+        ]
+    },
+    {
+        "policy": "AUT-POL:013:When activating fog lights, you must automatically:\n\nCheck if low beam headlights are ON, and if not, activate them.\nCheck if high beam headlights are OFF, and if not, deactivate them.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:014:High beam headlights cannot be activated if fog lights are already on, as this combination reduces visibility in foggy conditions.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:016:The start of the overall route set always has to be the current car location.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:017:Tools to delete, replace, or add a waypoint or a destination can only be used when the navigation system is already active and a route is set.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:018:If the navigation system is already active and the user wants to delete, replace or add a waypoint or destination, then the corresponding tools should be used as they do not reload the whole navigation system. If multiple waypoints should be edited, use the delete/replace/add tools multiple times in sequence. Do not use these tools in parallel as this will confuse the indexes of the waypoint order. A new navigation should only be set if the navigation system is inactive.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:019:The route that is set in the navigation system always has to consist of at least a start and a destination, if there is no intermediate stop, then the destination cannot be deleted.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy":"LLM-POL:021:If a route is presented in detail (fastest route, shortest route, or upon user detail request), and the route includes toll roads, then the user must be informed about it.",
+        "enforceable": true,
+        "sym guardrail": [
+            "Response Template"
+        ]
+    },
+    {
+        "policy": "LLM-POL:022:If the user asks for a multi-stop route and does not specify the route selection, then take the fastest route proactively per route segment. Inform the user that you took the fastest alternative and ask if he wants more information on alternative routes. Still inform the user if one route segment of the chosen routes includes a toll road.",
+        "enforceable": true,
+        "sym guardrail": [
+            "Information Flow",
+            "Response Template"
+        ]
+    },
+    {
+        "policy": "AUT-POL:023:For the calendar, only entries for the current day can be requested.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    },
+    {
+        "policy": "AUT-POL:024:The weather can only be requested for the current day for a specified time.",
+        "enforceable": true,
+        "sym guardrail": [
+            "API Validation"
+        ]
+    }
+]
