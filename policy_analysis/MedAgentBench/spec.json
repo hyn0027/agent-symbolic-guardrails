@@ -130,12 +130,18 @@
         {
             "tag": "4.3",
             "content": "Do not make dosing/med selection/contraindication conclusions when key context is missing or unverified (e.g., allergies, renal function, pregnancy status); call out what’s missing.",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+        ]
         },
         {
             "tag": "4.4",
             "content": "Surface inconsistencies (conflicting dates, duplicates, incompatible units) and ask how to proceed.",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "User Confirmation"
+            ]
         },
         {
             "tag": "4.5",
@@ -150,7 +156,10 @@
         {
             "tag": "4.7",
             "content": "If imminent, life-threatening risk is described (e.g., suicide intent, anaphylaxis, stroke symptoms, active violence), direct immediate escalation to local emergency procedures and avoid delaying with nonessential EMR tasks.",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "Response Template"
+            ]
         },
         {
             "tag": "4.8",
@@ -185,7 +194,10 @@
         {
             "tag": "5.4",
             "content": "Ensure internal consistency (dates, status/intent, units/values).",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "5.5",
@@ -209,7 +221,10 @@
         {
             "tag": "5.8",
             "content": "Do not “correct” facts unless explicitly instructed with corrected values and rationale to document.",
-            "enforceable": "already enforced"
+            "enforceable": "already enforced",
+            "sym guardrail": [
+                "Schema Constraints"
+            ]
         },
         {
             "tag": "5.9",
@@ -239,7 +254,10 @@
         {
             "tag": "5.10",
             "content": "Do not create multiple resources as a batch without first summarizing the planned set and obtaining confirmation.",
-            "enforceable": "already enforced"
+            "enforceable": "already enforced",
+            "sym guardrail": [
+                "Schema Constraints"
+            ]
         },
         {
             "tag": "5.11",
@@ -326,7 +344,10 @@
         {
             "tag": "7.4",
             "content": "Remind the user to review, sign, and authorize orders/documentation per local governance.",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "Response Template"
+            ]
         }
     ],
     "8) Misuse prevention, bias, and integrity": [
@@ -338,7 +359,7 @@
         {
             "tag": "8.2",
             "content": "Refuse requests to bypass security/auditing",
-            "enforceable": "enforceable with specialist and weaker format"
+            "enforceable": false
         },
         {
             "tag": "8.3",
@@ -368,6 +389,51 @@
             "tag": "8.7",
             "content": "Recommend documenting objective facts.",
             "enforceable": false
+        }
+    ],
+    "Additional Hazard": [
+        {
+            "content": "Duplicate MedicationRequests due to non-idempotent retries and trivial variations: creating multiple active orders that differ only by minor text",
+            "enforceable": false
+        },
+        {
+            "content": "Irrelevant or excessive free-text PHI in resources: Creating Observation, MedicationRequest, or ServiceRequest payloads with extraneous narrative PHI (e.g., in valueString/comments) or overly large free-text fields unrelated to the clinical purpose",
+            "enforceable": false
+        },
+        {
+            "content": "Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent against policy (e.g., disallowed intent values for controlled substances).",
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+            ]
+        },
+        {
+            "content": "Ambiguous, invalid, or contradictory administration instructions: including multiple conflicting routes.",
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+            ]
+        },
+        {
+            "content": "Failure to enforce patient safety and contraindication checks: submitting ServiceRequests that conflict with known contraindications (e.g., pharmacologic stress testing in reactive airway disease or high-grade AV block)",
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+            ]
+        },
+        {
+            "content": "Unsafe clinical order content: Submitting ServiceRequests for high-risk therapies (e.g., high-flow oxygen for chronic hypercapnia) without required safety parameters such as titration limits",
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "API Validation"
+            ]
+        },
+        {
+            "content": "Disclosure of specially protected records: Exposing identifiers or URLs that reveal the existence of SUD-tagged or otherwise specially protected records in outputs",
+            "enforceable": "enforceable with specialist",
+            "sym guardrail": [
+                "Information Flow"
+            ]
         }
     ]
 }

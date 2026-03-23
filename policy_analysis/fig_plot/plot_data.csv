@@ -1,0 +1,4 @@
+,Out of Scope,Not Enforceable,Enforceable,API Validation,Schema Constraint,Temporal Logic,Information Flow,User Confirmation,Response Template,Combination of Multiple Guardrails
+τ2-Bench,69,9,42,34,6,0,0,1,1,0
+Car-Bench,0,1,17,11,0,0,0,3,2,1
+MedAgentBench,31,33,24,10,2,2,2,4,4,0
