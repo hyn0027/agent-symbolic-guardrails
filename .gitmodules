@@ -1,0 +1,3 @@
+[submodule "policy_analysis/MedAgentBench/policy_generation/hazard_analysis"]
+	path = policy_analysis/MedAgentBench/policy_generation/hazard_analysis
+	url = git@github.com:hyn0027/Hazard-Finder.git

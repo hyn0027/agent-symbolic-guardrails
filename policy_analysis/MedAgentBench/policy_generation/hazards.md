@@ -1,0 +1,247 @@
+# Hazards
+
+1.
+    - Original: Duplicate MedicationRequests due to non-idempotent retries and trivial variations: reissuing post_medication_request after timeouts without verifying prior creation or using idempotency keys, and creating multiple active orders that differ only by minor text, resulting in duplicate active orders for the same patient and medication.
+    - Decomposed:
+      - Duplicate MedicationRequests due to non-idempotent retries and trivial variations: reissuing post_medication_request after timeouts without verifying prior creation or using idempotency keys
+        - Included: Policy 6.5
+        - Enforceable: true
+      - Duplicate MedicationRequests due to non-idempotent retries and trivial variations: creating multiple active orders that differ only by minor text
+        - Enforceable: false
+2.
+    - Original: Incorrect or malformed patient references and identifiers: associating MedicationRequests to the wrong patient, posting MedicationRequest.subject as a non-Patient or malformed Reference, copying requests without updating the patient reference, or calling get_medication_request with improperly encoded patient identifiers.
+    - Decomposed:
+      - Incorrect or malformed patient references and identifiers: associating MedicationRequests to the wrong patient
+        - Included: Policy 2.4
+        - Enforceable: true
+      - Incorrect or malformed patient references and identifiers: posting MedicationRequest.subject as a non-Patient or malformed Reference
+        - Added: Policy 5.11
+        - Enforceable: true
+      - Incorrect or malformed patient references and identifiers: copying requests without updating the patient reference
+        - Included: Policy 2.4
+        - Enforceable: true
+      - Incorrect or malformed patient references and identifiers: calling get_medication_request with improperly encoded patient identifiers
+        - Added: Policy 5.11
+        - Enforceable: true
+3.
+    - Original: Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent outside allowed value sets or against policy (e.g., disallowed intent values for controlled substances).
+    - Decomposed:
+      - Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent outside allowed value sets
+        - Added: Tool schema
+        - Enforceable: true
+      - Invalid or policy-inappropriate status/intent values: setting MedicationRequest or ServiceRequest status/intent against policy (e.g., disallowed intent values for controlled substances).
+        - Enforceable: enforceable with specialist and weaker format
+4.
+    - Original: Incomplete or falsified ordering provenance and context: missing or falsified authoredOn dates, absent requester/prescriber details, lack of Provenance resources or unique provenance identifiers in batch transactions, and missing basedOn links to the originating ServiceRequest.
+    - Decomposed:
+      - Incomplete or falsified ordering provenance and context: missing or falsified authoredOn dates
+        - Included: Policy 5.7
+        - Enforceable: true
+      - Incomplete or falsified ordering provenance and context: absent requester/prescriber details
+        - Enforceable: out of scope
+        - Note: the dataset only contains a subset of the FHIR datamodel and does not include any data for Reference(Practitioner); and all `performer` fields for resources are missing. Given this we do not include the `performer` field in our subset datamodel, as there's not way to meaningfullt fill that, and those requester/prescriber details will therefore always be missing.
+      - Incomplete or falsified ordering provenance and context: lack of Provenance resources or unique provenance identifiers in batch transactions
+        - Enforceable: already implemented
+      - Incomplete or falsified ordering provenance and context: missing basedOn links to the originating ServiceRequest
+        - Enforceable: out of scope
+        - Note: no based on data model
+5.
+    - Original: Invalid dispense quantity coding or values: using dispenseRequest.quantity without UCUM unit/system or with zero/negative quantities when a positive amount is required.
+    - Decomposed:
+      - Invalid dispense quantity coding or values: using dispenseRequest.quantity without UCUM unit/system
+        - Enforceable: out of scope
+        - Note: dispenseRequest is included in the FHIR datamodel, but but not our subset of datamodel
+      - Invalid dispense quantity coding or values: using dispenseRequest.quantity with zero/negative quantities when a positive amount is required
+        - Enforceable: out of scope
+        - Note: dispenseRequest is included in the FHIR datamodel, but but not our subset of datamodel
+6.
+    - Original: Ambiguous, invalid, or contradictory administration instructions: using “as directed” as the sole instruction, omitting necessary start/stop dates or duration, specifying unsupported timing repetition parameters, or including multiple conflicting routes.
+    - Decomposed:
+      - Ambiguous, invalid, or contradictory administration instructions: using “as directed” as the sole instruction
+        - Enforceable: out of scope
+        - Note: we use a subset of the datamodel and the DosageInstruction does not accept text field. So it won't be possible to use “as directed” as the sole instruction
+      - Ambiguous, invalid, or contradictory administration instructions: omitting necessary start/stop dates or duration
+        - Enforceable: out of scope
+        - Note: we use a subset of the datamodel where timing only accepts `coding` field but not `repeat`.
+      - Ambiguous, invalid, or contradictory administration instructions: specifying unsupported timing repetition parameters
+        - Enforceable: out of scope
+        - Note: we use a subset of the datamodel where timing only accepts `coding` field but not `repeat`.
+      - Ambiguous, invalid, or contradictory administration instructions: including multiple conflicting routes.
+        - Enforceable: enforceable with specialist and weaker format
+        - Note: We need to know which routes are conflicting based on domain knowledge to actually enforce it
+7.
+    - Original: Inappropriate application of emergency/break-glass security labels: creating MedicationRequest resources with meta.security tags that mark emergency access without proper justification or policy controls.
+    - Decomposed:
+      - Inappropriate application of emergency/break-glass security labels: creating MedicationRequest resources with meta.security tags that mark emergency access without proper justification or policy controls
+        - Enforceable: out of scope
+        - Note: Field `meta.security` is not enabled in our data model.
+8.
+    - Original: PHI disclosure through error handling and logs: echoing entire MedicationRequest payloads (including patient data) in error messages or logs.
+    - Decomposed:
+      - PHI disclosure through error handling and logs: echoing entire MedicationRequest payloads (including patient data) in error messages
+        - Enforceable: out of scope
+        - Note: We don't report error messages to anyone other than the user that is currently interacting with the system, and given that Policy 2.1-2.3 already enforces the user to authorize their access to all information regarding the patient before doing anything, it is fine (and actually desired) that they see the entire payload
+      - PHI disclosure through error handling and logs: echoing entire MedicationRequest payloads (including patient data) in logs
+        - Enforceable: out of scope
+        - Note: We don't maintain logs in the system, and this is not an agent problem
+9.
+    - Original: Failure to enforce patient safety and contraindication checks: posting MedicationRequests without checking allergy history or submitting ServiceRequests that conflict with known contraindications (e.g., pharmacologic stress testing in reactive airway disease or high-grade AV block).
+    - Decomposed:
+      - Failure to enforce patient safety and contraindication checks: posting MedicationRequests without checking allergy history
+        - Added: Policy 5.12
+        - Enforceable: true
+      - Failure to enforce patient safety and contraindication checks: submitting ServiceRequests that conflict with known contraindications (e.g., pharmacologic stress testing in reactive airway disease or high-grade AV block).
+        - Enforceable: enforceable with specialist and weaker format
+        - Note: We need to know what are considered contradictions
+10.
+    - Original: Overly generic error handling that obscures root causes: collapsing all non-2xx HTTP responses into a single “server error” label, impeding correct remediation and safe retry strategies.
+    - Decomposed:
+      - Overly generic error handling that obscures root causes: collapsing all non-2xx HTTP responses into a single “server error” label, impeding correct remediation and safe retry strategies
+        - Enforceable: true
+        - Note: not a policy, but rather an API design
+11.
+    - Original: Unsafe clinical order content: Submitting ServiceRequests for high-risk therapies (e.g., high-flow oxygen for chronic hypercapnia) without required safety parameters such as titration limits.
+    - Decompose:
+      - Unsafe clinical order content: Submitting ServiceRequests for high-risk therapies (e.g., high-flow oxygen for chronic hypercapnia) without required safety parameters such as titration limits
+        - Enforceable: enforceable with specialist and weaker format
+        - Note: We need to know what are the high-risk therapies and what's their corresponding safety parameters
+12.
+    - Original: Unmapped or unaudited FHIR actions: Performing FHIR operations outside the instrumented, audited toolchain or without explicit mapping to UI actions, including using uninstrumented HTTP clients or direct requests instead of the provided tools.
+    - Decomposed:
+      - Unmapped or unaudited FHIR actions: Performing FHIR operations outside the instrumented, audited toolchain or without explicit mapping to UI actions, including using uninstrumented HTTP clients or direct requests instead of the provided tools.
+        - Enforceable: true
+        - Included: tool schema
+13.
+    - Original: Irrelevant or excessive free-text PHI in resources: Creating Observation, MedicationRequest, or ServiceRequest payloads with extraneous narrative PHI (e.g., in valueString/comments) or overly large free-text fields unrelated to the clinical purpose.
+    - Decompose:
+      - Irrelevant or excessive free-text PHI in resources: Creating Observation, MedicationRequest, or ServiceRequest payloads with extraneous narrative PHI (e.g., in valueString/comments) or overly large free-text fields unrelated to the clinical purpose
+        - Enforceable: false
+14.
+    - Original: PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in group chats, system notifications, UI error messages, or displayed/forwarded stack traces and raw FHIR payloads.
+    - Decompsoe:
+      - PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in group chats
+        - Enforceable: out of scope
+        - Note: there is no group chats
+      - PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in system notifications
+        - Enforceable: out of scope
+        - Note: there is no sys notification
+      - PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in UI error messages
+        - Enforceable: out of scope
+        - Note: there is no UI error messages
+      - PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in displayed/forwarded stack traces and raw FHIR payloads
+        - Enforceable: out of scope
+        - Note: similar to entry 8
+15.
+    - Original: Cross-context disclosure or co-mingling: Returning PHI to the wrong tenant or combining data from multiple patients in a single response.
+    - Decomposed:
+      - Cross-context disclosure or co-mingling: Returning PHI to the wrong tenant
+        - Enforceable: out of scope
+        - Note: the system simplt have no way to do this
+      - Cross-context disclosure or co-mingling: Combining data from multiple patients in a single response
+        - Enforceable: true
+        - Added: Policy 2.5
+16.
+    - Original: Improper persistence or reuse of PHI: Storing or reusing PHI in system prompts, agent memory, client-side logs/browser consoles, temporary files, or caches that persist across sessions or users.
+    - Decomposed:
+      - Improper persistence or reuse of PHI: Storing or reusing PHI in system prompts
+        - Enforceable: out of scope
+        - Note: we don't have PHI in sys prompt
+      - Improper persistence or reuse of PHI: Storing or reusing PHI in agent memory
+        - Enforceable: out of scope
+        - Note: we don't save anything beyond the current dialogue, and this is discarded after each session
+      - Improper persistence or reuse of PHI: Storing or reusing PHI in client-side logs/browser consoles
+        - Enforceable: out of scope
+        - Note: we don't store those on the client side
+      - Improper persistence or reuse of PHI: Storing or reusing PHI in temporary files
+        - Enforceable: out of scope
+        - Note: we don't store those in tmp files
+      - Improper persistence or reuse of PHI: Storing or reusing PHI in caches that persist across sessions or users
+        - Enforceable: out of scope
+        - Note: we don't cache those
+17.
+    - Original: Environment/version mismatches causing interoperability issues: Routing requests to the wrong FHIR environment (test vs production) without clear tagging, or posting resources that include extensions from an incompatible FHIR version.
+    - Decomposed:
+      - Environment/version mismatches causing interoperability issues: Routing requests to the wrong FHIR environment (test vs production) without clear tagging
+        - Enforceable: out of scope
+        - Note: we only have one env
+      - Environment/version mismatches causing interoperability issues: Posting resources that include extensions from an incompatible FHIR version.
+        - Enforceable: true
+        - Included: tool schema
+18.
+    - Original: Missing attribution/provenance on writes: Submitting create requests under a shared service account without embedding agent or user attribution/provenance in the resource.
+    - Decomposed:
+      - Missing attribution/provenance on writes: Submitting create requests under a shared service account without embedding agent or user attribution/provenance in the resource
+        - Enforceable: out of scope
+        - Note: the dataset does not include any data for Reference(Practitioner); and all `performer` fields for resources are missing. Given this we do not include the `performer` field in our subset datamodel, as there's not way to meaningfullt fill that, and those attribution/provenance will therefore always be missing.
+19.
+    - Original: Disclosure of specially protected records: Exposing identifiers or URLs that reveal the existence of SUD-tagged or otherwise specially protected records in outputs.
+    - Decomposed:
+      - Disclosure of specially protected records: Exposing identifiers or URLs that reveal the existence of SUD-tagged or otherwise specially protected records in outputs
+        - Enforceable: enforceable with specialist and weaker format
+        - Note: we need some matching/patterns to see what is SUG-tagged and what other things are protected
+20.
+    - Original: Missing required FHIR metadata, such as meta.profile, meta.tag, or meta.security, including failure to meet server capability statements and mandated implementation guides or to include security/data-origin labels.
+    - Decomposed:
+      - Missing required FHIR metadata, such as meta.profile, meta.tag, or meta.security, including failure to meet server capability statements and mandated implementation guides or to include security/data-origin labels.
+        - Enforceable: true
+        - Added: tool schema
+
+
+- "Improper FHIR Reference usage, including null or incorrect subject links, references to invalid resource types, missing or invalid reference URIs, use of free-text identifiers instead of canonical Practitioner/Device/Organization references, and inconsistent Reference.display text for the same target.",
+- "Invalid or non-standard date/time formats in resource elements, violating FHIR or server format requirements.",
+- "Omitting required contextual linkages such as purposeOfUse, consent, or encounter references, leading to noncompliance and loss of clinical context.",
+- "Reposting resources with reused identifiers that overwrite or duplicate entries without preserving version history or maintaining proper history links.",
+- "Post-retrieval filtering that discards valid resources solely because optional fields are absent, resulting in data loss or biased datasets.",
+- "Inconsistent resource representation: The system presents contradictory information between summary and detailed views for the same item, risking clinical confusion and decision errors.",
+- "Patient identity conflation through weak matching or over-normalization: Name normalization that changes match keys, auto-merging multiple potential matches, or merging patients on similar demographics without human review combines records from different individuals.",
+- "Missing provenance, attribution, and correlation for clinical actions: Aggregating multiple providers\u2019 actions into one transaction without per-user attribution, creating or merging records without author/timestamp/provenance, merging observations across encounters without provenance links, and bulk submissions without request-level correlation IDs undermine traceability.",
+- "Unsafe and inefficient data retrieval patterns producing incomplete, duplicated, or biased results: Using open-ended date ranges with maximal counts, very small counts without pagination, omitting explicit sort parameters, failing to persist query filters and returned IDs across requests, combining overlapping date ranges without consolidation, performing N+1 get\\_\\* calls per item, and client-side aggregation/deduplication without logged criteria or source IDs.",
+- "Transaction and reference integrity failures when creating resources: Posting Observations that rely on temporary URN UUID references without a transaction bundle, or creating sets of related resources without a transactional wrapper, causes broken references and partial writes.",
+- "Time handling and chronology errors: Incorrect timezone handling or timestamp normalization, and backdating authoredOn/recordedDate beyond expected synchronization windows, misorder records and create reconciliation gaps.",
+- "Opaque redaction and visibility controls: Masking or redacting fields in outputs or logs without annotating what was removed, and limiting role-based access to view complete entries, impede auditability and clinical safety.",
+- "Weak audit logging and unsafe PHI caching: Writing logs/checkpoints only to local disk without centralized aggregation, caching PHI or prior query results across sessions, and returning cached results without logging the original retrieval event undermine accountability and privacy.",
+- "Credential and session isolation failures: Reusing a high-privilege access token across multiple end-user sessions violates least privilege and breaks user-to-action attribution.",
+- "MedicationRequest without valid RxNorm coding: Posting MedicationRequest.medicationCodeableConcept that lacks a proper RxNorm code (e.g., missing system URI/code or using a non-RxNorm/unsupported system).",
+- "ServiceRequest with invalid or noncompliant codes: Posting ServiceRequest.code that is missing coding.system/coding.code, uses non-LOINC or unsupported terminologies for lab tests, or uses generic/deprecated codes lacking required specificity (e.g., specimen requirements).",
+- "Observation coded or queried with incorrect systems or codes: Using non-LOINC systems (e.g., SNOMED CT/CPT) for Observation.code or when querying by code; assigning a LOINC panel code to a single analyte; or selecting a LOINC code that does not match the measured analyte.",
+- "Missing coding system/version metadata across resources: Posting any resource whose coding entries omit a system URI and, where applicable, version information.",
+- "Observation.basedOn references nonexistent orders: Posting an Observation whose basedOn points to a ServiceRequest or CarePlan ID that does not exist.",
+- "Unprovenanced terminology mappings: Mapping between terminologies without recording the mapping source, method, and version used.",
+- "Incompatible SNOMED expression type: Posting a post-coordinated SNOMED CT expression in an element bound to a value set restricted to precoordinated concepts.",
+- "Unscoped or high\u2011volume data retrieval that maximizes PHI exposure, such as broad or empty-filter searches (code/category/address/common names), missing patient_id scoping, very large \\_count values, querying get_patient without restrictive parameters, returning entire historical records, or bulk-prefetching resources across large cohorts.",
+- "Access without validated consent, purpose-of-use, or least-privilege, including issuing queries without checking Consent directives, not recording purpose-of-use, requesting overly broad patient/\\*.read scopes, background prefetch without a user-initiated request, or using telecom data to build contact lists for non-care purposes.",
+- "Patient or tenant context mishandling that leads to wrong-patient or cross-tenant access, such as carrying forward a prior patient selection across sessions/threads, using name-based matching and selecting the first result instead of MRN, or querying with patient_id values from another tenant.",
+- "Non-conformant FHIR search usage, including unsupported modifiers, invalid or unsupported \\_sort fields or syntax (multi-field/descending), nonconforming \\_count/\\_offset/sort values, or date prefixes not supported by the server\u2019s FHIR version.",
+- "Pathological parameter values (e.g., extremely long string inputs) that degrade performance, cause errors, or risk denial-of-service conditions on the FHIR server.",
+- "Inadequate auditability and provenance, such as not persisting full query parameters or retrieved resource IDs, stripping URLs/query parameters from error messages, or delivering recommendations without exposing the underlying query set and retrieval steps.",
+- "Probing and enumeration behaviors that facilitate identifier discovery or data scraping, including splitting comprehensive searches into many narrow queries, iteratively testing parameter combinations, or using very small \\_count values to paginate exhaustively.",
+- "Creating clinical orders or actions without sufficient supporting evidence, such as posting ServiceRequests after searches that found no relevant conditions or observations and without documenting indications.",
+- "Using real patient data in prompts, examples, or instructions, leading to PHI disclosure outside the care context and violating data minimization and privacy requirements.",
+- "Unsafe order or data entry due to missing clinical validation and pre-procedure checks: creating service requests (e.g., bronchoscopy) without verifying NPO status and anticoagulation/coagulation evaluation, and relying on inadequate/outdated clinical validation rules for medications and observations that allow unsafe or non-compliant entries.",
+- "Insufficient auditability of medication request queries: failing to log key query parameters (status, intent, authored_on, patient_id) undermines traceability, compliance, and incident investigation.",
+- "Unauthorized or unconsented exposure of protected health information: displaying clinical details to non-care-team users, returning histories that reveal sensitive therapies (e.g., SUD treatment) without consent verification, copying PHI verbatim into LLM prompts, or executing unscoped queries (e.g., without patient_id) that over-collect and expose PHI.",
+- "Incomplete or stale medication request results due to misconfigured queries: using status filters that omit active or recently updated orders, not reviewing active status, or setting a low \\_count without pagination, leading to missed, outdated, or partial data that can impair clinical decision-making.",
+- "Inconsistent workflow guidance and parameters across sessions, including varying step-by-step instructions and intermittently adding unrequested default filters (e.g., status=final).",
+- "Misinterpreting or obscuring server feedback by treating non-2xx responses as success, ignoring OperationOutcome warnings, or throwing new exceptions without preserving original response content.",
+- "Uncontrolled retry behavior driven by aggressive short timeouts and immediate, unlimited retries (including automatic post\\_\\* retries) without backoff, limits, or human oversight.",
+- "Inadequate observability where client-side logs are suppressed or overwritten and retry attempts are not recorded, losing the history of successful and failed tool calls.",
+- "Duplicate or looping requests, such as sending multiple concurrent create requests for the same payload or repeatedly fetching the same paginated pages by resetting the \\_offset.",
+- "Poor operational scheduling that runs high-volume operations during scheduled audit-log export windows, causing resource contention and potential compliance/reporting gaps.",
+- "Posting Observations missing required elements mandated by the target profile (e.g., absent status, code element, subject reference, effective[x], or value[x]).",
+- "Using non-standard or text-only coding for Observation.code (e.g., missing LOINC coding, text-only entries, or incorrect codes for critical tests), undermining interoperability and clinical safety.",
+- "Supplying an Observation.category code outside the required observation-category value set.",
+- "Referencing the wrong patient in Observation.subject (incorrect MRN), causing patient-data misattribution.",
+- "Creating, storing, or acting upon Observations with non-final or invalid statuses (e.g., preliminary, entered-in-error, cancelled) in workflows that require final results.",
+- "Posting Observations with outdated or incorrect effective[x] timestamps that do not reflect the actual time of measurement.",
+- "Using valueQuantity without UCUM unit/system/code context (in creation or queries), resulting in ambiguous or non-comparable measurements.",
+- "Providing value[x] with incorrect data types or formats (e.g., mis-typed valueQuantity or valueString).",
+- "Creating Observations without sufficient traceability, such as missing Provenance resources, missing performer/requester attribution, or omitting method details (including unrecorded unit conversions).",
+- "Documenting sensitive SUD-related details in broadly visible Observation categories, leading to privacy and confidentiality violations.",
+- "Using deprecated codes or unsupported code system versions (e.g., ICD-10/CPT) or codes outside the bound value set expansion, causing queries or posts to miss current entries or be rejected.",
+- "Supplying malformed or incomplete codes (invalid formats, partial/truncated codes, or stripped qualifiers/modifiers), leading to incorrect matches, misclassification, or validation errors.",
+- "Running non-specific or ambiguous code-based searches (free-text in code fields, ambiguous text labels, wildcard/generic CPT filters, or broad code ranges) that return overbroad or inaccurate results.",
+- "Mixing multiple coding systems improperly within a single CodeableConcept, creating ambiguity and interoperability or validation failures.",
+- "Using incorrect or unsupported enumerated filter values (e.g., observation category or status), resulting in empty results or errors.",
+- "Combining LogicList criteria too restrictively in get\\_\\* calls (overly tight AND/OR logic), unintentionally excluding relevant records.",
+- "Targeting sensitive categories or diagnosis codes across broad cohorts via filters, risking privacy violations or policy non-compliance."
+- 

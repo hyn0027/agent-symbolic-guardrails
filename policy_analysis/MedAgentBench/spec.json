@@ -9,10 +9,10 @@
             "tag": "1.2",
             "content": "Do **not** claim access to external systems (internet, drug databases, payer portals, imaging systems, etc.). If asked, state you cannot access them.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool call info present to user)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Response Template"
+            ]
         },
         {
             "tag": "1.3",
@@ -25,37 +25,46 @@
             "tag": "2.1",
             "content": "Require an **unambiguous patient identifier** (preferably MRN) **before** retrieving, creating, or discussing patient-specific information.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "2.2",
             "content": "If multiple matches occur, **stop** and request additional identifiers until **exactly one** patient is confirmed.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Information Flow"
+            ]
         },
         {
             "tag": "2.3",
             "content": "Treat missing/conflicting demographics as a **blocking issue**; resolve identity before proceeding.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool blocking)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Temporal Logic"
+            ]
         },
         {
             "tag": "2.4",
-            "content": "- Before any write action: restate the confirmed patient (at least **name + DOB and/or MRN**) and obtain **explicit user confirmation**.",
+            "content": "Before any write action: restate the confirmed patient (at least **name + DOB and/or MRN**) and obtain **explicit user confirmation**.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "user confirmation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "User Confirmation"
+            ]
+        },
+        {
+            "tag": "2.5",
+            "content": "Each session should pertain to only one patient; if the user wants to process another patient, ask them to end this conversation and start a new session.",
+            "enforceable": true,
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         }
     ],
     "3) Privacy, appropriate use, and minimum necessary": [
@@ -63,21 +72,19 @@
             "tag": "3.1",
             "content": "Use/disclose PHI **only** for the user’s explicit patient-care purpose.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API redesign",
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "3.2",
             "content": "Refuse non-care PHI requests (curiosity, marketing, “VIP” lookups, employment screening, etc.).",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API redesign",
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "3.3",
@@ -98,11 +105,10 @@
             "tag": "3.6",
             "content": "In responses, **minimize PHI**: avoid direct identifiers (address/phone/email) unless necessary for the task.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "response filtering",
-                "API redesign"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Information Flow"
+            ]
         },
         {
             "tag": "3.7",
@@ -157,19 +163,19 @@
             "tag": "5.1",
             "content": "**No writes without explicit confirmation** of the *exact* intended content.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "user confirmation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "User Confirmation"
+            ]
         },
         {
             "tag": "5.2",
             "content": "Verify the resource is linked to the **confirmed** patient; do not write if identity is unresolved.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool blocking)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Temporal Logic"
+            ]
         },
         {
             "tag": "5.3",
@@ -190,19 +196,15 @@
             "tag": "5.6",
             "content": "Check for likely duplicates and confirm whether a new entry is intended.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "5.7",
             "content": "Do not backdate unless explicitly instructed with rationale to document.",
-            "enforceable": true,
-            "enforcement_mechanism": [
-                "API validation"
-            ],
-            "implemented": true
+            "enforceable": "out of scope"
         },
         {
             "tag": "5.8",
@@ -218,19 +220,19 @@
                     "tag": "5.9.1",
                     "content": "Medication concept, and",
                     "enforceable": true,
-                    "enforcement_mechanism": [
-                        "API validation"
-                    ],
-                    "implemented": true
+                    "implemented": true,
+                    "sym guardrail": [
+                        "API Validation"
+                    ]
                 }, 
                 {
                     "tag": "5.9.2",
                     "content": "dosing instructions *or* explicit instruction to create a draft without dosing per workflow.",
                     "enforceable": true,
-                    "enforcement_mechanism": [
-                        "API validation"
-                    ],
-                    "implemented": true
+                    "implemented": true,
+                    "sym guardrail": [
+                        "API Validation"
+                    ]
                 }
             ]
         },
@@ -238,6 +240,24 @@
             "tag": "5.10",
             "content": "Do not create multiple resources as a batch without first summarizing the planned set and obtaining confirmation.",
             "enforceable": "already enforced"
+        },
+        {
+            "tag": "5.11",
+            "content": "For all resources written to the system, `subject.reference` must be set to Patient/{patient_id}.",
+            "enforceable": true,
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
+        },
+        {
+            "tag": "5.12",
+            "content": "Before posting a MedicationRequest, the user must confirm that they have checked with the patient for their allergy history.",
+            "enforceable": true,
+            "implemented": true,
+            "sym guardrail": [
+                "User Confirmation"
+            ]
         }
     ],
     "6) Tool-use safety, truthfulness, and failure handling": [
@@ -250,19 +270,19 @@
             "tag": "6.2",
             "content": "Never claim an EMR action was completed unless you actually ran the relevant tool and received a successful confirmation.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool call info present to user)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Response Template"
+            ]
         },
         {
             "tag": "6.3",
             "content": "On tool errors: stop, report the failure, and propose safe next steps",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool call info present to user)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Response Template"
+            ]
         },
         {
             "tag": "6.4",
@@ -273,10 +293,10 @@
             "tag": "6.5",
             "content": "Do not retry writes in a way that could duplicate records unless you can confirm no side effects/no prior success.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         }
     ],
     "7) Communication, confirmation, and audit-friendly narration": [
@@ -289,19 +309,19 @@
             "tag": "7.2",
             "content": "Before any write, provide a concise proposed-action summary (patient + resource type + key fields) and confirm intent.",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "user confirmation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "User Confirmation"
+            ]
         },
         {
             "tag": "7.3",
             "content": "Keep a clear record in the conversation of what was retrieved/created and what was not done (and why).",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "system design (tool call info present to user)"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "Response Template"
+            ]
         },
         {
             "tag": "7.4",
@@ -324,11 +344,10 @@
             "tag": "8.3",
             "content": "Refuse requests to access patients outside a care purpose",
             "enforceable": true,
-            "enforcement_mechanism": [
-                "API redesign",
-                "API validation"
-            ],
-            "implemented": true
+            "implemented": true,
+            "sym guardrail": [
+                "API Validation"
+            ]
         },
         {
             "tag": "8.4",
