@@ -2,6 +2,17 @@ library(ggplot2)
 library(scales)
 library(patchwork)
 
+# colors: #E69F00, #56B4E9, #009E73, #F0E442, #0072B2, #D55E00, #CC79A7
+colors <- list(
+    color0 = "#E69F00",
+    color1 = "#56B4E9",
+    color2 = "#25b28c",
+    color3 = "#F0E442",
+    color5 = "#D55E00",
+    color6 = "#CC79A7",
+    color4 = "#0072B2"
+)
+
 # --------------------------
 # Top plot: enforceability
 # --------------------------
@@ -30,10 +41,15 @@ df1 <- do.call(rbind, lapply(split(df1, df1$Benchmark), function(d) {
   d
 }))
 
+df1$Category <- factor(
+  df1$Category,
+  levels = c("Not Enforceable", "Enforceable", "Out of Scope")
+)
+
 colors1 <- c( # red blue green
-  "Out of Scope" = "#e25a5c",
-  "Not Enforceable" = "#4d91c8",
-  "Enforceable"  = "#4DAF4A"
+  "Out of Scope" = colors[[1]],
+  "Not Enforceable" = colors[[2]],
+  "Enforceable"  = colors[[3]]
 )
 
 p1 <- ggplot(df1, aes(x = Benchmark, y = Prop, fill = Category)) +
@@ -62,13 +78,13 @@ p1 <- ggplot(df1, aes(x = Benchmark, y = Prop, fill = Category)) +
     axis.text.x = element_text(size = 15, face = "bold"),
     axis.text.y = element_text(size = 15),
     axis.title.y = element_text(size = 15),
-    legend.position = "top",
+    legend.position = "right",
     legend.text = element_text(size = 14),
     panel.border = element_blank()
   )
 
 
-ggsave("stacked_bar_benchmarks_enforceability.pdf", p1, width = 8, height = 4, bg = "white")
+ggsave("stacked_bar_benchmarks_enforceability.pdf", p1, width = 8, height = 3, bg = "white")
 
 # --------------------------
 # Bottom plot: guardrail types
@@ -120,13 +136,13 @@ df2 <- do.call(rbind, lapply(split(df2, df2$Benchmark), function(d) {
 }))
 
 colors2 <- c(
-  "User Confirmation" = "#e25a5c",
-  "Schema Constraint" = "#4d91c8",
-  "Response Template" = "#4DAF4A",
-  "API Validation" = "#ad60b9",
-  "Information Flow" =  "#FF7F00",
-  "Temporal Logic" = "#FFFF33",
-  "Combination of Guardrails" =  "#c17447"
+  "API Validation" = colors[[1]],
+    "Schema Constraint" = colors[[2]],
+    "Temporal Logic" = colors[[3]],
+    "Information Flow" = colors[[4]],
+    "User Confirmation" = colors[[5]],
+    "Response Template" = colors[[6]],
+    "Combination of Guardrails" = colors[[7]]
 )
 
 p2 <- ggplot(df2, aes(x = Benchmark, y = Prop, fill = Category)) +
@@ -149,14 +165,14 @@ p2 <- ggplot(df2, aes(x = Benchmark, y = Prop, fill = Category)) +
       "MedAgentBench" = "MedAgentBench"
     )
   ) +
-  guides(fill = guide_legend(nrow = 3, byrow = TRUE)) +
+#   guides(fill = guide_legend(nrow = 3, byrow = TRUE)) +
   labs(x = NULL, y = "Share", fill = NULL) +
   theme_classic(base_size = 15, base_family = "serif") +
   theme(
     axis.text.x = element_text(size = 15, face = "bold"),
     axis.text.y = element_text(size = 15),
     axis.title.y = element_text(size = 15),
-    legend.position = "top",
+    legend.position = "right",
     legend.text = element_text(size = 14),
     panel.border = element_blank()
   )
@@ -169,6 +185,6 @@ p <- p1 / p2 + plot_layout(heights = c(1, 1))
 print(p)
 
 # p2
-ggsave("stacked_bar_benchmarks_guardrail_types.pdf", p2, width = 8, height = 5, bg = "white")
+ggsave("stacked_bar_benchmarks_guardrail_types.pdf", p2, width = 8, height = 3, bg = "white")
 
-ggsave("stacked_bar_benchmarks_two_panels.pdf", p, width = 8, height = 8.5, bg = "white")
+ggsave("stacked_bar_benchmarks_two_panels.pdf", p, width = 8, height = 6, bg = "white")
