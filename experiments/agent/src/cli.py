@@ -20,6 +20,14 @@ elif CONFIG.DATASET.NAME == "MedAgentBench":
     )
     from domains.MedAgentBench.task import load_tasks
     from domains.MedAgentBench.eval import evaluate_single, aggregate_evals
+elif CONFIG.DATASET.NAME == "CarBench":
+    from domains.CarBench.prompts import (
+        system_prompt,
+        user_prompt,
+        assess_end_conversation,
+    )
+    from domains.CarBench.task import load_tasks
+    from domains.CarBench.eval import evaluate_single, aggregate_evals
 
 
 def human_interaction() -> None:

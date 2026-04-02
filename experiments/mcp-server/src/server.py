@@ -3,10 +3,13 @@ from config_loader import CONFIG
 
 if CONFIG.DATASET.NAME == "tau2":
     import dataset_domains.tau2
+
     if CONFIG.DATASET.DOMAIN == "airline":
         import dataset_domains.tau2.airlines
 elif CONFIG.DATASET.NAME == "MedAgentBench":
     import dataset_domains.MedAgentBench
+elif CONFIG.DATASET.NAME == "CarBench":
+    import dataset_domains.CarBench
 
 
 def main() -> None:

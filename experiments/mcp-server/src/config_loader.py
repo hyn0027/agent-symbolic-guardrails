@@ -21,12 +21,21 @@ def load_config(config_path: Optional[str] = None) -> Config:
         argparse_parser.add_argument(
             "--config", type=str, default="config.yml", help="Path to the config file."
         )
+        argparse_parser.add_argument(
+            "--idx",
+            type=str,
+            default=None,
+            help="Optional index to distinguish multiple runs.",
+        )
         args, _ = argparse_parser.parse_known_args()
         config_path = Path(__file__).parent / args.config
     assert isinstance(config_path, (str, Path)), "config_path must be a string or Path"
     with open(config_path, "r") as f:
         config = yaml.safe_load(f)
-    return Config(config)
+    config = Config(config)
+    if args.idx is not None:
+        config["IDX"] = args.idx
+    return config
 
 
 CONFIG = load_config()

@@ -84,7 +84,7 @@ p1 <- ggplot(df1, aes(x = Benchmark, y = Prop, fill = Category)) +
   )
 
 
-ggsave("stacked_bar_benchmarks_enforceability.pdf", p1, width = 8, height = 3, bg = "white")
+ggsave("stacked_bar_benchmarks_enforceability.pdf", p1, width = 8, height = 2, bg = "white")
 
 # --------------------------
 # Bottom plot: guardrail types

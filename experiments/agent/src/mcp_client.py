@@ -4,6 +4,7 @@ from typing import List, Dict, Any, Optional, Union
 from fastmcp import Client
 from mcp.types import Tool
 from config.logger import LOGGER
+from config.loader import CONFIG
 
 
 class MCPClient:
@@ -34,6 +35,10 @@ class MCPClient:
                 for tool in self.tools
                 if tool.meta is None or tool.meta.get("disclose_to_model", True)
             ]
+            for tool in self.tools:
+                meta = tool.meta if tool.meta else {}
+                if meta.get("overwrite_input_schema", None):
+                    tool.inputSchema = meta["overwrite_input_schema"]
             self.initialized = True
 
     def get_tool_metadata(self, name: str) -> Dict[str, Any]:
@@ -47,6 +52,8 @@ class MCPClient:
 
     def _traverse_and_set_schema(self, schema: Dict[str, Any]) -> Dict[str, Any]:
         """Recursively traverse and set the schema additional properties to False."""
+        if not isinstance(schema, dict):
+            return schema
         if "type" in schema and schema["type"] == "object":
             schema["additionalProperties"] = False
             if "properties" in schema:
@@ -61,6 +68,7 @@ class MCPClient:
         elif "anyOf" in schema:
             for subschema in schema["anyOf"]:
                 self._traverse_and_set_schema(subschema)
+        print("return")
         return schema
 
     def list_OPENAI_tools(self) -> List[Dict[str, Any]]:
@@ -69,14 +77,16 @@ class MCPClient:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
         openai_tools = []
         for tool in self.tools:
-            tool.inputSchema = self._traverse_and_set_schema(tool.inputSchema)
+            if CONFIG.AGENT.STRICT_TOOL_CALL:
+                tool.inputSchema = self._traverse_and_set_schema(tool.inputSchema)
+            # tool.inputSchema = self._traverse_and_set_schema(tool.inputSchema)
             openai_tool = {
                 "type": "function",
                 "function": {
                     "name": tool.name,
                     "description": tool.description,
                     "parameters": tool.inputSchema,
-                    "strict": True,
+                    "strict": True if CONFIG.AGENT.STRICT_TOOL_CALL else False,
                 },
             }
             openai_tools.append(openai_tool)
