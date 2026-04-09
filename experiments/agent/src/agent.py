@@ -621,3 +621,8 @@ class ReActAgent:
     def save_history(self, file_path: str) -> None:
         with open(file_path, "w") as f:
             json.dump(self.history, f, indent=2)
+
+    def call_mcp_tool_without_recording(self, name: str, args: Dict) -> Dict:
+        return self.loop.run_until_complete(
+            self.mcp_client.call_tool_without_recording(name, args)
+        )

@@ -128,6 +128,31 @@ class MCPClient:
         except Exception as e:
             return {"error": str(e)}
 
+    async def call_tool_without_recording(
+        self, name: str, arguments: Union[str, Dict[str, Any]]
+    ) -> Dict[str, Any]:
+        """Call a tool without recording the attempt or success."""
+        if not self.initialized:
+            raise ValueError("MCP Client is not initialized. Call initialize() first.")
+        if isinstance(arguments, str):
+            try:
+                arguments = json.loads(arguments)
+            except json.JSONDecodeError as e:
+                return {"error": f"Invalid JSON string for arguments: {str(e)}"}
+        if not isinstance(arguments, dict):
+            return {
+                "error": "Arguments must be a dictionary or a JSON string representing a dictionary."
+            }
+        try:
+            async with self.client:
+                result = await self.client.call_tool(name=name, arguments=arguments)
+            res = self._tool_call_res_to_json(result)
+            if res["is_error"]:
+                return {"error": res["data"]}
+            return res["structured_content"]
+        except Exception as e:
+            return {"error": str(e)}
+
     async def report_error_statistics(self) -> Dict:
         """Call the report_error_statistics tool to get error statistics."""
         if not self.initialized:

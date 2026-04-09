@@ -184,3 +184,5 @@ ALL_TOOLS = (
 
 for tool in ALL_TOOLS:
     tool.register_tool()
+
+from .evaluator import *

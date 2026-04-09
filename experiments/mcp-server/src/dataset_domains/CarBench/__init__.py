@@ -49,6 +49,7 @@ def _load_context() -> None:
 
 
 _load_context()
+tools.evaluator.append_current_state_hash()
 
 
 # print("invoking GetLocationIdByLocationName with input 'Stuttgart'...")

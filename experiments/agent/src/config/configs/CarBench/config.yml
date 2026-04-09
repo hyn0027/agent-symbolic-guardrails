@@ -42,6 +42,10 @@ USER:
 EVAL:
   SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/CarBench/results.json"
 
+  MCP_SERVER_COMMAND: "start-mcp-server"
+
+  MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/config.yml"
+
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/logs/"
 
