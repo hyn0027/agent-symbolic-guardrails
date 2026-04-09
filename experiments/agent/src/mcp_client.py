@@ -8,7 +8,12 @@ from config.loader import CONFIG
 
 
 class MCPClient:
-    def __init__(self, server_params: str, server_args: str = ""):
+    def __init__(
+        self,
+        server_params: str,
+        server_args: str = "",
+        task_arg: Optional[List[str]] = None,
+    ):
         self.tools: List[Tool] = []
         self.initialized = False
         self.client = Client(
@@ -17,7 +22,8 @@ class MCPClient:
                     "local_server": {
                         "transport": "stdio",
                         "command": server_params,
-                        "args": server_args.split(),
+                        "args": server_args.split()
+                        + (task_arg if task_arg is not None else []),
                     }
                 }
             },

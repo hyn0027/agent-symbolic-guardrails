@@ -8,6 +8,8 @@ from eval import TerminateReason
 from config.loader import CONFIG, args
 from config.logger import LOGGER
 
+from domains import BaseTask
+
 if CONFIG.DATASET.NAME == "tau2":
     from domains.tau2.prompts import system_prompt, user_prompt, assess_end_conversation
     from domains.tau2.task import load_tasks
@@ -58,8 +60,8 @@ def human_interaction() -> None:
         agent.shutdown()
 
 
-def _run_once(user_task: Any):
-    agent = ReActAgent(system_prompt=system_prompt())
+def _run_once(user_task: BaseTask):
+    agent = ReActAgent(system_prompt=system_prompt(), task_arg=user_task.task_arg())
     user = UserSimulator(system_prompt=user_prompt(user_task))
     if CONFIG.AGENT.AGENT_INITIAL_MESSAGE:
         agent_message = agent.initiate_conversation()

@@ -10,6 +10,17 @@ import json
 
 # set context_init_config
 def _load_context() -> None:
+    if CONFIG.IDX is None:
+        default_fixed_context = FixedContext()
+        fixed_context.set(default_fixed_context)
+        default_context_state = ContextState()
+        context_state.set(default_context_state)
+        default_task_config = TaskConfig()
+        task_config.set(default_task_config)
+        tool_execution_errors_during_runtime.set([])
+        policy_errors_during_runtime.set([])
+        return
+
     assert isinstance(CONFIG.IDX, str), "Config idx must be a string."
     assert isinstance(CONFIG.DATASET.PATH, str), "Dataset path must be a string."
 

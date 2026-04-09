@@ -66,6 +66,9 @@ class Task(BaseTask):
             ]
         )
 
+    def task_arg(self) -> List[str]:
+        return ["--id", self.task_id]
+
 
 def load_tasks() -> List[Task]:
     path = simulation_config.TASK_FILE

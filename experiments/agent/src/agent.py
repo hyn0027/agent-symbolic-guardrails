@@ -16,7 +16,7 @@ safeguard_config = CONFIG.SAFEGUARD
 
 
 class ReActAgent:
-    def __init__(self, system_prompt: str):
+    def __init__(self, system_prompt: str, task_arg: Optional[List[str]] = None):
         assert isinstance(agent_config.MODEL, str), "MODEL must be a string."
         self.model = agent_config.MODEL
         assert isinstance(
@@ -24,6 +24,7 @@ class ReActAgent:
         ), "TEMPERATURE must be a float."
         self.temperature = agent_config.TEMPERATURE
         self.system_prompt = system_prompt
+        self.task_arg = task_arg if task_arg is not None else []
         self._initialize()
 
     def _initialize(self) -> None:
@@ -41,7 +42,9 @@ class ReActAgent:
         ), "MCP_SERVER_COMMAND_TEST_ARGS must be a string."
 
         self.mcp_client = MCPClient(
-            agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_TEST_ARGS
+            agent_config.MCP_SERVER_COMMAND,
+            agent_config.MCP_SERVER_COMMAND_TEST_ARGS,
+            self.task_arg,
         )
         self.loop.run_until_complete(self.mcp_client.initialize())
 
@@ -450,7 +453,9 @@ class ReActAgent:
 
         LOGGER.debug("Starting golden MCP client")
         golden_mcp_client = MCPClient(
-            agent_config.MCP_SERVER_COMMAND, agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS
+            agent_config.MCP_SERVER_COMMAND,
+            agent_config.MCP_SERVER_COMMAND_GOLDEN_ARGS,
+            self.task_arg,
         )
         golden_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(golden_loop)

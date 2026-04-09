@@ -11,7 +11,7 @@ class Config(dict):
         try:
             return Config(self[item]) if isinstance(self[item], dict) else self[item]
         except KeyError:
-            raise AttributeError(f"'Config' object has no attribute '{item}'")
+            return None
 
 
 def load_config(config_path: Optional[str] = None) -> Config:
