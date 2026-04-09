@@ -32,6 +32,8 @@ USER_AS_A_TOOL_ACTION_NAMES = [
     "disambiguate_with_user_tool_arguments",
     "ask_user_for_confirmation",
 ]
+RESPOND_ACTION_NAME = "respond"
+RESPOND_ACTION_FIELD_NAME = "content"
 
 
 def consistent_hash(
@@ -154,6 +156,59 @@ def evaluate_single(
 
             return r_actions_final, r_actions_intermediate, r_actions, reward_delta
 
+        def calculate_tool_subset_reward(
+            performed_actions: List,
+        ) -> Tuple[Optional[float], Optional[List[str]], float]:
+            """
+            Calculate tool subset reward (coverage of required information-gathering tools).
+
+            Args:
+                task: The task being evaluated
+                performed_actions: List of actions performed by the agent
+
+            Returns:
+                Tuple of (r_tool_subset, tool_subset_missing_tools, reward_delta)
+            """
+            if is_hallucination_task(task.task_type):
+                return None, None, 0.0
+
+            gt_action_names = {
+                action.name
+                for action in task.actions
+                if action.name != RESPOND_ACTION_NAME
+            }
+            performed_action_names = {action["name"] for action in performed_actions}
+
+            # Calculate missing tools from ground truth
+            tool_subset_missing_tools = list(gt_action_names - performed_action_names)
+            r_tool_subset = gt_action_names.issubset(performed_action_names)
+
+            if not r_tool_subset:
+                return 0.0, tool_subset_missing_tools, -1.0
+            else:
+                return 1.0, tool_subset_missing_tools, 0.0
+
+        def calculate_tool_execution_reward(
+            score_tool_execution_errors: bool,
+        ) -> Tuple[float, List, float]:
+            """
+            Calculate tool execution error reward.
+
+            Args:
+                score_tool_execution_errors: Whether to score tool execution errors
+
+            Returns:
+                Tuple of (r_tool_execution, tool_execution_errors, reward_delta)
+            """
+            tool_execution_errors = agent.call_mcp_tool_without_recording(
+                "get_tool_execution_errors_during_runtime", {}
+            )
+
+            if score_tool_execution_errors and len(tool_execution_errors) > 0:
+                return 0.0, tool_execution_errors, -1.0
+            else:
+                return 1.0, tool_execution_errors, 0.0
+
         reward = 1.0
         performed_actions = agent.fetch_successful_tool_call_history()
 
@@ -184,24 +239,21 @@ def evaluate_single(
 
         # print(r_actions_final, r_actions_intermediate, r_actions, reward_delta)
 
-        # TODO
-        return
-
         # ==== Tool Subset Evaluation Reward ====
         r_tool_subset, tool_subset_missing_tools, reward_delta = (
-            calculate_tool_subset_reward(
-                task=self.task, performed_actions=performed_actions
-            )
+            calculate_tool_subset_reward(performed_actions=performed_actions)
         )
         reward += reward_delta
 
         # ==== Tool-Execution-Error-Calculations ====
         r_tool_execution, tool_execution_errors, reward_delta = (
             calculate_tool_execution_reward(
-                score_tool_execution_errors=self.score_tool_execution_errors
+                score_tool_execution_errors=eval_config.SCORE_TOOL_EXECUTION_ERRORS,
             )
         )
         reward += reward_delta
+        return
+        # TODO
 
         # ==== End-Conversation-Failure-Calculations ====
         r_user_end_conversation, end_conversation_keyword, reward_delta = (
