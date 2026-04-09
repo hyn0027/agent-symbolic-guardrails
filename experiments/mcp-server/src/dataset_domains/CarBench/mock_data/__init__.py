@@ -9,6 +9,7 @@ from dataset_domains.CarBench.context.fixed_context import FixedContext
 
 from .data_manager import DataManager
 import contextlib, io, os
+from config_loader import CONFIG
 
 # Define lists (you can choose one list or separate ones)
 ALL_STATE_MODELS = [ContextState]
@@ -20,26 +21,7 @@ ALL_MODELS = ALL_STATE_MODELS + ALL_CONTEXT_MODELS
 
 def _resolve_data_directory() -> str:
     """Download mock data JSONL files from HuggingFace and return the cached path."""
-    from huggingface_hub import snapshot_download
-    from huggingface_hub.utils import disable_progress_bars
-    from huggingface_hub import logging as hf_logging
-
-    repo_id = "johanneskirmayr/car-bench-dataset"
-
-    disable_progress_bars()
-    hf_logging.set_verbosity_error()
-
-    with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(
-        io.StringIO()
-    ):
-        local_dir = snapshot_download(
-            repo_id=repo_id,
-            repo_type="dataset",
-            allow_patterns=["mock_data/**"],
-        )
-
-    data_path = os.path.join(local_dir, "mock_data")
-    return data_path
+    return CONFIG.DATASET.MOCK_PATH
 
 
 class _LazyDataManager:

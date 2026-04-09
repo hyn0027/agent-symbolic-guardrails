@@ -38,3 +38,8 @@ def _load_context() -> None:
 
 
 _load_context()
+
+
+# print("invoking GetLocationIdByLocationName with input 'Stuttgart'...")
+# GetLocationIdByLocationName.invoke("Stuttgart")
+# print("Finished invoking GetLocationIdByLocationName.")
