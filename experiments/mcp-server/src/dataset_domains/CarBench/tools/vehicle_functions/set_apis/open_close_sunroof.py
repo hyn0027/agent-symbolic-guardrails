@@ -49,7 +49,17 @@ class OpenCloseSunroof(Tool):
                     response["errors"] = {"AUT-POL:005": error_message}
                     tool_execution_errors_during_runtime.get().append(error_message)
                     return json.dumps(response)
-
+        if safeguard_config.API_CHECK:  # AUT-POL:008
+            if percentage > 0:
+                all_previous_tool_calls_names = set(
+                    [tool_call["name"] for tool_call in Tool.all_tool_calls]
+                )
+                if "get_weather" not in all_previous_tool_calls_names:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:009: The sunroof can only be opened if the current weather condition is known (i.e., the get_weather tool has been called at least once before). Otherwise the operation will be blocked."
+                    response["errors"] = {"AUT-POL:009": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
         response["status"] = "SUCCESS"
         response["result"] = {"percentage": percentage}
         vehicle_ctx.update_state(sunroof_position=percentage)

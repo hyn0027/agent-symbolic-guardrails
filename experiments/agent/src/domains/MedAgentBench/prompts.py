@@ -1,6 +1,7 @@
 from config.loader import CONFIG
 from .task import Task
 from agent import ReActAgent
+from typing import Optional
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
@@ -16,7 +17,7 @@ def _domain_policy() -> str:
     return domain_policy
 
 
-def system_prompt() -> str:
+def system_prompt(task: Optional[Task]) -> str:
     assert isinstance(
         agent_config.SYSTEM_PROMPT_TEMPLATE, str
     ), "System prompt template must be a string."

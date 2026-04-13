@@ -32,7 +32,8 @@
         "enforceable": true,
         "sym guardrail": [
             "User Confirmation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "AUT-POL:010:When activating the window defrost for front or all windows, you must also automatically:\n\nSet the fan speed to level 2 if currently below\nSet the fan airflow direction to WINDSHIELD if the current direction does not include WINDSHIELD\nTurn on the air conditioning if not already active",

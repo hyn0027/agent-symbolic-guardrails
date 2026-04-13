@@ -7,6 +7,12 @@ from dataset_domains.CarBench.context.dynamic_context_state import (
     context_state,
 )
 from dataset_domains.CarBench.tools.tool import Tool
+from dataset_domains.CarBench.tools.tool_execution_error_evaluator import (
+    tool_execution_errors_during_runtime,
+)
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class SetFogLights(Tool):
@@ -23,6 +29,18 @@ class SetFogLights(Tool):
         """
         vehicle_ctx = context_state.get()
         response = {}
+
+        if safeguard_config.API_CHECK:  # AUT-POL:008
+            if on:
+                all_previous_tool_calls_names = set(
+                    [tool_call["name"] for tool_call in Tool.all_tool_calls]
+                )
+                if "get_weather" not in all_previous_tool_calls_names:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:008: The fog lights can only be turned on if the current weather condition is known (i.e., the get_weather tool has been called at least once before). Otherwise the operation will be blocked."
+                    response["errors"] = {"AUT-POL:009": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
 
         response["status"] = "SUCCESS"
         response["result"] = {"on": on}  #

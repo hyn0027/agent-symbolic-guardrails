@@ -62,7 +62,9 @@ def human_interaction() -> None:
 
 
 def _run_once(user_task: BaseTask):
-    agent = ReActAgent(system_prompt=system_prompt(), task_arg=user_task.task_arg())
+    agent = ReActAgent(
+        system_prompt=system_prompt(user_task), task_arg=user_task.task_arg()
+    )
     user = UserSimulator(system_prompt=user_prompt(user_task))
     if CONFIG.AGENT.AGENT_INITIAL_MESSAGE:
         agent_message = agent.initiate_conversation()

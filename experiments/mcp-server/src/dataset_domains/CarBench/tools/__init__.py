@@ -186,3 +186,63 @@ for tool in ALL_TOOLS:
     tool.register_tool()
 
 from .evaluator import *
+from dataset_domains.CarBench.context.dynamic_context_state import (
+    context_state,
+)
+from dataset_domains.CarBench.context.fixed_context import fixed_context
+
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
+    """
+    Get details for user confirmation. For test only.
+    """
+    vehicle_ctx = context_state.get()
+    fixed_ctx = fixed_context.get()
+    if func_name == "open_close_window":  # LLM-POL:007
+        percentage = func_args.get("percentage")
+        ac = vehicle_ctx.air_conditioning
+        if percentage > 25 and ac:
+            return f"Warning: You are about to open the window more than 25% while the AC is ON, which may lead to energy inefficiency."
+        return f"You are about to open the window to {percentage}%. Air conditioning is currently {'ON' if ac else 'OFF'}."
+    if func_name == "open_close_sunroof":  # LLM-POL:008, AUT-POL:009
+        percentage = func_args.get("percentage")
+        weather = GetWeather.invoke(
+            location_or_poi_id=fixed_ctx.current_location.id,
+            month=fixed_ctx.current_datetime.month,
+            day=fixed_ctx.current_datetime.day,
+            time_hour_24hformat=fixed_ctx.current_datetime.hour,
+            time_minutes=fixed_ctx.current_datetime.minute,
+        )
+        allowed_conditions = ["sunny", "cloudy", "partly_cloudy"]
+        if weather["status"] == "SUCCESS":
+            current_weather = weather["result"]["current_slot"]["condition"]
+            if percentage > 0 and current_weather not in allowed_conditions:
+                return f"Warning: You are about to open the sunroof to {percentage}%, but the current weather condition is {current_weather}, which may not be suitable for opening the sunroof."
+            elif percentage > 0:
+                return f"You are about to open the sunroof to {percentage}%. The current weather condition is {current_weather}."
+        elif percentage > 0:
+            return f"Warning: You are about to open the sunroof to {percentage}%, but the weather information cannot be retrieved at the moment. Please proceed with caution."
+    if func_name == "set_fog_lights":  # LLM-POL:008, AUT-POL:009
+        on = func_args.get("on")
+        weather = GetWeather.invoke(
+            location_or_poi_id=fixed_ctx.current_location.id,
+            month=fixed_ctx.current_datetime.month,
+            day=fixed_ctx.current_datetime.day,
+            time_hour_24hformat=fixed_ctx.current_datetime.hour,
+            time_minutes=fixed_ctx.current_datetime.minute,
+        )
+        allowed_conditions = ["cloudy_and_thunderstorm", "cloudy_and_hail"]
+        if weather["status"] == "SUCCESS":
+            current_weather = weather["result"]["current_slot"]["condition"]
+            if on and current_weather not in allowed_conditions:
+                return f"Warning: You are about to turn on the fog lights, but the current weather condition is {current_weather}, which may not be suitable for turning on the fog lights."
+            elif on:
+                return f"You are about to turn on the fog lights. The current weather condition is {current_weather}."
+        elif on:
+            return f"Warning: You are about to turn on the fog lights, but the weather information cannot be retrieved at the moment. Please proceed with caution."
+    return ""

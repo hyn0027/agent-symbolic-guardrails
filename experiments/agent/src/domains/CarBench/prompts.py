@@ -3,6 +3,7 @@ from agent import ReActAgent
 
 from config.loader import CONFIG
 from .task import Task, TaskType
+from .context import load_context, fixed_context
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
@@ -18,13 +19,23 @@ def _domain_policy() -> str:
     return domain_policy
 
 
-def system_prompt() -> str:
+def system_prompt(task: Optional[Task] = None) -> str:
     assert isinstance(
         agent_config.SYSTEM_PROMPT_TEMPLATE, str
     ), "System prompt template must be a string."
-    return agent_config.SYSTEM_PROMPT_TEMPLATE.format(
+    prompt = agent_config.SYSTEM_PROMPT_TEMPLATE.format(
         agent_instruction=agent_config.AGENT_INSTRUCTION,
         domain_policy=_domain_policy(),
+    )
+    load_context(task)
+    fixed_ctx = fixed_context.get()
+    prompt = prompt.replace(
+        "{{placeholder_location_based_on_task_context_init_config}}",
+        fixed_ctx.current_location.model_dump_json(),
+    )
+    prompt = prompt.replace(
+        "{{placeholder_datetime_based_on_task_context_init_config}}",
+        fixed_ctx.current_datetime.model_dump_json(),
     )
 
 

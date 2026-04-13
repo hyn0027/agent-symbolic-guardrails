@@ -5,9 +5,6 @@ import functools
 import inspect
 import json
 from .evaluator import append_current_state_hash
-from dataset_domains.CarBench.context.dynamic_context_state import (
-    context_state,
-)
 
 from config_loader import CONFIG
 
@@ -102,31 +99,9 @@ class Tool(abc.ABC):
                 safeguard_config.USER_CONFIRMATION
             )  # LLM-POL:004
         if name in ["open_close_window"]:  # LLM-POL:007
-            metadata["require_confirmation"] = (
-                safeguard_config.USER_CONFIRMATION
-            )
+            metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
 
         return metadata
-
-
-@mcp.tool(
-    meta={
-        "disclose_to_model": False,
-    }
-)
-def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
-    """
-    Get details for user confirmation. For test only.
-    """
-    vehicle_ctx = context_state.get()
-    if func_name == "open_close_window":  # LLM-POL:007
-        percentage = func_args.get("percentage")
-        ac = vehicle_ctx.air_conditioning
-        if percentage > 25 and ac:
-            return f"Warning: You are about to open the window more than 25% while the AC is ON, which may lead to energy inefficiency."
-        return f"You are about to open the window to {percentage}%. Air conditioning is currently {'ON' if ac else 'OFF'}."
-
-    return ""
 
 
 @mcp.tool(
