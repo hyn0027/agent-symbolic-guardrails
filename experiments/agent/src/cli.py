@@ -42,13 +42,13 @@ def human_interaction() -> None:
         while True:
             user_input = input("User: ")
             LOGGER.debug(f"User: {user_input}")
-            if assess_end_conversation(user_input):
+            if assess_end_conversation(user_input, agent):
                 LOGGER.info("Exiting the agent.")
                 agent.append_user_message(user_input)
                 break
             response = agent.ReAct_loop(user_input)
             LOGGER.info(f"Agent: {response}")
-            if assess_end_conversation(response) or agent.end_conversation:
+            if assess_end_conversation(response, agent) or agent.end_conversation:
                 LOGGER.info(f"Conversation ended by agent response.")
                 break
     except KeyboardInterrupt:
@@ -85,14 +85,14 @@ def _run_once(user_task: BaseTask):
                 break
             user_input = user.respond_to_customer_support(agent_message)
             LOGGER.info(f"User: (round {step_cnt}) {user_input}")
-            if assess_end_conversation(user_input):
+            if assess_end_conversation(user_input, agent):
                 LOGGER.info(f"Simulation ended due to user response.")
                 terminate_reason = TerminateReason.USER_STOP
                 agent.append_user_message(user_input)
                 break
             agent_message = agent.ReAct_loop(user_input)
             LOGGER.info(f"Agent: {agent_message}")
-            if assess_end_conversation(agent_message) or agent.end_conversation:
+            if assess_end_conversation(agent_message, agent) or agent.end_conversation:
                 LOGGER.info(f"Simulation ended due to agent response.")
                 terminate_reason = TerminateReason.AGENT_STOP
                 break

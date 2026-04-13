@@ -5,6 +5,7 @@ from typing import List, Any, Dict, Tuple, Optional, Union, Set
 from config.logger import LOGGER
 from config.loader import CONFIG
 import asyncio
+import json
 
 from agent import ReActAgent
 from mcp_client import MCPClient
@@ -15,6 +16,11 @@ from hashlib import sha256
 from .task import Task, TaskType
 from .context.dynamic_context_state import context_state, ContextState
 from .context import load_context
+from .policy_evaluator import (
+    load_policy_evaluator,
+    policy_errors_during_runtime,
+    BasePolicyEvaluatorEnv,
+)
 
 eval_config = CONFIG.EVAL
 
@@ -64,6 +70,10 @@ def evaluate_single(
 
     def eval_original_bench() -> Any:
         load_context(task)
+        tool_policy_error_during_runtime = agent.call_mcp_tool_without_recording(
+            "get_policy_errors_during_runtime", {}
+        )
+        policy_errors_during_runtime.set(tool_policy_error_during_runtime)
 
         def is_hallucination_task(task_type: TaskType) -> bool:
             """Check if the task is a hallucination task type."""
@@ -209,6 +219,269 @@ def evaluate_single(
             else:
                 return 1.0, tool_execution_errors, 0.0
 
+        def calculate_end_conversation_reward() -> Tuple[float, Optional[str], float]:
+            """
+            Calculate end conversation reward (user satisfaction).
+
+            Returns:
+                Tuple of (r_user_end_conversation, end_conversation_keyword, reward_delta)
+            """
+            end_conversation_fail = agent.end_conversation_falure
+
+            if len(end_conversation_fail) > 0:
+                end_conversation_keyword = end_conversation_fail[0][
+                    "conversation_control_keyword"
+                ]
+                return 0.0, end_conversation_keyword, -1.0
+            else:
+                return 1.0, None, 0.0
+
+        def calculate_output_reward() -> Tuple[Optional[float], Dict]:
+            """
+            Calculate output-string-based reward.
+
+            Returns:
+                Tuple of (r_outputs, outputs)
+            """
+            # Placeholder for future implementation
+            return None, {}
+
+        def filter_trajectory_messages(messages: List[Dict]) -> List[Dict]:
+            """
+            Filter trajectory messages to include only specified keys.
+
+            Args:
+                messages: List of conversation messages
+
+            Returns:
+                Filtered list of messages with core fields only
+            """
+            traj_messages = (
+                messages[1:] if messages[0]["role"] == "system" else messages
+            )
+            traj_messages_core = []
+
+            for msg in traj_messages:
+                filtered_msg = {}
+                for key in ["role", "content", "name", "tool_calls"]:
+                    if key in msg:
+                        if (
+                            key == "content"
+                            and "tool_calls" in msg
+                            and msg["tool_calls"]
+                        ):
+                            filtered_msg[key] = ""
+                        else:
+                            filtered_msg[key] = msg[key]
+                traj_messages_core.append(filtered_msg)
+
+            return traj_messages_core
+
+        def enhance_policy_line_with_context(
+            line: str,
+            performed_action_names: Set[str],
+            difference_is_more_than_3_degrees: bool,
+        ) -> Optional[str]:
+            """
+            Enhance policy line with context-specific information or skip if not applicable.
+
+            Args:
+                line: Policy line to enhance
+                performed_action_names: Set of action names performed by agent
+                difference_is_more_than_3_degrees: Whether temperature difference exceeds 3 degrees
+
+            Returns:
+                Enhanced policy line or None if policy should be skipped
+            """
+            if "REQUIRES_CONFIRMATION" in line:
+                if (
+                    len(
+                        performed_action_names.intersection(
+                            {
+                                "send_email",
+                                "open_close_trunk_door",
+                                "set_head_lights_high_beams",
+                            }
+                        )
+                    )
+                    > 0
+                ):
+                    return (
+                        line
+                        + " The tools that require confirmation are: 'send_email', 'open_close_trunk_door', and 'set_head_lights_high_beams'."
+                    )
+                return None
+
+            elif (
+                "windows are requested by the user to open more than 25% (absolute position) and AC is ON in that moment"
+                in line
+            ):
+                if len(performed_action_names.intersection({"open_close_window"})) > 0:
+                    return (
+                        line
+                        + " Consider that you can only know the AC status if it was turned on **before** the user request to open the windows. Mark not applicable, if th AC was not requested to turn on before, also  mark not applicable if the windows are closed or requested to close. Also this policy is one-way: applies only if user requests to open the windows, turn on AC request are handled in another policy."
+                    )
+                return None
+
+            elif "In certain weather conditions, the vehicle control actions" in line:
+                if (
+                    len(
+                        performed_action_names.intersection(
+                            {"open_close_sunroof", "set_fog_lights"}
+                        )
+                    )
+                    == 0
+                ):
+                    return None
+
+            elif "user sets the temperature to a single seat zone" in line:
+                if (
+                    len(
+                        performed_action_names.intersection({"set_climate_temperature"})
+                    )
+                    == 0
+                    or not difference_is_more_than_3_degrees
+                ):
+                    return None
+
+            elif (
+                "route is presented in detail (fastest route, shortest route, or upon user detail request)"
+                in line
+            ):
+                if (
+                    len(
+                        performed_action_names.intersection(
+                            {"get_routes_from_start_to_destination"}
+                        )
+                    )
+                    > 0
+                ):
+                    return (
+                        line
+                        + " For this policy, first reason which routes were presented in detail, then evaluate if these routes include a toll road - if true this would be included in the list of road types else it's not present, then evaluate the policy for the routes identified to be presented in detail."
+                    )
+                return None
+
+            elif (
+                "user asks for a multi-stop route and does not specify the route selection"
+                in line
+            ):
+                if (
+                    len(
+                        performed_action_names.intersection(
+                            {"get_routes_from_start_to_destination"}
+                        )
+                    )
+                    == 0
+                ):
+                    return None
+
+            return line
+
+        def calculate_policy_llm_errors(
+            policy_evaluator,
+            messages: List[Dict],
+            performed_action_names: Set[str],
+            difference_is_more_than_3_degrees: bool,
+        ) -> List[str]:
+            """
+            Calculate LLM-based policy errors.
+
+            Args:
+                policy_evaluator: Policy evaluator instance
+                messages: Conversation messages
+                performed_action_names: Set of action names performed
+                difference_is_more_than_3_degrees: Whether temperature difference exceeds 3 degrees
+
+            Returns:
+                List of policy error reasoning strings
+            """
+
+            from .wiki import WIKI_LLM_POL_LINES
+
+            traj_messages_core = filter_trajectory_messages(messages)
+            pol_llm_evaluation_results = []
+
+            for line in WIKI_LLM_POL_LINES:
+                enhanced_line = enhance_policy_line_with_context(
+                    line, performed_action_names, difference_is_more_than_3_degrees
+                )
+
+                if enhanced_line is None:
+                    continue
+
+                evaluation_result = policy_evaluator.evaluate_llm(
+                    policy=enhanced_line, trajectory=str(traj_messages_core)
+                )
+                pol_llm_evaluation_results.append(json.loads(evaluation_result))
+
+            policy_llm_errors = [
+                eval_result["reasoning"]
+                for eval_result in pol_llm_evaluation_results
+                if not eval_result["policy_followed"]
+            ]
+
+            return policy_llm_errors
+
+        def calculate_policy_reward(
+            evaluate_policy: bool,
+            score_policy_errors: bool,
+            policy_evaluator: BasePolicyEvaluatorEnv,
+            messages: List[Dict],
+            performed_action_names: Set[str],
+            difference_is_more_than_3_degrees: bool,
+        ) -> Tuple[Optional[float], List[str], List, float]:
+            """
+            Calculate policy compliance reward (LLM-based and AUT-based).
+
+            Args:
+                evaluate_policy: Whether to evaluate policy compliance
+                score_policy_errors: Whether to score policy errors
+                policy_evaluator: Policy evaluator instance
+                messages: Conversation messages
+                performed_action_names: Set of action names performed
+                difference_is_more_than_3_degrees: Whether temperature difference exceeds 3 degrees
+
+            Returns:
+                Tuple of (r_policy, policy_llm_errors, policy_errors_aut, reward_delta)
+            """
+            if is_hallucination_task(task.task_type):
+                return None, None, None, 0.0
+
+            policy_llm_errors = []
+            policy_errors_aut = []
+            r_policy = None
+            reward_delta = 0.0
+
+            # LLM-based Policy Error Calculation
+            if evaluate_policy:
+                r_policy = 1.0
+                policy_llm_errors = calculate_policy_llm_errors(
+                    policy_evaluator,
+                    messages,
+                    performed_action_names,
+                    difference_is_more_than_3_degrees,
+                )
+            else:
+                r_policy = None
+
+            # AUT-based Policy Error Calculation
+            if evaluate_policy:
+                traj_messages = (
+                    messages[1:] if messages[0]["role"] == "system" else messages
+                )
+                policy_evaluator.evaluate_aut(trajectory=traj_messages)
+                policy_errors_aut = policy_errors_during_runtime.get()
+
+            # Calculate reward penalty
+            if score_policy_errors and (
+                len(policy_errors_aut) > 0 or len(policy_llm_errors) > 0
+            ):
+                r_policy = 0.0
+                reward_delta = -1.0
+
+            return r_policy, policy_llm_errors, policy_errors_aut, reward_delta
+
         reward = 1.0
         performed_actions = agent.fetch_successful_tool_call_history()
 
@@ -251,9 +524,8 @@ def evaluate_single(
                 score_tool_execution_errors=eval_config.SCORE_TOOL_EXECUTION_ERRORS,
             )
         )
+
         reward += reward_delta
-        return
-        # TODO
 
         # ==== End-Conversation-Failure-Calculations ====
         r_user_end_conversation, end_conversation_keyword, reward_delta = (
@@ -267,11 +539,14 @@ def evaluate_single(
         # ==== Policy-Error-Calculations ====
         r_policy, policy_llm_errors, policy_errors_aut, reward_delta = (
             calculate_policy_reward(
-                task=self.task,
-                evaluate_policy=self.evaluate_policy,
-                score_policy_errors=self.score_policy_errors,
-                policy_evaluator=self.policy_evaluator,
-                messages=messages,
+                evaluate_policy=eval_config.EVALUATE_POLICY,
+                score_policy_errors=eval_config.SCORE_POLICY_ERRORS,
+                policy_evaluator=load_policy_evaluator(
+                    policy_evaluator_strategy=eval_config.POLICY_EVALUATOR_STRATEGY,
+                    model=eval_config.POLICY_EVALUATOR_MODEL,
+                    provider=eval_config.POLICY_EVALUATOR_PROVIDER,
+                ),
+                messages=agent.history,
                 performed_action_names=performed_action_names,
                 difference_is_more_than_3_degrees=difference_is_more_than_3_degrees,
             )
@@ -280,6 +555,9 @@ def evaluate_single(
 
         # Ensure reward doesn't go below 0
         reward = max(0.0, reward)
+
+        return
+        # TODO
 
         info = RewardInfo(
             r_actions=r_actions,

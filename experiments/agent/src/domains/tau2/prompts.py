@@ -1,6 +1,7 @@
 from config.loader import CONFIG
 from .task import Task
 from config.logger import LOGGER
+from agent import ReActAgent
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
@@ -47,14 +48,14 @@ def user_prompt(task: Task) -> str:
     )
 
 
-def assess_end_conversation(message: str) -> bool:
+def assess_end_conversation(message: str, agent: ReActAgent) -> bool:
     end_indicators = [
         "###STOP###",
         # "###TRANSFER###",
         "###OUT-OF-SCOPE###",
     ]
     for indicator in end_indicators:
-        
+
         if indicator in message:
             return True
     return False

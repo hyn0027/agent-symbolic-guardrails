@@ -626,3 +626,8 @@ class ReActAgent:
         return self.loop.run_until_complete(
             self.mcp_client.call_tool_without_recording(name, args)
         )
+
+    def append_new_attr(self, name: str, value: Any) -> None:
+        if hasattr(self, name):
+            return
+        setattr(self, name, value)

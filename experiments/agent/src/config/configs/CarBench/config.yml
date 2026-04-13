@@ -46,6 +46,11 @@ EVAL:
   MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/config.yml"
 
   SCORE_TOOL_EXECUTION_ERRORS: true
+  EVALUATE_POLICY: true
+  SCORE_POLICY_ERRORS: true
+  POLICY_EVALUATOR_STRATEGY: "llm"
+  POLICY_EVALUATOR_MODEL: "gpt-4o-mini"
+  POLICY_EVALUATOR_PROVIDER: "openai"
 
 SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/logs/"

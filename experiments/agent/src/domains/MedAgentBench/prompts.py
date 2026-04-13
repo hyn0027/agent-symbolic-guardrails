@@ -1,5 +1,6 @@
 from config.loader import CONFIG
 from .task import Task
+from agent import ReActAgent
 
 agent_config = CONFIG.AGENT
 user_config = CONFIG.USER
@@ -49,7 +50,7 @@ def user_prompt(task: Task) -> str:
         raise ValueError(f"Unsupported simulation type: {simulation_config.TYPE}")
 
 
-def assess_end_conversation(message: str) -> bool:
+def assess_end_conversation(message: str, agent: ReActAgent) -> bool:
     end_indicators = ["###STOP###"]
     for indicator in end_indicators:
         if indicator in message:

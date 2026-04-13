@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Optional
+from agent import ReActAgent
 
 from config.loader import CONFIG
 from .task import Task, TaskType
@@ -126,13 +127,25 @@ Remember: The goal is to create realistic, natural conversations while strictly 
     return build_system_prompt(task.persona, task.instruction)
 
 
-def assess_end_conversation(message: str) -> bool:
+def assess_end_conversation(message: str, agent: ReActAgent) -> bool:
     end_indicators = [
         "STOP",
         "HALLUCINATION_ERROR",
         "DISAMBIGUATION_ERROR",
         "OUT_OF_SCOPE",
+        "ASSISTANT_ACKNOWLEDGED_REMOVED_PART",
     ]
+    error_indicators = ["HALLUCINATION_ERROR", "DISAMBIGUATION_ERROR", "OUT_OF_SCOPE"]
+    agent.append_new_attr("end_conversation_falure", [])
+    for indicator in error_indicators:
+        if indicator in message:
+            agent.end_conversation_falure.append(
+                {
+                    "status": "FAILURE",
+                    "conversation_control_keyword": indicator,
+                }
+            )
+            return True
     for indicator in end_indicators:
         if indicator in message:
             return True
