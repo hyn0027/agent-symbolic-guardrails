@@ -10,6 +10,9 @@ from dataset_domains.CarBench.tools.tool import Tool
 from dataset_domains.CarBench.tools.tool_execution_error_evaluator import (
     tool_execution_errors_during_runtime,
 )
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class OpenCloseSunroof(Tool):
@@ -34,6 +37,18 @@ class OpenCloseSunroof(Tool):
             tool_execution_errors_during_runtime.get().append(error_message)
             response["errors"] = {"OPEN_CLOSE_SUNROOF_001": error_message}
             return json.dumps(response)
+
+        if safeguard_config.API_CHECK:  # AUT-POL:005
+            if percentage != 0:
+                if vehicle_ctx.sunshade_position != 100:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = (
+                        "Violating policy AUT-POL:005:The sunroof can only be opened if the sunshade is already fully opened or the sunshade is currently opened in parallel. Otherwise the operation will be blocked.\n"
+                        f"Current sunshade position: {vehicle_ctx.sunshade_position}%, requested sunroof position: {percentage}%."
+                    )
+                    response["errors"] = {"AUT-POL:005": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
 
         response["status"] = "SUCCESS"
         response["result"] = {"percentage": percentage}

@@ -314,6 +314,13 @@ class ReActAgent:
             if user_input.strip().upper().find("CONFIRM") == 0:
                 self.user_confirmation_hist.append("confirmed")
                 LOGGER.info("User confirmed the tool invocation.")
+                self.history.insert(
+                    -1,
+                    {
+                        "role": "user",
+                        "content": f"User confirmed the tool invocation with response: {self.tmp_user_response}",
+                    },
+                )
                 self._process_tool_call(
                     self.remaining_tool_call,
                     user_confirmed=True,
@@ -323,13 +330,21 @@ class ReActAgent:
             elif user_input.strip().upper().find("CANCEL") == 0:
                 self.user_confirmation_hist.append("canceled")
                 LOGGER.info("User canceled the tool invocation.")
-                self.history.append(
+                self.history.insert(
+                    -1,
                     {
-                        "role": "tool",
-                        "content": f"Tool invocation canceled by user response: {self.tmp_user_response}",
-                        "tool_call_id": self.remaining_tool_call.id,
-                    }
+                        "role": "user",
+                        "content": f"User canceled the tool invocation with response: {self.tmp_user_response}",
+                    },
                 )
+                self.history.pop()
+                # self.history.append(
+                #     {
+                #         "role": "tool",
+                #         "content": f"Tool invocation canceled by user response: {self.tmp_user_response}",
+                #         "tool_call_id": self.remaining_tool_call.id,
+                #     }
+                # )
                 self.remaining_tool_call = None
             else:
                 self.user_confirmation_hist.append("invalid_response")
@@ -363,6 +378,13 @@ class ReActAgent:
                     response.tool_calls[0], user_confirmed=False
                 )
                 if res is not None:
+                    self.history.insert(
+                        -1,
+                        {
+                            "role": "assistant",
+                            "content": res,
+                        },
+                    )
                     self.remaining_tool_call = response.tool_calls[0]
                     if safeguard_config.TOOL_CALL_DISCLOSURE:
                         disclosure_message = self.tool_call_disclosure_summary()

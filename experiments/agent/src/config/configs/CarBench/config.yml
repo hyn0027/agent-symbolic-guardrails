@@ -56,7 +56,7 @@ SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/logs/"
 
 SAFEGUARD:
-  USER_CONFIRMATION: false
+  USER_CONFIRMATION: TRUE
   USER_CONFIRMATION_TEMPLATE: |
     I am about to perform the following action:
     Tool: {tool_name}
@@ -66,11 +66,11 @@ SAFEGUARD:
     Please review the action above and confirm if you would like me to proceed.
     Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
 
-  TOOL_RESPONSE_TEMPLATE: false
+  TOOL_RESPONSE_TEMPLATE: true
 
-  TOOL_END_CONVERSATION_FLAG: true
+  TOOL_END_CONVERSATION_FLAG: false
 
-  TOOL_BLOCKING: true
+  TOOL_BLOCKING: false
 
   TOOL_CALL_DISCLOSURE: false
 

@@ -6,6 +6,7 @@ from config.logger import LOGGER
 from config.loader import CONFIG
 import asyncio
 import json
+from pydantic import BaseModel
 
 from agent import ReActAgent
 from mcp_client import MCPClient
@@ -14,7 +15,7 @@ from eval import TerminateReason
 from hashlib import sha256
 
 from .task import Task, TaskType
-from .context.dynamic_context_state import context_state, ContextState
+from .context.dynamic_context_state import context_state
 from .context import load_context
 from .policy_evaluator import (
     load_policy_evaluator,
@@ -40,6 +41,40 @@ USER_AS_A_TOOL_ACTION_NAMES = [
 ]
 RESPOND_ACTION_NAME = "respond"
 RESPOND_ACTION_FIELD_NAME = "content"
+
+
+class RewardOutputInfo(BaseModel):
+    r_outputs: float
+    outputs: Dict[str, bool]
+
+
+class RewardActionInfo(BaseModel):
+    r_actions: Optional[float] = None
+    gt_vehicle_state_hash: Optional[str] = None
+
+
+class RewardInfo(BaseModel):
+    r_actions: Optional[float] = None  # Legacy field for backward compatibility
+    r_actions_final: Optional[float] = None  # Final state correctness
+    r_actions_intermediate: Optional[float] = None  # Intermediate states correctness
+    r_tool_subset: Optional[float] = None
+    tool_subset_missing_tools: Optional[List[str]] = (
+        []
+    )  # Tools from ground truth that were not performed
+    r_tool_execution: Optional[float] = None
+    tool_execution_errors: Optional[List[str]] = []
+    r_policy: Optional[float] = None
+    policy_llm_errors: Optional[List[str]] = []
+    policy_aut_errors: Optional[List[str]] = []
+    r_user_end_conversation: Optional[float] = None
+    end_conversation_keyword: Optional[str] = None
+    r_outputs: Optional[float] = None
+    outputs: Optional[Dict[str, bool]] = {}
+
+
+class RewardResult(BaseModel):
+    reward: float
+    info: Union[RewardOutputInfo, RewardActionInfo, RewardInfo]
 
 
 def consistent_hash(
@@ -68,7 +103,7 @@ def evaluate_single(
     LOGGER.info("=========== Evaluating Single Simulation ===========")
     LOGGER.info(f"Evaluating simulation with terminate reason: {terminate_reason}")
 
-    def eval_original_bench() -> Any:
+    def eval_original_bench() -> RewardResult:
         load_context(task)
         tool_policy_error_during_runtime = agent.call_mcp_tool_without_recording(
             "get_policy_errors_during_runtime", {}
@@ -134,9 +169,7 @@ def evaluate_single(
             for action in task.actions:
                 call_tool_with_new_client(action.name, action.kwargs)
 
-            gt_state_hashes = call_tool_with_new_client("get_all_state_hashes", {}).get(
-                "result", []
-            )
+            gt_state_hashes = call_tool_with_new_client("get_all_state_hashes", {})
 
             # print(f"GT state hashes: {gt_state_hashes}")
             # print(f"Actual state hashes: {state_hashes}")
@@ -556,9 +589,6 @@ def evaluate_single(
         # Ensure reward doesn't go below 0
         reward = max(0.0, reward)
 
-        return
-        # TODO
-
         info = RewardInfo(
             r_actions=r_actions,
             r_actions_final=r_actions_final,
@@ -575,9 +605,11 @@ def evaluate_single(
             r_outputs=r_outputs,
             outputs=outputs,
         )
-        return RewardResult(reward=reward, info=info, actions=performed_actions)
+        return RewardResult(reward=reward, info=info)
 
-    eval_original_bench()
+    res = eval_original_bench()
+    LOGGER.info(f"RewardResult: {json.dumps(res.model_dump(), indent=2)}")
+    return res
 
 
 def aggregate_evals(res_list: List) -> None:

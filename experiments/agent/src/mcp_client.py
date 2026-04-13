@@ -149,7 +149,7 @@ class MCPClient:
             res = self._tool_call_res_to_json(result)
             if res["is_error"]:
                 return {"error": res["data"]}
-            return res["structured_content"]
+            return res["structured_content"]["result"]
         except Exception as e:
             return {"error": str(e)}
 

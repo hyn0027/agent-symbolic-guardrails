@@ -8,21 +8,24 @@
         "enforceable": true,
         "sym guardrail": [
             "User Confirmation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "AUT-POL:005:The sunroof can only be opened if the sunshade is already fully opened or the sunshade is currently opened in parallel. Otherwise the operation will be blocked.",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "LLM-POL:007:If windows are requested by the user to open more than 25% (absolute position) and AC is ON in that moment, prompt for confirmation and warn about energy inefficiency.",
         "enforceable": true,
         "sym guardrail": [
             "User Confirmation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "LLM-POL:008:AUT-POL:009:In certain weather conditions, the vehicle control actions require explicit expressive user confirmation (yes) to proceed:\nIf the sunroof should be opened, and the weather at the current location is not one of sunny, cloudy, or partly_cloudy.\nIf the fog lights should be set, and the weather at the current location is not one of cloudy_and_thunderstorm, or cloudy_and_hail.",

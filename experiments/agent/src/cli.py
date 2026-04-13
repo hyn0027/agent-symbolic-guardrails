@@ -57,6 +57,7 @@ def human_interaction() -> None:
         LOGGER.info("TOOL ERROR STATISTICS:")
         tool_error_stats = agent.report_tool_error_statistics()
         LOGGER.info(json.dumps(tool_error_stats, indent=2))
+        agent.log_history()
         agent.shutdown()
 
 
