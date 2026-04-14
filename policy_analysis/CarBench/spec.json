@@ -40,21 +40,24 @@
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "AUT-POL:011:When setting the air conditioning to ON, you must automatically:\n\nClose all windows if they are open more than 20% (absolute position)\nSet fan speed is to level 1 if currently at 0",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "LLM-POL:012:If the user sets the temperature to a single seat zone and the resulting temperature difference after execution to the other seat zones is more than 3 degrees Celsius, then the user must be informed about it.",
         "enforceable": true,
         "sym guardrail": [
             "Response Template"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "AUT-POL:013:When activating fog lights, you must automatically:\n\nCheck if low beam headlights are ON, and if not, activate them.\nCheck if high beam headlights are OFF, and if not, deactivate them.",

@@ -10,6 +10,9 @@ from dataset_domains.CarBench.tools.tool import Tool
 from dataset_domains.CarBench.tools.tool_execution_error_evaluator import (
     tool_execution_errors_during_runtime,
 )
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class SetAirConditioning(Tool):
@@ -28,6 +31,39 @@ class SetAirConditioning(Tool):
         vehicle_ctx = context_state.get()
         response = {}
         # no errors yet for SetAirConditioning
+        if safeguard_config.API_CHECK:  # AUT-POL:011
+            if on:
+                previous_tool_calls = set(
+                    [tool_call["name"] for tool_call in Tool.all_tool_calls]
+                )
+                if (
+                    vehicle_ctx.window_driver_position > 20
+                    or vehicle_ctx.window_passenger_position > 20
+                    or vehicle_ctx.window_driver_rear_position > 20
+                    or vehicle_ctx.window_passenger_rear_position > 20
+                ):
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:011: When activating the air conditioning, all windows must be closed if they are open more than 20%. Please close all windows that are open more than 20%, before activating the air conditioning."
+                    response["errors"] = {"AUT-POL:011": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
+                if vehicle_ctx.fan_speed == 0:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:011: When activating the air conditioning, if the current fan speed is at level 0, the fan speed must be set to at least level 1. Please increase the fan speed to at least level 1 before activating the air conditioning."
+                    response["errors"] = {"AUT-POL:011": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
+                if not (
+                    "get_climate_settings" in previous_tool_calls
+                    or "set_fan_speed" in previous_tool_calls
+                ) or not (
+                    "get_vehicle_window_positions" in previous_tool_calls
+                    or "open_close_window" in previous_tool_calls
+                ):
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:011: When setting the air conditioning to ON, the system must have information about the current climate settings (either through get_climate_settings or through set_fan_speed) and the current window positions (either through get_vehicle_window_positions or open_close_window). Please retrieve the necessary climate settings and window position information before activating the air conditioning."
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
 
         response["status"] = "SUCCESS"
         response["result"] = {"on": on}

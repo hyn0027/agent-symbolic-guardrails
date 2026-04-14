@@ -200,14 +200,10 @@ If the user asks for something that invalidates the policy, you should reason "N
                         # AUT-POL:011
                         if not (
                             "get_climate_settings" in previous_tool_calls
-                            or (
-                                "open_close_window" in previous_tool_calls
-                                and "set_fan_speed" in previous_tool_calls
-                            )
-                            or not (
-                                "get_vehicle_window_positions" in previous_tool_calls
-                                or "open_close_window" in previous_tool_calls
-                            )
+                            or "set_fan_speed" in previous_tool_calls
+                        ) or not (
+                            "get_vehicle_window_positions" in previous_tool_calls
+                            or "open_close_window" in previous_tool_calls
                         ):
                             # AUT-POL:011
                             policy_errors_during_runtime.get().append(

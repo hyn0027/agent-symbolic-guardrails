@@ -218,6 +218,7 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
             time_hour_24hformat=fixed_ctx.current_datetime.hour,
             time_minutes=fixed_ctx.current_datetime.minute,
         )
+        weather = json.loads(weather) if isinstance(weather, str) else weather
         allowed_conditions = ["sunny", "cloudy", "partly_cloudy"]
         if weather["status"] == "SUCCESS":
             current_weather = weather["result"]["current_slot"]["condition"]
@@ -236,6 +237,7 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
             time_hour_24hformat=fixed_ctx.current_datetime.hour,
             time_minutes=fixed_ctx.current_datetime.minute,
         )
+        weather = json.loads(weather) if isinstance(weather, str) else weather
         allowed_conditions = ["cloudy_and_thunderstorm", "cloudy_and_hail"]
         if weather["status"] == "SUCCESS":
             current_weather = weather["result"]["current_slot"]["condition"]
@@ -245,4 +247,18 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
                 return f"You are about to turn on the fog lights. The current weather condition is {current_weather}."
         elif on:
             return f"Warning: You are about to turn on the fog lights, but the weather information cannot be retrieved at the moment. Please proceed with caution."
+    if func_name == "set_climate_temperature":
+        temperature = func_args.get("temperature")
+        seat_zone = func_args.get("seat_zone")
+        if seat_zone == "DRIVER":
+            current_passenger_temp = vehicle_ctx.climate_temperature_passenger
+            diff = abs(temperature - current_passenger_temp)
+            if diff > 3:
+                return f"Warning: You are about to set the temperature to {temperature}°C for the DRIVER seat, which will result in a temperature difference of {diff}°C compared to the current passenger seat temperature. This may cause discomfort for the passenger."
+        elif seat_zone == "PASSENGER":
+            current_driver_temp = vehicle_ctx.climate_temperature_driver
+            diff = abs(temperature - current_driver_temp)
+            if diff > 3:
+                return f"Warning: You are about to set the temperature to {temperature}°C for the PASSENGER seat, which will result in a temperature difference of {diff}°C compared to the current driver seat temperature. This may cause discomfort for the driver."
+
     return ""

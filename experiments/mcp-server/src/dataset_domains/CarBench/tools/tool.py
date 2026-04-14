@@ -100,7 +100,10 @@ class Tool(abc.ABC):
             )  # LLM-POL:004
         if name in ["open_close_window"]:  # LLM-POL:007
             metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
-
+        if name in ["open_close_sunroof", "set_fog_lights"]:  # LLM-POL:008, AUT-POL:009
+            metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
+        if name in ["set_climate_temperature"]:  # LLM-POL:012
+            metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
         return metadata
 
 

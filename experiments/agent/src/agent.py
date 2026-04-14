@@ -106,7 +106,7 @@ class ReActAgent:
 
         if safeguard_config.USER_CONFIRMATION and not user_confirmed:
             if tool_meta.get("require_confirmation", False):
-                LOGGER.debug(
+                LOGGER.info(
                     f"Tool '{tool_name}' requires user confirmation before invocation."
                 )
 
@@ -152,7 +152,7 @@ class ReActAgent:
             self.loop.run_until_complete(
                 self.mcp_client.save_state(self.golden_eval_path)
             )
-            LOGGER.debug(
+            LOGGER.info(
                 f"Successfully saved state for golden evaluation at path: {self.golden_eval_path}"
             )
         if (
@@ -178,14 +178,14 @@ class ReActAgent:
                 )
                 return None
 
-        LOGGER.debug(f"Invoking tool '{tool_name}'")
+        LOGGER.info(f"Invoking tool '{tool_name}'")
         tool_response = self.loop.run_until_complete(
             self.mcp_client.call_tool(tool_name, tool_args)
         )
-        LOGGER.debug(
+        LOGGER.info(
             f"Tool invocation completed. Tool: {tool_name}, Arguments: {tool_args}"
         )
-        LOGGER.debug(f"Tool Response: {tool_response}")
+        LOGGER.info(f"Tool Response: {tool_response}")
 
         success = "error" not in tool_response
         tool_call_content = (

@@ -37,6 +37,7 @@ def system_prompt(task: Optional[Task] = None) -> str:
         "{{placeholder_datetime_based_on_task_context_init_config}}",
         fixed_ctx.current_datetime.model_dump_json(),
     )
+    return prompt
 
 
 def user_prompt(task: Task) -> str:
