@@ -3,6 +3,10 @@ from typing import Any, Dict, List, Union
 
 from dataset_domains.CarBench.context.dynamic_context_state import (
     context_state,
+    check_waypoints_valid,
+)
+from dataset_domains.CarBench.context.fixed_context import (
+    fixed_context,
 )
 from dataset_domains.CarBench.mock_data import car_va_data_manager
 from dataset_domains.CarBench.tools.helper_functions import (
@@ -13,6 +17,9 @@ from dataset_domains.CarBench.tools.tool import Tool
 from dataset_domains.CarBench.tools.tool_execution_error_evaluator import (
     tool_execution_errors_during_runtime,
 )
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class NavigationDeleteOneWaypoint(Tool):
@@ -108,6 +115,19 @@ class NavigationDeleteOneWaypoint(Tool):
             tool_execution_errors_during_runtime.get().append(error_message)
             response["errors"] = {"NAVIGATION_DELETE_WAYPOINT_008": error_message}
             return json.dumps(response)
+
+        new_waypoints = (
+            vehicle_ctx.waypoints_id[:waypoint_idx_to_delete]
+            + vehicle_ctx.waypoints_id[waypoint_idx_to_delete + 1 :]
+        )
+        if safeguard_config.API_CHECK:  # AUT-POL:016
+            if not check_waypoints_valid(new_waypoints):
+                fixed_ctx = fixed_context.get()
+                error_message = f"Violating policy AUT-POL:016: The start of the overall route set always has to be the current car location. The updated waypoints list after adding the new waypoint does not start with the current car location. The current car location is '{fixed_ctx.current_location.id}'"
+                response["status"] = "REJECTED_BY_GUARDRAIL"
+                response["errors"] = {"AUT-POL:016": error_message}
+                policy_errors_during_runtime.get().append(error_message)
+                return json.dumps(response)
 
         vehicle_ctx.update_state(
             waypoints_id=vehicle_ctx.waypoints_id[:waypoint_idx_to_delete]

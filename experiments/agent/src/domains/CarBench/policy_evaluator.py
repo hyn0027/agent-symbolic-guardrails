@@ -112,6 +112,14 @@ If the user asks for something that invalidates the policy, you should reason "N
                     for tool_call in (step.get("tool_calls") or [])
                     if step["role"] == "assistant" and step.get("tool_calls")
                 ]
+                tool_call_res = trajectory[idx + 1]["content"]
+                if "Tool Response:" in tool_call_res:
+                    tool_call_res = tool_call_res.split("Tool Response:")[-1].strip()
+                tool_call_res = json.loads(tool_call_res)
+                tool_call_res_result = tool_call_res.get("result", {})
+                tool_call_res_result = json.loads(tool_call_res_result) if isinstance(tool_call_res_result, str) else tool_call_res_result
+                if tool_call_res_result.get("status") != "SUCCESS":
+                    continue
                 if "open_close_sunroof" in [
                     tool_call["function"]["name"] for tool_call in tool_calls
                 ]:

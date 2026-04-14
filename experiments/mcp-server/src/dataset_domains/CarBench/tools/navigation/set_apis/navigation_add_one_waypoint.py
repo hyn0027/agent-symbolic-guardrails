@@ -3,6 +3,10 @@ from typing import Any, Dict, List, Optional
 
 from dataset_domains.CarBench.context.dynamic_context_state import (
     context_state,
+    check_waypoints_valid,
+)
+from dataset_domains.CarBench.context.fixed_context import (
+    fixed_context,
 )
 from dataset_domains.CarBench.mock_data import car_va_data_manager
 from dataset_domains.CarBench.tools.helper_functions import (
@@ -13,6 +17,9 @@ from dataset_domains.CarBench.tools.tool import Tool
 from dataset_domains.CarBench.tools.tool_execution_error_evaluator import (
     tool_execution_errors_during_runtime,
 )
+from config_loader import CONFIG
+
+safeguard_config = CONFIG.SAFEGUARD
 
 
 class NavigationAddOneWaypoint(Tool):
@@ -197,6 +204,14 @@ class NavigationAddOneWaypoint(Tool):
             new_routes_list = current_routes[:idx_before] + [
                 route_id_leading_to_new_waypoint
             ]
+        if safeguard_config.API_CHECK:  # AUT-POL:016
+            if not check_waypoints_valid(new_waypoints_list):
+                fixed_ctx = fixed_context.get()
+                error_message = f"Violating policy AUT-POL:016: The start of the overall route set always has to be the current car location. The updated waypoints list after adding the new waypoint does not start with the current car location. The current car location is '{fixed_ctx.current_location.id}'"
+                response["status"] = "REJECTED_BY_GUARDRAIL"
+                response["errors"] = {"AUT-POL:016": error_message}
+                policy_errors_during_runtime.get().append(error_message)
+                return json.dumps(response)
 
         try:
             vehicle_ctx.update_state(

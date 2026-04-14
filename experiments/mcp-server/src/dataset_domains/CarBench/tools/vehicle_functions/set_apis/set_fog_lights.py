@@ -41,6 +41,35 @@ class SetFogLights(Tool):
                     response["errors"] = {"AUT-POL:009": error_message}
                     tool_execution_errors_during_runtime.get().append(error_message)
                     return json.dumps(response)
+        if safeguard_config.API_CHECK:  # AUT-POL:013
+            if on:
+                previous_tool_calls = set(
+                    [tool_call["name"] for tool_call in Tool.all_tool_calls]
+                )
+                if vehicle_ctx.head_lights_low_beams == False:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:013: When activating the fog lights, if the low beam headlights are currently OFF, they must be turned ON. Please turn on the low beam headlights before activating the fog lights."
+                    response["errors"] = {"AUT-POL:013": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
+                if vehicle_ctx.head_lights_high_beams == True:
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:013: When activating the fog lights, if the high beam headlights are currently ON, they must be turned OFF. Please turn off the high beam headlights before activating the fog lights."
+                    response["errors"] = {"AUT-POL:013": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
+                if not (
+                    "get_exterior_lights_status" in previous_tool_calls
+                    or (
+                        "set_head_lights_low_beams" in previous_tool_calls
+                        and "set_head_lights_high_beams" in previous_tool_calls
+                    )
+                ):
+                    response["status"] = "REJECTED_BY_GUARDRAIL"
+                    error_message = "Violating policy AUT-POL:013: When activating the fog lights, the system must check if low beam headlights are ON, and if not, activate them, and check if high beam headlights are OFF, and if not, deactivate them. Please ensure that the get_exterior_lights_status tool has been called at least once before, or that the set_head_lights_low_beams and set_head_lights_high_beams tools have been called at least once before activating the fog lights."
+                    response["errors"] = {"AUT-POL:013": error_message}
+                    tool_execution_errors_during_runtime.get().append(error_message)
+                    return json.dumps(response)
 
         response["status"] = "SUCCESS"
         response["result"] = {"on": on}  #

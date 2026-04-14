@@ -1,7 +1,7 @@
 import contextvars
 import threading
 from enum import Enum
-from typing import Union
+from typing import Union, List
 
 from pydantic import BaseModel, Field, ValidationError, ConfigDict
 
@@ -196,3 +196,15 @@ class ContextState(BaseModel):
                                 f"TECH-AUT-POL:016:The start of the overall route set always has to be the current car location."
                             )
 
+
+def check_waypoints_valid(value: List) -> bool:
+    from dataset_domains.CarBench.context.fixed_context import (
+        fixed_context,
+    )
+
+    fixed_ctx = fixed_context.get()
+    if not value:
+        return True
+    if value[0] != fixed_ctx.current_location.id:
+        return False
+    return True
