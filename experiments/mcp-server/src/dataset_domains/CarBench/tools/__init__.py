@@ -260,5 +260,8 @@ def get_user_confirmation_details(func_name, func_args: Dict[str, Any]) -> str:
             diff = abs(temperature - current_driver_temp)
             if diff > 3:
                 return f"Warning: You are about to set the temperature to {temperature}°C for the PASSENGER seat, which will result in a temperature difference of {diff}°C compared to the current driver seat temperature. This may cause discomfort for the driver."
-
+    if func_name == "get_routes_from_start_to_destination":
+        return f"Warning: You are geting the fastest route. If you wants more information on alternative routes, please specify it in your request. Also, please be aware that the route may include toll roads, details can be find in the tool response details."
+    if func_name == "get_current_navigation_state":
+        return f"Warning: You are getting the current navigation state, which may include sensitive information such as the current location and destination. Please make sure to handle this information with care. The current route may include toll roads, details can be find in the tool response details."
     return ""

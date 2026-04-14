@@ -481,11 +481,11 @@ class ReActAgent:
         )
         golden_loop = asyncio.new_event_loop()
         asyncio.set_event_loop(golden_loop)
-        LOGGER.debug("Initializing golden MCP client")
+        LOGGER.info("Initializing golden MCP client")
         golden_loop.run_until_complete(golden_mcp_client.initialize())
         LOGGER.debug("Golden MCP client initialized")
         all_tools = golden_mcp_client.list_OPENAI_tools()
-        LOGGER.debug(
+        LOGGER.info(
             f"loading states for golden evaluation from path: {self.golden_eval_path}"
         )
         golden_loop.run_until_complete(

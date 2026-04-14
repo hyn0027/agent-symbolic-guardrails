@@ -103,6 +103,7 @@ def _run_once(user_task: BaseTask):
     except KeyboardInterrupt:
         LOGGER.info("Exiting the agent due to keyboard interrupt.")
     finally:
+        # agent.log_history()
         agent.shutdown()
     return eval_res
 

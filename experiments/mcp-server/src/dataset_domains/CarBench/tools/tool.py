@@ -6,6 +6,11 @@ import inspect
 import json
 from .evaluator import append_current_state_hash
 
+from dataset_domains.CarBench.context.dynamic_context_state import (
+    ContextState,
+    context_state,
+)
+from dataset_domains.CarBench.context.fixed_context import FixedContext, fixed_context
 from config_loader import CONFIG
 
 safeguard_config = CONFIG.SAFEGUARD
@@ -72,6 +77,8 @@ class Tool(abc.ABC):
     def after_invoke(cls, result, *args, **kwargs) -> None:
         append_current_state_hash()
         result = json.loads(result) if isinstance(result, str) else result
+        if "status" not in result:
+            return
         if result["status"] == "SUCCESS":
             cls.all_tool_calls.append(
                 {
@@ -83,8 +90,12 @@ class Tool(abc.ABC):
             )
         elif result["status"] == "FAILURE":
             cls.raise_count_with_type["implemented"] += 1
+            if safeguard_config.RAISE_ERROR_IF_FAILED:
+                raise ValueError(result["errors"])
         elif result["status"] == "REJECTED_BY_GUARDRAIL":
             cls.raise_count_with_type["api_check"] += 1
+            if safeguard_config.RAISE_ERROR_IF_FAILED:
+                raise ValueError(result["errors"])
 
     @classmethod
     def get_metadata(cls) -> dict[str, Any]:
@@ -104,6 +115,13 @@ class Tool(abc.ABC):
             metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
         if name in ["set_climate_temperature"]:  # LLM-POL:012
             metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
+        if name in [
+            "get_current_navigation_state",
+            "get_routes_from_start_to_destination",
+        ]:  # LLM-POL:021
+            metadata["tool_call_disclosure"] = safeguard_config.TOOL_CALL_DISCLOSURE
+            # LLM-POL:022
+            metadata["require_confirmation"] = safeguard_config.USER_CONFIRMATION
         return metadata
 
 
@@ -113,9 +131,15 @@ class Tool(abc.ABC):
     }
 )
 def save_state(path: str) -> str:
-    raise NotImplementedError(
-        "This function is only for testing. It should not be called during actual evaluation."
-    )
+    vehicle_ctx = context_state.get()
+    fixed_ctx = fixed_context.get()
+    state = {
+        "vehicle_context": vehicle_ctx.model_dump(mode="json"),
+        "fixed_context": fixed_ctx.model_dump(mode="json"),
+    }
+    with open(path, "w") as f:
+        json.dump(state, f, indent=2)
+    return "State saved successfully."
 
 
 @mcp.tool(
@@ -124,9 +148,22 @@ def save_state(path: str) -> str:
     }
 )
 def load_state(path: str) -> str:
-    raise NotImplementedError(
-        "This function is only for testing. It should not be called during actual evaluation."
-    )
+    with open(path, "r") as f:
+        state = json.load(f)
+    # vehicle_ctx = ContextState.model_validate(state["vehicle_context"])
+    # fixed_ctx = FixedContext.model_validate(state["fixed_context"])
+    context_state.get().update_state(**state["vehicle_context"])
+    fixed_context.get().update_state(**state["fixed_context"])
+    return "State loaded successfully."
+
+
+@mcp.tool(
+    meta={
+        "disclose_to_model": False,
+    }
+)
+def get_vehicle_ctx() -> Dict:
+    return context_state.get()
 
 
 @mcp.tool(

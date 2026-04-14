@@ -70,6 +70,7 @@ class RewardInfo(BaseModel):
     end_conversation_keyword: Optional[str] = None
     r_outputs: Optional[float] = None
     outputs: Optional[Dict[str, bool]] = {}
+    notes: Optional[Dict] = None
 
 
 class RewardResult(BaseModel):
@@ -108,7 +109,7 @@ def evaluate_single(
         tool_policy_error_during_runtime = agent.call_mcp_tool_without_recording(
             "get_policy_errors_during_runtime", {}
         )
-        policy_errors_during_runtime.set(tool_policy_error_during_runtime)
+        policy_errors_during_runtime.set([])
 
         def is_hallucination_task(task_type: TaskType) -> bool:
             """Check if the task is a hallucination task type."""
@@ -503,7 +504,7 @@ def evaluate_single(
                 traj_messages = (
                     messages[1:] if messages[0]["role"] == "system" else messages
                 )
-                policy_evaluator.evaluate_aut(trajectory=traj_messages)
+                policy_evaluator.evaluate_aut(trajectory=traj_messages, agent=agent)
                 policy_errors_aut = policy_errors_during_runtime.get()
 
             # Calculate reward penalty
@@ -604,14 +605,21 @@ def evaluate_single(
             end_conversation_keyword=end_conversation_keyword,
             r_outputs=r_outputs,
             outputs=outputs,
+            notes={
+                "driver temp": climate_temperature_driver,
+                "passenger temp": climate_temperature_passenger,
+                "difference > 3 degrees": difference_is_more_than_3_degrees,
+                "tool_policy_errors_during_runtime": tool_policy_error_during_runtime,
+            },
         )
         return RewardResult(reward=reward, info=info)
 
     res = eval_original_bench()
     LOGGER.info(f"RewardResult: {json.dumps(res.model_dump(), indent=2)}")
+    res.info.notes["full_trajectory"] = agent.history
     return res
 
 
-def aggregate_evals(res_list: List) -> None:
+def aggregate_evals(res_list: List[RewardResult]) -> None:
     LOGGER.info("=========== Aggregating Evaluation Results ===========")
     LOGGER.info("Aggregate Evals Not Implemented Yet.")

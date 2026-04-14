@@ -3,10 +3,19 @@ import contextvars
 import enum
 import json
 from typing import Any, Dict, List, Optional, Union
+import asyncio
 
 from litellm import completion
 from pydantic import BaseModel
+from agent import ReActAgent
+from mcp_client import MCPClient
+
 from .context.dynamic_context_state import context_state
+
+from config.loader import CONFIG
+from config.logger import LOGGER
+
+eval_config = CONFIG.EVAL
 
 policy_errors_during_runtime: contextvars.ContextVar[List[str]] = (
     contextvars.ContextVar("policy_errors_during_runtime")
@@ -95,9 +104,40 @@ If the user asks for something that invalidates the policy, you should reason "N
         ]
         return self.generate_evaluation(self.messages)
 
-    def evaluate_aut(self, trajectory: List[Dict]) -> str:
+    def evaluate_aut(self, trajectory: List[Dict], agent: Optional[ReActAgent]) -> str:
+        if agent is None:
+            raise ValueError("Agent is required for evaluating AUT trajectory.")
+        new_mcp_client = MCPClient(
+            eval_config.MCP_SERVER_COMMAND,
+            eval_config.MCP_SERVER_COMMAND_EVAL_ARGS,
+            agent.task_arg,
+        )
+        new_loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(new_loop)
+        new_loop.run_until_complete(new_mcp_client.initialize())
 
-        vehicle_ctx = context_state.get()
+        def _shutdown_new_loop() -> None:
+            try:
+                pending = asyncio.all_tasks(loop=new_loop)
+                for task in pending:
+                    task.cancel()
+                new_loop.run_until_complete(
+                    asyncio.gather(*pending, return_exceptions=True)
+                )
+                new_loop.run_until_complete(new_loop.shutdown_asyncgens())
+            finally:
+                new_loop.close()
+
+        def call_tool_with_new_client(name: str, args: Dict) -> Dict:
+            try:
+                return new_loop.run_until_complete(
+                    new_mcp_client.call_tool_without_recording(name, args)
+                )
+            except Exception as e:
+                LOGGER.error(f"Error calling tool {name} with new client: {str(e)}")
+                return {}
+
+        # vehicle_ctx = context_state.get()
         # actions = [tool_call for step in trajectory for tool_call in step["tool_calls"] if step["role"] == "assistant"]
         for idx, step in enumerate(trajectory):
             if step["role"] == "assistant":
@@ -117,9 +157,20 @@ If the user asks for something that invalidates the policy, you should reason "N
                     tool_call_res = tool_call_res.split("Tool Response:")[-1].strip()
                 tool_call_res = json.loads(tool_call_res)
                 tool_call_res_result = tool_call_res.get("result", {})
-                tool_call_res_result = json.loads(tool_call_res_result) if isinstance(tool_call_res_result, str) else tool_call_res_result
+                tool_call_res_result = (
+                    json.loads(tool_call_res_result)
+                    if isinstance(tool_call_res_result, str)
+                    else tool_call_res_result
+                )
                 if tool_call_res_result.get("status") != "SUCCESS":
                     continue
+                call_tool_with_new_client(
+                    name=tool_calls[0]["function"]["name"],
+                    args=json.loads(tool_calls[0]["function"]["arguments"]),
+                )
+                ctx = call_tool_with_new_client(name="get_vehicle_ctx", args={})
+                context_state.set(ctx)
+                vehicle_ctx = context_state.get()
                 if "open_close_sunroof" in [
                     tool_call["function"]["name"] for tool_call in tool_calls
                 ]:
@@ -306,6 +357,8 @@ If the user asks for something that invalidates the policy, you should reason "N
                     policy_errors_during_runtime.get().append(
                         "TECH-AUT-POL:018: Only one navigation editing tool can be used in parallel per step."
                     )
+
+        _shutdown_new_loop()
 
     def get_total_cost(self) -> float:
         return self.total_cost

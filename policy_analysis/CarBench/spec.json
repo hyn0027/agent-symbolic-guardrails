@@ -88,28 +88,32 @@
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": "already implemented"
     },
     {
         "policy": "AUT-POL:018:If the navigation system is already active and the user wants to delete, replace or add a waypoint or destination, then the corresponding tools should be used as they do not reload the whole navigation system. If multiple waypoints should be edited, use the delete/replace/add tools multiple times in sequence. Do not use these tools in parallel as this will confuse the indexes of the waypoint order. A new navigation should only be set if the navigation system is inactive.",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": "already implemented"
     },
     {
         "policy": "AUT-POL:019:The route that is set in the navigation system always has to consist of at least a start and a destination, if there is no intermediate stop, then the destination cannot be deleted.",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": "already implemented"
     },
     {
         "policy":"LLM-POL:021:If a route is presented in detail (fastest route, shortest route, or upon user detail request), and the route includes toll roads, then the user must be informed about it.",
         "enforceable": true,
         "sym guardrail": [
             "Response Template"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "LLM-POL:022:If the user asks for a multi-stop route and does not specify the route selection, then take the fastest route proactively per route segment. Inform the user that you took the fastest alternative and ask if he wants more information on alternative routes. Still inform the user if one route segment of the chosen routes includes a toll road.",
@@ -117,20 +121,23 @@
         "sym guardrail": [
             "Information Flow",
             "Response Template"
-        ]
+        ],
+        "implemented": true
     },
     {
         "policy": "AUT-POL:023:For the calendar, only entries for the current day can be requested.",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": "already implemented"
     },
     {
         "policy": "AUT-POL:024:The weather can only be requested for the current day for a specified time.",
         "enforceable": true,
         "sym guardrail": [
             "API Validation"
-        ]
+        ],
+        "implemented": "already implemented"
     }
 ]
