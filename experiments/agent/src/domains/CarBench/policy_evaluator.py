@@ -155,7 +155,13 @@ If the user asks for something that invalidates the policy, you should reason "N
                 tool_call_res = trajectory[idx + 1]["content"]
                 if "Tool Response:" in tool_call_res:
                     tool_call_res = tool_call_res.split("Tool Response:")[-1].strip()
-                tool_call_res = json.loads(tool_call_res)
+                try:
+                    tool_call_res = json.loads(tool_call_res)
+                except json.JSONDecodeError as e:
+                    LOGGER.error(
+                        f"Error parsing tool call result as JSON: {tool_call_res}, original content: {trajectory[idx + 1]['content']}"
+                    )
+                    continue
                 tool_call_res_result = tool_call_res.get("result", {})
                 tool_call_res_result = (
                     json.loads(tool_call_res_result)

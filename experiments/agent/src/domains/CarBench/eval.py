@@ -894,7 +894,7 @@ def aggregate_evals(res_list: List[RewardResult]) -> None:
             "aggregated_result": agg_res,
             "config": CONFIG,
             "full_trajectory": full_trajectory,
-            "individual_results": res_list,
+            "individual_results": [res.model_dump(mode="json") for res in res_list],
         }
         json.dump(res, f, indent=2)
     LOGGER.info(

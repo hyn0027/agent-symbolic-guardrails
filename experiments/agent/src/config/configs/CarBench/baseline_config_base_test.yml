@@ -7,9 +7,9 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/CarBench/baseline_config.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/CarBench/baseline_config_base_test.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/CarBench/guardrail_config.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/CarBench/guardrail_config_base_test.yml"
 
   TEST_WITH_GOLDEN: true
 
@@ -40,10 +40,10 @@ USER:
   TEMPERATURE: 1.0
 
 EVAL:
-  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/CarBench/results.json"
+  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/baseline_results_base_test.json"
 
   MCP_SERVER_COMMAND: "start-mcp-server"
-  MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/baseline_config.yml"
+  MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/baseline_config_base_test.yml"
 
   SCORE_TOOL_EXECUTION_ERRORS: true
   EVALUATE_POLICY: true
