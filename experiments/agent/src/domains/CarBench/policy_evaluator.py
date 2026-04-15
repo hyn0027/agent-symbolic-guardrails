@@ -169,7 +169,7 @@ If the user asks for something that invalidates the policy, you should reason "N
                     args=json.loads(tool_calls[0]["function"]["arguments"]),
                 )
                 ctx = call_tool_with_new_client(name="get_vehicle_ctx", args={})
-                context_state.set(ctx)
+                context_state.get().update_state(**ctx)
                 vehicle_ctx = context_state.get()
                 if "open_close_sunroof" in [
                     tool_call["function"]["name"] for tool_call in tool_calls

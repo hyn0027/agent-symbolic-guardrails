@@ -105,7 +105,7 @@ class Tool(abc.ABC):
             "overwrite_input_schema": info["parameters"],
         }
 
-        if info["description"].startswith("REQUIRES_CONFIRMATION"):
+        if info["description"].find("REQUIRES_CONFIRMATION") != -1:
             metadata["require_confirmation"] = (
                 safeguard_config.USER_CONFIRMATION
             )  # LLM-POL:004

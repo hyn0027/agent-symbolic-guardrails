@@ -56,7 +56,7 @@ SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/logs/"
 
 SAFEGUARD:
-  USER_CONFIRMATION: true
+  USER_CONFIRMATION: false
   USER_CONFIRMATION_TEMPLATE: |
     I am about to perform the following action:
     Tool: {tool_name}
@@ -66,13 +66,13 @@ SAFEGUARD:
     Please review the action above and confirm if you would like me to proceed.
     Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
 
-  TOOL_RESPONSE_TEMPLATE: true
+  TOOL_RESPONSE_TEMPLATE: false
 
   TOOL_END_CONVERSATION_FLAG: true
 
-  TOOL_BLOCKING: true
+  TOOL_BLOCKING: false
 
-  TOOL_CALL_DISCLOSURE: true
+  TOOL_CALL_DISCLOSURE: false
 
   TOOL_CALL_DISCLOSURE_TEMPLATE: |
     Here is detailed information about tool calls the agent just made:
@@ -82,5 +82,5 @@ SAFEGUARD:
 
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/dataset/tasks/base_test.jsonl"
-  MAX_STEPS: 40
-  MAX_WORKERS: 20
+  MAX_STEPS: 20
+  MAX_WORKERS: 8

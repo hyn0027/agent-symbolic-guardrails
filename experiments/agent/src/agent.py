@@ -371,9 +371,10 @@ class ReActAgent:
                 return self.history[-1]["content"]
 
             response = self._call_LLM(self.history, self.tools)
-            self.history.append(response.to_dict())
 
             if response.tool_calls:
+                response.content = ""
+                self.history.append(response.to_dict())
                 res = self._process_tool_call(
                     response.tool_calls[0], user_confirmed=False
                 )
@@ -393,6 +394,7 @@ class ReActAgent:
                         return final_response
                     return res
             else:
+                self.history.append(response.to_dict())
                 assert isinstance(
                     response.content, str
                 ), "LLM response content is not a string."
