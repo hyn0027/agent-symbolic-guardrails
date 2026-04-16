@@ -68,7 +68,7 @@ class LLMPolicyEvaluatorEnv(BasePolicyEvaluatorEnv):
             custom_llm_provider=self.provider,
             messages=messages,
             response_format=PolicyEvaluatorResponseFormat,
-            temperature=0.0,
+            # temperature=0.0,
         )
         message = res.choices[0].message
         self.messages.append(message.model_dump())

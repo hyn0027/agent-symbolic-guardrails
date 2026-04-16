@@ -136,6 +136,7 @@ def save_state(path: str) -> str:
     state = {
         "vehicle_context": vehicle_ctx.model_dump(mode="json"),
         "fixed_context": fixed_ctx.model_dump(mode="json"),
+        "all_tool_calls": Tool.all_tool_calls,
     }
     with open(path, "w") as f:
         json.dump(state, f, indent=2)
@@ -154,6 +155,7 @@ def load_state(path: str) -> str:
     # fixed_ctx = FixedContext.model_validate(state["fixed_context"])
     context_state.get().update_state(**state["vehicle_context"])
     fixed_context.get().update_state(**state["fixed_context"])
+    Tool.all_tool_calls = state["all_tool_calls"]
     return "State loaded successfully."
 
 
