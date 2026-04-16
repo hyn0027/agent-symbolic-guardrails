@@ -1,13 +1,15 @@
-Generate policy:
-<https://platform.openai.com/logs/resp_08667cd6646ef3f4006983ac1e41288197b8d9f4ce0536d49e>
+# Record
 
-Make it concise:
-<https://platform.openai.com/logs/resp_08f126ebed63f460006983ad2d1a348196bf6aa0c6b3985d63>
+## Base policy generation
 
-Remove redundancy:
-<https://platform.openai.com/logs/resp_080f1a5491ac4f75006983aed6d11c81939bfa620b117c884e>
+Generate policy: prompt in `prompt.md`
 
-Decompose one entry into two:
+Make it concise: "Rewrite the following agent safety policy. Make it concise, but still clear.", then followed by the response generated in previous step.
+
+Remove redundancy: "There are overlapping rules in the provided agent policy. Identify and remove redundancies, and rewrite rules where necessary.", then followed by the response generated in previous steps.
+
+
+## Decompose one entry into two:
 
 Criteria:
 
