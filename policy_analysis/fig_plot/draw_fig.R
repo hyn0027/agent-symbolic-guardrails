@@ -17,7 +17,7 @@ colors <- list(
 # Top plot: enforceability
 # --------------------------
 df1 <- data.frame(
-  Benchmark = rep(c("tau2-Bench", "Car-Bench", "MedAgentBench"), each = 3),
+  Benchmark = rep(c("tau2-Bench", "CAR-bench", "MedAgentBench"), each = 3),
   Category = rep(c("Out of Scope", "Not Enforceable", "Enforceable"), times = 3),
   Value = c(
     69, 9, 42,
@@ -28,7 +28,7 @@ df1 <- data.frame(
 
 df1$Benchmark <- factor(
   df1$Benchmark,
-  levels = c("tau2-Bench", "Car-Bench", "MedAgentBench")
+  levels = c("tau2-Bench", "CAR-bench", "MedAgentBench")
 )
 
 df1 <- do.call(rbind, lapply(split(df1, df1$Benchmark), function(d) {
@@ -68,16 +68,16 @@ p1 <- ggplot(df1, aes(x = Benchmark, y = Prop, fill = Category)) +
   scale_x_discrete(
     labels = c(
       "tau2-Bench" = expression(tau^2 * "-Bench"),
-      "Car-Bench" = "Car-Bench",
+      "CAR-bench" = "CAR-bench",
       "MedAgentBench" = "MedAgentBench"
     )
   ) +
   labs(x = NULL, y = "Share", fill = NULL) +
-  theme_classic(base_size = 15, base_family = "serif") +
+  theme_classic(base_size = 14, base_family = "serif") +
   theme(
-    axis.text.x = element_text(size = 15, face = "bold"),
-    axis.text.y = element_text(size = 15),
-    axis.title.y = element_text(size = 15),
+    axis.text.x = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
     legend.position = "right",
     legend.text = element_text(size = 14),
     panel.border = element_blank()
@@ -90,7 +90,7 @@ ggsave("stacked_bar_benchmarks_enforceability.pdf", p1, width = 8, height = 2, b
 # Bottom plot: guardrail types
 # --------------------------
 df2 <- data.frame(
-  Benchmark = rep(c("tau2-Bench", "Car-Bench", "MedAgentBench"), each = 7),
+  Benchmark = rep(c("tau2-Bench", "CAR-bench", "MedAgentBench"), each = 7),
   Category = rep(c(
     "User Confirmation",
     "Schema Constraint",
@@ -102,14 +102,14 @@ df2 <- data.frame(
   ), times = 3),
   Value = c(
     1, 6, 1, 34, 0, 0, 0,   # tau2-Bench
-    3, 0, 2, 11, 0, 0, 1,   # Car-Bench
+    3, 0, 2, 11, 0, 0, 1,   # CAR-bench
     5, 2, 6, 16, 3, 2, 0    # MedAgentBench
   )
 )
 
 df2$Benchmark <- factor(
   df2$Benchmark,
-  levels = c("tau2-Bench", "Car-Bench", "MedAgentBench")
+  levels = c("tau2-Bench", "CAR-bench", "MedAgentBench")
 )
 
 df2$Category <- factor(
@@ -161,17 +161,17 @@ p2 <- ggplot(df2, aes(x = Benchmark, y = Prop, fill = Category)) +
   scale_x_discrete(
     labels = c(
       "tau2-Bench" = expression(tau^2 * "-Bench"),
-      "Car-Bench" = "Car-Bench",
+      "CAR-bench" = "CAR-bench",
       "MedAgentBench" = "MedAgentBench"
     )
   ) +
 #   guides(fill = guide_legend(nrow = 3, byrow = TRUE)) +
   labs(x = NULL, y = "Share", fill = NULL) +
-  theme_classic(base_size = 15, base_family = "serif") +
+  theme_classic(base_size = 14, base_family = "serif") +
   theme(
-    axis.text.x = element_text(size = 15, face = "bold"),
-    axis.text.y = element_text(size = 15),
-    axis.title.y = element_text(size = 15),
+    axis.text.x = element_text(size = 14, face = "bold"),
+    axis.text.y = element_text(size = 14),
+    axis.title.y = element_text(size = 14),
     legend.position = "right",
     legend.text = element_text(size = 14),
     panel.border = element_blank()
