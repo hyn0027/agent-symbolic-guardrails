@@ -129,13 +129,14 @@ If the user asks for something that invalidates the policy, you should reason "N
                 new_loop.close()
 
         def call_tool_with_new_client(name: str, args: Dict) -> Dict:
-            try:
-                return new_loop.run_until_complete(
-                    new_mcp_client.call_tool_without_recording(name, args)
-                )
-            except Exception as e:
-                LOGGER.error(f"Error calling tool {name} with new client: {str(e)}")
-                return {}
+            # try:
+            return new_loop.run_until_complete(
+                new_mcp_client.call_tool_without_recording(name, args)
+            )
+
+        # except Exception as e:
+        #     LOGGER.error(f"Error calling tool {name} with new client: {str(e)}")
+        #     return {}
 
         # vehicle_ctx = context_state.get()
         # actions = [tool_call for step in trajectory for tool_call in step["tool_calls"] if step["role"] == "assistant"]
@@ -152,6 +153,11 @@ If the user asks for something that invalidates the policy, you should reason "N
                     for tool_call in (step.get("tool_calls") or [])
                     if step["role"] == "assistant" and step.get("tool_calls")
                 ]
+                if idx + 1 >= len(trajectory):
+                    LOGGER.debug(
+                        f"No tool call result found for tool calls: {tool_calls}, trajectory index: {idx}, agent_id: {agent.task_arg}"
+                    )
+                    continue
                 tool_call_res = trajectory[idx + 1]["content"]
                 if "Tool Response:" in tool_call_res:
                     tool_call_res = tool_call_res.split("Tool Response:")[-1].strip()
@@ -177,6 +183,13 @@ If the user asks for something that invalidates the policy, you should reason "N
                 ctx = call_tool_with_new_client(name="get_vehicle_ctx", args={})
                 context_state.get().update_state(**ctx)
                 vehicle_ctx = context_state.get()
+                # LOGGER.debug(
+                #     f"Evaluating tool calls: {json.dumps(tool_calls, indent=2)}"
+                # )
+                # LOGGER.debug(
+                #     f"Vehicle context after tool calls: {json.dumps(vehicle_ctx.model_dump(mode='json'), indent=2)}"
+                # )
+                # LOGGER.debug(f"ctx: {json.dumps(ctx, indent=2)}")
                 if "open_close_sunroof" in [
                     tool_call["function"]["name"] for tool_call in tool_calls
                 ]:
@@ -285,6 +298,9 @@ If the user asks for something that invalidates the policy, you should reason "N
                             )
                             or vehicle_ctx.fan_speed == 0
                         ):
+                            LOGGER.warning(
+                                f"Windows positions: driver {vehicle_ctx.window_driver_position}, passenger {vehicle_ctx.window_passenger_position}, driver rear {vehicle_ctx.window_driver_rear_position}, passenger rear {vehicle_ctx.window_passenger_rear_position}, fan speed: {vehicle_ctx.fan_speed}"
+                            )
                             # AUT-POL:011
                             policy_errors_during_runtime.get().append(
                                 "AUT-POL:011: Policy not followed. Either one or more windows are open more than 20% or the fan speed is 0."

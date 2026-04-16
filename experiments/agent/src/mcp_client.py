@@ -135,23 +135,20 @@ class MCPClient:
         if not self.initialized:
             raise ValueError("MCP Client is not initialized. Call initialize() first.")
         if isinstance(arguments, str):
-            try:
-                arguments = json.loads(arguments)
-            except json.JSONDecodeError as e:
-                return {"error": f"Invalid JSON string for arguments: {str(e)}"}
+            arguments = json.loads(arguments)
         if not isinstance(arguments, dict):
-            return {
-                "error": "Arguments must be a dictionary or a JSON string representing a dictionary."
-            }
+            raise ValueError(
+                "Arguments must be a dictionary or a JSON string representing a dictionary."
+            )
+        async with self.client:
+            result = await self.client.call_tool(name=name, arguments=arguments)
+        res = self._tool_call_res_to_json(result)
+        if res["is_error"]:
+            return {"error": res}
         try:
-            async with self.client:
-                result = await self.client.call_tool(name=name, arguments=arguments)
-            res = self._tool_call_res_to_json(result)
-            if res["is_error"]:
-                return {"error": res["data"]}
             return res["structured_content"]["result"]
-        except Exception as e:
-            return {"error": str(e)}
+        except KeyError:
+            return res["structured_content"]
 
     async def report_error_statistics(self) -> Dict:
         """Call the report_error_statistics tool to get error statistics."""

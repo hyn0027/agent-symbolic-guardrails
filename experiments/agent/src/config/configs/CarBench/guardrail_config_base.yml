@@ -7,17 +7,17 @@ AGENT:
 
   MCP_SERVER_COMMAND: "start-mcp-server"
 
-  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/CarBench/baseline_config_base_test.yml"
+  MCP_SERVER_COMMAND_TEST_ARGS: "--config configs/CarBench/guardrail_config_base.yml"
 
-  MCP_SERVER_COMMAND_GOLDEN_ARGS: "--config configs/CarBench/guardrail_config_base_test.yml"
+  MCP_SERVER_COMMAND_GOLDEN_ARGS: null
 
-  TEST_WITH_GOLDEN: true
+  TEST_WITH_GOLDEN: false
 
   TEST_RAW_TOOL: false
 
-  SAVE_STATE_BASE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/tmp/"
+  SAVE_STATE_BASE_PATH: null
 
-  SAVE_STATE_EXTENTION: "json"
+  SAVE_STATE_EXTENTION: null
 
   MAX_GOLDEN_RETRIES: 5
 
@@ -40,10 +40,10 @@ USER:
   TEMPERATURE: 1.0
 
 EVAL:
-  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/baseline_results_base_test.json"
+  SAVE_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/guardrail_results_base.json"
 
   MCP_SERVER_COMMAND: "start-mcp-server"
-  MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/baseline_config_base_test.yml"
+  MCP_SERVER_COMMAND_EVAL_ARGS: "--config configs/CarBench/baseline_config_base.yml"
 
   SCORE_TOOL_EXECUTION_ERRORS: true
   EVALUATE_POLICY: true
@@ -56,7 +56,7 @@ SETTINGS:
   LOG_PATH: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/logs/"
 
 SAFEGUARD:
-  USER_CONFIRMATION: false
+  USER_CONFIRMATION: true
   USER_CONFIRMATION_TEMPLATE: |
     I am about to perform the following action:
     Tool: {tool_name}
@@ -66,13 +66,13 @@ SAFEGUARD:
     Please review the action above and confirm if you would like me to proceed.
     Please respond first with "CONFIRM" to proceed or "CANCEL" to abort. Then provide your additional notes after that if any.
 
-  TOOL_RESPONSE_TEMPLATE: false
+  TOOL_RESPONSE_TEMPLATE: true
 
   TOOL_END_CONVERSATION_FLAG: true
 
-  TOOL_BLOCKING: false
+  TOOL_BLOCKING: true
 
-  TOOL_CALL_DISCLOSURE: false
+  TOOL_CALL_DISCLOSURE: true
 
   TOOL_CALL_DISCLOSURE_TEMPLATE: |
     Here is detailed information about tool calls the agent just made:
@@ -81,6 +81,6 @@ SAFEGUARD:
   NO_TOOL_CALL_DISCLOSURE_MESSAGE: ""
 
 SIMULATION:
-  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/dataset/tasks/base_test.jsonl"
+  TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/dataset/tasks/base.jsonl"
   MAX_STEPS: 20
   MAX_WORKERS: 8

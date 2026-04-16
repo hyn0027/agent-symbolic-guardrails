@@ -163,7 +163,8 @@ def load_state(path: str) -> str:
     }
 )
 def get_vehicle_ctx() -> Dict:
-    return context_state.get()
+    ctx = context_state.get()
+    return ctx.model_dump(mode="json")
 
 
 @mcp.tool(
