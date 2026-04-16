@@ -2,7 +2,7 @@ DATASET:
   NAME: "CarBench"
 
 AGENT:
-  MODEL: "gpt-4o-mini"
+  MODEL: "gpt-5"
   TEMPERATURE: 1.0
 
   MCP_SERVER_COMMAND: "start-mcp-server"
@@ -36,7 +36,7 @@ AGENT:
   STRICT_TOOL_CALL: false
 
 USER:
-  MODEL: "gpt-4o-mini"
+  MODEL: "gpt-5"
   TEMPERATURE: 1.0
 
 EVAL:
@@ -49,7 +49,7 @@ EVAL:
   EVALUATE_POLICY: true
   SCORE_POLICY_ERRORS: true
   POLICY_EVALUATOR_STRATEGY: "llm"
-  POLICY_EVALUATOR_MODEL: "gpt-4o-mini"
+  POLICY_EVALUATOR_MODEL: "gpt-5"
   POLICY_EVALUATOR_PROVIDER: "openai"
 
 SETTINGS:
@@ -82,5 +82,5 @@ SAFEGUARD:
 
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/dataset/tasks/base.jsonl"
-  MAX_STEPS: 20
-  MAX_WORKERS: 8
+  MAX_STEPS: 40
+  MAX_WORKERS: 10

@@ -84,5 +84,5 @@ SAFEGUARD:
 
 SIMULATION:
   TASK_FILE: "/Users/yhong3/Documents/Research/Software Security/working_repo/mcp-agent/experiments/data/Car-Bench/dataset/tasks/base.jsonl"
-  MAX_STEPS: 20
-  MAX_WORKERS: 8
+  MAX_STEPS: 40
+  MAX_WORKERS: 10
