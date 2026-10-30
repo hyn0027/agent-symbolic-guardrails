@@ -1,0 +1,22 @@
+model: gpt-6-sol
+reasoning_effort: medium   # GPT-6 Astra / 6.1 Sol do not support "none"; null to omit
+max_concurrency: 8         # policies labeled in parallel
+max_retries: 3             # retries per API call
+limit: null                # label at most N policies not yet in labeled.csv; null = all
+prompt_cache_options:      # OpenAI prompt caching (GPT-5.6+); null for older models
+  mode: implicit           # breakpoint at the end of each new user message
+  ttl: 30m                 # 30m (cache write 1.25x) or 12h (cache write 2.5x)
+
+# USD per 1M tokens (from OpenAI's pricing page), used to report what each run costs.
+# write_30m / write_12h: cache-write prices (GPT-5.6+); omit them for older models.
+prices:
+  gpt-6-astra:   {input: 10.00, output: 50.00, cached: 1.00, write_30m: 12.50, write_12h: 25.00}
+  gpt-6.1-sol:   {input: 2.00,  output: 10.00, cached: 0.10, write_30m: 2.50,  write_12h: 5.00}
+  gpt-6.1-terra: {input: 1.00,  output: 5.00,  cached: 0.05, write_30m: 1.25,  write_12h: 2.50}
+  gpt-6-luna:    {input: 0.10,  output: 0.50,  cached: 0.01, write_30m: 0.125, write_12h: 0.25}
+  gpt-6-sol:     {input: 2.00,  output: 10.00, cached: 0.20, write_30m: 2.50,  write_12h: 5.00}
+  gpt-5.6-sol:   {input: 4.00,  output: 20.00, cached: 0.40, write_30m: 5.00,  write_12h: 10.00}
+  gpt-5.6-terra: {input: 2.00,  output: 12.00, cached: 0.20, write_30m: 2.50,  write_12h: 5.00}
+  gpt-5.6-luna:  {input: 0.20,  output: 1.20,  cached: 0.02, write_30m: 0.25,  write_12h: 0.50}
+  gpt-5.5:       {input: 5.00,  output: 30.00, cached: 0.50}
+  gpt-5.4:       {input: 2.50,  output: 15.00, cached: 0.25}
