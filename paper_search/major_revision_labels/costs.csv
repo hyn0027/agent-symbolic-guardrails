@@ -1,0 +1,469 @@
+2026-10-30T11:16:12,135285,DSLOB: A Synthetic Limit Order Book Dataset for Benchmarking Forecasting Algorithms under Distributional Shift,gpt-6.1-terra,21037,21034,0.001380
+2026-10-30T11:16:13,120297,Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,gpt-6.1-terra,185490,184269,0.013641
+2026-10-30T11:16:16,133864,DroidCall: A Dataset for LLM-powered Android Intent Invocation,gpt-6.1-terra,66253,66026,0.004459
+2026-10-30T11:16:16,123162,Towards Unifying Quantitative Security Benchmarking for Multi Agent Systems,gpt-6.1-terra,101867,100846,0.008070
+2026-10-30T11:16:17,130767,BarrierBench : Evaluating Large Language Models for Safety Verification in Dynamical Systems,gpt-6.1-terra,82684,82219,0.005785
+2026-10-30T11:16:18,136664,Knowledge Graph-Guided Multi-Agent Distillation for Reliable Industrial Question Answering with Datasets,gpt-6.1-terra,47253,47250,0.003005
+2026-10-30T11:16:20,149207,HumanAgencyBench: Scalable Evaluation of Human Agency Support in AI Assistants,gpt-6.1-terra,35241,35238,0.002185
+2026-10-30T11:16:21,170398,DialogGuard: Multi-Agent Psychosocial Safety Evaluation of Sensitive LLM Responses,gpt-6.1-terra,34407,34404,0.002128
+2026-10-30T11:16:25,170774,R-Judge: Benchmarking Safety Risk Awareness for LLM Agents,gpt-6.1-terra,49278,49275,0.003572
+2026-10-30T11:16:28,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6.1-terra,299339,298307,0.018607
+2026-10-30T11:16:28,172018,Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking,gpt-6.1-terra,37948,37945,0.002615
+2026-10-30T11:16:30,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6.1-terra,210236,209250,0.013551
+2026-10-30T11:16:31,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6.1-terra,204530,203560,0.013522
+2026-10-30T11:16:35,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6.1-terra,128378,127314,0.009772
+2026-10-30T11:16:38,152748,Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks,gpt-6.1-terra,285785,285312,0.016165
+2026-10-30T11:16:39,204384,Seeing is not always believing: Benchmarking Human and Model Perception of AI-Generated Images,gpt-6.1-terra,64609,64606,0.003508
+2026-10-30T11:16:41,203172,VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications,gpt-6.1-terra,192506,192290,0.010833
+2026-10-30T11:16:45,206604,Beyond Single-Value Metrics: Evaluating and Enhancing LLM Unlearning with Cognitive Diagnosis,gpt-6.1-terra,53594,53591,0.003173
+2026-10-30T11:16:46,198402,CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D,gpt-6.1-terra,214326,213887,0.012331
+2026-10-30T11:16:48,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6.1-terra,100592,99570,0.008387
+2026-10-30T11:16:51,231213,Knots: A Large-Scale Multi-Agent Enhanced Expert-Annotated Dataset and LLM Prompt Optimization for NOTAM Semantic Parsing,gpt-6.1-terra,38594,38591,0.002513
+2026-10-30T11:16:53,235718,Den-TP: A Density-Balanced Data Curation and Evaluation Framework for Trajectory Prediction,gpt-6.1-terra,31649,31646,0.001830
+2026-10-30T11:16:53,209841,Towards Comprehensive Stage-wise Benchmarking of Large Language Models in Fact-Checking,gpt-6.1-terra,177312,176798,0.011035
+2026-10-30T11:16:56,215286,ISD-Agent-Bench: A Comprehensive Benchmark for Evaluating LLM-based Instructional Design Agents,gpt-6.1-terra,70025,69802,0.004772
+2026-10-30T11:16:59,235724,GT-HarmBench: Benchmarking AI Safety Risks Through the Lens of Game Theory,gpt-6.1-terra,57265,57262,0.003261
+2026-10-30T11:16:59,219932,AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration,gpt-6.1-terra,43844,42702,0.006154
+2026-10-30T11:17:00,207543,Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms,gpt-6.1-terra,271236,270208,0.017077
+2026-10-30T11:17:06,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6.1-terra,125910,124960,0.009277
+2026-10-30T11:17:10,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6.1-terra,311535,310473,0.019232
+2026-10-30T11:20:38,244706,SAGE: A Generic Framework for LLM Safety Evaluation,gpt-6.1-terra,45174,45171,0.002717
+2026-10-30T11:20:39,240063,$\texttt{BluePrint}$: A Social Media User Dataset for LLM Persona Evaluation and Training,gpt-6.1-terra,28937,28934,0.001885
+2026-10-30T11:20:39,237948,EVALOOOP: A Self-Consistency-Centered Framework for Assessing Large Language Model Robustness in Programming,gpt-6.1-terra,40165,40162,0.002516
+2026-10-30T11:20:44,254820,Can LLMs Write Faithfully? An Agent-Based Evaluation of LLM-generated Islamic Content,gpt-6.1-terra,16977,16974,0.001767
+2026-10-30T11:20:45,254650,JAILJUDGE: A Comprehensive Jailbreak Judge Benchmark with Multi-Agent Enhanced Explanation Evaluation Framework,gpt-6.1-terra,64352,64349,0.003735
+2026-10-30T11:20:48,256935,MedRepBench: A Comprehensive Benchmark for Medical Report Interpretation,gpt-6.1-terra,22316,22313,0.001569
+2026-10-30T11:20:55,236558,Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs,gpt-6.1-terra,136109,135033,0.010373
+2026-10-30T11:20:56,238938,HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies,gpt-6.1-terra,183533,182324,0.013934
+2026-10-30T11:20:57,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",gpt-6.1-terra,104026,102849,0.009175
+2026-10-30T11:20:57,241584,MAD-Fact: A Multi-Agent Debate Framework for Long-Form Factuality Evaluation in LLMs,gpt-6.1-terra,167714,167091,0.012096
+2026-10-30T11:20:59,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6.1-terra,458393,457369,0.026320
+2026-10-30T11:21:02,267814,Put Your Money Where Your Mouth Is: Evaluating Strategic Planning and Execution of LLM Agents in an Auction Arena,gpt-6.1-terra,56401,56398,0.003283
+2026-10-30T11:21:05,276026,WGSR-Bench: Wargame-based Game-theoretic Strategic Reasoning Benchmark for Large Language Models,gpt-6.1-terra,39317,39314,0.002514
+2026-10-30T11:21:05,278937,"GAPS: A Clinically Grounded, Automated Benchmark for Evaluating AI Clinicians",gpt-6.1-terra,25305,25302,0.001828
+2026-10-30T11:21:13,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6.1-terra,293795,292777,0.017878
+2026-10-30T11:21:16,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6.1-terra,248252,247261,0.015843
+2026-10-30T11:21:16,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6.1-terra,154231,153238,0.010679
+2026-10-30T11:21:18,279117,DeepScholar-Bench: A Live Benchmark and Automated Evaluation for Generative Research Synthesis,gpt-6.1-terra,141846,141596,0.010076
+2026-10-30T11:21:25,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6.1-terra,353257,352173,0.021425
+2026-10-30T11:21:40,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,gpt-6.1-terra,899532,898548,0.048544
+2026-10-30T11:25:13,123162,Towards Unifying Quantitative Security Benchmarking for Multi Agent Systems,gpt-6.1-terra,101841,100842,0.008122
+2026-10-30T11:25:15,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6.1-terra,128273,127274,0.009464
+2026-10-30T11:25:17,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,gpt-6.1-terra,178435,177434,0.012674
+2026-10-30T11:25:18,120297,Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,gpt-6.1-terra,185359,184231,0.013713
+2026-10-30T11:25:20,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6.1-terra,210235,209256,0.013508
+2026-10-30T11:25:20,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6.1-terra,100527,99531,0.008708
+2026-10-30T11:25:25,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6.1-terra,204487,203715,0.016222
+2026-10-30T11:25:26,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6.1-terra,299293,298291,0.018263
+2026-10-30T11:25:38,219932,AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration,gpt-6.1-terra,44162,42934,0.006733
+2026-10-30T11:25:40,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6.1-terra,125914,124968,0.008992
+2026-10-30T11:25:43,207543,Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms,gpt-6.1-terra,271393,270343,0.018391
+2026-10-30T11:25:46,236558,Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs,gpt-6.1-terra,136103,134908,0.010435
+2026-10-30T11:25:46,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6.1-terra,311470,310445,0.019270
+2026-10-30T11:25:51,238938,HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies,gpt-6.1-terra,183452,182282,0.014193
+2026-10-30T11:25:56,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6.1-terra,458393,457386,0.026544
+2026-10-30T11:26:02,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",gpt-6.1-terra,104017,102818,0.009386
+2026-10-30T11:26:10,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6.1-terra,154245,153240,0.011540
+2026-10-30T11:26:10,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6.1-terra,293743,292760,0.017908
+2026-10-30T11:26:14,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6.1-terra,353144,352113,0.021151
+2026-10-30T11:26:15,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6.1-terra,248285,247309,0.016082
+2026-10-30T11:26:18,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,gpt-6.1-terra,899479,898526,0.049084
+2026-10-30T11:35:32,123162,Towards Unifying Quantitative Security Benchmarking for Multi Agent Systems,gpt-6.1-terra,101981,100887,0.008298
+2026-10-30T11:35:33,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6.1-terra,128449,127344,0.009810
+2026-10-30T11:35:36,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,gpt-6.1-terra,178455,177408,0.012180
+2026-10-30T11:35:36,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6.1-terra,100553,99511,0.008089
+2026-10-30T11:35:37,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6.1-terra,210315,209259,0.013734
+2026-10-30T11:35:42,120297,Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,gpt-6.1-terra,185594,184260,0.014387
+2026-10-30T11:35:43,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6.1-terra,204576,203551,0.014540
+2026-10-30T11:35:44,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6.1-terra,299438,298296,0.018879
+2026-10-30T11:35:56,219932,AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration,gpt-6.1-terra,44319,43029,0.006815
+2026-10-30T11:35:57,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6.1-terra,125964,125142,0.008791
+2026-10-30T11:36:02,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6.1-terra,311583,310478,0.019291
+2026-10-30T11:36:02,207543,Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms,gpt-6.1-terra,271336,270221,0.017761
+2026-10-30T11:36:02,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",gpt-6.1-terra,20244,20241,0.001970
+2026-10-30T11:36:08,236558,Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs,gpt-6.1-terra,136143,135031,0.010413
+2026-10-30T11:36:10,238938,HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies,gpt-6.1-terra,183861,182471,0.014942
+2026-10-30T11:36:14,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6.1-terra,458334,457287,0.026604
+2026-10-30T11:36:25,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6.1-terra,154309,153232,0.011144
+2026-10-30T11:36:26,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6.1-terra,248252,247231,0.015799
+2026-10-30T11:36:29,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6.1-terra,293929,292824,0.018914
+2026-10-30T11:36:31,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6.1-terra,353118,352075,0.022239
+2026-10-30T11:36:36,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,gpt-6.1-terra,899584,898540,0.049048
+2026-10-30T11:38:03,111320,Do the Rewards Justify the Means? Measuring Trade-Offs Between Rewards and Ethical Behavior in the MACHIAVELLI Benchmark,gpt-6-sol,54462,0,0.137133
+2026-10-30T11:38:06,109833,SWE-MERA: A Dynamic Benchmark for Agenticly Evaluating Large Language Models on Software Engineering Tasks,gpt-6-sol,37921,18839,0.053640
+2026-10-30T11:38:06,114812,MedFact: Benchmarking the Fact-Checking Capabilities of Large Language Models on Chinese Medical Texts,gpt-6-sol,79625,0,0.200201
+2026-10-30T11:38:07,114559,"From AutoRecSys to AutoRecLab: A Call to Build, Evaluate, and Govern Autonomous Recommender-Systems Research Labs",gpt-6-sol,13341,6493,0.022416
+2026-10-30T11:38:12,115015,SastBench: A Benchmark for Testing Agentic SAST Triage,gpt-6-sol,84270,55950,0.084226
+2026-10-30T11:38:16,102065,ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks,gpt-6-sol,345675,230191,0.337914
+2026-10-30T11:38:18,114074,DrafterBench: Benchmarking Large Language Models for Tasks Automation in Civil Engineering,gpt-6-sol,180295,90032,0.247621
+2026-10-30T11:38:19,119852,Amelia: A Large Dataset and Benchmark for Airport Surface Movement Forecasting,gpt-6-sol,72706,0,0.182643
+2026-10-30T11:38:21,124057,EvalSVA: Multi-Agent Evaluators for Next-Gen Software Vulnerability Assessment,gpt-6-sol,27995,0,0.070996
+2026-10-30T11:38:22,117463,$C^3$-Bench: The Things Real Disturbing LLM based Agent in Multi-Tasking,gpt-6-sol,158840,79300,0.217037
+2026-10-30T11:38:24,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,gpt-6-sol,178744,142336,0.125060
+2026-10-30T11:38:29,135285,DSLOB: A Synthetic Limit Order Book Dataset for Benchmarking Forecasting Algorithms under Distributional Shift,gpt-6-sol,21036,0,0.053478
+2026-10-30T11:38:32,123162,Towards Unifying Quantitative Security Benchmarking for Multi Agent Systems,gpt-6-sol,102200,81014,0.074860
+2026-10-30T11:38:32,133864,DroidCall: A Dataset for LLM-powered Android Intent Invocation,gpt-6-sol,66276,33012,0.091889
+2026-10-30T11:38:33,130767,BarrierBench : Evaluating Large Language Models for Safety Verification in Dynamical Systems,gpt-6-sol,82747,54927,0.083351
+2026-10-30T11:38:34,120297,Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,gpt-6-sol,185779,147813,0.134890
+2026-10-30T11:38:36,136664,Knowledge Graph-Guided Multi-Agent Distillation for Reliable Industrial Question Answering with Datasets,gpt-6-sol,47252,0,0.119348
+2026-10-30T11:38:37,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6-sol,299589,239017,0.204516
+2026-10-30T11:38:37,149207,HumanAgencyBench: Scalable Evaluation of Human Agency Support in AI Assistants,gpt-6-sol,35240,0,0.089068
+2026-10-30T11:38:39,170398,DialogGuard: Multi-Agent Psychosocial Safety Evaluation of Sensitive LLM Responses,gpt-6-sol,34406,0,0.086833
+2026-10-30T11:38:42,170774,R-Judge: Benchmarking Safety Risk Awareness for LLM Agents,gpt-6-sol,49277,0,0.124751
+2026-10-30T11:38:44,172018,Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking,gpt-6-sol,37947,0,0.095866
+2026-10-30T11:38:45,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6-sol,210731,167911,0.147225
+2026-10-30T11:38:48,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6-sol,204922,163210,0.147984
+2026-10-30T11:38:53,203172,VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications,gpt-6-sol,192493,96144,0.262148
+2026-10-30T11:38:56,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6-sol,128525,102106,0.091561
+2026-10-30T11:38:56,198402,CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D,gpt-6-sol,214388,142686,0.210788
+2026-10-30T11:38:57,204384,Seeing is not always believing: Benchmarking Human and Model Perception of AI-Generated Images,gpt-6-sol,64608,0,0.162129
+2026-10-30T11:38:57,152748,Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks,gpt-6-sol,285879,190316,0.280886
+2026-10-30T11:39:01,206604,Beyond Single-Value Metrics: Evaluating and Enhancing LLM Unlearning with Cognitive Diagnosis,gpt-6-sol,53593,0,0.135031
+2026-10-30T11:39:05,231213,Knots: A Large-Scale Multi-Agent Enhanced Expert-Annotated Dataset and LLM Prompt Optimization for NOTAM Semantic Parsing,gpt-6-sol,38593,0,0.097541
+2026-10-30T11:39:07,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6-sol,100819,80007,0.073054
+2026-10-30T11:39:10,235718,Den-TP: A Density-Balanced Data Curation and Evaluation Framework for Trajectory Prediction,gpt-6-sol,31648,0,0.079809
+2026-10-30T11:39:10,215286,ISD-Agent-Bench: A Comprehensive Benchmark for Evaluating LLM-based Instructional Design Agents,gpt-6-sol,70035,34900,0.097195
+2026-10-30T11:39:12,209841,Towards Comprehensive Stage-wise Benchmarking of Large Language Models in Fact-Checking,gpt-6-sol,177432,118005,0.176054
+2026-10-30T11:39:14,235724,GT-HarmBench: Benchmarking AI Safety Risks Through the Lens of Game Theory,gpt-6-sol,57264,0,0.144188
+2026-10-30T11:39:18,207543,Bridging AI and Software Security: A Comparative Vulnerability Assessment of LLM Agent Deployment Paradigms,gpt-6-sol,271548,216571,0.188699
+2026-10-30T11:39:20,219932,AgentGuard: Repurposing Agentic Orchestrator for Safety Evaluation of Tool Orchestration,gpt-6-sol,44257,34674,0.039205
+2026-10-30T11:39:20,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6-sol,126228,100352,0.089003
+2026-10-30T11:39:28,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6-sol,311731,248724,0.214005
+2026-10-30T11:41:14,241584,MAD-Fact: A Multi-Agent Debate Framework for Long-Form Factuality Evaluation in LLMs,gpt-6-sol,55583,0,0.140036
+2026-10-30T11:41:31,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6-sol,154546,122977,0.109000
+2026-10-30T11:41:32,299107,Hijacking JARVIS: Benchmarking Mobile GUI Agents against Unprivileged Third Parties,gpt-6-sol,188426,150021,0.131999
+2026-10-30T11:41:32,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6-sol,248587,198217,0.170701
+2026-10-30T11:41:35,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6-sol,294166,234678,0.203668
+2026-10-30T11:41:39,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6-sol,353562,282146,0.243302
+2026-10-30T11:41:40,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6-sol,458731,366218,0.312429
+2026-10-30T11:41:41,314165,ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases,gpt-6-sol,200727,159945,0.143466
+2026-10-30T11:41:45,318912,VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents,gpt-6-sol,191538,152581,0.133311
+2026-10-30T11:41:56,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,gpt-6-sol,203894,162466,0.142296
+2026-10-30T11:42:05,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,gpt-6-sol,295791,235967,0.203866
+2026-10-30T11:42:07,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,gpt-6-sol,244927,195280,0.168326
+2026-10-30T11:42:07,378119,ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations,gpt-6-sol,151029,119997,0.110662
+2026-10-30T11:42:08,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,gpt-6-sol,441277,352389,0.302310
+2026-10-30T11:42:11,350004,CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions,gpt-6-sol,395408,315674,0.268922
+2026-10-30T11:42:13,331265,FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments,gpt-6-sol,159119,126656,0.116041
+2026-10-30T11:42:14,439138,Evaluating Control Protocols for Untrusted AI Agents,gpt-6-sol,53502,0,0.135053
+2026-10-30T11:42:22,405859,LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios,gpt-6-sol,221692,176731,0.153011
+2026-10-30T11:42:29,417671,ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents,gpt-6-sol,299625,239032,0.206371
+2026-10-30T11:42:30,432568,CORE: Full-Path Evaluation of LLM Agents Beyond Final State,gpt-6-sol,101613,80403,0.077718
+2026-10-30T11:47:41,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6-sol,128731,127369,0.035071
+2026-10-30T11:47:43,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,gpt-6-sol,178755,177534,0.045552
+2026-10-30T11:47:46,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6-sol,126266,125099,0.032140
+2026-10-30T11:47:48,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6-sol,210630,209403,0.052911
+2026-10-30T11:47:49,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6-sol,204954,203702,0.055583
+2026-10-30T11:47:51,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6-sol,311873,310607,0.071189
+2026-10-30T11:47:52,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6-sol,299624,298394,0.068336
+2026-10-30T11:47:52,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6-sol,101028,99774,0.028352
+2026-10-30T11:48:09,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6-sol,248504,247327,0.057370
+2026-10-30T11:48:11,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6-sol,154611,153382,0.039211
+2026-10-30T11:48:11,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6-sol,294021,292824,0.066930
+2026-10-30T11:48:17,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6-sol,458984,457476,0.104538
+2026-10-30T11:48:17,299107,Hijacking JARVIS: Benchmarking Mobile GUI Agents against Unprivileged Third Parties,gpt-6-sol,188705,187219,0.048441
+2026-10-30T11:48:18,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6-sol,353459,352208,0.081612
+2026-10-30T11:48:20,314165,ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases,gpt-6-sol,200718,199548,0.048567
+2026-10-30T11:48:22,318912,VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents,gpt-6-sol,191489,190309,0.048094
+2026-10-30T11:48:35,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,gpt-6-sol,204053,202819,0.051201
+2026-10-30T11:48:42,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,gpt-6-sol,441338,440153,0.096126
+2026-10-30T11:48:45,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,gpt-6-sol,244948,243750,0.056597
+2026-10-30T11:48:45,331265,FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments,gpt-6-sol,159191,157985,0.041614
+2026-10-30T11:48:45,378119,ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations,gpt-6-sol,151078,149598,0.041352
+2026-10-30T11:48:50,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,gpt-6-sol,295852,294641,0.071538
+2026-10-30T11:48:54,350004,CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions,gpt-6-sol,395463,394238,0.092583
+2026-10-30T11:48:58,405859,LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios,gpt-6-sol,221819,220602,0.053545
+2026-10-30T11:49:05,432568,CORE: Full-Path Evaluation of LLM Agents Beyond Final State,gpt-6-sol,101450,100167,0.032283
+2026-10-30T11:49:08,417671,ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents,gpt-6-sol,299766,298385,0.071772
+2026-10-30T11:51:42,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,gpt-6-sol,128609,127322,0.033214
+2026-10-30T11:51:46,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,gpt-6-sol,126342,125099,0.032370
+2026-10-30T11:51:48,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,gpt-6-sol,178886,177574,0.044557
+2026-10-30T11:51:48,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",gpt-6-sol,101089,99768,0.028239
+2026-10-30T11:51:49,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,gpt-6-sol,204985,203702,0.049500
+2026-10-30T11:51:52,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,gpt-6-sol,210935,209545,0.052966
+2026-10-30T11:51:59,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,gpt-6-sol,299714,298425,0.068280
+2026-10-30T11:52:06,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,gpt-6-sol,311869,310560,0.076177
+2026-10-30T11:52:12,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,gpt-6-sol,458788,457475,0.100270
+2026-10-30T11:52:13,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,gpt-6-sol,248723,247446,0.057784
+2026-10-30T11:52:16,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,gpt-6-sol,154719,153392,0.040598
+2026-10-30T11:52:17,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,gpt-6-sol,294298,292993,0.070124
+2026-10-30T11:52:19,299107,Hijacking JARVIS: Benchmarking Mobile GUI Agents against Unprivileged Third Parties,gpt-6-sol,188500,187141,0.046098
+2026-10-30T11:52:21,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,gpt-6-sol,353630,352270,0.084436
+2026-10-30T11:52:29,314165,ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases,gpt-6-sol,200791,199550,0.050705
+2026-10-30T11:52:33,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,gpt-6-sol,204072,202779,0.048891
+2026-10-30T11:52:33,318912,VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents,gpt-6-sol,191621,190353,0.047033
+2026-10-30T11:52:46,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,gpt-6-sol,295891,294607,0.067944
+2026-10-30T11:52:47,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,gpt-6-sol,244968,243708,0.056544
+2026-10-30T11:52:48,331265,FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments,gpt-6-sol,159220,157971,0.041429
+2026-10-30T11:52:49,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,gpt-6-sol,441351,440131,0.098119
+2026-10-30T11:52:53,378119,ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations,gpt-6-sol,151173,149627,0.041533
+2026-10-30T11:52:54,496462,"Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",gpt-6-sol,28903,0,0.073156
+2026-10-30T11:52:54,350004,CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions,gpt-6-sol,395578,394263,0.090793
+2026-10-30T11:52:57,520288,Semantically Aware UAV Landing Site Assessment from Remote Sensing Imagery via Multimodal Large Language Models,gpt-6-sol,15331,0,0.039286
+2026-10-30T11:53:04,405859,LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios,gpt-6-sol,221912,220615,0.054138
+2026-10-30T11:53:08,417671,ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents,gpt-6-sol,299711,298411,0.071015
+2026-10-30T11:53:11,432568,CORE: Full-Path Evaluation of LLM Agents Beyond Final State,gpt-6-sol,101526,100156,0.029829
+2026-10-30T11:53:14,586497,Multimodal Safety Evaluation in Generative Agent Social Simulations,gpt-6-sol,39775,0,0.100536
+2026-10-30T11:53:21,558776,PrivacyLens: Evaluating Privacy Norm Awareness of Language Models in Action,gpt-6-sol,288188,229770,0.197062
+2026-10-30T11:53:21,554355,Beyond IVR: Benchmarking Customer Support LLM Agents for Business-Adherence,gpt-6-sol,221746,176636,0.154815
+2026-10-30T11:53:22,596393,DUALGUAGE: Automated Joint Security-Functionality Benchmarking for Secure Code Generation,gpt-6-sol,37450,0,0.095703
+2026-10-30T11:53:28,459257,SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints,gpt-6-sol,775811,619865,0.520610
+2026-10-30T11:53:32,553347,"$α^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",gpt-6-sol,303330,241883,0.210877
+2026-10-30T11:53:38,591795,Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents,gpt-6-sol,155353,123417,0.112046
+2026-10-30T11:53:51,559906,RiOSWorld: Benchmarking the Risk of Multimodal Computer-Use Agents,gpt-6-sol,355839,283915,0.241385
+2026-10-30T11:56:02,240063,$\texttt{BluePrint}$: A Social Media User Dataset for LLM Persona Evaluation and Training,gpt-6-sol,28936,0,0.073238
+2026-10-30T11:56:03,254650,JAILJUDGE: A Comprehensive Jailbreak Judge Benchmark with Multi-Agent Enhanced Explanation Evaluation Framework,gpt-6-sol,64351,0,0.162086
+2026-10-30T11:56:03,237948,EVALOOOP: A Self-Consistency-Centered Framework for Assessing Large Language Model Robustness in Programming,gpt-6-sol,40164,0,0.101528
+2026-10-30T11:56:04,244706,SAGE: A Generic Framework for LLM Safety Evaluation,gpt-6-sol,45173,0,0.114181
+2026-10-30T11:56:07,256935,MedRepBench: A Comprehensive Benchmark for Medical Report Interpretation,gpt-6-sol,22315,0,0.056586
+2026-10-30T11:56:08,254820,Can LLMs Write Faithfully? An Agent-Based Evaluation of LLM-generated Islamic Content,gpt-6-sol,16976,0,0.043708
+2026-10-30T11:56:21,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",gpt-6-sol,104207,82525,0.076923
+2026-10-30T11:56:23,238938,HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies,gpt-6-sol,183815,146162,0.131777
+2026-10-30T11:56:25,236558,Mind the Gap: Evaluating Model- and Agentic-Level Vulnerabilities in LLMs with Action Graphs,gpt-6-sol,136508,108346,0.098097
+2026-10-30T11:56:52,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,gpt-6-sol,899877,719149,0.601962
+2026-10-30T11:57:24,648891,$τ$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains,gpt-6-sol,254862,203079,0.177676
+2026-10-30T11:57:26,638617,Forgetful but Faithful: A Cognitive Memory Architecture and Benchmark for Privacy-Aware Generative Agents,gpt-6-sol,340023,203828,0.388146
+2026-10-30T11:57:26,603112,Evaluating Implicit Regulatory Compliance in LLM Tool Invocation via Logic-Guided Synthesis,gpt-6-sol,126733,100594,0.094079
+2026-10-30T11:57:26,676596,SecRepoBench: Benchmarking Code Agents for Secure Code Completion in Real-World Repositories,gpt-6-sol,117593,93275,0.084273
+2026-10-30T11:57:30,643524,A Functionality-Grounded Benchmark for Evaluating Web Agents in E-commerce Domains,gpt-6-sol,162857,129461,0.115705
+2026-10-30T11:57:34,614110,Breaking the Code: Security Assessment of AI Code Agents Through Systematic Jailbreaking Attacks,gpt-6-sol,280509,223639,0.198105
+2026-10-30T11:57:42,653194,SafeArena: Evaluating the Safety of Autonomous Web Agents,gpt-6-sol,305688,243721,0.209654
+2026-10-30T11:57:54,705026,PEAR: Planner-Executor Agent Robustness Benchmark,gpt-6-sol,181320,144293,0.129069
+2026-10-30T11:57:57,666343,MLA-Trust: Benchmarking Trustworthiness of Multimodal LLM Agents in GUI Environments,gpt-6-sol,600924,479944,0.405311
+2026-10-30T11:58:15,696953,"MVISU-Bench: Benchmarking Mobile Agents for Real-World Tasks by Multi-App, Vague, Interactive, Single-App and Unethical Instructions",gpt-6-sol,231348,184254,0.162118
+2026-10-30T11:59:40,291123,Decision Quality Evaluation Framework at Pinterest,gpt-6-sol,18248,0,0.046649
+2026-10-30T11:59:40,283692,Who is ChatGPT? Benchmarking LLMs' Psychological Portrayal Using PsychoBench,gpt-6-sol,42826,0,0.107953
+2026-10-30T11:59:40,301452,Using Large Language Models to Generate Authentic Multi-agent Knowledge Work Datasets,gpt-6-sol,8678,0,0.022913
+2026-10-30T11:59:41,267814,Put Your Money Where Your Mouth Is: Evaluating Strategic Planning and Execution of LLM Agents in an Auction Arena,gpt-6-sol,56400,0,0.142158
+2026-10-30T11:59:41,280319,SOPRAG: Multi-view Graph Experts Retrieval for Industrial Standard Operating Procedures,gpt-6-sol,32394,0,0.082294
+2026-10-30T11:59:41,278937,"GAPS: A Clinically Grounded, Automated Benchmark for Evaluating AI Clinicians",gpt-6-sol,25304,0,0.064468
+2026-10-30T11:59:41,276026,WGSR-Bench: Wargame-based Game-theoretic Strategic Reasoning Benchmark for Large Language Models,gpt-6-sol,39316,0,0.099378
+2026-10-30T11:59:47,322270,Common Benchmarks Undervalue the Generalization Power of Programmatic Policies,gpt-6-sol,27925,0,0.070981
+2026-10-30T11:59:47,279117,DeepScholar-Bench: A Live Benchmark and Automated Evaluation for Generative Research Synthesis,gpt-6-sol,141860,70797,0.195124
+2026-10-30T11:59:47,316910,Pruning Minimal Reasoning Graphs for Efficient Retrieval-Augmented Generation,gpt-6-sol,31842,0,0.080624
+2026-10-30T11:59:48,316407,UAVBench: An Open Benchmark Dataset for Autonomous and Agentic AI UAV Systems via LLM-Generated Flight Scenarios,gpt-6-sol,47110,0,0.118793
+2026-10-30T11:59:51,323314,NuRisk: A Visual Question Answering Dataset for Agent-Level Risk Assessment in Autonomous Driving,gpt-6-sol,25804,0,0.065478
+2026-10-30T11:59:51,338821,MoralityGym: A Benchmark for Evaluating Hierarchical Moral Alignment in Sequential Decision-Making Agents,gpt-6-sol,42060,0,0.106159
+2026-10-30T11:59:53,345739,A Benchmark for Understanding Dialogue Safety in Mental Health Support,gpt-6-sol,18351,0,0.046486
+2026-10-30T11:59:54,331635,MedKGEval: A Knowledge Graph-Based Multi-Turn Evaluation Framework for Open-Ended Patient Interactions with Clinical LLMs,gpt-6-sol,24888,0,0.063229
+2026-10-30T11:59:54,348557,ManagerBench: Evaluating the Safety-Pragmatism Trade-off in Autonomous LLMs,gpt-6-sol,38145,0,0.096181
+2026-10-30T11:59:56,340276,Bridging the Knowledge-Action Gap by Evaluating LLMs in Dynamic Dental Clinical Scenarios,gpt-6-sol,44818,0,0.113664
+2026-10-30T11:59:56,335304,MedDialogRubrics: A Comprehensive Benchmark and Evaluation Framework for Multi-turn Medical Consultations in Large Language Models,gpt-6-sol,29330,0,0.074324
+2026-10-30T11:59:56,363124,Hiding in Plain Sight: Reframing Hardware Trojan Benchmarking as a Hide&Seek Modification,gpt-6-sol,18713,0,0.047461
+2026-10-30T11:59:57,344232,LibVulnWatch: A Deep Assessment Agent System and Leaderboard for Uncovering Hidden Vulnerabilities in Open-Source AI Libraries,gpt-6-sol,100670,0,0.253283
+2026-10-30T11:59:58,353473,Benchmarks and Algorithms for Offline Preference-Based Reward Learning,gpt-6-sol,38570,0,0.097194
+2026-10-30T12:00:00,363761,SycoEval-EM: Sycophancy Evaluation of Large Language Models in Simulated Clinical Encounters for Emergency Care,gpt-6-sol,17875,0,0.045776
+2026-10-30T12:00:04,381306,STEP: Structured Training and Evaluation Platform for benchmarking trajectory prediction models,gpt-6-sol,29153,0,0.073491
+2026-10-30T12:00:05,378155,6G-Bench: An Open Benchmark for Semantic Communication and Network-Level Reasoning with Foundation Models in AI-Native 6G Networks,gpt-6-sol,61443,0,0.154716
+2026-10-30T12:00:06,391910,BioBlue: Systematic runaway-optimiser-like LLM failure modes on biologically and economically aligned AI safety benchmarks for LLMs with simplified observation format,gpt-6-sol,16971,0,0.043426
+2026-10-30T12:00:14,363808,HackWorld: Evaluating Computer-Use Agents on Exploiting Web Application Vulnerabilities,gpt-6-sol,149711,99560,0.149415
+2026-10-30T12:00:17,365067,FinGAIA: A Chinese Benchmark for AI Agents in Real-World Financial Domain,gpt-6-sol,161699,107526,0.160173
+2026-10-30T12:00:20,409037,VCode: a Multimodal Coding Benchmark with SVG as Symbolic Visual Representation,gpt-6-sol,55423,0,0.141226
+2026-10-30T12:00:21,401027,RepliBench: Evaluating the Autonomous Replication Capabilities of Language Model Agents,gpt-6-sol,294191,195904,0.287274
+2026-10-30T12:00:22,415315,CHBias: Bias Evaluation and Mitigation of Chinese Conversational Language Models,gpt-6-sol,31297,0,0.078811
+2026-10-30T12:00:24,386928,PredictionMarketBench: A SWE-bench-Style Framework for Backtesting Trading Agents on Prediction Markets,gpt-6-sol,46147,36020,0.042314
+2026-10-30T12:00:25,410547,Welfare Diplomacy: Benchmarking Language Model Cooperation,gpt-6-sol,84026,0,0.211034
+2026-10-30T12:00:25,417961,Ollabench: Evaluating LLMs' Reasoning for Human-centric Interdependent Cybersecurity,gpt-6-sol,27796,0,0.070149
+2026-10-30T12:00:25,383036,RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts,gpt-6-sol,260183,173197,0.255020
+2026-10-30T12:00:28,376553,BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems,gpt-6-sol,388264,258615,0.379501
+2026-10-30T12:00:33,442741,LiveMedBench: A Contamination-Free Medical Benchmark for LLMs with Automated Rubric Evaluation,gpt-6-sol,49761,0,0.125551
+2026-10-30T12:00:34,409745,CXMArena: Unified Dataset to benchmark performance in realistic CXM Scenarios,gpt-6-sol,197474,157159,0.138222
+2026-10-30T12:00:34,422978,TheAgentCompany: Benchmarking LLM Agents on Consequential Real World Tasks,gpt-6-sol,81982,40874,0.113422
+2026-10-30T12:00:38,439481,HackSynth: LLM Agent and Evaluation Framework for Autonomous Penetration Testing,gpt-6-sol,117738,78235,0.117790
+2026-10-30T12:00:50,430726,OCCULT: Evaluating Large Language Models for Offensive Cyber Operation Capabilities,gpt-6-sol,278216,185241,0.272311
+2026-10-30T12:01:43,444528,MaPPing Your Model: Assessing the Impact of Adversarial Attacks on LLM-based Programming Assistants,gpt-6-sol,22495,0,0.057346
+2026-10-30T12:01:44,445134,ATAG: AI-Agent Application Threat Assessment with Attack Graphs,gpt-6-sol,37350,0,0.094563
+2026-10-30T12:01:45,443895,MalURLBench: A Benchmark Evaluating Agents' Vulnerabilities When Processing Web URLs,gpt-6-sol,24696,0,0.064868
+2026-10-30T12:01:45,445092,"Noise, Adaptation, and Strategy: Assessing LLM Fidelity in Decision-Making",gpt-6-sol,35723,0,0.090126
+2026-10-30T12:01:46,461408,"Privasis: Synthesizing the Largest ""Public"" Private Dataset from Scratch",gpt-6-sol,66884,0,0.168248
+2026-10-30T12:01:47,465041,TeleAntiFraud-28k: An Audio-Text Slow-Thinking Dataset for Telecom Fraud Detection,gpt-6-sol,25739,0,0.065356
+2026-10-30T12:01:48,472123,AgentDrive: An Open Benchmark Dataset for Agentic AI Reasoning with LLM-Generated Scenarios in Autonomous Systems,gpt-6-sol,44339,0,0.111966
+2026-10-30T12:01:48,480048,MDD-5k: A New Diagnostic Conversation Dataset for Mental Disorders Synthesized via Neuro-Symbolic LLM Agents,gpt-6-sol,20602,0,0.052894
+2026-10-30T12:01:52,479159,Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems,gpt-6-sol,33459,0,0.087096
+2026-10-30T12:01:54,481955,FinBen: A Holistic Financial Benchmark for Large Language Models,gpt-6-sol,39739,0,0.100526
+2026-10-30T12:01:58,483493,Beyond BeautifulSoup: Benchmarking LLM-Powered Web Scraping for Everyday Users,gpt-6-sol,52051,34456,0.053494
+2026-10-30T12:01:59,489223,"MedConsultBench: A Full-Cycle, Fine-Grained, Process-Aware Benchmark for Medical Consultation Agents",gpt-6-sol,33984,0,0.086048
+2026-10-30T12:02:00,489237,VERA-MH: Reliability and Validity of an Open-Source AI Safety Evaluation in Mental Health,gpt-6-sol,38879,0,0.098006
+2026-10-30T12:02:02,487931,SWE-bench Goes Live!,gpt-6-sol,74452,37105,0.102836
+2026-10-30T12:02:05,480872,SocialDF: Benchmark Dataset and Detection Model for Mitigating Harmful Deepfake Content on Social Media Platforms,gpt-6-sol,68036,45105,0.069464
+2026-10-30T12:02:07,488266,Investigating Pedagogical Teacher and Student LLM Agents: Genetic Adaptation Meets Retrieval Augmented Generation Across Learning Style,gpt-6-sol,58802,0,0.148593
+2026-10-30T12:02:11,486652,EconWebArena: Benchmarking Autonomous Agents on Economic Tasks in Realistic Web Environments,gpt-6-sol,61638,30687,0.085622
+2026-10-30T12:02:14,506503,Position: Theory of Mind Benchmarks are Broken for Large Language Models,gpt-6-sol,89055,0,0.223626
+2026-10-30T12:02:16,524244,OutSafe-Bench: A Benchmark for Multimodal Offensive Content Detection in Large Language Models,gpt-6-sol,36286,0,0.091714
+2026-10-30T12:02:18,520658,PPTC-R benchmark: Towards Evaluating the Robustness of Large Language Models for PowerPoint Task Completion,gpt-6-sol,78326,39037,0.109577
+2026-10-30T12:02:21,500121,SafetyFlow: An Agent-Flow System for Automated LLM Safety Benchmarking,gpt-6-sol,30641,0,0.077641
+2026-10-30T12:02:23,528717,MeetBench-XL: Calibrated Multi-Dimensional Evaluation and Learned Dual-Policy Agents for Real-Time Meetings,gpt-6-sol,40518,20124,0.058897
+2026-10-30T12:02:26,538368,What Would an LLM Do? Evaluating Large Language Models for Policymaking to Alleviate Homelessness,gpt-6-sol,38616,0,0.097728
+2026-10-30T12:02:27,504232,DataGovBench: Benchmarking LLM Agents for Real-World Data Governance Workflows,gpt-6-sol,279300,185896,0.274795
+2026-10-30T12:02:27,487602,MIRAI: Evaluating LLM Agents for Event Forecasting,gpt-6-sol,451463,300518,0.444272
+2026-10-30T12:02:28,539109,YNTP-100: A Benchmark for Your Next Token Prediction with 100 People,gpt-6-sol,33910,0,0.085473
+2026-10-30T12:02:28,530146,SEC-bench: Automated Benchmarking of LLM Agents on Real-World Software Security Tasks,gpt-6-sol,131925,87722,0.130647
+2026-10-30T12:02:33,554484,PrivacyBench: A Conversational Benchmark for Evaluating Privacy in Personalized AI,gpt-6-sol,21249,0,0.054161
+2026-10-30T12:02:35,564569,SCARE: A Benchmark for SQL Correction and Question Answerability Classification for Reliable EHR Question Answering,gpt-6-sol,36821,0,0.093671
+2026-10-30T12:02:37,568343,An end-to-end agentic pipeline for smart contract translation and quality evaluation,gpt-6-sol,28576,0,0.074619
+2026-10-30T12:02:39,539714,CyberGym: Evaluating AI Agents' Real-World Cybersecurity Capabilities at Scale,gpt-6-sol,248189,165233,0.243532
+2026-10-30T12:02:40,511126,Benchmarking Poisoning Attacks against Retrieval-Augmented Generation,gpt-6-sol,604053,482441,0.408701
+2026-10-30T12:02:41,574459,Automated Benchmark Generation for Repository-Level Coding Tasks,gpt-6-sol,66266,33003,0.092125
+2026-10-30T12:02:41,578206,Efficient LLM Safety Evaluation through Multi-Agent Debate,gpt-6-sol,18973,0,0.048451
+2026-10-30T12:02:42,582682,The Ethical Compass of the Machine: Evaluating Large Language Models for Decision Support in Construction Project Management,gpt-6-sol,16383,0,0.041826
+2026-10-30T12:02:43,550096,Assessing Spear-Phishing Website Generation in Large Language Model Coding Agents,gpt-6-sol,73600,48829,0.074549
+2026-10-30T12:02:46,584251,MAGPIE: A dataset for Multi-AGent contextual PrIvacy Evaluation,gpt-6-sol,22937,0,0.058291
+2026-10-30T12:02:47,587383,MemeCMD: An Automatically Generated Chinese Multi-turn Dialogue Dataset with Contextually Retrieved Memes,gpt-6-sol,26397,0,0.066991
+2026-10-30T12:02:48,580225,AI for Climate Finance: Agentic Retrieval and Multi-Step Reasoning for Early Warning System Investments,gpt-6-sol,40776,20243,0.058608
+2026-10-30T12:02:49,530973,LiveTradeBench: Seeking Real-World Alpha with Large Language Models,gpt-6-sol,338317,269832,0.233431
+2026-10-30T12:02:49,591511,"AVIATOR: Towards AI-Agentic Vulnerability Injection Workflow for High-Fidelity, Large-Scale Code Security Dataset",gpt-6-sol,46562,0,0.118463
+2026-10-30T12:02:50,595149,It's the Thought that Counts: Evaluating the Attempts of Frontier LLMs to Persuade on Harmful Topics,gpt-6-sol,56694,0,0.142584
+2026-10-30T12:02:55,598969,WaymoQA: A Multi-View Visual Question Answering Dataset for Safety-Critical Reasoning in Autonomous Driving,gpt-6-sol,46967,0,0.118006
+2026-10-30T12:02:55,605985,MATRIX: Multi-Agent simulaTion fRamework for safe Interactions and conteXtual clinical conversational evaluation,gpt-6-sol,61860,0,0.155478
+2026-10-30T12:02:56,604293,A Synthetic Dataset for Personal Attribute Inference,gpt-6-sol,68883,0,0.173056
+2026-10-30T12:03:00,612012,When Benchmarks Lie: Evaluating Malicious Prompt Classifiers Under True Distribution Shift,gpt-6-sol,30604,0,0.078089
+2026-10-30T12:03:02,617833,SOCK: A Benchmark for Measuring Self-Replication in Large Language Models,gpt-6-sol,18879,12343,0.021364
+2026-10-30T12:03:02,597561,"Transparent, Evaluable, and Accessible Data Agents: A Proof-of-Concept Framework",gpt-6-sol,115462,76668,0.116624
+2026-10-30T12:03:13,605209,"Towards Effective Offensive Security LLM Agents: Hyperparameter Tuning, LLM as a Judge, and a Lightweight CTF Benchmark",gpt-6-sol,113947,75711,0.113718
+2026-10-30T12:03:23,607757,VoiceAgentBench: Are Voice Assistants ready for agentic tasks?,gpt-6-sol,440356,351497,0.297889
+2026-10-30T12:04:23,618733,From Static Benchmarks to Dynamic Protocol: Agent-Centric Text Anomaly Detection for Evaluating LLM Reasoning,gpt-6-sol,41482,0,0.104653
+2026-10-30T12:04:24,638763,BELLS: A Framework Towards Future Proof Benchmarks for the Evaluation of LLM Safeguards,gpt-6-sol,22328,0,0.057258
+2026-10-30T12:04:24,620672,"OffTopicEval: When Large Language Models Enter the Wrong Chat, Almost Always!",gpt-6-sol,65493,0,0.164811
+2026-10-30T12:04:24,639244,LLMArena: Assessing Capabilities of Large Language Models in Dynamic Multi-Agent Environments,gpt-6-sol,50098,0,0.126164
+2026-10-30T12:04:26,637829,Jailbreak Foundry: From Papers to Runnable Attacks for Reproducible Benchmarking,gpt-6-sol,43833,0,0.112111
+2026-10-30T12:04:26,645505,Human Choice Prediction in Language-based Persuasion Games: Simulation-based Off-Policy Evaluation,gpt-6-sol,57717,0,0.145391
+2026-10-30T12:04:30,658174,SafeEvalAgent: Toward Agentic and Self-Evolving Safety Evaluation of LLMs,gpt-6-sol,29637,0,0.075171
+2026-10-30T12:04:32,659192,The Automated but Risky Game: Modeling and Benchmarking Agent-to-Agent Negotiations and Transactions in Consumer Markets,gpt-6-sol,40269,0,0.101651
+2026-10-30T12:04:36,670998,ElectriQ: A Benchmark for Assessing the Response Capability of Large Language Models in Power Marketing,gpt-6-sol,39403,0,0.099666
+2026-10-30T12:04:42,618925,FeatBench: Towards More Realistic Evaluation of Feature-level Code Generation,gpt-6-sol,225916,179926,0.156893
+2026-10-30T12:04:43,620710,From Benchmarks to Business Impact: Deploying IBM Generalist Agent in Enterprise Production,gpt-6-sol,131944,104651,0.098005
+2026-10-30T12:04:43,666266,PentestEval: Benchmarking LLM-based Penetration Testing with Modular and Stage-Level Design,gpt-6-sol,130368,86643,0.130667
+2026-10-30T12:04:45,680545,Automated Safety Benchmarking: A Multi-agent Pipeline for LVLMs,gpt-6-sol,30997,0,0.078591
+2026-10-30T12:04:48,677159,Toward Scalable Verifiable Reward: Proxy State-Based Evaluation for Multi-turn Tool-Calling LLM Agents,gpt-6-sol,59823,39603,0.062786
+2026-10-30T12:04:51,688149,SecureCode: A Production-Grade Multi-Turn Dataset for Training Security-Aware Code Generation Models,gpt-6-sol,50576,0,0.127498
+2026-10-30T12:04:52,702100,RephQA: Evaluating Readability of Large Language Models in Public Health Question Answering,gpt-6-sol,55064,0,0.138528
+2026-10-30T12:04:54,707901,Informed AI Regulation: Comparing the Ethical Frameworks of Leading LLM Chatbots Using an Ethics-Based Audit to Assess Moral Reasoning and Normative Values,gpt-6-sol,26096,0,0.065868
+2026-10-30T12:04:56,675060,TruthTensor: Evaluating LLMs through Human Imitation on Prediction Market under Drift and Holistic Reasoning,gpt-6-sol,201898,160666,0.143426
+2026-10-30T12:04:57,671300,TD-EVAL: Revisiting Task-Oriented Dialogue Evaluation by Combining Turn-Level Precision with Dialogue-Level Comparisons,gpt-6-sol,175607,139621,0.130042
+2026-10-30T12:04:57,708768,Better to Ask in English: Cross-Lingual Evaluation of Large Language Models for Healthcare Queries,gpt-6-sol,52496,0,0.131879
+2026-10-30T12:04:59,685364,"CiteAudit: You Cited It, But Did You Read It? A Benchmark for Verifying Scientific References in the LLM Era",gpt-6-sol,83549,55433,0.084602
+2026-10-30T12:05:01,660147,Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models,gpt-6-sol,1131261,753938,1.097311
+2026-10-30T12:05:03,713882,HR-MultiWOZ: A Task Oriented Dialogue (TOD) Dataset for HR LLM Agent,gpt-6-sol,23717,0,0.060291
+2026-10-30T12:05:05,720852,Diverse And Private Synthetic Datasets Generation for RAG evaluation: A multi-agent framework,gpt-6-sol,12181,0,0.031491
+2026-10-30T12:05:08,727262,LaoBench: A Large-Scale Multidimensional Lao Benchmark for Large Language Models,gpt-6-sol,41677,0,0.105211
+2026-10-30T12:05:12,709448,From Conversation to Query Execution: Benchmarking User and Tool Interactions for EHR Database Agents,gpt-6-sol,155731,103567,0.155979
+2026-10-30T12:05:15,733341,BuildBench: Benchmarking LLM Agents on Compiling Real-World Open-Source Software,gpt-6-sol,47951,23855,0.067018
+2026-10-30T12:05:17,738907,CultureGuard: Towards Culturally-Aware Dataset and Guard Model for Multilingual Safety Applications,gpt-6-sol,43541,0,0.109781
+2026-10-30T12:05:19,715846,AutoPenBench: Benchmarking Generative Agents for Penetration Testing,gpt-6-sol,170800,113626,0.168776
+2026-10-30T12:05:20,689727,Evaluating Small Language Models for Agentic On-Farm Decision Support Systems,gpt-6-sol,326267,260217,0.225091
+2026-10-30T12:05:20,713025,AgentDAM: Privacy Leakage Evaluation for Autonomous Web Agents,gpt-6-sol,186404,148366,0.130241
+2026-10-30T12:05:23,729882,CyberExplorer: Benchmarking LLM Offensive Security Capabilities in a Real-World Attacking Simulation Environment,gpt-6-sol,153289,101966,0.152426
+2026-10-30T12:05:23,743628,Building Trust in Mental Health Chatbots: Safety Metrics and LLM-Based Evaluation Tools,gpt-6-sol,39770,0,0.101073
+2026-10-30T12:05:23,737319,Multi-OphthaLingua: A Multilingual Benchmark for Assessing and Debiasing LLM Ophthalmological QA in LMICs,gpt-6-sol,63732,42189,0.066971
+2026-10-30T12:05:27,719126,OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety,gpt-6-sol,248452,198024,0.170287
+2026-10-30T12:05:38,748539,Evaluating Precise Geolocation Inference Capabilities of Vision Language Models,gpt-6-sol,59530,39432,0.061037
+2026-10-30T12:05:39,749320,A Benchmark for Evaluating Outcome-Driven Constraint Violations in Autonomous AI Agents,gpt-6-sol,98996,78438,0.072525
+2026-10-30T12:05:40,748272,IntellAgent: A Multi-Agent Framework for Evaluating Conversational AI Systems,gpt-6-sol,97596,77292,0.072941
+2026-10-30T12:05:44,753478,MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis,gpt-6-sol,183939,122290,0.184396
+2026-10-30T12:05:44,741333,TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems,gpt-6-sol,277313,221099,0.190957
+2026-10-30T12:05:45,750745,AgentHallu: Benchmarking Automated Hallucination Attribution of LLM-based Agents,gpt-6-sol,199648,132834,0.198157
+2026-10-30T12:05:45,752243,WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents,gpt-6-sol,50428,39527,0.040500
+2026-10-30T12:05:45,760468,Engineering Reasoning and Instruction (ERI) Benchmark: A Large Taxonomy-driven Dataset for Foundation Models and Agents,gpt-6-sol,42113,0,0.106401
+2026-10-30T12:05:47,769267,HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation,gpt-6-sol,30250,0,0.076773
+2026-10-30T12:05:52,776762,DITING: A Multi-Agent Evaluation Framework for Benchmarking Web Novel Translation,gpt-6-sol,23163,0,0.058726
+2026-10-30T12:05:54,767344,Sola-Visibility-ISPM: Benchmarking Agentic AI for Identity Security Posture Management Visibility,gpt-6-sol,66562,44137,0.067425
+2026-10-30T12:05:57,776831,AgentAuditor: Human-Level Safety and Security Evaluation for LLM Agents,gpt-6-sol,91785,0,0.231491
+2026-10-30T12:05:58,776457,AutoAdvExBench: Benchmarking autonomous exploitation of adversarial example defenses,gpt-6-sol,77612,51508,0.079257
+2026-10-30T12:06:19,776670,Implicit Intelligence -- Evaluating Agents on What Users Don't Say,gpt-6-sol,572767,457342,0.386133
+2026-10-30T12:06:20,755079,macOSWorld: A Multilingual Interactive Benchmark for GUI Agents,gpt-6-sol,488330,389862,0.329545
+2026-10-30T12:13:00,386928,PredictionMarketBench: A SWE-bench-Style Framework for Backtesting Trading Agents on Prediction Markets,gpt-6-sol,17317,17012,0.005942
+2026-10-30T12:13:01,203172,VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications,gpt-6-sol,192591,96144,0.262233
+2026-10-30T12:13:02,365067,FinGAIA: A Chinese Benchmark for AI Agents in Real-World Financial Domain,gpt-6-sol,107621,107306,0.024216
+2026-10-30T12:13:08,152748,Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks,gpt-6-sol,286053,190384,0.281175
+2026-10-30T12:13:10,409745,CXMArena: Unified Dataset to benchmark performance in realistic CXM Scenarios,gpt-6-sol,78113,77794,0.018643
+2026-10-30T12:13:12,102065,ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks,gpt-6-sol,345805,230260,0.337840
+2026-10-30T12:13:13,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",gpt-6-sol,104913,103271,0.032202
+2026-10-30T12:13:16,439481,HackSynth: LLM Agent and Evaluation Framework for Autonomous Penetration Testing,gpt-6-sol,117951,117328,0.028969
+2026-10-30T12:13:17,483493,Beyond BeautifulSoup: Benchmarking LLM-Powered Web Scraping for Everyday Users,gpt-6-sol,52274,51671,0.015027
+2026-10-30T12:13:21,383036,RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts,gpt-6-sol,260404,259760,0.057138
+2026-10-30T12:13:23,530973,LiveTradeBench: Seeking Real-World Alpha with Large Language Models,gpt-6-sol,134394,134058,0.029769
+2026-10-30T12:13:24,597561,"Transparent, Evaluable, and Accessible Data Agents: A Proof-of-Concept Framework",gpt-6-sol,76738,76410,0.018869
+2026-10-30T12:13:26,620710,From Benchmarks to Business Impact: Deploying IBM Generalist Agent in Enterprise Production,gpt-6-sol,51878,51544,0.014511
+2026-10-30T12:13:27,618925,FeatBench: Towards More Realistic Evaluation of Feature-level Code Generation,gpt-6-sol,89505,89184,0.020846
+2026-10-30T12:13:27,504232,DataGovBench: Benchmarking LLM Agents for Real-World Data Governance Workflows,gpt-6-sol,185966,185644,0.040601
+2026-10-30T12:13:28,487602,MIRAI: Evaluating LLM Agents for Event Forecasting,gpt-6-sol,300561,300282,0.062331
+2026-10-30T12:13:31,675060,TruthTensor: Evaluating LLMs through Human Imitation on Prediction Market under Drift and Holistic Reasoning,gpt-6-sol,79821,79456,0.019351
+2026-10-30T12:13:31,677159,Toward Scalable Verifiable Reward: Proxy State-Based Evaluation for Multi-turn Tool-Calling LLM Agents,gpt-6-sol,39686,39372,0.010836
+2026-10-30T12:13:34,685364,"CiteAudit: You Cited It, But Did You Read It? A Benchmark for Verifying Scientific References in the LLM Era",gpt-6-sol,55538,55162,0.014769
+2026-10-30T12:13:39,709448,From Conversation to Query Execution: Benchmarking User and Tool Interactions for EHR Database Agents,gpt-6-sol,103656,103340,0.023765
+2026-10-30T12:13:40,689727,Evaluating Small Language Models for Agentic On-Farm Decision Support Systems,gpt-6-sol,129710,129380,0.030098
+2026-10-30T12:13:41,753478,MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis,gpt-6-sol,122360,122014,0.029965
+2026-10-30T12:13:47,748539,Evaluating Precise Geolocation Inference Capabilities of Vision Language Models,gpt-6-sol,59674,59088,0.016558
+2026-10-30T12:13:47,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,gpt-6-sol,900440,899046,0.189777
+2026-10-30T12:14:02,776670,Implicit Intelligence -- Evaluating Agents on What Users Don't Say,gpt-6-sol,573008,571559,0.123437
+2026-10-30T12:15:02,784782,From homeostasis to resource sharing: Biologically and economically aligned multi-objective multi-agent gridworld-based AI safety benchmarks,gpt-6-sol,35378,0,0.089693
+2026-10-30T12:15:03,778011,YRC-Bench: A Benchmark for Learning to Coordinate with Experts,gpt-6-sol,48666,0,0.122623
+2026-10-30T12:15:04,786728,Is Safety Standard Same for Everyone? User-Specific Safety Evaluation of Large Language Models,gpt-6-sol,58619,0,0.147866
+2026-10-30T12:15:04,793967,RADAR: A Risk-Aware Dynamic Multi-Agent Framework for LLM Safety Evaluation via Role-Specialized Collaboration,gpt-6-sol,25938,0,0.065904
+2026-10-30T12:15:04,792298,TFHE-Coder: Evaluating LLM-agentic Fully Homomorphic Encryption Code Generation,gpt-6-sol,25954,0,0.067503
+2026-10-30T12:15:06,800230,RAGalyst: Automated Human-Aligned Agentic Evaluation for Domain-Specific RAG,gpt-6-sol,30413,0,0.077101
+2026-10-30T12:15:10,802743,Benchmarking Prompt Engineering Techniques for Secure Code Generation with GPT Models,gpt-6-sol,31840,0,0.080688
+2026-10-30T12:15:12,803201,TraderBench: How Robust Are AI Agents in Adversarial Capital Markets?,gpt-6-sol,39371,19531,0.055673
+2026-10-30T12:15:13,793534,FieldWorkArena: Agentic AI Benchmark for Real Field Work Tasks,gpt-6-sol,50001,33043,0.052159
+2026-10-30T12:15:13,817057,Explanations are a Means to an End: Decision Theoretic Explanation Evaluation,gpt-6-sol,31478,0,0.079834
+2026-10-30T12:15:18,811460,CVE-Bench: A Benchmark for AI Agents' Ability to Exploit Real-World Web Application Vulnerabilities,gpt-6-sol,94707,62877,0.094636
+2026-10-30T12:15:19,818464,When Agents Trade: Live Multi-Market Trading Benchmark for LLM Agents,gpt-6-sol,30323,0,0.077066
+2026-10-30T12:15:24,818887,Crisis-Bench: Benchmarking Strategic Ambiguity and Reputation Management in Large Language Models,gpt-6-sol,51641,0,0.130231
+2026-10-30T12:15:24,807853,Decision Making under Imperfect Recall: Algorithms and Benchmarks,gpt-6-sol,102600,0,0.257638
+2026-10-30T12:15:25,818225,REAL: Benchmarking Autonomous Agents on Deterministic Simulations of Real Websites,gpt-6-sol,58274,28968,0.081336
+2026-10-30T12:15:29,824179,"Imitation Learning Datasets: A Toolkit For Creating Datasets, Training Agents and Benchmarking",gpt-6-sol,6424,0,0.016649
+2026-10-30T12:15:32,832821,The Seeker's Dilemma: Realistic Formulation and Benchmarking for Hardware Trojan Detection,gpt-6-sol,34402,0,0.086753
+2026-10-30T12:15:32,826803,A Proposal for Evaluating the Operational Risk for ChatBots based on Large Language Models,gpt-6-sol,24367,0,0.062116
+2026-10-30T12:15:32,794068,AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,gpt-6-sol,179811,143071,0.127517
+2026-10-30T12:15:34,817511,SafePro: Evaluating the Safety of Professional-Level AI Agents,gpt-6-sol,141401,112342,0.100158
+2026-10-30T12:15:36,834792,Real-World En Call Center Transcripts Dataset with PII Redaction,gpt-6-sol,52394,0,0.131984
+2026-10-30T12:15:39,836225,StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?,gpt-6-sol,27735,0,0.072206
+2026-10-30T12:15:44,821816,EU-Agent-Bench: Measuring Illegal Behavior of LLM Agents Under EU Law,gpt-6-sol,97433,77146,0.077319
+2026-10-30T12:15:45,876582,"AI Transparency Atlas: Framework, Scoring, and Real-Time Model Card Evaluation Pipeline",gpt-6-sol,15718,0,0.040393
+2026-10-30T12:15:50,857872,Intelligent System for Automated Molecular Patent Infringement Assessment,gpt-6-sol,104690,52175,0.144079
+2026-10-30T12:15:59,853406,"Agent Tools Orchestration Leaks More: Dataset, Benchmark, and Mitigation",gpt-6-sol,175759,139847,0.125072
+2026-10-30T12:16:00,853732,WAREX: Web Agent Reliability Evaluation on Existing Benchmarks,gpt-6-sol,108872,86216,0.081066
+2026-10-30T12:16:07,888427,"Towards Automatic Evaluation for LLMs' Clinical Capabilities: Metric, Data, and Algorithm",gpt-6-sol,36534,0,0.092763
+2026-10-30T12:16:08,890394,Advancing AI Trustworthiness Through Patient Simulation: Risk Assessment of Conversational Agents for Antidepressant Selection,gpt-6-sol,45992,0,0.117238
+2026-10-30T12:16:10,823233,PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach,gpt-6-sol,691397,552316,0.464448
+2026-10-30T12:16:11,881532,Benchmarking LLM-Assisted Blue Teaming via Standardized Threat Hunting,gpt-6-sol,171502,114060,0.169143
+2026-10-30T12:16:13,840748,MAPS: A Multilingual Benchmark for Agent Performance and Security,gpt-6-sol,280089,223253,0.193533
+2026-10-30T12:16:14,878949,Risky-Bench: Probing Agentic Safety Risks under Real-World Deployment,gpt-6-sol,229195,182532,0.160896
+2026-10-30T12:16:14,879748,It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents,gpt-6-sol,169147,134527,0.118528
+2026-10-30T12:16:19,895159,FinEval: A Chinese Financial Domain Knowledge Evaluation Benchmark for Large Language Models,gpt-6-sol,69327,0,0.177826
+2026-10-30T12:16:25,906533,CryptoFormalEval: Integrating LLMs and Formal Verification for Automated Cryptographic Protocol Vulnerability Detection,gpt-6-sol,51524,34092,0.053054
+2026-10-30T12:16:26,916464,MoPHES:Leveraging on-device LLMs as Agent for Mobile Psychological Health Evaluation and Support,gpt-6-sol,29498,0,0.074763
+2026-10-30T12:16:30,811615,AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents,gpt-6-sol,203176,161742,0.141546
+2026-10-30T12:16:31,895643,Beyond Accuracy: A Multi-Dimensional Framework for Evaluating Enterprise Agentic AI Systems,gpt-6-sol,56189,44137,0.046960
+2026-10-30T12:16:32,917202,PandaGuard: Systematic Evaluation of LLM Safety against Jailbreaking Attacks,gpt-6-sol,60982,0,0.153664
+2026-10-30T12:16:37,904766,From Assistant to Double Agent: Formalizing and Benchmarking Attacks on OpenClaw for Personalized Local AI Agent,gpt-6-sol,81052,64061,0.063702
+2026-10-30T12:16:37,919954,Auto-Evaluation: A Critical Measure in Driving Improvements in Quality and Safety of AI-Generated Lesson Resources,gpt-6-sol,37863,0,0.095786
+2026-10-30T12:16:38,917264,Driving with Regulation: Trustworthy and Interpretable Decision-Making for Autonomous Driving with Retrieval-Augmented Reasoning,gpt-6-sol,38461,0,0.098151
+2026-10-30T12:16:39,922740,Are Personalized Stochastic Parrots More Dangerous? Evaluating Persona Biases in Dialogue Systems,gpt-6-sol,50038,0,0.125923
+2026-10-30T12:16:43,908022,Agent-SafetyBench: Evaluating the Safety of LLM Agents,gpt-6-sol,191905,152763,0.133410
+2026-10-30T12:16:46,897933,BioAgent Bench: An AI Agent Evaluation Suite for Bioinformatics,gpt-6-sol,146749,116465,0.108006
+2026-10-30T12:16:58,908271,"$α^3$-Bench: A Unified Benchmark of Safety, Robustness, and Efficiency for LLM-Based UAV Agents over 6G Networks",gpt-6-sol,266539,212441,0.191426
+2026-10-30T12:17:04,922168,SeCodePLT: A Unified Platform for Evaluating the Security of Code GenAI,gpt-6-sol,407373,325097,0.276652
+2026-10-30T12:17:07,927585,Agent Security Bench (ASB): Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents,gpt-6-sol,264101,210472,0.187939
+2026-10-30T12:17:09,928148,AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems,gpt-6-sol,228268,181636,0.163270
+2026-10-30T12:25:46,931445,Dynamic Benchmarking of Reasoning Capabilities in Code Large Language Models Under Data Contamination,gpt-6-sol,30170,0,0.076674
+2026-10-30T12:25:46,928941,"Red Lines and Grey Zones in the Fog of War: Benchmarking Legal Risk, Moral Harm, and Regional Bias in Large Language Model Military Decision-Making",gpt-6-sol,57925,0,0.145741
+2026-10-30T12:25:48,932205,WAInjectBench: Benchmarking Prompt Injection Detections for Web Agents,gpt-6-sol,28791,0,0.073186
+2026-10-30T12:25:52,948951,"AI Research Agents for Machine Learning: Search, Exploration, and Generalization in MLE-bench",gpt-6-sol,69086,0,0.174304
+2026-10-30T12:25:53,959720,Echoes of Human Malice in Agents: Benchmarking LLMs for Multi-Turn Online Harassment Attacks,gpt-6-sol,32967,0,0.083486
+2026-10-30T12:25:55,937254,Evaluating Small Vision-Language Models on Distance-Dependent Traffic Perception,gpt-6-sol,63321,0,0.158831
+2026-10-30T12:25:56,947369,BackportBench: A Multilingual Benchmark for Automated Backporting of Patches,gpt-6-sol,100062,66446,0.099605
+2026-10-30T12:26:04,972790,CONFETTI: Conversational Function-Calling Evaluation Through Turn-Level Interactions,gpt-6-sol,57962,28828,0.080408
+2026-10-30T12:26:09,941484,MCP-SafetyBench: A Benchmark for Safety Evaluation of Large Language Models with Real-World MCP Servers,gpt-6-sol,218663,174171,0.150557
+2026-10-30T12:26:12,983783,Evaluating Language Model Reasoning about Confidential Information,gpt-6-sol,27747,0,0.070546
+2026-10-30T12:26:15,969988,EgoNormia: Benchmarking Physical Social Norm Understanding,gpt-6-sol,52293,0,0.131751
+2026-10-30T12:26:16,989027,Medical Malice: A Dataset for Context-Aware Safety in Healthcare LLMs,gpt-6-sol,5953,0,0.015791
+2026-10-30T12:26:21,967517,Breaking Agent Backbones: Evaluating the Security of Backbone LLMs in AI Agents,gpt-6-sol,322165,256892,0.226213
+2026-10-30T12:26:22,995687,PRODIGy: a PROfile-based DIalogue Generation dataset,gpt-6-sol,19575,0,0.049576
+2026-10-30T12:26:23,995118,Evaluating LLM Agent Adherence to Hierarchical Safety Principles: A Lightweight Benchmark for Probing Foundational Controllability Components,gpt-6-sol,22267,0,0.058206
+2026-10-30T12:26:24,959253,MCP Security Bench (MSB): Benchmarking Attacks Against Model Context Protocol in LLM Agents,gpt-6-sol,326491,260276,0.223685
+2026-10-30T12:26:25,949579,RedCode: Risky Code Execution and Generation Benchmark for Code Agents,gpt-6-sol,583133,465720,0.392219
+2026-10-30T12:26:26,976013,VC-Agent: An Interactive Agent for Customized Video Dataset Collection,gpt-6-sol,101183,50310,0.141372
+2026-10-30T12:26:32,996291,"Researchy Questions: A Dataset of Multi-Perspective, Decompositional Questions for LLM Web Agents",gpt-6-sol,89506,44508,0.125354
+2026-10-30T12:26:40,988352,MIRAGE-Bench: LLM Agent is Hallucinating and Where to Find Them,gpt-6-sol,348479,277959,0.238204
+2026-10-30T12:26:58,974658,MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation,gpt-6-sol,307615,245216,0.215683
