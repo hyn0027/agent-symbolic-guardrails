@@ -467,3 +467,353 @@
 2026-10-30T12:26:32,996291,"Researchy Questions: A Dataset of Multi-Perspective, Decompositional Questions for LLM Web Agents",gpt-6-sol,89506,44508,0.125354
 2026-10-30T12:26:40,988352,MIRAGE-Bench: LLM Agent is Hallucinating and Where to Find Them,gpt-6-sol,348479,277959,0.238204
 2026-10-30T12:26:58,974658,MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation,gpt-6-sol,307615,245216,0.215683
+2026-10-31T12:22:43,752243,WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents,claude-sonnet-5-5,35596,14731,0.108929
+2026-10-31T12:22:51,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,claude-sonnet-5-5,99667,11932,0.386029
+2026-10-31T12:22:52,596393,DUALGUAGE: Automated Joint Security-Functionality Benchmarking for Secure Code Generation,claude-sonnet-5-5,82946,21054,0.283111
+2026-10-31T12:22:53,967517,Breaking Agent Backbones: Evaluating the Security of Backbone LLMs in AI Agents,claude-sonnet-5-5,116446,14735,0.440077
+2026-10-31T12:22:54,741333,TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems,claude-sonnet-5-5,113443,14701,0.423604
+2026-10-31T12:22:54,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,claude-sonnet-5-5,78865,11879,0.305855
+2026-10-31T12:22:57,696953,"MVISU-Bench: Benchmarking Mobile Agents for Real-World Tasks by Multi-App, Vague, Interactive, Single-App and Unethical Instructions",claude-sonnet-5-5,78466,14785,0.290964
+2026-10-31T12:22:59,439138,Evaluating Control Protocols for Untrusted AI Agents,claude-sonnet-5-5,117476,11886,0.462445
+2026-10-31T12:23:01,653194,SafeArena: Evaluating the Safety of Autonomous Web Agents,claude-sonnet-5-5,116692,14731,0.443260
+2026-10-31T12:23:05,638617,Forgetful but Faithful: A Cognitive Memory Architecture and Benchmark for Privacy-Aware Generative Agents,claude-sonnet-5-5,168091,11875,0.670284
+2026-10-31T12:23:14,974658,MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation,claude-sonnet-5-5,105010,20950,0.394866
+2026-10-31T12:23:14,719126,OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety,claude-sonnet-5-5,92638,14771,0.338657
+2026-10-31T12:23:18,591795,Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents,claude-sonnet-5-5,77564,14731,0.285216
+2026-10-31T12:23:19,928148,AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems,claude-sonnet-5-5,86785,20993,0.299352
+2026-10-31T12:23:26,769267,HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation,claude-sonnet-5-5,51594,14705,0.182368
+2026-10-31T12:23:30,648891,$τ$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains,claude-sonnet-5-5,146972,14721,0.565636
+2026-10-31T12:23:31,603112,Evaluating Implicit Regulatory Compliance in LLM Tool Invocation via Logic-Guided Synthesis,claude-sonnet-5-5,55156,14719,0.202700
+2026-10-31T12:23:34,586497,Multimodal Safety Evaluation in Generative Agent Social Simulations,claude-sonnet-5-5,60324,14747,0.235847
+2026-10-31T12:23:40,908022,Agent-SafetyBench: Evaluating the Safety of LLM Agents,claude-sonnet-5-5,87286,14749,0.343901
+2026-10-31T12:23:43,553347,"$α^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",claude-sonnet-5-5,92493,14751,0.359168
+2026-10-31T12:23:44,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,claude-sonnet-5-5,136588,14785,0.522071
+2026-10-31T12:23:45,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,claude-sonnet-5-5,212168,113704,0.457639
+2026-10-31T12:23:47,496462,"Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",claude-sonnet-5-5,56023,14761,0.201681
+2026-10-31T12:23:58,853732,WAREX: Web Agent Reliability Evaluation on Existing Benchmarks,claude-sonnet-5-5,61931,20928,0.196314
+2026-10-31T12:24:07,794068,AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,claude-sonnet-5-5,89715,14796,0.346301
+2026-10-31T12:24:10,459257,SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints,claude-sonnet-5-5,266736,21101,1.021795
+2026-10-31T12:24:11,749320,A Benchmark for Evaluating Outcome-Driven Constraint Violations in Autonomous AI Agents,claude-sonnet-5-5,78878,20993,0.298236
+2026-10-31T12:24:15,823233,PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach,claude-sonnet-5-5,191727,14769,0.761532
+2026-10-31T12:24:23,895643,Beyond Accuracy: A Multi-Dimensional Framework for Evaluating Enterprise Agentic AI Systems,claude-sonnet-5-5,44962,17885,0.143665
+2026-10-31T12:42:27,752243,WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents,claude-sonnet-5-5,35605,14735,0.104872
+2026-10-31T12:42:38,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,claude-sonnet-5-5,78930,14777,0.291769
+2026-10-31T12:42:39,967517,Breaking Agent Backbones: Evaluating the Security of Backbone LLMs in AI Agents,claude-sonnet-5-5,116403,14753,0.438949
+2026-10-31T12:42:42,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,claude-sonnet-5-5,106227,21092,0.377984
+2026-10-31T12:42:42,653194,SafeArena: Evaluating the Safety of Autonomous Web Agents,claude-sonnet-5-5,116771,14767,0.436551
+2026-10-31T12:42:43,696953,"MVISU-Bench: Benchmarking Mobile Agents for Real-World Tasks by Multi-App, Vague, Interactive, Single-App and Unethical Instructions",claude-sonnet-5-5,78428,14789,0.284329
+2026-10-31T12:42:43,596393,DUALGUAGE: Automated Joint Security-Functionality Benchmarking for Secure Code Generation,claude-sonnet-5-5,76492,14814,0.287688
+2026-10-31T12:42:44,741333,TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems,claude-sonnet-5-5,113662,14783,0.430776
+2026-10-31T12:42:45,439138,Evaluating Control Protocols for Untrusted AI Agents,claude-sonnet-5-5,123982,21020,0.447653
+2026-10-31T12:42:46,638617,Forgetful but Faithful: A Cognitive Memory Architecture and Benchmark for Privacy-Aware Generative Agents,claude-sonnet-5-5,168378,14847,0.653065
+2026-10-31T12:42:48,974658,MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation,claude-sonnet-5-5,98544,14737,0.379377
+2026-10-31T12:42:53,895643,Beyond Accuracy: A Multi-Dimensional Framework for Evaluating Enterprise Agentic AI Systems,claude-sonnet-5-5,51600,21152,0.159125
+2026-10-31T12:43:04,719126,OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety,claude-sonnet-5-5,99233,21087,0.343299
+2026-10-31T12:43:05,648891,$τ$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains,claude-sonnet-5-5,18194,14741,0.042235
+2026-10-31T12:43:10,603112,Evaluating Implicit Regulatory Compliance in LLM Tool Invocation via Logic-Guided Synthesis,claude-sonnet-5-5,55326,14813,0.198875
+2026-10-31T12:43:10,591795,Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents,claude-sonnet-5-5,77654,14776,0.290612
+2026-10-31T12:43:10,928148,AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems,claude-sonnet-5-5,80265,14767,0.298576
+2026-10-31T12:43:14,586497,Multimodal Safety Evaluation in Generative Agent Social Simulations,claude-sonnet-5-5,66876,21026,0.224178
+2026-10-31T12:43:15,908022,Agent-SafetyBench: Evaluating the Safety of LLM Agents,claude-sonnet-5-5,87408,14794,0.329195
+2026-10-31T12:43:18,769267,HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation,claude-sonnet-5-5,51691,14739,0.191854
+2026-10-31T12:43:19,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,claude-sonnet-5-5,110941,14743,0.416324
+2026-10-31T12:43:31,496462,"Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",claude-sonnet-5-5,55910,14749,0.198192
+2026-10-31T12:43:32,553347,"$α^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",claude-sonnet-5-5,92702,14876,0.365751
+2026-10-31T12:43:34,853732,WAREX: Web Agent Reliability Evaluation on Existing Benchmarks,claude-sonnet-5-5,55453,14727,0.189651
+2026-10-31T12:43:34,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,claude-sonnet-5-5,136710,14830,0.541625
+2026-10-31T12:43:36,749320,A Benchmark for Evaluating Outcome-Driven Constraint Violations in Autonomous AI Agents,claude-sonnet-5-5,72367,14745,0.271165
+2026-10-31T12:43:47,794068,AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,claude-sonnet-5-5,89560,14835,0.345770
+2026-10-31T12:43:48,459257,SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints,claude-sonnet-5-5,266541,21020,1.021730
+2026-10-31T12:43:50,559906,RiOSWorld: Benchmarking the Risk of Multimodal Computer-Use Agents,claude-sonnet-5-5,18172,14735,0.038548
+2026-10-31T12:43:56,823233,PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach,claude-sonnet-5-5,191690,14768,0.759980
+2026-10-31T12:54:16,769267,HardSecBench: Benchmarking the Security Awareness of LLMs for Hardware Code Generation,claude-sonnet-5-5,51856,14893,0.182227
+2026-10-31T12:54:16,554355,Beyond IVR: Benchmarking Customer Support LLM Agents for Business-Adherence,claude-sonnet-5-5,72692,14889,0.269286
+2026-10-31T12:54:17,817511,SafePro: Evaluating the Safety of Professional-Level AI Agents,claude-sonnet-5-5,64604,14935,0.230198
+2026-10-31T12:54:17,326307,OS-Harm: A Benchmark for Measuring Safety of Computer Use Agents,claude-sonnet-5-5,111330,14929,0.417236
+2026-10-31T12:54:18,705026,PEAR: Planner-Executor Agent Robustness Benchmark,claude-sonnet-5-5,79829,14871,0.290832
+2026-10-31T12:54:21,350004,CRMArena-Pro: Holistic Assessment of LLM Agents Across Diverse Business Scenarios and Interactions,claude-sonnet-5-5,101483,14955,0.380115
+2026-10-31T12:54:22,941484,MCP-SafetyBench: A Benchmark for Safety Evaluation of Large Language Models with Real-World MCP Servers,claude-sonnet-5-5,94477,21293,0.332843
+2026-10-31T12:54:25,749320,A Benchmark for Evaluating Outcome-Driven Constraint Violations in Autonomous AI Agents,claude-sonnet-5-5,72576,14899,0.277474
+2026-10-31T12:54:25,638617,Forgetful but Faithful: A Cognitive Memory Architecture and Benchmark for Privacy-Aware Generative Agents,claude-sonnet-5-5,175053,21306,0.652465
+2026-10-31T12:54:29,417671,ST-WebAgentBench: A Benchmark for Evaluating Safety and Trustworthiness in Web Agents,claude-sonnet-5-5,125197,14974,0.485042
+2026-10-31T12:54:32,752243,WebTrap Park: An Automated Platform for Systematic Security Evaluation of Web Agents,claude-sonnet-5-5,35781,14889,0.105189
+2026-10-31T12:54:35,974658,MAGPIE: A benchmark for Multi-AGent contextual PrIvacy Evaluation,claude-sonnet-5-5,98844,14891,0.393245
+2026-10-31T12:54:40,928148,AgentLeak: A Full-Stack Benchmark for Privacy Leakage in Multi-Agent LLM Systems,claude-sonnet-5-5,80522,14907,0.294060
+2026-10-31T12:54:44,496462,"Benchmarking MLLM-based Web Understanding: Reasoning, Robustness and Safety",claude-sonnet-5-5,56095,14889,0.199238
+2026-10-31T12:54:47,558776,PrivacyLens: Evaluating Privacy Norm Awareness of Language Models in Action,claude-sonnet-5-5,122249,14901,0.466781
+2026-10-31T12:54:50,895643,Beyond Accuracy: A Multi-Dimensional Framework for Evaluating Enterprise Agentic AI Systems,claude-sonnet-5-5,51741,21300,0.162140
+2026-10-31T12:54:52,878949,Risky-Bench: Probing Agentic Safety Risks under Real-World Deployment,claude-sonnet-5-5,115192,14883,0.431410
+2026-10-31T12:54:53,553347,"$α^3$-SecBench: A Large-Scale Evaluation Suite of Security, Resilience, and Trust for LLM-based UAV Agents over 6G Networks",claude-sonnet-5-5,93141,15010,0.358506
+2026-10-31T12:54:54,853732,WAREX: Web Agent Reliability Evaluation on Existing Benchmarks,claude-sonnet-5-5,55752,14881,0.189075
+2026-10-31T12:54:58,432568,CORE: Full-Path Evaluation of LLM Agents Beyond Final State,claude-sonnet-5-5,61138,14950,0.220198
+2026-10-31T12:55:00,967517,Breaking Agent Backbones: Evaluating the Security of Backbone LLMs in AI Agents,claude-sonnet-5-5,116792,14939,0.457246
+2026-10-31T12:55:00,648891,$τ$-bench: A Benchmark for Tool-Agent-User Interaction in Real-World Domains,claude-sonnet-5-5,147407,14941,0.566145
+2026-10-31T12:55:09,643524,A Functionality-Grounded Benchmark for Evaluating Web Agents in E-commerce Domains,claude-sonnet-5-5,63307,14893,0.222011
+2026-10-31T12:55:16,904766,From Assistant to Double Agent: Formalizing and Benchmarking Attacks on OpenClaw for Personalized Local AI Agent,claude-sonnet-5-5,51052,14917,0.177691
+2026-10-31T12:55:17,741333,TAMAS: Benchmarking Adversarial Risks in Multi-Agent LLM Systems,claude-sonnet-5-5,113771,14891,0.433844
+2026-10-31T12:55:18,354401,Is Vibe Coding Safe? Benchmarking Vulnerability of Agent-Generated Code in Real-World Tasks,claude-sonnet-5-5,99949,14957,0.369867
+2026-10-31T12:55:20,922168,SeCodePLT: A Unified Platform for Evaluating the Security of Code GenAI,claude-sonnet-5-5,118074,14910,0.460223
+2026-10-31T12:55:23,823233,PropensityBench: Evaluating Latent Safety Risks in Large Language Models via an Agentic Approach,claude-sonnet-5-5,198601,21311,0.776179
+2026-10-31T12:55:26,586497,Multimodal Safety Evaluation in Generative Agent Social Simulations,claude-sonnet-5-5,60588,14921,0.215447
+2026-10-31T12:55:28,908271,"$α^3$-Bench: A Unified Benchmark of Safety, Robustness, and Efficiency for LLM-Based UAV Agents over 6G Networks",claude-sonnet-5-5,88833,14933,0.343081
+2026-10-31T12:55:32,821816,EU-Agent-Bench: Measuring Illegal Behavior of LLM Agents Under EU Law,claude-sonnet-5-5,72061,14941,0.279164
+2026-10-31T12:55:37,696953,"MVISU-Bench: Benchmarking Mobile Agents for Real-World Tasks by Multi-App, Vague, Interactive, Single-App and Unethical Instructions",claude-sonnet-5-5,78735,14989,0.285445
+2026-10-31T12:55:39,331265,FinVault: Benchmarking Financial Agent Safety in Execution-Grounded Environments,claude-sonnet-5-5,83698,14887,0.323201
+2026-10-31T12:55:39,719126,OpenAgentSafety: A Comprehensive Framework for Evaluating Real-World AI Agent Safety,claude-sonnet-5-5,92931,14970,0.340043
+2026-10-31T12:55:43,959253,MCP Security Bench (MSB): Benchmarking Attacks Against Model Context Protocol in LLM Agents,claude-sonnet-5-5,89431,14903,0.322982
+2026-10-31T12:55:46,591795,Privacy in Action: Towards Realistic Privacy Mitigation and Evaluation for LLM-Powered Agents,claude-sonnet-5-5,77815,14905,0.286104
+2026-10-31T12:55:50,959720,Echoes of Human Malice in Agents: Benchmarking LLMs for Multi-Turn Online Harassment Attacks,claude-sonnet-5-5,69548,14909,0.249175
+2026-10-31T12:55:55,794068,AgentDojo: A Dynamic Environment to Evaluate Prompt Injection Attacks and Defenses for LLM Agents,claude-sonnet-5-5,96253,21299,0.341253
+2026-10-31T12:55:55,988352,MIRAGE-Bench: LLM Agent is Hallucinating and Where to Find Them,claude-sonnet-5-5,158130,14933,0.610911
+2026-10-31T12:55:55,853406,"Agent Tools Orchestration Leaks More: Dataset, Benchmark, and Mitigation",claude-sonnet-5-5,74292,14905,0.280992
+2026-10-31T12:56:00,927585,Agent Security Bench (ASB): Formalizing and Benchmarking Attacks and Defenses in LLM-based Agents,claude-sonnet-5-5,133972,14980,0.548739
+2026-10-31T12:56:02,702100,RephQA: Evaluating Readability of Large Language Models in Public Health Question Answering,claude-sonnet-5-5,146286,21220,0.528355
+2026-10-31T12:56:02,983783,Evaluating Language Model Reasoning about Confidential Information,claude-sonnet-5-5,79609,21188,0.267344
+2026-10-31T12:56:08,807853,Decision Making under Imperfect Recall: Algorithms and Benchmarks,claude-sonnet-5-5,121380,14891,0.451474
+2026-10-31T12:56:09,620710,From Benchmarks to Business Impact: Deploying IBM Generalist Agent in Enterprise Production,claude-sonnet-5-5,65289,14955,0.235725
+2026-10-31T12:56:12,972790,CONFETTI: Conversational Function-Calling Evaluation Through Turn-Level Interactions,claude-sonnet-5-5,58808,14937,0.197254
+2026-10-31T12:56:17,443895,MalURLBench: A Benchmark Evaluating Agents' Vulnerabilities When Processing Web URLs,claude-sonnet-5-5,58637,14947,0.217465
+2026-10-31T12:56:19,743628,Building Trust in Mental Health Chatbots: Safety Metrics and LLM-Based Evaluation Tools,claude-sonnet-5-5,90443,14901,0.330789
+2026-10-31T12:56:20,348557,ManagerBench: Evaluating the Safety-Pragmatism Trade-off in Autonomous LLMs,claude-sonnet-5-5,112622,14899,0.418455
+2026-10-31T12:56:22,660147,Cybench: A Framework for Evaluating Cybersecurity Capabilities and Risks of Language Models,claude-sonnet-5-5,427263,21354,1.665389
+2026-10-31T12:56:23,506503,Position: Theory of Mind Benchmarks are Broken for Large Language Models,claude-sonnet-5-5,126730,14891,0.470443
+2026-10-31T12:56:26,550096,Assessing Spear-Phishing Website Generation in Large Language Model Coding Agents,claude-sonnet-5-5,62808,14929,0.217131
+2026-10-31T12:56:35,857872,Intelligent System for Automated Molecular Patent Infringement Assessment,claude-sonnet-5-5,107980,14919,0.400855
+2026-10-31T12:56:37,688149,SecureCode: A Production-Grade Multi-Turn Dataset for Training Security-Aware Code Generation Models,claude-sonnet-5-5,88436,14917,0.330049
+2026-10-31T12:56:37,917264,Driving with Regulation: Trustworthy and Interpretable Decision-Making for Autonomous Driving with Retrieval-Augmented Reasoning,claude-sonnet-5-5,67429,14998,0.251680
+2026-10-31T12:56:38,591511,"AVIATOR: Towards AI-Agentic Vulnerability Injection Workflow for High-Fidelity, Large-Scale Code Security Dataset",claude-sonnet-5-5,98668,14943,0.366885
+2026-10-31T12:56:40,617833,SOCK: A Benchmark for Measuring Self-Replication in Large Language Models,claude-sonnet-5-5,39529,14881,0.122355
+2026-10-31T12:56:40,750745,AgentHallu: Benchmarking Automated Hallucination Attribution of LLM-based Agents,claude-sonnet-5-5,95759,14937,0.346519
+2026-10-31T12:56:42,803201,TraderBench: How Robust Are AI Agents in Adversarial Capital Markets?,claude-sonnet-5-5,50890,14883,0.171334
+2026-10-31T12:56:44,676596,SecRepoBench: Benchmarking Code Agents for Secure Code Completion in Real-World Repositories,claude-sonnet-5-5,50147,14979,0.174871
+2026-10-31T12:56:46,653194,SafeArena: Evaluating the Safety of Autonomous Web Agents,claude-sonnet-5-5,117002,14921,0.434798
+2026-10-31T12:56:53,776762,DITING: A Multi-Agent Evaluation Framework for Benchmarking Web Novel Translation,claude-sonnet-5-5,75877,14893,0.276298
+2026-10-31T12:56:59,345739,A Benchmark for Understanding Dialogue Safety in Mental Health Support,claude-sonnet-5-5,50248,14877,0.168060
+2026-10-31T12:57:01,524244,OutSafe-Bench: A Benchmark for Multimodal Offensive Content Detection in Large Language Models,claude-sonnet-5-5,74511,14899,0.261550
+2026-10-31T12:57:04,574459,Automated Benchmark Generation for Repository-Level Coding Tasks,claude-sonnet-5-5,94633,21308,0.319469
+2026-10-31T12:57:05,670998,ElectriQ: A Benchmark for Assessing the Response Capability of Large Language Models in Power Marketing,claude-sonnet-5-5,70932,14899,0.249114
+2026-10-31T12:57:06,811615,AgentHarm: A Benchmark for Measuring Harmfulness of LLM Agents,claude-sonnet-5-5,112977,14945,0.429321
+2026-10-31T12:57:08,680545,Automated Safety Benchmarking: A Multi-agent Pipeline for LVLMs,claude-sonnet-5-5,61648,18131,0.199711
+2026-10-31T12:57:08,895159,FinEval: A Chinese Financial Domain Knowledge Evaluation Benchmark for Large Language Models,claude-sonnet-5-5,128998,14899,0.490838
+2026-10-31T12:57:10,607757,VoiceAgentBench: Are Voice Assistants ready for agentic tasks?,claude-sonnet-5-5,149640,14941,0.567703
+2026-10-31T12:57:14,472123,AgentDrive: An Open Benchmark Dataset for Agentic AI Reasoning with LLM-Generated Scenarios in Autonomous Systems,claude-sonnet-5-5,76259,15011,0.282678
+2026-10-31T12:57:16,826803,A Proposal for Evaluating the Operational Risk for ChatBots based on Large Language Models,claude-sonnet-5-5,81054,21222,0.282682
+2026-10-31T12:57:21,604293,A Synthetic Dataset for Personal Attribute Inference,claude-sonnet-5-5,145079,14911,0.550458
+2026-10-31T12:57:24,778011,YRC-Bench: A Benchmark for Learning to Coordinate with Experts,claude-sonnet-5-5,91497,14925,0.337484
+2026-10-31T12:57:31,802743,Benchmarking Prompt Engineering Techniques for Secure Code Generation with GPT Models,claude-sonnet-5-5,62521,21233,0.199207
+2026-10-31T12:57:32,908022,Agent-SafetyBench: Evaluating the Safety of LLM Agents,claude-sonnet-5-5,87592,14923,0.327159
+2026-10-31T12:57:38,578206,Efficient LLM Safety Evaluation through Multi-Agent Debate,claude-sonnet-5-5,57541,14921,0.200812
+2026-10-31T12:57:40,733341,BuildBench: Benchmarking LLM Agents on Compiling Real-World Open-Source Software,claude-sonnet-5-5,67492,14937,0.234295
+2026-10-31T12:57:41,504232,DataGovBench: Benchmarking LLM Agents for Real-World Data Governance Workflows,claude-sonnet-5-5,226224,120887,0.484704
+2026-10-31T12:57:41,840748,MAPS: A Multilingual Benchmark for Agent Performance and Security,claude-sonnet-5-5,101994,21285,0.361512
+2026-10-31T12:57:42,410547,Welfare Diplomacy: Benchmarking Language Model Cooperation,claude-sonnet-5-5,174228,14921,0.671270
+2026-10-31T12:57:43,378119,ConVerse: Benchmarking Contextual Safety in Agent-to-Agent Conversations,claude-sonnet-5-5,71430,14949,0.261888
+2026-10-31T12:57:43,818225,REAL: Benchmarking Autonomous Agents on Deterministic Simulations of Real Websites,claude-sonnet-5-5,76800,14891,0.270705
+2026-10-31T12:57:56,614110,Breaking the Code: Security Assessment of AI Code Agents Through Systematic Jailbreaking Attacks,claude-sonnet-5-5,93462,14972,0.349674
+2026-10-31T12:57:57,401027,RepliBench: Evaluating the Autonomous Replication Capabilities of Language Model Agents,claude-sonnet-5-5,144645,14889,0.546852
+2026-10-31T12:58:10,378155,6G-Bench: An Open Benchmark for Semantic Communication and Network-Level Reasoning with Foundation Models in AI-Native 6G Networks,claude-sonnet-5-5,101577,14931,0.383321
+2026-10-31T12:58:18,671300,TD-EVAL: Revisiting Task-Oriented Dialogue Evaluation by Combining Turn-Level Precision with Dialogue-Level Comparisons,claude-sonnet-5-5,75231,14937,0.288959
+2026-10-31T12:59:07,439138,Evaluating Control Protocols for Untrusted AI Agents,claude-sonnet-5-5,117639,17953,0.428728
+2026-10-31T13:07:13,409037,VCode: a Multimodal Coding Benchmark with SVG as Symbolic Visual Representation,claude-sonnet-5-5,110528,77174,0.171308
+2026-10-31T13:07:19,559906,RiOSWorld: Benchmarking the Risk of Multimodal Computer-Use Agents,claude-sonnet-5-5,157288,106237,0.249829
+2026-10-31T13:09:18,793534,FieldWorkArena: Agentic AI Benchmark for Real Field Work Tasks,claude-sonnet-5-5,33399,21175,0.073998
+2026-10-31T13:09:20,931445,Dynamic Benchmarking of Reasoning Capabilities in Code Large Language Models Under Data Contamination,claude-sonnet-5-5,87572,58819,0.143246
+2026-10-31T13:09:24,708768,Better to Ask in English: Cross-Lingual Evaluation of Large Language Models for Healthcare Queries,claude-sonnet-5-5,66213,40021,0.137138
+2026-10-31T13:09:29,811460,CVE-Bench: A Benchmark for AI Agents' Ability to Exploit Real-World Web Application Vulnerabilities,claude-sonnet-5-5,53489,27468,0.144259
+2026-10-31T13:09:29,595149,It's the Thought that Counts: Evaluating the Attempts of Frontier LLMs to Persuade on Harmful Topics,claude-sonnet-5-5,95250,59619,0.188782
+2026-10-31T13:09:33,658174,SafeEvalAgent: Toward Agentic and Self-Evolving Safety Evaluation of LLMs,claude-sonnet-5-5,87087,57695,0.165947
+2026-10-31T13:09:34,363124,Hiding in Plain Sight: Reframing Hardware Trojan Benchmarking as a Hide&Seek Modification,claude-sonnet-5-5,32179,21197,0.065558
+2026-10-31T13:09:35,753478,MoodAngels: A Retrieval-augmented Multi-agent Framework for Psychiatry Diagnosis,claude-sonnet-5-5,221439,159747,0.307336
+2026-10-31T13:09:37,461408,"Privasis: Synthesizing the Largest ""Public"" Private Dataset from Scratch",claude-sonnet-5-5,224016,159734,0.318985
+2026-10-31T13:09:39,363808,HackWorld: Evaluating Computer-Use Agents on Exploiting Web Application Vulnerabilities,claude-sonnet-5-5,171167,115696,0.280610
+2026-10-31T13:09:39,487931,SWE-bench Goes Live!,claude-sonnet-5-5,92818,58956,0.165872
+2026-10-31T13:09:41,342490,Unsafer in Many Turns: Benchmarking and Defending Multi-Turn Safety Risks in Tool-Using Agents,claude-sonnet-5-5,283682,231181,0.291133
+2026-10-31T13:09:45,323314,NuRisk: A Visual Question Answering Dataset for Agent-Level Risk Assessment in Autonomous Driving,claude-sonnet-5-5,34685,21197,0.082098
+2026-10-31T13:09:49,487602,MIRAI: Evaluating LLM Agents for Event Forecasting,claude-sonnet-5-5,399953,312407,0.446526
+2026-10-31T13:09:53,922740,Are Personalized Stochastic Parrots More Dangerous? Evaluating Persona Biases in Dialogue Systems,claude-sonnet-5-5,149228,104430,0.223212
+2026-10-31T13:09:57,618733,From Static Benchmarks to Dynamic Protocol: Agent-Centric Text Anomaly Detection for Evaluating LLM Reasoning,claude-sonnet-5-5,100372,58993,0.197678
+2026-10-31T13:09:58,949579,RedCode: Risky Code Execution and Generation Benchmark for Code Agents,claude-sonnet-5-5,417986,354864,0.372685
+2026-10-31T13:10:01,442741,LiveMedBench: A Contamination-Free Medical Benchmark for LLMs with Automated Rubric Evaluation,claude-sonnet-5-5,56752,27722,0.150205
+2026-10-31T13:10:01,659192,The Automated but Risky Game: Modeling and Benchmarking Agent-to-Agent Negotiations and Transactions in Consumer Markets,claude-sonnet-5-5,69463,42900,0.147281
+2026-10-31T13:10:04,486652,EconWebArena: Benchmarking Autonomous Agents on Economic Tasks in Realistic Web Environments,claude-sonnet-5-5,68150,42870,0.129592
+2026-10-31T13:10:07,480048,MDD-5k: A New Diagnostic Conversation Dataset for Mental Disorders Synthesized via Neuro-Symbolic LLM Agents,claude-sonnet-5-5,56225,40066,0.096941
+2026-10-31T13:10:11,340276,Bridging the Knowledge-Action Gap by Evaluating LLMs in Dynamic Dental Clinical Scenarios,claude-sonnet-5-5,195496,149368,0.245986
+2026-10-31T13:10:12,539714,CyberGym: Evaluating AI Agents' Real-World Cybersecurity Capabilities at Scale,claude-sonnet-5-5,151830,102880,0.247301
+2026-10-31T13:10:12,995687,PRODIGy: a PROfile-based DIalogue Generation dataset,claude-sonnet-5-5,50198,27642,0.110854
+2026-10-31T13:10:16,818464,When Agents Trade: Live Multi-Market Trading Benchmark for LLM Agents,claude-sonnet-5-5,45957,27454,0.100530
+2026-10-31T13:10:16,409745,CXMArena: Unified Dataset to benchmark performance in realistic CXM Scenarios,claude-sonnet-5-5,128563,96978,0.171582
+2026-10-31T13:10:21,666343,MLA-Trust: Benchmarking Trustworthiness of Multimodal LLM Agents in GUI Environments,claude-sonnet-5-5,283885,232478,0.282687
+2026-10-31T13:10:22,715846,AutoPenBench: Benchmarking Generative Agents for Penetration Testing,claude-sonnet-5-5,129792,96958,0.176450
+2026-10-31T13:10:44,376553,BountyBench: Dollar Impact of AI Agent Attackers and Defenders on Real-World Cybersecurity Systems,claude-sonnet-5-5,569685,451796,0.620626
+2026-10-31T13:11:57,824179,"Imitation Learning Datasets: A Toolkit For Creating Datasets, Training Agents and Benchmarking",claude-sonnet-5-5,15841,8799,0.041744
+2026-10-31T13:12:04,582682,The Ethical Compass of the Machine: Evaluating Large Language Models for Decision Support in Construction Project Management,claude-sonnet-5-5,51103,27502,0.123760
+2026-10-31T13:12:06,713882,HR-MultiWOZ: A Task Oriented Dialogue (TOD) Dataset for HR LLM Agent,claude-sonnet-5-5,63430,43014,0.109066
+2026-10-31T13:12:09,767344,Sola-Visibility-ISPM: Benchmarking Agentic AI for Identity Security Posture Management Visibility,claude-sonnet-5-5,71237,42536,0.145465
+2026-10-31T13:12:09,598969,WaymoQA: A Multi-View Visual Question Answering Dataset for Safety-Critical Reasoning in Autonomous Driving,claude-sonnet-5-5,46000,24966,0.112345
+2026-10-31T13:12:09,439481,HackSynth: LLM Agent and Evaluation Framework for Autonomous Penetration Testing,claude-sonnet-5-5,63739,40040,0.125980
+2026-10-31T13:12:11,666266,PentestEval: Benchmarking LLM-based Penetration Testing with Modular and Stage-Level Design,claude-sonnet-5-5,59944,40018,0.110861
+2026-10-31T13:12:12,792298,TFHE-Coder: Evaluating LLM-agentic Fully Homomorphic Encryption Code Generation,claude-sonnet-5-5,34676,21191,0.087400
+2026-10-31T13:12:14,596393,DUALGUAGE: Automated Joint Security-Functionality Benchmarking for Secure Code Generation,claude-sonnet-5-5,90406,65290,0.140520
+2026-10-31T13:12:16,603112,Evaluating Implicit Regulatory Compliance in LLM Tool Invocation via Logic-Guided Synthesis,claude-sonnet-5-5,58320,40499,0.118148
+2026-10-31T13:12:19,969988,EgoNormia: Benchmarking Physical Social Norm Understanding,claude-sonnet-5-5,156162,116225,0.212105
+2026-10-31T13:12:21,564569,SCARE: A Benchmark for SQL Correction and Question Answerability Classification for Reliable EHR Question Answering,claude-sonnet-5-5,104209,74077,0.176027
+2026-10-31T13:12:23,415315,CHBias: Bias Evaluation and Mitigation of Chinese Conversational Language Models,claude-sonnet-5-5,76084,49383,0.136185
+2026-10-31T13:12:28,738907,CultureGuard: Towards Culturally-Aware Dataset and Guard Model for Multilingual Safety Applications,claude-sonnet-5-5,88860,59582,0.165906
+2026-10-31T13:12:30,500121,SafetyFlow: An Agent-Flow System for Automated LLM Safety Benchmarking,claude-sonnet-5-5,36049,21225,0.084431
+2026-10-31T13:12:31,528717,MeetBench-XL: Calibrated Multi-Dimensional Evaluation and Learned Dual-Policy Agents for Real-Time Meetings,claude-sonnet-5-5,36106,21263,0.088236
+2026-10-31T13:12:32,539109,YNTP-100: A Benchmark for Your Next Token Prediction with 100 People,claude-sonnet-5-5,52866,27682,0.125022
+2026-10-31T13:12:36,638763,BELLS: A Framework Towards Future Proof Benchmarks for the Evaluation of LLM Safeguards,claude-sonnet-5-5,38463,21205,0.106702
+2026-10-31T13:12:41,520658,PPTC-R benchmark: Towards Evaluating the Robustness of Large Language Models for PowerPoint Task Completion,claude-sonnet-5-5,92697,67223,0.137765
+2026-10-31T13:12:44,834792,Real-World En Call Center Transcripts Dataset with PII Redaction,claude-sonnet-5-5,91599,66495,0.133907
+2026-10-31T13:12:44,786728,Is Safety Standard Same for Everyone? User-Specific Safety Evaluation of Large Language Models,claude-sonnet-5-5,96413,67147,0.166457
+2026-10-31T13:12:49,776831,AgentAuditor: Human-Level Safety and Security Evaluation for LLM Agents,claude-sonnet-5-5,244516,174458,0.352137
+2026-10-31T13:12:50,937254,Evaluating Small Vision-Language Models on Distance-Dependent Traffic Perception,claude-sonnet-5-5,90547,64093,0.147517
+2026-10-31T13:12:50,737319,Multi-OphthaLingua: A Multilingual Benchmark for Assessing and Debiasing LLM Ophthalmological QA in LMICs,claude-sonnet-5-5,43488,27480,0.092411
+2026-10-31T13:12:50,881532,Benchmarking LLM-Assisted Blue Teaming via Standardized Threat Hunting,claude-sonnet-5-5,175891,135245,0.222828
+2026-10-31T13:12:52,996291,"Researchy Questions: A Dataset of Multi-Perspective, Decompositional Questions for LLM Web Agents",claude-sonnet-5-5,95205,59588,0.176477
+2026-10-31T13:12:53,618925,FeatBench: Towards More Realistic Evaluation of Feature-level Code Generation,claude-sonnet-5-5,99077,58958,0.193926
+2026-10-31T13:12:57,335304,MedDialogRubrics: A Comprehensive Benchmark and Evaluation Framework for Multi-turn Medical Consultations in Large Language Models,claude-sonnet-5-5,90517,65380,0.139259
+2026-10-31T13:13:02,709448,From Conversation to Query Execution: Benchmarking User and Tool Interactions for EHR Database Agents,claude-sonnet-5-5,247887,167982,0.403298
+2026-10-31T13:18:56,677159,Toward Scalable Verifiable Reward: Proxy State-Based Evaluation for Multi-turn Tool-Calling LLM Agents,claude-sonnet-5-5,40058,21311,0.099195
+2026-10-31T13:18:57,381306,STEP: Structured Training and Evaluation Platform for benchmarking trajectory prediction models,claude-sonnet-5-5,37161,21177,0.089467
+2026-10-31T13:19:00,639244,LLMArena: Assessing Capabilities of Large Language Models in Dynamic Multi-Agent Environments,claude-sonnet-5-5,89829,59444,0.153141
+2026-10-31T13:19:01,932205,WAInjectBench: Benchmarking Prompt Injection Detections for Web Agents,claude-sonnet-5-5,88809,58792,0.155282
+2026-10-31T13:19:03,817057,Explanations are a Means to an End: Decision Theoretic Explanation Evaluation,claude-sonnet-5-5,54863,27497,0.141356
+2026-10-31T13:19:04,916464,MoPHES:Leveraging on-device LLMs as Agent for Mobile Psychological Health Evaluation and Support,claude-sonnet-5-5,58707,40030,0.108774
+2026-10-31T13:19:06,784782,From homeostasis to resource sharing: Biologically and economically aligned multi-objective multi-agent gridworld-based AI safety benchmarks,claude-sonnet-5-5,89218,59074,0.160835
+2026-10-31T13:19:08,707901,Informed AI Regulation: Comparing the Ethical Frameworks of Leading LLM Chatbots Using an Ethics-Based Audit to Assess Moral Reasoning and Normative Values,claude-sonnet-5-5,91431,58931,0.169627
+2026-10-31T13:19:10,584251,MAGPIE: A dataset for Multi-AGent contextual PrIvacy Evaluation,claude-sonnet-5-5,48607,27504,0.127048
+2026-10-31T13:19:13,612012,When Benchmarks Lie: Evaluating Malicious Prompt Classifiers Under True Distribution Shift,claude-sonnet-5-5,172106,135240,0.207683
+2026-10-31T13:19:18,995118,Evaluating LLM Agent Adherence to Hierarchical Safety Principles: A Lightweight Benchmark for Probing Foundational Controllability Components,claude-sonnet-5-5,37227,21221,0.092746
+2026-10-31T13:19:20,344232,LibVulnWatch: A Deep Assessment Agent System and Leaderboard for Uncovering Hidden Vulnerabilities in Open-Source AI Libraries,claude-sonnet-5-5,228370,161855,0.336419
+2026-10-31T13:19:21,928941,"Red Lines and Grey Zones in the Fog of War: Benchmarking Legal Risk, Moral Harm, and Regional Bias in Large Language Model Military Decision-Making",claude-sonnet-5-5,221720,157444,0.325792
+2026-10-31T13:19:22,989027,Medical Malice: A Dataset for Context-Aware Safety in Healthcare LLMs,claude-sonnet-5-5,36188,21277,0.085596
+2026-10-31T13:19:23,888427,"Towards Automatic Evaluation for LLMs' Clinical Capabilities: Metric, Data, and Algorithm",claude-sonnet-5-5,61630,40262,0.120201
+2026-10-31T13:19:24,554484,PrivacyBench: A Conversational Benchmark for Evaluating Privacy in Personalized AI,claude-sonnet-5-5,44716,27462,0.098375
+2026-10-31T13:19:26,465041,TeleAntiFraud-28k: An Audio-Text Slow-Thinking Dataset for Telecom Fraud Detection,claude-sonnet-5-5,35944,21201,0.082354
+2026-10-31T13:19:34,605209,"Towards Effective Offensive Security LLM Agents: Hyperparameter Tuning, LLM as a Judge, and a Lightweight CTF Benchmark",claude-sonnet-5-5,48507,27488,0.110159
+2026-10-31T13:19:36,689727,Evaluating Small Language Models for Agentic On-Farm Decision Support Systems,claude-sonnet-5-5,161123,115758,0.235791
+2026-10-31T13:19:36,479159,Towards Fair and Comprehensive Evaluation of Routers in Collaborative LLM Systems,claude-sonnet-5-5,48937,27644,0.109559
+2026-10-31T13:19:37,597561,"Transparent, Evaluable, and Accessible Data Agents: A Proof-of-Concept Framework",claude-sonnet-5-5,94155,65282,0.156767
+2026-10-31T13:19:39,530146,SEC-bench: Automated Benchmarking of LLM Agents on Real-World Software Security Tasks,claude-sonnet-5-5,129300,87882,0.214882
+2026-10-31T13:19:41,483493,Beyond BeautifulSoup: Benchmarking LLM-Powered Web Scraping for Everyday Users,claude-sonnet-5-5,36067,21237,0.086506
+2026-10-31T13:19:44,976013,VC-Agent: An Interactive Agent for Customized Video Dataset Collection,claude-sonnet-5-5,109136,72760,0.182677
+2026-10-31T13:19:45,760468,Engineering Reasoning and Instruction (ERI) Benchmark: A Large Taxonomy-driven Dataset for Foundation Models and Agents,claude-sonnet-5-5,95130,58886,0.180049
+2026-10-31T13:19:49,776457,AutoAdvExBench: Benchmarking autonomous exploitation of adversarial example defenses,claude-sonnet-5-5,51085,27490,0.129286
+2026-10-31T13:19:54,948951,"AI Research Agents for Machine Learning: Search, Exploration, and Generalization in MLE-bench",claude-sonnet-5-5,149783,103178,0.236184
+2026-10-31T13:19:58,445092,"Noise, Adaptation, and Strategy: Assessing LLM Fidelity in Decision-Making",claude-sonnet-5-5,50338,27694,0.119877
+2026-10-31T13:19:58,587383,MemeCMD: An Automatically Generated Chinese Multi-turn Dialogue Dataset with Contextually Retrieved Memes,claude-sonnet-5-5,23387,8807,0.076254
+2026-10-31T13:19:59,405859,LPS-Bench: Benchmarking Safety Awareness of Computer-Use Agents in Long-Horizon Planning under Benign and Adversarial Scenarios,claude-sonnet-5-5,188373,145819,0.236454
+2026-10-31T13:19:59,755079,macOSWorld: A Multilingual Interactive Benchmark for GUI Agents,claude-sonnet-5-5,194311,144608,0.254988
+2026-10-31T13:20:00,793967,RADAR: A Risk-Aware Dynamic Multi-Agent Framework for LLM Safety Evaluation via Role-Specialized Collaboration,claude-sonnet-5-5,68805,42572,0.138953
+2026-10-31T13:20:01,338821,MoralityGym: A Benchmark for Evaluating Hierarchical Moral Alignment in Sequential Decision-Making Agents,claude-sonnet-5-5,61148,27516,0.162243
+2026-10-31T13:20:04,645505,Human Choice Prediction in Language-based Persuasion Games: Simulation-based Off-Policy Evaluation,claude-sonnet-5-5,112997,74809,0.183048
+2026-10-31T13:20:06,365067,FinGAIA: A Chinese Benchmark for AI Agents in Real-World Financial Domain,claude-sonnet-5-5,96545,58942,0.186220
+2026-10-31T13:20:13,776670,Implicit Intelligence -- Evaluating Agents on What Users Don't Say,claude-sonnet-5-5,347230,288545,0.324265
+2026-10-31T13:20:14,488266,Investigating Pedagogical Teacher and Student LLM Agents: Genetic Adaptation Meets Retrieval Augmented Generation Across Learning Style,claude-sonnet-5-5,172198,119734,0.255851
+2026-10-31T13:20:23,729882,CyberExplorer: Benchmarking LLM Offensive Security Capabilities in a Real-World Attacking Simulation Environment,claude-sonnet-5-5,98440,71863,0.149856
+2026-10-31T13:20:36,383036,RE-Bench: Evaluating frontier AI R&D capabilities of language model agents against human experts,claude-sonnet-5-5,402479,312482,0.463844
+2026-10-31T13:24:11,836225,StockBench: Can LLM Agents Trade Stocks Profitably In Real-world Markets?,claude-sonnet-5-5,46375,27644,0.098405
+2026-10-31T13:24:12,832821,The Seeker's Dilemma: Realistic Formulation and Benchmarking for Hardware Trojan Detection,claude-sonnet-5-5,58687,40018,0.101706
+2026-10-31T13:24:14,727262,LaoBench: A Large-Scale Multidimensional Lao Benchmark for Large Language Models,claude-sonnet-5-5,68406,42993,0.131258
+2026-10-31T13:24:14,897933,BioAgent Bench: An AI Agent Evaluation Suite for Bioinformatics,claude-sonnet-5-5,53447,27440,0.134428
+2026-10-31T13:24:15,480872,SocialDF: Benchmark Dataset and Detection Model for Mitigating Harmful Deepfake Content on Social Media Platforms,claude-sonnet-5-5,35953,21207,0.087121
+2026-10-31T13:24:15,417961,Ollabench: Evaluating LLMs' Reasoning for Human-centric Interdependent Cybersecurity,claude-sonnet-5-5,58699,40024,0.105492
+2026-10-31T13:24:16,580225,AI for Climate Finance: Agentic Retrieval and Multi-Step Reasoning for Early Warning System Investments,claude-sonnet-5-5,50384,27720,0.119923
+2026-10-31T13:24:19,800230,RAGalyst: Automated Human-Aligned Agentic Evaluation for Domain-Specific RAG,claude-sonnet-5-5,87927,64037,0.131667
+2026-10-31T13:24:19,489237,VERA-MH: Reliability and Validity of an Open-Source AI Safety Evaluation in Mental Health,claude-sonnet-5-5,149798,103190,0.231219
+2026-10-31T13:24:23,530973,LiveTradeBench: Seeking Real-World Alpha with Large Language Models,claude-sonnet-5-5,152991,102832,0.249369
+2026-10-31T13:24:32,748539,Evaluating Precise Geolocation Inference Capabilities of Vision Language Models,claude-sonnet-5-5,23399,8789,0.080873
+2026-10-31T13:24:33,720852,Diverse And Private Synthetic Datasets Generation for RAG evaluation: A multi-agent framework,claude-sonnet-5-5,36200,21285,0.087120
+2026-10-31T13:24:33,422978,TheAgentCompany: Benchmarking LLM Agents on Consequential Real World Tasks,claude-sonnet-5-5,92824,58967,0.167718
+2026-10-31T13:24:34,353473,Benchmarks and Algorithms for Offline Preference-Based Reward Learning,claude-sonnet-5-5,92798,58948,0.165696
+2026-10-31T13:24:38,947369,BackportBench: A Multilingual Benchmark for Automated Backporting of Patches,claude-sonnet-5-5,59522,36720,0.119427
+2026-10-31T13:24:39,391910,BioBlue: Systematic runaway-optimiser-like LLM failure modes on biologically and economically aligned AI safety benchmarks for LLMs with simplified observation format,claude-sonnet-5-5,90100,58876,0.163339
+2026-10-31T13:24:43,538368,What Would an LLM Do? Evaluating Large Language Models for Policymaking to Alleviate Homelessness,claude-sonnet-5-5,52215,27454,0.126772
+2026-10-31T13:24:45,511126,Benchmarking Poisoning Attacks against Retrieval-Augmented Generation,claude-sonnet-5-5,231203,180145,0.292923
+2026-10-31T13:24:45,919954,Auto-Evaluation: A Critical Measure in Driving Improvements in Quality and Safety of AI-Generated Lesson Resources,claude-sonnet-5-5,112253,74407,0.196256
+2026-10-31T13:24:45,605985,MATRIX: Multi-Agent simulaTion fRamework for safe Interactions and conteXtual clinical conversational evaluation,claude-sonnet-5-5,151843,102912,0.254909
+2026-10-31T13:24:50,459257,SOPBench: Evaluating Language Agents at Following Standard Operating Procedures and Constraints,claude-sonnet-5-5,760540,635097,0.671683
+2026-10-31T13:24:53,879748,It's a TRAP! Task-Redirecting Agent Persuasion Benchmark for Web Agents,claude-sonnet-5-5,67730,42656,0.130714
+2026-10-31T13:24:56,363761,SycoEval-EM: Sycophancy Evaluation of Large Language Models in Simulated Clinical Encounters for Emergency Care,claude-sonnet-5-5,24626,8807,0.092565
+2026-10-31T13:24:57,713025,AgentDAM: Privacy Leakage Evaluation for Autonomous Web Agents,claude-sonnet-5-5,95051,58795,0.183671
+2026-10-31T13:24:57,818887,Crisis-Bench: Benchmarking Strategic Ambiguity and Reputation Management in Large Language Models,claude-sonnet-5-5,135123,101812,0.190400
+2026-10-31T13:25:01,906533,CryptoFormalEval: Integrating LLMs and Formal Verification for Automated Cryptographic Protocol Vulnerability Detection,claude-sonnet-5-5,51158,27534,0.121311
+2026-10-31T13:25:01,917202,PandaGuard: Systematic Evaluation of LLM Safety against Jailbreaking Attacks,claude-sonnet-5-5,102966,74053,0.151802
+2026-10-31T13:25:04,331635,MedKGEval: A Knowledge Graph-Based Multi-Turn Evaluation Framework for Open-Ended Patient Interactions with Clinical LLMs,claude-sonnet-5-5,46145,27538,0.108286
+2026-10-31T13:25:08,430726,OCCULT: Evaluating Large Language Models for Offensive Cyber Operation Capabilities,claude-sonnet-5-5,222431,162154,0.302879
+2026-10-31T13:25:10,685364,"CiteAudit: You Cited It, But Did You Read It? A Benchmark for Verifying Scientific References in the LLM Era",claude-sonnet-5-5,59972,40039,0.116667
+2026-10-31T13:27:42,386928,PredictionMarketBench: A SWE-bench-Style Framework for Backtesting Trading Agents on Prediction Markets,claude-sonnet-5-5,37188,21197,0.085901
+2026-10-31T13:27:48,675060,TruthTensor: Evaluating LLMs through Human Imitation on Prediction Market under Drift and Holistic Reasoning,claude-sonnet-5-5,51146,27526,0.124914
+2026-10-31T13:27:49,276026,WGSR-Bench: Wargame-based Game-theoretic Strategic Reasoning Benchmark for Large Language Models,claude-sonnet-5-5,49862,27510,0.118281
+2026-10-31T13:27:54,444528,MaPPing Your Model: Assessing the Impact of Adversarial Attacks on LLM-based Programming Assistants,claude-sonnet-5-5,38607,21255,0.106862
+2026-10-31T13:27:55,481955,FinBen: A Holistic Financial Benchmark for Large Language Models,claude-sonnet-5-5,95319,58959,0.186863
+2026-10-31T13:27:56,890394,Advancing AI Trustworthiness Through Patient Simulation: Risk Assessment of Conversational Agents for Antidepressant Selection,claude-sonnet-5-5,151858,102924,0.245256
+2026-10-31T13:27:58,748272,IntellAgent: A Multi-Agent Framework for Evaluating Conversational AI Systems,claude-sonnet-5-5,87927,65298,0.140655
+2026-10-31T13:27:58,489223,"MedConsultBench: A Full-Cycle, Fine-Grained, Process-Aware Benchmark for Medical Consultation Agents",claude-sonnet-5-5,175190,137508,0.211539
+2026-10-31T13:28:00,347628,MPCI-Bench: A Benchmark for Multimodal Pairwise Contextual Integrity Evaluation of Language Model Agents,claude-sonnet-5-5,135875,102332,0.193581
+2026-10-31T13:28:04,520288,Semantically Aware UAV Landing Site Assessment from Remote Sensing Imagery via Multimodal Large Language Models,claude-sonnet-5-5,49580,35074,0.117873
+2026-10-31T13:28:05,316910,Pruning Minimal Reasoning Graphs for Efficient Retrieval-Augmented Generation,claude-sonnet-5-5,66955,42905,0.121091
+2026-10-31T13:28:10,568343,An end-to-end agentic pipeline for smart contract translation and quality evaluation,claude-sonnet-5-5,91609,66503,0.161693
+2026-10-31T13:28:10,124057,EvalSVA: Multi-Agent Evaluators for Next-Gen Software Vulnerability Assessment,claude-sonnet-5-5,43448,27454,0.087661
+2026-10-31T13:28:11,620672,"OffTopicEval: When Large Language Models Enter the Wrong Chat, Almost Always!",claude-sonnet-5-5,217615,159689,0.313653
+2026-10-31T13:28:16,237948,EVALOOOP: A Self-Consistency-Centered Framework for Assessing Large Language Model Robustness in Programming,claude-sonnet-5-5,96317,58836,0.186863
+2026-10-31T13:28:17,283692,Who is ChatGPT? Benchmarking LLMs' Psychological Portrayal Using PsychoBench,claude-sonnet-5-5,92831,58954,0.169035
+2026-10-31T13:28:17,279117,DeepScholar-Bench: A Live Benchmark and Automated Evaluation for Generative Research Synthesis,claude-sonnet-5-5,215062,159663,0.283340
+2026-10-31T13:28:20,138905,RAS-Eval: A Comprehensive Benchmark for Security Evaluation of LLM Agents in Real-World Environments,claude-sonnet-5-5,59099,40246,0.110008
+2026-10-31T13:28:23,278937,"GAPS: A Clinically Grounded, Automated Benchmark for Evaluating AI Clinicians",claude-sonnet-5-5,98966,59548,0.195005
+2026-10-31T13:28:26,170774,R-Judge: Benchmarking Safety Risk Awareness for LLM Agents,claude-sonnet-5-5,93921,59577,0.180609
+2026-10-31T13:28:26,318912,VPI-Bench: Visual Prompt Injection Attacks for Computer-Use Agents,claude-sonnet-5-5,131759,97438,0.186758
+2026-10-31T13:28:32,244706,SAGE: A Generic Framework for LLM Safety Evaluation,claude-sonnet-5-5,107830,74749,0.174593
+2026-10-31T13:28:33,172018,Time Travel is Cheating: Going Live with DeepFund for Real-Time Fund Investment Benchmarking,claude-sonnet-5-5,90300,58957,0.161667
+2026-10-31T13:28:41,238938,HiddenTables & PyQTax: A Cooperative Game and Dataset For TableQA to Ensure Scale and Data Privacy Across a Myriad of Taxonomies,claude-sonnet-5-5,91461,65982,0.144882
+2026-10-31T13:28:42,235718,Den-TP: A Density-Balanced Data Curation and Evaluation Framework for Trajectory Prediction,claude-sonnet-5-5,37211,21189,0.092474
+2026-10-31T13:28:44,149207,HumanAgencyBench: Scalable Evaluation of Human Agency Support in AI Assistants,claude-sonnet-5-5,144755,103144,0.214171
+2026-10-31T13:28:48,204384,Seeing is not always believing: Benchmarking Human and Model Perception of AI-Generated Images,claude-sonnet-5-5,64900,27490,0.183988
+2026-10-31T13:28:48,118704,MobileSafetyBench: Evaluating Safety of Autonomous Agents in Mobile Device Control,claude-sonnet-5-5,158698,115793,0.226103
+2026-10-31T13:28:50,114812,MedFact: Benchmarking the Fact-Checking Capabilities of Large Language Models on Chinese Medical Texts,claude-sonnet-5-5,258351,195013,0.333284
+2026-10-31T13:28:56,241546,Benchmarking the Robustness of Agentic Systems to Adversarially-Induced Harms,claude-sonnet-5-5,253624,181135,0.372393
+2026-10-31T17:10:56,109833,SWE-MERA: A Dynamic Benchmark for Agenticly Evaluating Large Language Models on Software Engineering Tasks,claude-sonnet-5-5,47747,24862,0.113348
+2026-10-31T17:11:02,127731,AgentLAB: Benchmarking LLM Agents against Long-Horizon Attacks,claude-sonnet-5-5,54895,24676,0.148402
+2026-10-31T17:11:03,130767,BarrierBench : Evaluating Large Language Models for Safety Verification in Dynamical Systems,claude-sonnet-5-5,52260,24636,0.143349
+2026-10-31T17:11:03,115015,SastBench: A Benchmark for Testing Agentic SAST Triage,claude-sonnet-5-5,66897,40037,0.137152
+2026-10-31T17:11:04,125946,CAR-bench: Evaluating the Consistency and Limit-Awareness of LLM Agents under Real-World Uncertainty,claude-sonnet-5-5,56787,24902,0.161953
+2026-10-31T17:11:07,119852,Amelia: A Large Dataset and Benchmark for Airport Surface Movement Forecasting,claude-sonnet-5-5,156350,100549,0.266187
+2026-10-31T17:11:07,101255,SecureAgentBench: Benchmarking Secure Code Generation under Realistic Vulnerability Scenarios,claude-sonnet-5-5,96353,56022,0.197050
+2026-10-31T17:11:10,117463,$C^3$-Bench: The Things Real Disturbing LLM based Agent in Multi-Tasking,claude-sonnet-5-5,219652,159113,0.297357
+2026-10-31T17:11:14,114074,DrafterBench: Benchmarking Large Language Models for Tasks Automation in Civil Engineering,claude-sonnet-5-5,154463,100116,0.262552
+2026-10-31T17:11:16,133864,DroidCall: A Dataset for LLM-powered Android Intent Invocation,claude-sonnet-5-5,81281,53828,0.140865
+2026-10-31T17:11:16,135285,DSLOB: A Synthetic Limit Order Book Dataset for Benchmarking Forecasting Algorithms under Distributional Shift,claude-sonnet-5-5,38657,21293,0.088943
+2026-10-31T17:11:18,120297,Dive into the Agent Matrix: A Realistic Evaluation of Self-Replication Risk in LLM Agents,claude-sonnet-5-5,89127,56169,0.184416
+2026-10-31T17:11:21,102065,ITBench: Evaluating AI Agents across Diverse Real-World IT Automation Tasks,claude-sonnet-5-5,301140,227275,0.379378
+2026-10-31T17:11:22,111320,Do the Rewards Justify the Means? Measuring Trade-Offs Between Rewards and Ethical Behavior in the MACHIAVELLI Benchmark,claude-sonnet-5-5,193957,145818,0.266860
+2026-10-31T17:11:26,170398,DialogGuard: Multi-Agent Psychosocial Safety Evaluation of Sensitive LLM Responses,claude-sonnet-5-5,46013,27496,0.106074
+2026-10-31T17:11:35,225452,MCPTox: A Benchmark for Tool Poisoning Attack on Real-World MCP Servers,claude-sonnet-5-5,35974,21221,0.081837
+2026-10-31T17:11:36,198685,"MedBench v4: A Robust and Scalable Benchmark for Evaluating Chinese Medical Language Models, Multimodal Models, and Intelligent Agents",claude-sonnet-5-5,90696,65517,0.144741
+2026-10-31T17:11:36,215286,ISD-Agent-Bench: A Comprehensive Benchmark for Evaluating LLM-based Instructional Design Agents,claude-sonnet-5-5,56077,27518,0.140107
+2026-10-31T17:11:39,203172,VitaBench: Benchmarking LLM Agents with Versatile Interactive Tasks in Real-world Applications,claude-sonnet-5-5,113092,74145,0.202348
+2026-10-31T17:11:39,209841,Towards Comprehensive Stage-wise Benchmarking of Large Language Models in Fact-Checking,claude-sonnet-5-5,76623,51515,0.136286
+2026-10-31T17:11:39,152748,Agent-X: Evaluating Deep Multimodal Reasoning in Vision-Centric Agentic Tasks,claude-sonnet-5-5,286284,215195,0.360618
+2026-10-31T17:11:45,198402,CTRL-ALT-DECEIT: Sabotage Evaluations for Automated AI R&D,claude-sonnet-5-5,300043,229353,0.362898
+2026-10-31T17:11:51,206604,Beyond Single-Value Metrics: Evaluating and Enhancing LLM Unlearning with Cognitive Diagnosis,claude-sonnet-5-5,158486,117419,0.225775
+2026-10-31T17:11:51,231213,Knots: A Large-Scale Multi-Agent Enhanced Expert-Annotated Dataset and LLM Prompt Optimization for NOTAM Semantic Parsing,claude-sonnet-5-5,125701,93167,0.186369
+2026-10-31T17:11:55,240063,$\texttt{BluePrint}$: A Social Media User Dataset for LLM Persona Evaluation and Training,claude-sonnet-5-5,68245,42927,0.130533
+2026-10-31T17:11:56,245436,"Design, Results and Industry Implications of the World's First Insurance Large Language Model Evaluation Benchmark",claude-sonnet-5-5,51702,27750,0.127727
+2026-10-31T17:11:57,218166,Benchmarking Correctness and Security in Multi-Turn Code Generation,claude-sonnet-5-5,148600,103230,0.241082
+2026-10-31T17:11:57,241584,MAD-Fact: A Multi-Agent Debate Framework for Long-Form Factuality Evaluation in LLMs,claude-sonnet-5-5,51169,27546,0.122346
+2026-10-31T17:11:59,235724,GT-HarmBench: Benchmarking AI Safety Risks Through the Lens of Game Theory,claude-sonnet-5-5,236287,185940,0.269257
+2026-10-31T17:12:00,254820,Can LLMs Write Faithfully? An Agent-Based Evaluation of LLM-generated Islamic Content,claude-sonnet-5-5,47429,27554,0.114508
+2026-10-31T17:12:02,256935,MedRepBench: A Comprehensive Benchmark for Medical Report Interpretation,claude-sonnet-5-5,34844,21257,0.083544
+2026-10-31T17:12:08,236082,Drift-Bench: Diagnosing Cooperative Breakdowns in LLM Agents under Input Faults via Multi-Turn Interaction,claude-sonnet-5-5,285180,229551,0.308483
+2026-10-31T17:12:11,264141,TAME: A Trustworthy Test-Time Evolution of Agent Memory with Systematic Benchmarking,claude-sonnet-5-5,39736,21225,0.101791
+2026-10-31T17:12:12,267814,Put Your Money Where Your Mouth Is: Evaluating Strategic Planning and Execution of LLM Agents in an Auction Arena,claude-sonnet-5-5,89159,59041,0.153113
+2026-10-31T17:12:14,254650,JAILJUDGE: A Comprehensive Jailbreak Judge Benchmark with Multi-Agent Enhanced Explanation Evaluation Framework,claude-sonnet-5-5,161050,116619,0.236251
+2026-10-31T17:12:15,301452,Using Large Language Models to Generate Authentic Multi-agent Knowledge Work Datasets,claude-sonnet-5-5,45187,27696,0.091842
+2026-10-31T17:12:16,291123,Decision Quality Evaluation Framework at Pinterest,claude-sonnet-5-5,20913,8799,0.073306
+2026-10-31T17:12:18,280319,SOPRAG: Multi-view Graph Experts Retrieval for Industrial Standard Operating Procedures,claude-sonnet-5-5,62133,40516,0.116155
+2026-10-31T17:12:19,299107,Hijacking JARVIS: Benchmarking Mobile GUI Agents against Unprivileged Third Parties,claude-sonnet-5-5,61281,40081,0.112000
+2026-10-31T17:12:25,260093,MCPSecBench: A Systematic Security Benchmark and Playground for Testing Model Context Protocols,claude-sonnet-5-5,103683,74538,0.178560
+2026-10-31T17:12:39,314165,ImpossibleBench: Measuring LLMs' Propensity of Exploiting Test Cases,claude-sonnet-5-5,94147,59020,0.195655
+2026-10-31T17:12:43,316407,UAVBench: An Open Benchmark Dataset for Autonomous and Agentic AI UAV Systems via LLM-Generated Flight Scenarios,claude-sonnet-5-5,91834,65430,0.158424
+2026-10-31T17:12:46,270441,NetArena: Dynamic Benchmarks for AI Agents in Network Automation,claude-sonnet-5-5,145975,101742,0.261697
+2026-10-31T17:13:58,270833,WASP: Benchmarking Web Agent Security Against Prompt Injection Attacks,claude-sonnet-5-5,90415,62150,0.160483

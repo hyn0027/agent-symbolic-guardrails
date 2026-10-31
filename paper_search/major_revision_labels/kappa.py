@@ -1,6 +1,6 @@
 """Cohen's kappa (with 95% bootstrap CI) between the LLM labels and human_label_1.csv.
 
-Each column is compared on the papers where both the LLM and the human gave a label.
+Each column is compared on the papers where both the LLM and the human gave a label. For "out of scope", papers the human marked out of scope as "duplicated" are left out.
 Usage: python kappa.py
 """
 
@@ -26,6 +26,9 @@ rng = np.random.default_rng(0)
 for col in COLUMNS:
     a, b = normalize(merged[col + "_llm"]), normalize(merged[col + "_human"])
     both = (a != "") & (b != "")
+    if col == "out of scope":
+        # the model is never offered "duplicated" (it needs other papers' context), so leave those papers out
+        both &= normalize(merged["why out of scope_human"]) != "duplicated"
     a, b = a[both].to_numpy(), b[both].to_numpy()
     if len(a) == 0:
         print(f"{col:20s} n=0")
