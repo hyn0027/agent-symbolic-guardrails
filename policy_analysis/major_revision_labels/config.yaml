@@ -1,8 +1,13 @@
-model: gpt-6-sol
-reasoning_effort: medium   # GPT-6 Astra / 6.1 Sol do not support "none"; null to omit
+backend: claude            # claude (Claude Code, your subscription) or openai (OpenAI API, key in .env)
+model: claude-sonnet-5-5   # claude: e.g. claude-sonnet-5-5, claude-opus-5-5 (a full name pins the exact version)
+                           # openai: e.g. gpt-6-sol, gpt-6.1-terra (must be listed under prices)
+effort: medium             # claude: low | medium | high | xhigh | max; openai: the model's reasoning effort, or null
 max_concurrency: 8         # policies labeled in parallel
-max_retries: 3             # retries per API call
-limit: null                # label at most N policies not yet in labeled.csv; null = all
+max_retries: 3             # retries per policy
+timeout_minutes: 10        # claude only: per policy
+limit: null                # label at most N policies not yet in labeled_<backend>.csv; null = all
+
+# openai only
 prompt_cache_options:      # OpenAI prompt caching (GPT-5.6+); null for older models
   mode: implicit           # breakpoint at the end of each new user message
   ttl: 30m                 # 30m (cache write 1.25x) or 12h (cache write 2.5x)
