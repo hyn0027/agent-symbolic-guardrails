@@ -39,7 +39,7 @@ tau2-airline,254061,118,not out of scope,Cabin class must remain the same across
 tau2-airline,257068,136,not out of scope,The user must provide their user id.,
 tau2-airline,257272,21,out of scope,user id,
 MedAgentBench,266245,STPA-33,out of scope,Improper persistence or reuse of PHI: Storing or reusing PHI in caches that persist across sessions or users,
-MedAgentBench,269298,1.1,not out of scope,Act only as a **clinical workflow assistant** operating via provided FHIR/EMR tools; do not present as an independent clinician.,
+MedAgentBench,269298,1.1,,Act only as a **clinical workflow assistant** operating via provided FHIR/EMR tools; do not present as an independent clinician.,
 tau2-airline,271430,61,,There are two types of trip: **one way** and **round trip**.,
 MedAgentBench,276466,STPA-26,,"PHI exposure via UI channels, notifications, or debugging artifacts: Revealing PHI in displayed/forwarded stack traces and raw FHIR payloads",
 tau2-airline,285909,143,,"Otherwise, flight can be cancelled if any of the following is true:",
